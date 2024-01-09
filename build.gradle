@@ -149,6 +149,8 @@ spotless {
     }
 }
 
+// Disable automatics spotless execution during a build
+// By default, spotless is configured to run during a build. This is generally undesirable because we don't want formatting errors to cause build failures and hinder developent, debugging, and testing. We generally want to run and apply the spotless changes prior to committing and/or pushing the code to a source code repository (e.g. git)
 if (!('spotlessCheck' in gradle.startParameter.taskNames)) {
     spotlessJavaCheck.enabled = false
     spotlessGroovyGradleCheck.enabled = false
