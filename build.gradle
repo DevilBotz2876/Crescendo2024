@@ -106,6 +106,8 @@ tasks.withType(JavaCompile) {
 }
 
 // START: Setup spotless
+
+// Configure the spotless settings for the various file types (java, gradle, xml, etc)
 spotless {
     java {
         target fileTree('.') {
