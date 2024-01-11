@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 // START: Setup AdvantageKit
@@ -12,8 +11,9 @@ import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+
 // END: Setup AdvantageKit
-public class Robot extends LoggedRobot  {
+public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
@@ -43,7 +43,7 @@ public class Robot extends LoggedRobot  {
     /* Initialize AdvantageKit Logging */
     // Set up data receivers & replay source
 
-    //We will add support for replay mode later
+    // We will add support for replay mode later
     /*if (Constants.AdvantageKit.REPLAY_MODE) {
       // Running in replay mode
       setUseTiming(false); // Run as fast as possible
@@ -55,16 +55,16 @@ public class Robot extends LoggedRobot  {
           new WPILOGWriter(
               LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a new log
     } else {*/
-      if (isReal()) {
-        // Running on real robot
-        Logger.addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick
-        Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-      } else {
-        // Running in simulation
-        Logger.addDataReceiver(new WPILOGWriter(""));
-        Logger.addDataReceiver(new NT4Publisher());
-      }
-    //}
+    if (isReal()) {
+      // Running on real robot
+      Logger.addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick
+      Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+    } else {
+      // Running in simulation
+      Logger.addDataReceiver(new WPILOGWriter(""));
+      Logger.addDataReceiver(new NT4Publisher());
+    }
+    // }
 
     Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may
     // be added.
