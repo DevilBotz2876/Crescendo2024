@@ -176,3 +176,19 @@ logs/
 
 # Folder that has CTRE Phoenix Sim device config storage
 ctre_sim/
+
+# START: Setup gversion
+
+# Tell git to ignore the generated file: src/main/java/frc/robot/BuildConstants.java
+# We generally don't want to commit/track changes to files that are auto-generated during the build process
+
+src/main/java/frc/robot/BuildConstants.java
+# END: Setup gversion
+
+# START: Setup AdvantageKit
+
+# Tell git to ignore the generated files ending with: .wpilog
+# Most wpilog files are useful only during development/debugging. One exception is logs captured during an actual competition/match. It may be useful to save them for post-match analysis to debug/understand what happened
+
+*.wpilog
+# END: Setup AdvantageKit
