@@ -6,14 +6,11 @@ package bhs.devilbotz;
 
 import edu.wpi.first.wpilibj.RobotBase;
 
-/**
- * Main initialization function. Do not perform any initialization here.
- */
+/** Main initialization function. Do not perform any initialization here. */
 public final class Main {
-    private Main() {
-    }
+  private Main() {}
 
-    public static void main(String... args) {
-        RobotBase.startRobot(Robot::new);
-    }
+  public static void main(String... args) {
+    RobotBase.startRobot(Robot::new);
+  }
 }

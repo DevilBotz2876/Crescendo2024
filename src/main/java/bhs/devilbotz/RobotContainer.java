@@ -17,29 +17,26 @@ import edu.wpi.first.wpilibj2.command.Commands;
  * @see Command
  */
 public class RobotContainer {
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
-    public RobotContainer() {
-        configureBindings();
-    }
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  public RobotContainer() {
+    configureBindings();
+  }
 
-    /**
-     * Use this method to define your button->command mappings. Buttons can be created by instantiating
-     * a {@link edu.wpi.first.wpilibj.GenericHID GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick Joystick} or {@link edu.wpi.first.wpilibj.XboxController
-     * XboxController}), and then passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton
-     * JoystickButton}.
-     */
-    private void configureBindings() {
-    }
+  /**
+   * Use this method to define your button->command mappings. Buttons can be created by
+   * instantiating a {@link edu.wpi.first.wpilibj.GenericHID GenericHID} or one of its subclasses
+   * ({@link edu.wpi.first.wpilibj.Joystick Joystick} or {@link edu.wpi.first.wpilibj.XboxController
+   * XboxController}), and then passing it to a {@link
+   * edu.wpi.first.wpilibj2.command.button.JoystickButton JoystickButton}.
+   */
+  private void configureBindings() {}
 
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
-    public Command getAutonomousCommand() {
-        return Commands.print("No autonomous command configured");
-    }
+  /**
+   * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
+   */
+  public Command getAutonomousCommand() {
+    return Commands.print("No autonomous command configured");
+  }
 }
