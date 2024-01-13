@@ -182,7 +182,7 @@ ctre_sim/
 # Tell git to ignore the generated file: src/main/java/frc/robot/BuildConstants.java
 # We generally don't want to commit/track changes to files that are auto-generated during the build process
 
-src/main/java/frc/robot/BuildConstants.java
+src/main/java/bhs/devilbotz/BuildConstants.java
 # END: Setup gversion
 
 # START: Setup AdvantageKit
