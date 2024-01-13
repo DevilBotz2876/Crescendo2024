@@ -1,4 +1,4 @@
-package frc.subsystems;
+package frc.robot.subsystems;
 
 public interface Arm {
   // gets the angle of the arm.
