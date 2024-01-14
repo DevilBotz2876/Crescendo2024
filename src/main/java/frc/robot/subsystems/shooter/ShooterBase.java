@@ -18,8 +18,8 @@ public class ShooterBase extends SubsystemBase implements Shooter {
     @Override
     public void disable() {
         voltage = 0;
-        ShooterMotorLeft.disable();
-        ShooterMotorRight.disable();
+        ShooterMotorLeft.setVoltage(voltage);
+        ShooterMotorRight.setVoltage(voltage);
     }
 
     @Override
