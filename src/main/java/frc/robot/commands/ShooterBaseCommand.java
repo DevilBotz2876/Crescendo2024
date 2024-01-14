@@ -30,22 +30,26 @@ public class ShooterBaseCommand extends Command {
     }
     @Override
     public void initialize() {
-        // create speed entry under Shooter tab as a number sider with min = -1 and max = 1
+        // Create speed entry under Shooter tab as a number sider with min = -1 and max = 1
         speedEntry = tab.add("speed", 0).withWidget(BuiltInWidgets.kNumberSlider)
         .withProperties(Map.of("min", -1, "max", 1)).getEntry();
 
-        //sets default value to 0.0
+        // Sets default value to 0.0
         speedEntry.setValue(0.0);
     }
 
 
     @Override
     public void execute() {
-        //turns on motors if right trigger is fully pressed. else the motors turn off.
+        // Turns on motors if right trigger is fully pressed. else the motors turn off.
         if (rightTriggerAxis.getAsDouble() == 1.0) {
+            // Checks the speed Entry for the speed and sets the speed of motors
             shooter.setSpeed(speedEntry.getDouble(0.0));
+
+            // Enable motors, It has to be called regularly for voltage compensation to work properly
             shooter.enable();
         } else {
+            // Disable the shooters
             shooter.disable();
         }
     }
