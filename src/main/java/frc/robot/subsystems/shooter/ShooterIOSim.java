@@ -11,10 +11,10 @@ public class ShooterIOSim implements ShooterIO {
   @Override
   public void updateInputs(ShooterIOInputs inputs) {
 
-    //Update sim
+    // Update sim
     sim.update(0.02);
 
-    //Update inputs
+    // Update inputs
     inputs.velocityRadPerSec = sim.getAngularVelocityRadPerSec();
     inputs.appliedVolts = appliedVolts;
   }
@@ -24,5 +24,4 @@ public class ShooterIOSim implements ShooterIO {
     appliedVolts = volts;
     sim.setInputVoltage(volts);
   }
-
 }

@@ -1,14 +1,10 @@
 package frc.robot.subsystems.shooter;
 
 public interface Shooter {
-  /**
-   * Disable the speed of a motors for the shooter.
-   */
+  /** Disable the speed of a motors for the shooter. */
   public default void disable() {}
 
-  /**
-   * Enable the speed of a motors for the shooter.
-   */
+  /** Enable the speed of a motors for the shooter. */
   public default void enable() {}
 
   /**
