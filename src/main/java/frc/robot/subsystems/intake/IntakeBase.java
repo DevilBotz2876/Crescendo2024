@@ -1,33 +1,40 @@
 package frc.robot.subsystems.intake;
 
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import org.littletonrobotics.junction.Logger;
+
+//import frc.robot.subsystems.intake.IntakeIO;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeBase extends SubsystemBase implements Intake {
-    private final MotorController IntakeMotor;
-
+    private final IntakeIO IO;
+    private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
     private double voltage;
 
-    public IntakeBase() {
-        IntakeMotor = new Spark(0);
+    public IntakeBase(IntakeIO IO) {
+        
+        this.IO = IO; 
+            
         voltage = 0;
     }
 
     @Override
     public void disable() {
         voltage = 0;
-        IntakeMotor.setVoltage(voltage);
+        IO.setVoltage(voltage);
     }
 
     @Override
     public void enable() {
-        IntakeMotor.setVoltage(voltage);
+        IO.setVoltage(voltage);
     }
 
     @Override
-    //Sets the voltage to 5.0 times speed. the speed value is -1 1
-    public void setSpeed(double speed) {
-        voltage = 5.0 * speed;
+    public void setVoltage(double volts) {
+        voltage = volts;
+    }
+    @Override
+    public void periodic() {
+        IO.updateInputs(inputs);
+        Logger.processInputs("Intake", inputs);
     }
 }

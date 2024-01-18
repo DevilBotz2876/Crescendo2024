@@ -11,10 +11,6 @@ public interface Intake {
    */
   public default void enable() {}
 
-  /**
-   * Set the speed of the motor for the intake.
-   *
-   * @param speed The speed to set. Value should be between -1.0 and 1.0.
-   */
-  public default void setSpeed(double speed) {}
+ 
+  public default void setVoltage(double volts) {}
 }
