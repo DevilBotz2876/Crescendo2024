@@ -12,9 +12,11 @@ public interface Shooter {
   public default void enable() {}
 
   /**
-   * Set the speed of motors for the shooter.
+   * Set the voltage of motors for the shooter.
    *
-   * @param speed The speed to set. Value should be between -1.0 and 1.0.
+   * @param volts The volts to set. Value should be between -12.0 and 12.0.
    */
-  public default void setSpeed(double speed) {}
+  public default void setVoltage(double volts) {}
+
+  public double getCurrentSpeed();
 }

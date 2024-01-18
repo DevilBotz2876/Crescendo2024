@@ -4,18 +4,21 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.XboxController;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.ShooterBaseCommand;
 import frc.robot.subsystems.shooter.ShooterBase;
+import frc.robot.subsystems.shooter.ShooterIOSim;
 
 public class RobotContainer {
-  public final XboxController controller;
+  public final CommandXboxController controller;
   public final ShooterBase shooter;
 
   public RobotContainer() {
-    controller = new XboxController(0);
+    controller = new CommandXboxController(0);
 
     boolean swerveBot = false;
     boolean tankBot = false;
@@ -25,15 +28,17 @@ public class RobotContainer {
     } else if (tankBot) {
       shooter = null;
     } else {
-      shooter = new ShooterBase();
+      shooter = new ShooterBase(new ShooterIOSim());
     }
 
+    shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
 
     configureBindings();
   }
 
   private void configureBindings() {
-    shooter.setDefaultCommand(new ShooterBaseCommand(shooter, () -> controller.getRightTriggerAxis() ));
+    controller.rightTrigger().onTrue(new ShooterBaseCommand(shooter, () -> true));
+    controller.rightTrigger().onFalse(shooter.getDefaultCommand());
   }
 
   public Command getAutonomousCommand() {
