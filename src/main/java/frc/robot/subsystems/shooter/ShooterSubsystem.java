@@ -1,14 +1,15 @@
 package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-public class ShooterBase extends SubsystemBase implements Shooter {
+public class ShooterSubsystem extends SubsystemBase implements Shooter {
   ShooterIO io;
   private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
-  private double voltage;
+  @AutoLogOutput private double voltage;
 
-  public ShooterBase(ShooterIO io) {
+  public ShooterSubsystem(ShooterIO io) {
     this.io = io;
     voltage = 0;
   }
@@ -30,6 +31,11 @@ public class ShooterBase extends SubsystemBase implements Shooter {
   // Sets the voltage to volts. the volts value is -12 to 12
   public void setVoltage(double volts) {
     voltage = volts;
+  }
+
+  @Override
+  public double getVoltage() {
+    return inputs.appliedVolts;
   }
 
   @Override

@@ -9,12 +9,12 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.ShooterBaseCommand;
-import frc.robot.subsystems.shooter.ShooterBase;
 import frc.robot.subsystems.shooter.ShooterIOSim;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 public class RobotContainer {
   public final CommandXboxController controller;
-  public final ShooterBase shooter;
+  public final ShooterSubsystem shooter;
 
   public RobotContainer() {
     controller = new CommandXboxController(0);
@@ -27,7 +27,7 @@ public class RobotContainer {
     } else if (tankBot) {
       shooter = null;
     } else {
-      shooter = new ShooterBase(new ShooterIOSim());
+      shooter = new ShooterSubsystem(new ShooterIOSim());
     }
 
     shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));

@@ -5,17 +5,17 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.shooter.ShooterBase;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
 
 public class ShooterBaseCommand extends Command {
-  ShooterBase shooter;
+  ShooterSubsystem shooter;
   BooleanSupplier enable;
   ShuffleboardTab tab;
   GenericEntry voltsEntry;
 
-  public ShooterBaseCommand(ShooterBase shooter, BooleanSupplier enable) {
+  public ShooterBaseCommand(ShooterSubsystem shooter, BooleanSupplier enable) {
     this.shooter = shooter;
     this.enable = enable;
 
