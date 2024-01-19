@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -23,9 +24,10 @@ public class RobotContainer {
     drive.setDefaultCommand(
         new DriveCommand(
             drive,
-            () -> -controller.getLeftY(),
-            () -> -controller.getLeftX(),
-            () -> -controller.getRightX()));
+            () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.01),
+            () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.01),
+            () -> MathUtil.applyDeadband(-controller.getRightX(), 0.01)));
+    // TODO: Move deadband to constants file
 
     controller
         .start()
