@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.ShooterBaseCommand;
+import frc.robot.commands.ShooterEnable;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
@@ -30,14 +30,13 @@ public class RobotContainer {
       shooter = new ShooterSubsystem(new ShooterIOSim());
     }
 
-    shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
-
     configureBindings();
   }
 
   private void configureBindings() {
-    controller.rightTrigger().onTrue(new ShooterBaseCommand(shooter, () -> true));
-    controller.rightTrigger().onFalse(shooter.getDefaultCommand());
+    shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
+
+    controller.rightTrigger().whileTrue(new ShooterEnable(shooter));
   }
 
   public Command getAutonomousCommand() {
