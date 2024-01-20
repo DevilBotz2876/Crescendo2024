@@ -25,7 +25,7 @@ public class RobotContainer {
   public RobotContainer() {
     controller = new CommandXboxController(0);
 
-    boolean hasIntake = true;
+    boolean hasIntake = false;
     boolean hasShooter = false;
 
     if (hasShooter) {
