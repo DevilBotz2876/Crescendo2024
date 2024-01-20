@@ -4,11 +4,15 @@
 
 package frc.robot;
 
+// import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.IntakeBaseCommand;
 import frc.robot.commands.ShooterEnable;
+import frc.robot.subsystems.intake.IntakeBase;
+import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
@@ -16,6 +20,7 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 public class RobotContainer {
   public final CommandXboxController controller;
   public final ShooterSubsystem shooter;
+  public final IntakeBase intake;
 
   public RobotContainer() {
     controller = new CommandXboxController(0);
@@ -25,10 +30,13 @@ public class RobotContainer {
 
     if (swerveBot) {
       shooter = null;
+      intake = null;
     } else if (tankBot) {
       shooter = new ShooterSubsystem(new ShooterIOSparkMax());
+      intake = null;
     } else {
       shooter = new ShooterSubsystem(new ShooterIOSim());
+      intake = new IntakeBase(new IntakeIOSim());
     }
 
     configureBindings();
@@ -38,6 +46,11 @@ public class RobotContainer {
     shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
 
     controller.rightTrigger().whileTrue(new ShooterEnable(shooter));
+    intake.setDefaultCommand(
+        new IntakeBaseCommand(
+            intake,
+            () -> controller.rightBumper().getAsBoolean(),
+            () -> controller.leftBumper().getAsBoolean()));
   }
 
   public Command getAutonomousCommand() {
