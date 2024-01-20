@@ -9,7 +9,7 @@ public class IntakeIOSparkMax implements IntakeIO {
   private static final double GEAR_RATIO = 10.0;
 
   // define the 2 SparkMax Controllers. A leader, and a follower
-  private final CANSparkMax leader = new CANSparkMax(0, MotorType.kBrushless);
+  private final CANSparkMax leader = new CANSparkMax(2, MotorType.kBrushless);
 
   // Gets the NEO encoder
   private final RelativeEncoder encoder = leader.getEncoder();
