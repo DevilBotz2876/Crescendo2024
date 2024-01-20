@@ -51,7 +51,9 @@ loadScripts(document, 'script');</script>
 <span class="package-hierarchy-label">Package Hierarchies:</span>
 <ul class="horizontal">
 <li><a href="frc/robot/package-tree.html">frc.robot</a>, </li>
-<li><a href="frc/robot/subsystems/arm/package-tree.html">frc.robot.subsystems.arm</a></li>
+<li><a href="frc/robot/commands/package-tree.html">frc.robot.commands</a>, </li>
+<li><a href="frc/robot/subsystems/arm/package-tree.html">frc.robot.subsystems.arm</a>, </li>
+<li><a href="frc/robot/subsystems/shooter/package-tree.html">frc.robot.subsystems.shooter</a></li>
 </ul>
 </div>
 <section class="hierarchy">
@@ -60,6 +62,11 @@ loadScripts(document, 'script');</script>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" class="type-name-link external-link" title="class or interface in java.lang">Object</a>
 <ul>
 <li class="circle">frc.robot.<a href="frc/robot/BuildConstants.html" class="type-name-link" title="class in frc.robot">BuildConstants</a></li>
+<li class="circle">edu.wpi.first.wpilibj2.command.Command (implements edu.wpi.first.util.sendable.Sendable)
+<ul>
+<li class="circle">frc.robot.commands.<a href="frc/robot/commands/ShooterEnable.html" class="type-name-link" title="class in frc.robot.commands">ShooterEnable</a></li>
+</ul>
+</li>
 <li class="circle">frc.robot.<a href="frc/robot/Main.html" class="type-name-link" title="class in frc.robot">Main</a></li>
 <li class="circle">edu.wpi.first.wpilibj.RobotBase (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a>)
 <ul>
@@ -75,6 +82,13 @@ loadScripts(document, 'script');</script>
 </ul>
 </li>
 <li class="circle">frc.robot.<a href="frc/robot/RobotContainer.html" class="type-name-link" title="class in frc.robot">RobotContainer</a></li>
+<li class="circle">frc.robot.subsystems.shooter.<a href="frc/robot/subsystems/shooter/ShooterIO.ShooterIOInputs.html" class="type-name-link" title="class in frc.robot.subsystems.shooter">ShooterIO.ShooterIOInputs</a></li>
+<li class="circle">frc.robot.subsystems.shooter.<a href="frc/robot/subsystems/shooter/ShooterIOSim.html" class="type-name-link" title="class in frc.robot.subsystems.shooter">ShooterIOSim</a> (implements frc.robot.subsystems.shooter.<a href="frc/robot/subsystems/shooter/ShooterIO.html" title="interface in frc.robot.subsystems.shooter">ShooterIO</a>)</li>
+<li class="circle">edu.wpi.first.wpilibj2.command.SubsystemBase (implements edu.wpi.first.util.sendable.Sendable, edu.wpi.first.wpilibj2.command.Subsystem)
+<ul>
+<li class="circle">frc.robot.subsystems.shooter.<a href="frc/robot/subsystems/shooter/ShooterSubsystem.html" class="type-name-link" title="class in frc.robot.subsystems.shooter">ShooterSubsystem</a> (implements frc.robot.subsystems.shooter.<a href="frc/robot/subsystems/shooter/Shooter.html" title="interface in frc.robot.subsystems.shooter">Shooter</a>)</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -83,6 +97,8 @@ loadScripts(document, 'script');</script>
 <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
 <li class="circle">frc.robot.subsystems.arm.<a href="frc/robot/subsystems/arm/Arm.html" class="type-name-link" title="interface in frc.robot.subsystems.arm">Arm</a></li>
+<li class="circle">frc.robot.subsystems.shooter.<a href="frc/robot/subsystems/shooter/Shooter.html" class="type-name-link" title="interface in frc.robot.subsystems.shooter">Shooter</a></li>
+<li class="circle">frc.robot.subsystems.shooter.<a href="frc/robot/subsystems/shooter/ShooterIO.html" class="type-name-link" title="interface in frc.robot.subsystems.shooter">ShooterIO</a></li>
 </ul>
 </section>
 </main>
