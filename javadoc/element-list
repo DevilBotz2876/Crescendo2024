@@ -1,4 +1,5 @@
 frc.robot
 frc.robot.commands
 frc.robot.subsystems.arm
+frc.robot.subsystems.intake
 frc.robot.subsystems.shooter
