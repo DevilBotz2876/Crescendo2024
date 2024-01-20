@@ -15,6 +15,7 @@ import frc.robot.commands.drive.DriveCommand;
 import frc.robot.subsystems.drive.DriveSwerveYAGSL;
 import frc.robot.subsystems.intake.IntakeBase;
 import frc.robot.subsystems.intake.IntakeIOSim;
+import frc.robot.subsystems.intake.IntakeIOSparkMax;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
@@ -38,7 +39,7 @@ public class RobotContainer {
     }
 
     if (hasIntake) {
-      intake = null;
+      intake = new IntakeBase(new IntakeIOSparkMax());
     } else {
       intake = new IntakeBase(new IntakeIOSim());
     }
