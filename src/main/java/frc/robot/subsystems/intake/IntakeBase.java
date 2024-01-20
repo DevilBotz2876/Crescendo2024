@@ -18,13 +18,16 @@ public class IntakeBase extends SubsystemBase implements Intake {
     }
 
     @Override
+    //disable the intake
     public void disable() {
         voltage = 0;
         IO.setVoltage(voltage);
     }
 
     @Override
+    //Enabling the intake
     public void enable() {
+        //voltage = 1;
         IO.setVoltage(voltage);
     }
 
