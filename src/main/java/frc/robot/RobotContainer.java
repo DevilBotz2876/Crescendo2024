@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-// import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -25,17 +24,18 @@ public class RobotContainer {
   public RobotContainer() {
     controller = new CommandXboxController(0);
 
-    boolean swerveBot = false;
-    boolean tankBot = true;
+    boolean hasIntake = false;
+    boolean hasShooter = false;
 
-    if (swerveBot) {
-      shooter = null;
-      intake = null;
-    } else if (tankBot) {
+    if (hasShooter) {
       shooter = new ShooterSubsystem(new ShooterIOSparkMax());
-      intake = null;
     } else {
       shooter = new ShooterSubsystem(new ShooterIOSim());
+    }
+
+    if (hasIntake) {
+      intake = null;
+    } else {
       intake = new IntakeBase(new IntakeIOSim());
     }
 
