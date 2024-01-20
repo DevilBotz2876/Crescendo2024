@@ -19,7 +19,7 @@ public class ShooterIOSparkMax implements ShooterIO {
 
   @Override
   public void updateInputs(ShooterIOInputs inputs) {
-    inputs.velocityRadPerSec = 
+    inputs.velocityRadPerSec =
         Units.rotationsPerMinuteToRadiansPerSecond(encoder.getVelocity() / GEAR_RATIO);
     inputs.appliedVolts = leader.getAppliedOutput() * leader.getBusVoltage();
   }
@@ -27,6 +27,5 @@ public class ShooterIOSparkMax implements ShooterIO {
   @Override
   public void setVoltage(double volts) {
     leader.setVoltage(volts);
-    
   }
 }
