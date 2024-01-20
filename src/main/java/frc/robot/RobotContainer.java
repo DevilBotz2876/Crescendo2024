@@ -9,18 +9,31 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.ShooterEnable;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.subsystems.drive.DriveSwerveYAGSL;
+import frc.robot.subsystems.shooter.ShooterIOSim;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 public class RobotContainer {
-  CommandXboxController controller = new CommandXboxController(0);
-  DriveSwerveYAGSL drive = new DriveSwerveYAGSL();
+  public final CommandXboxController controller;
+  public final ShooterSubsystem shooter;
+  public final DriveSwerveYAGSL drive;
 
   public RobotContainer() {
+    controller = new CommandXboxController(0);
+
+    shooter = new ShooterSubsystem(new ShooterIOSim());
+    drive = new DriveSwerveYAGSL();
+
     configureBindings();
   }
 
   private void configureBindings() {
+    shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
+
+    controller.rightTrigger().whileTrue(new ShooterEnable(shooter));
+
     drive.setDefaultCommand(
         new DriveCommand(
             drive,
