@@ -14,6 +14,7 @@ import frc.robot.commands.ShooterEnable;
 import frc.robot.subsystems.intake.IntakeBase;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.shooter.ShooterIOSim;
+import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 public class RobotContainer {
@@ -25,13 +26,13 @@ public class RobotContainer {
     controller = new CommandXboxController(0);
 
     boolean swerveBot = false;
-    boolean tankBot = false;
+    boolean tankBot = true;
 
     if (swerveBot) {
       shooter = null;
       intake = null;
     } else if (tankBot) {
-      shooter = null;
+      shooter = new ShooterSubsystem(new ShooterIOSparkMax());
       intake = null;
     } else {
       shooter = new ShooterSubsystem(new ShooterIOSim());
