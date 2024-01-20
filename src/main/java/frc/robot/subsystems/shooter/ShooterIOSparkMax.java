@@ -6,7 +6,7 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.util.Units;
 
 public class ShooterIOSparkMax implements ShooterIO {
-  private static final double GEAR_RATIO = 1.5;
+  private static final double GEAR_RATIO = 5.0;
 
   private final CANSparkMax leader = new CANSparkMax(0, MotorType.kBrushless);
   private final CANSparkMax follower = new CANSparkMax(1, MotorType.kBrushless);
