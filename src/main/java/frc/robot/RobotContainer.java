@@ -9,21 +9,40 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.IntakeBaseCommand;
 import frc.robot.commands.ShooterEnable;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.subsystems.drive.DriveSwerveYAGSL;
+import frc.robot.subsystems.intake.IntakeBase;
+import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.shooter.ShooterIOSim;
+import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 public class RobotContainer {
   public final CommandXboxController controller;
   public final ShooterSubsystem shooter;
+  public final IntakeBase intake;
   public final DriveSwerveYAGSL drive;
 
   public RobotContainer() {
     controller = new CommandXboxController(0);
 
-    shooter = new ShooterSubsystem(new ShooterIOSim());
+    boolean hasIntake = false;
+    boolean hasShooter = false;
+
+    if (hasShooter) {
+      shooter = new ShooterSubsystem(new ShooterIOSparkMax());
+    } else {
+      shooter = new ShooterSubsystem(new ShooterIOSim());
+    }
+
+    if (hasIntake) {
+      intake = null;
+    } else {
+      intake = new IntakeBase(new IntakeIOSim());
+    }
+
     drive = new DriveSwerveYAGSL();
 
     configureBindings();
@@ -33,6 +52,11 @@ public class RobotContainer {
     shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
 
     controller.rightTrigger().whileTrue(new ShooterEnable(shooter));
+    intake.setDefaultCommand(
+        new IntakeBaseCommand(
+            intake,
+            () -> controller.rightBumper().getAsBoolean(),
+            () -> controller.leftBumper().getAsBoolean()));
 
     drive.setDefaultCommand(
         new DriveCommand(
