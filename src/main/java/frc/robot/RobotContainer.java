@@ -4,9 +4,13 @@
 
 package frc.robot;
 
+//import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.math.MathUtil;
+//import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.drive.DriveCommand;
@@ -16,8 +20,12 @@ public class RobotContainer {
   CommandXboxController controller = new CommandXboxController(0);
   DriveSwerveYAGSL drive = new DriveSwerveYAGSL();
 
+   //private final SendableChooser<Command> autoChooser;
+
   public RobotContainer() {
     configureBindings();
+    //autoChooser = AutoBuilder.buildAutoChooser("Mobility Auto");
+    // SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   private void configureBindings() {
@@ -36,6 +44,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return new PathPlannerAuto("Shoot Speaker Amp Side and Intake Amp Note Auto");
   }
+
 }
