@@ -192,3 +192,8 @@ src/main/java/frc/robot/BuildConstants.java
 
 *.wpilog
 # END: Setup AdvantageKit
+
+# START: Ignore simulation JSON files
+networktables.json
+simgui*.json
+# END: Ignore simulation JSON files

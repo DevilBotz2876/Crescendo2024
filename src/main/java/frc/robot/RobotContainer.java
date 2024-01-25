@@ -4,31 +4,63 @@
 
 package frc.robot;
 
-//import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import edu.wpi.first.math.MathUtil;
-//import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.IntakeBaseCommand;
+import frc.robot.commands.ShooterEnable;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.subsystems.drive.DriveSwerveYAGSL;
+import frc.robot.subsystems.intake.IntakeBase;
+import frc.robot.subsystems.intake.IntakeIOSim;
+import frc.robot.subsystems.intake.IntakeIOSparkMax;
+import frc.robot.subsystems.shooter.ShooterIOSim;
+import frc.robot.subsystems.shooter.ShooterIOSparkMax;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 public class RobotContainer {
-  CommandXboxController controller = new CommandXboxController(0);
-  DriveSwerveYAGSL drive = new DriveSwerveYAGSL();
-
-   //private final SendableChooser<Command> autoChooser;
+  public final CommandXboxController controller;
+  public final ShooterSubsystem shooter;
+  public final IntakeBase intake;
+  public final DriveSwerveYAGSL drive;
 
   public RobotContainer() {
+    controller = new CommandXboxController(0);
+
+    boolean hasIntake = false;
+    boolean hasShooter = false;
+
+    if (hasShooter) {
+      shooter = new ShooterSubsystem(new ShooterIOSparkMax());
+    } else {
+      shooter = new ShooterSubsystem(new ShooterIOSim());
+    }
+
+    if (hasIntake) {
+      intake = new IntakeBase(new IntakeIOSparkMax());
+    } else {
+      intake = new IntakeBase(new IntakeIOSim());
+    }
+
+    drive = new DriveSwerveYAGSL();
+
     configureBindings();
-    //autoChooser = AutoBuilder.buildAutoChooser("Mobility Auto");
+    // autoChooser = AutoBuilder.buildAutoChooser("Mobility Auto");
     // SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   private void configureBindings() {
+    shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
+
+    controller.rightTrigger().whileTrue(new ShooterEnable(shooter));
+    intake.setDefaultCommand(
+        new IntakeBaseCommand(
+            intake,
+            () -> controller.rightBumper().getAsBoolean(),
+            () -> controller.leftBumper().getAsBoolean()));
+
     drive.setDefaultCommand(
         new DriveCommand(
             drive,
@@ -46,5 +78,4 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return new PathPlannerAuto("Mobility Auto");
   }
-
 }
