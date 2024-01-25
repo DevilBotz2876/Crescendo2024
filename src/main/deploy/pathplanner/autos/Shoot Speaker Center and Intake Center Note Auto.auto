@@ -2,31 +2,31 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.5,
-      "y": 2
+      "x": 1.3189579655351042,
+      "y": 5.535530663936646
     },
-    "rotation": 0
+    "rotation": -179.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Mobility Path"
+            "name": "Shoot Note"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 5.0
+            "waitTime": 0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Return Path"
+            "pathName": "Speaker to Center Note Path"
           }
         }
       ]

@@ -44,7 +44,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new PathPlannerAuto("Shoot Speaker Amp Side and Intake Amp Note Auto");
+    return new PathPlannerAuto("Mobility Auto");
   }
 
 }
