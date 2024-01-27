@@ -15,7 +15,7 @@ import frc.robot.commands.drive.DriveCommand;
 import frc.robot.subsystems.drive.DriveSwerveYAGSL;
 import frc.robot.subsystems.intake.IntakeBase;
 import frc.robot.subsystems.intake.IntakeIOSim;
-import frc.robot.subsystems.intake.IntakeIOSparkMax;
+import frc.robot.subsystems.intake.IntakeIOTalonSRX;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
@@ -29,8 +29,9 @@ public class RobotContainer {
   public RobotContainer() {
     controller = new CommandXboxController(0);
 
-    boolean hasIntake = false;
-    boolean hasShooter = false;
+    boolean hasIntake = true;
+    boolean hasShooter = true;
+    boolean hasDrive = false;
 
     if (hasShooter) {
       shooter = new ShooterSubsystem(new ShooterIOSparkMax());
@@ -39,12 +40,16 @@ public class RobotContainer {
     }
 
     if (hasIntake) {
-      intake = new IntakeBase(new IntakeIOSparkMax());
+      intake = new IntakeBase(new IntakeIOTalonSRX());
     } else {
       intake = new IntakeBase(new IntakeIOSim());
     }
 
-    drive = new DriveSwerveYAGSL();
+    if (hasDrive) {
+      drive = new DriveSwerveYAGSL();
+    } else {
+      drive = null;
+    }
 
     configureBindings();
   }
@@ -59,18 +64,20 @@ public class RobotContainer {
             () -> controller.rightBumper().getAsBoolean(),
             () -> controller.leftBumper().getAsBoolean()));
 
-    drive.setDefaultCommand(
-        new DriveCommand(
-            drive,
-            () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.01),
-            () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.01),
-            () -> MathUtil.applyDeadband(-controller.getRightX(), 0.01)));
-    // TODO: Move deadband to constants file
+    if (drive != null) {
+      drive.setDefaultCommand(
+          new DriveCommand(
+              drive,
+              () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.01),
+              () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.01),
+              () -> MathUtil.applyDeadband(-controller.getRightX(), 0.01)));
+      // TODO: Move deadband to constants file
 
-    controller
-        .start()
-        .onTrue(
-            new InstantCommand(() -> drive.setFieldOrientedDrive(!drive.isFieldOrientedDrive())));
+      controller
+          .start()
+          .onTrue(
+              new InstantCommand(() -> drive.setFieldOrientedDrive(!drive.isFieldOrientedDrive())));
+    }
   }
 
   public Command getAutonomousCommand() {

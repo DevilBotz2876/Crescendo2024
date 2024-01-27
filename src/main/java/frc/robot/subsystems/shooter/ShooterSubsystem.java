@@ -35,12 +35,12 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
 
   @Override
   public double getVoltage() {
-    return inputs.appliedVolts;
+    return inputs.appliedVoltsTop;
   }
 
   @Override
   public double getCurrentSpeed() {
-    return inputs.velocityRadPerSec;
+    return inputs.velocityRadPerSecTop;
   }
 
   @Override
