@@ -1,9 +1,11 @@
 package frc.robot.subsystems.drive;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
 import java.io.File;
+import org.littletonrobotics.junction.AutoLogOutput;
 import swervelib.SwerveDrive;
 import swervelib.parser.SwerveParser;
 
@@ -13,7 +15,7 @@ public class DriveSwerveYAGSL extends DriveBase {
   private final File swerveJsonDirectory =
       new File(Filesystem.getDeployDirectory(), "swervePracticeBot");
   private SwerveDrive swerveDrive;
-  private boolean fieldOrientedDrive = false;
+  @AutoLogOutput private boolean fieldOrientedDrive = false;
 
   public DriveSwerveYAGSL() {
     try {
@@ -48,5 +50,9 @@ public class DriveSwerveYAGSL extends DriveBase {
 
   public boolean isFieldOrientedDrive() {
     return fieldOrientedDrive;
+  }
+
+  public void resetOdometry() {
+    swerveDrive.resetOdometry(new Pose2d());
   }
 }
