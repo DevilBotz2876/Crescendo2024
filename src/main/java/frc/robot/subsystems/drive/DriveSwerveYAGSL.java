@@ -11,7 +11,7 @@ import swervelib.parser.SwerveParser;
 
 public class DriveSwerveYAGSL extends DriveBase {
   private final double maximumSpeed =
-      Units.feetToMeters(2); // * TODO: Calculate actual max speed */
+      Units.feetToMeters(4.5); // * TODO: Calculate actual max speed */
   private final File swerveJsonDirectory =
       new File(Filesystem.getDeployDirectory(), "swervePracticeBot");
   private SwerveDrive swerveDrive;
