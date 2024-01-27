@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.5,
+      "x": 0.52,
       "y": 2
     },
     "rotation": 0
@@ -20,13 +20,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 5.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Return Path"
+            "waitTime": 2.0
           }
         }
       ]
