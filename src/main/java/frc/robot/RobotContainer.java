@@ -71,6 +71,8 @@ public class RobotContainer {
         .start()
         .onTrue(
             new InstantCommand(() -> drive.setFieldOrientedDrive(!drive.isFieldOrientedDrive())));
+
+    controller.back().onTrue(new InstantCommand(() -> drive.resetOdometry()));
   }
 
   public Command getAutonomousCommand() {
