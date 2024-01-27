@@ -14,6 +14,7 @@ import frc.robot.commands.IntakeBaseCommand;
 import frc.robot.commands.ShooterEnable;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.drive.DriveTank;
+import frc.robot.subsystems.drive.DriveBase;
 import frc.robot.subsystems.drive.DriveSwerveYAGSL;
 import frc.robot.subsystems.drive.DriveTrain;
 import frc.robot.subsystems.intake.IntakeBase;
@@ -27,16 +28,39 @@ public class RobotContainer {
   public final CommandXboxController controller;
   public final ShooterSubsystem shooter;
   public final IntakeBase intake;
-  public final DriveSwerveYAGSL drive;
-  private final Joystick m_controller = new Joystick(0);
+  public final DriveBase drive;
 
-  public String checkDriveMode = "tank";
+  public enum RobotModel {
+    PHOENIX, // Practice Swerve Bot
+    SHERMAN, // Practice Tank Bot
+  }
+
+  public enum DriveType {
+    NONE,
+    SWERVE,
+    TANK
+  }
 
   public RobotContainer() {
+    RobotModel model = RobotModel.PHOENIX;
+
     controller = new CommandXboxController(0);
 
     boolean hasIntake = false;
     boolean hasShooter = false;
+    DriveType driveType = DriveType.NONE;
+
+    switch (model) {
+      case PHOENIX:
+        driveType = DriveType.SWERVE;
+        break;
+      case SHERMAN:
+        driveType = DriveType.TANK;
+        hasIntake = true;
+        hasShooter = true;
+        break;
+      default:
+    }
 
     if (hasShooter) {
       shooter = new ShooterSubsystem(new ShooterIOSparkMax());
@@ -50,17 +74,34 @@ public class RobotContainer {
       intake = new IntakeBase(new IntakeIOSim());
     }
 
-    drive = new DriveSwerveYAGSL();
+    switch (driveType) {
+      case SWERVE:
+        drive = new DriveSwerveYAGSL();
+        break;
+      case TANK:
+        drive = new DriveTrain();
+        // Once DriveTrain implements "runVelocity", we can delete starting from this...
+        DriveTrain m_drivetrain = (DriveTrain) drive;
+        m_drivetrain.setDefaultCommand(
+          new DriveTank(
+            m_drivetrain,
+            () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.05),
+            () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.05)
+          )
+        );
+        // ...upto these lines
+        break;
+      default:
+        drive = null;
+    }
 
     configureBindings();
   }
 
   private void configureBindings() {
-    switch (checkDriveMode) {
-      case "swerve" :
-        shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
-
+      shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
       controller.rightTrigger().whileTrue(new ShooterEnable(shooter));
+
       intake.setDefaultCommand(
         new IntakeBaseCommand(
           intake,
@@ -69,11 +110,11 @@ public class RobotContainer {
 
       drive.setDefaultCommand(
         new DriveCommand(
-          drive,
-          () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.01),
-          () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.01),
-          () -> MathUtil.applyDeadband(-controller.getRightX(), 0.01)));
-      // TODO: Move deadband to constants file
+            drive,
+            () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.05),
+            () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.05),
+            () -> MathUtil.applyDeadband(-controller.getRightX(), 0.05)));
+    // TODO: Move deadband to constants file
 
       controller
         .start()
@@ -81,19 +122,6 @@ public class RobotContainer {
             new InstantCommand(() -> drive.setFieldOrientedDrive(!drive.isFieldOrientedDrive())));
 
       controller.back().onTrue(new InstantCommand(() -> drive.resetOdometry()));
-      break;
-
-      case "tank" :
-        DriveTrain m_drivetrain = new DriveTrain();
-        m_drivetrain.setDefaultCommand(
-          new DriveTank(
-            m_drivetrain,
-            m_controller::getY,
-            m_controller::getX
-          )
-        );
-        break;
-    }
   }
 
   public Command getAutonomousCommand() {

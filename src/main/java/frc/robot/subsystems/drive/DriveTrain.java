@@ -6,7 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class DriveTrain extends SubsystemBase {
+public class DriveTrain extends DriveBase {
     // Define talons
     private static final WPI_TalonSRX leftMaster = new WPI_TalonSRX(10);
     private static final WPI_TalonSRX rightMaster = new WPI_TalonSRX(11);
