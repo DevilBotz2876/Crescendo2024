@@ -14,6 +14,8 @@ public interface Shooter {
    */
   public default void setVoltage(double volts) {}
 
+  public default void setVelocity(double setPoint) {}
+
   public double getCurrentSpeed();
 
   public double getVoltage();

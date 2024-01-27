@@ -12,6 +12,7 @@ public class ShooterEnable extends Command {
   ShooterSubsystem shooter;
   ShuffleboardTab tab;
   GenericEntry voltsEntry;
+  GenericEntry velocityEntry;
 
   public ShooterEnable(ShooterSubsystem shooter) {
     this.shooter = shooter;
@@ -25,14 +26,20 @@ public class ShooterEnable extends Command {
             .withProperties(Map.of("min", -12, "max", 12))
             .getEntry();
 
+    velocityEntry = tab.add("Velocity", 0).withProperties(Map.of("min", 0, "max", 300)).getEntry();
+
     // Sets default value to 0.0
     voltsEntry.setValue(0.0);
+    velocityEntry.setValue(0.0);
 
     addRequirements(shooter);
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    // shooter.setVoltage(velocityEntry.getDouble(0.0));
+    // shooter.setVoltage(200);
+  }
 
   @Override
   public void execute() {
@@ -41,6 +48,8 @@ public class ShooterEnable extends Command {
 
     // Enable motors, It has to be called regularly for voltage compensation to work properly
     shooter.enable();
+    // shooter.setVelocity(velocityEntry.getDouble(0.0));
+
   }
 
   @Override
