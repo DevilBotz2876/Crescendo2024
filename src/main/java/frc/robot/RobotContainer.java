@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -12,7 +13,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.IntakeBaseCommand;
 import frc.robot.commands.ShooterEnable;
 import frc.robot.commands.drive.DriveCommand;
+import frc.robot.commands.drive.DriveTank;
 import frc.robot.subsystems.drive.DriveSwerveYAGSL;
+import frc.robot.subsystems.drive.DriveTrain;
 import frc.robot.subsystems.intake.IntakeBase;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.intake.IntakeIOSparkMax;
@@ -25,6 +28,9 @@ public class RobotContainer {
   public final ShooterSubsystem shooter;
   public final IntakeBase intake;
   public final DriveSwerveYAGSL drive;
+  private final Joystick m_controller = new Joystick(0);
+
+  public String checkDriveMode = "tank";
 
   public RobotContainer() {
     controller = new CommandXboxController(0);
@@ -50,29 +56,44 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
+    switch (checkDriveMode) {
+      case "swerve" :
+        shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
 
-    controller.rightTrigger().whileTrue(new ShooterEnable(shooter));
-    intake.setDefaultCommand(
+      controller.rightTrigger().whileTrue(new ShooterEnable(shooter));
+      intake.setDefaultCommand(
         new IntakeBaseCommand(
-            intake,
-            () -> controller.rightBumper().getAsBoolean(),
-            () -> controller.leftBumper().getAsBoolean()));
+          intake,
+          () -> controller.rightBumper().getAsBoolean(),
+          () -> controller.leftBumper().getAsBoolean()));
 
-    drive.setDefaultCommand(
+      drive.setDefaultCommand(
         new DriveCommand(
-            drive,
-            () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.01),
-            () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.01),
-            () -> MathUtil.applyDeadband(-controller.getRightX(), 0.01)));
-    // TODO: Move deadband to constants file
+          drive,
+          () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.01),
+          () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.01),
+          () -> MathUtil.applyDeadband(-controller.getRightX(), 0.01)));
+      // TODO: Move deadband to constants file
 
-    controller
+      controller
         .start()
         .onTrue(
             new InstantCommand(() -> drive.setFieldOrientedDrive(!drive.isFieldOrientedDrive())));
 
-    controller.back().onTrue(new InstantCommand(() -> drive.resetOdometry()));
+      controller.back().onTrue(new InstantCommand(() -> drive.resetOdometry()));
+      break;
+
+      case "tank" :
+        DriveTrain m_drivetrain = new DriveTrain();
+        m_drivetrain.setDefaultCommand(
+          new DriveTank(
+            m_drivetrain,
+            m_controller::getY,
+            m_controller::getX
+          )
+        );
+        break;
+    }
   }
 
   public Command getAutonomousCommand() {
