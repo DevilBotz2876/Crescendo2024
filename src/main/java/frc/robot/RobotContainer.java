@@ -62,9 +62,9 @@ public class RobotContainer {
     drive.setDefaultCommand(
         new DriveCommand(
             drive,
-            () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.01),
-            () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.01),
-            () -> MathUtil.applyDeadband(-controller.getRightX(), 0.01)));
+            () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.05),
+            () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.05),
+            () -> MathUtil.applyDeadband(-controller.getRightX(), 0.05)));
     // TODO: Move deadband to constants file
 
     controller
