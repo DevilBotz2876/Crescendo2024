@@ -23,4 +23,14 @@ public interface Drive {
    * @return speed in radian/sec
    */
   public double getMaxAngularSpeed();
+
+  public default void setFieldOrientedDrive(boolean enable) {}
+  ;
+
+  public default boolean isFieldOrientedDrive() {
+    return false;
+  }
+
+  public default void resetOdometry() {}
+  ;
 }
