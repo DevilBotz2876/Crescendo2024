@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.IntakeBaseCommand;
 import frc.robot.commands.ShooterEnable;
 import frc.robot.commands.drive.DriveCommand;
+import frc.robot.subsystems.drive.DriveBase;
 import frc.robot.subsystems.drive.DriveSwerveYAGSL;
 import frc.robot.subsystems.intake.IntakeBase;
 import frc.robot.subsystems.intake.IntakeIOSim;
@@ -27,14 +28,40 @@ public class RobotContainer {
   public final CommandXboxController controller;
   public final ShooterSubsystem shooter;
   public final IntakeBase intake;
-  public final DriveSwerveYAGSL drive;
+  public final DriveBase drive;
   private final SendableChooser<Command> autoChooser;
 
+  public enum RobotModel {
+    PHOENIX, // Practice Swerve Bot
+    SHERMAN, // Practice Tank Bot
+  }
+
+  public enum DriveType {
+    NONE,
+    SWERVE,
+    TANK
+  }
+
   public RobotContainer() {
+    RobotModel model = RobotModel.PHOENIX;
+
     controller = new CommandXboxController(0);
 
     boolean hasIntake = false;
     boolean hasShooter = false;
+    DriveType driveType = DriveType.NONE;
+
+    switch (model) {
+      case PHOENIX:
+        driveType = DriveType.SWERVE;
+        break;
+      case SHERMAN:
+        driveType = DriveType.TANK;
+        hasIntake = true;
+        hasShooter = true;
+        break;
+      default:
+    }
 
     if (hasShooter) {
       shooter = new ShooterSubsystem(new ShooterIOSparkMax());
@@ -48,7 +75,16 @@ public class RobotContainer {
       intake = new IntakeBase(new IntakeIOSim());
     }
 
-    drive = new DriveSwerveYAGSL();
+    switch (driveType) {
+      case SWERVE:
+        drive = new DriveSwerveYAGSL();
+        break;
+      case TANK:
+        drive = null;
+        break;
+      default:
+        drive = null;
+    }
 
     configureBindings();
     autoChooser = AutoBuilder.buildAutoChooser("Mobility Auto");
