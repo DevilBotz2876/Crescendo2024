@@ -9,9 +9,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.ArmCommand;
 import frc.robot.commands.IntakeBaseCommand;
 import frc.robot.commands.ShooterEnable;
 import frc.robot.commands.drive.DriveCommand;
+import frc.robot.subsystems.arm.ArmIOSparkMax;
+import frc.robot.subsystems.arm.ArmIOStub;
+import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.drive.DriveBase;
 import frc.robot.subsystems.drive.DriveSwerveYAGSL;
 import frc.robot.subsystems.intake.IntakeBase;
@@ -26,6 +30,7 @@ public class RobotContainer {
   public final ShooterSubsystem shooter;
   public final IntakeBase intake;
   public final DriveBase drive;
+  public final ArmSubsystem arm;
 
   public enum RobotModel {
     PHOENIX, // Practice Swerve Bot
@@ -46,6 +51,7 @@ public class RobotContainer {
     boolean hasIntake = false;
     boolean hasShooter = false;
     DriveType driveType = DriveType.NONE;
+    boolean hasArm = false;
 
     switch (model) {
       case PHOENIX:
@@ -55,6 +61,7 @@ public class RobotContainer {
         driveType = DriveType.TANK;
         hasIntake = true;
         hasShooter = true;
+        hasArm = true;
         break;
       default:
     }
@@ -80,6 +87,12 @@ public class RobotContainer {
         break;
       default:
         drive = null;
+    }
+
+    if (hasArm) {
+      arm = new ArmSubsystem(new ArmIOSparkMax());
+    } else {
+      arm = new ArmSubsystem(new ArmIOStub());
     }
 
     configureBindings();
@@ -109,6 +122,12 @@ public class RobotContainer {
             new InstantCommand(() -> drive.setFieldOrientedDrive(!drive.isFieldOrientedDrive())));
 
     controller.back().onTrue(new InstantCommand(() -> drive.resetOdometry()));
+
+    arm.setDefaultCommand(
+        new ArmCommand(
+            arm,
+            () -> controller.getHID().getPOV() == 0,
+            () -> controller.getHID().getPOV() == 180));
   }
 
   public Command getAutonomousCommand() {
