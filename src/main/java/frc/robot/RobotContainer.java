@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -83,12 +82,10 @@ public class RobotContainer {
         // Once DriveTrain implements "runVelocity", we can delete starting from this...
         DriveTrain m_drivetrain = (DriveTrain) drive;
         m_drivetrain.setDefaultCommand(
-          new DriveTank(
-            m_drivetrain,
-            () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.05),
-            () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.05)
-          )
-        );
+            new DriveTank(
+                m_drivetrain,
+                () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.05),
+                () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.05)));
         // ...upto these lines
         break;
       default:
@@ -99,29 +96,31 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-      shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
-      controller.rightTrigger().whileTrue(new ShooterEnable(shooter));
+    shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
+    controller.rightTrigger().whileTrue(new ShooterEnable(shooter));
 
-      intake.setDefaultCommand(
+    intake.setDefaultCommand(
         new IntakeBaseCommand(
-          intake,
-          () -> controller.rightBumper().getAsBoolean(),
-          () -> controller.leftBumper().getAsBoolean()));
+            intake,
+            () -> controller.rightBumper().getAsBoolean(),
+            () -> controller.leftBumper().getAsBoolean()));
 
+    if (drive != null) {
       drive.setDefaultCommand(
-        new DriveCommand(
-            drive,
-            () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.05),
-            () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.05),
-            () -> MathUtil.applyDeadband(-controller.getRightX(), 0.05)));
-    // TODO: Move deadband to constants file
+          new DriveCommand(
+              drive,
+              () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.05),
+              () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.05),
+              () -> MathUtil.applyDeadband(-controller.getRightX(), 0.05)));
+      // TODO: Move deadband to constants file
 
       controller
-        .start()
-        .onTrue(
-            new InstantCommand(() -> drive.setFieldOrientedDrive(!drive.isFieldOrientedDrive())));
+          .start()
+          .onTrue(
+              new InstantCommand(() -> drive.setFieldOrientedDrive(!drive.isFieldOrientedDrive())));
 
       controller.back().onTrue(new InstantCommand(() -> drive.resetOdometry()));
+    }
   }
 
   public Command getAutonomousCommand() {
