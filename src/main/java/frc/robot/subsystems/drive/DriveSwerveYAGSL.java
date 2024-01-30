@@ -88,4 +88,8 @@ public class DriveSwerveYAGSL extends DriveBase {
   public void resetOdometry() {
     swerveDrive.resetOdometry(new Pose2d());
   }
+
+  public void setPoseToMatchField() {
+    swerveDrive.resetOdometry(swerveDrive.field.getRobotPose());
+  }
 }
