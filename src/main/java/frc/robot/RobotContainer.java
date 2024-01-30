@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.IntakeBaseCommand;
 import frc.robot.commands.ShooterEnable;
 import frc.robot.commands.drive.DriveCommand;
+import frc.robot.subsystems.drive.DriveBase;
 import frc.robot.subsystems.drive.DriveSwerveYAGSL;
 import frc.robot.subsystems.intake.IntakeBase;
 import frc.robot.subsystems.intake.IntakeIOSim;
@@ -25,17 +26,42 @@ public class RobotContainer {
   public final CommandXboxController controller;
   public final ShooterSubsystem shooter;
   public final IntakeBase intake;
-  public final DriveSwerveYAGSL drive;
+  public final DriveBase drive;
+
+  public enum RobotModel {
+    PHOENIX, // Practice Swerve Bot
+    SHERMAN, // Practice Tank Bot
+  }
+
+  public enum DriveType {
+    NONE,
+    SWERVE,
+    TANK
+  }
 
   private final LoggedDashboardNumber shooterSpeedInput =
       new LoggedDashboardNumber("Shooter Speed", 300.0);
 
   public RobotContainer() {
+    RobotModel model = RobotModel.PHOENIX;
+
     controller = new CommandXboxController(0);
 
-    boolean hasIntake = true;
-    boolean hasShooter = true;
-    boolean hasDrive = false;
+    boolean hasIntake = false;
+    boolean hasShooter = false;
+    DriveType driveType = DriveType.NONE;
+
+    switch (model) {
+      case PHOENIX:
+        driveType = DriveType.SWERVE;
+        break;
+      case SHERMAN:
+        driveType = DriveType.TANK;
+        hasIntake = true;
+        hasShooter = true;
+        break;
+      default:
+    }
 
     if (hasShooter) {
       shooter = new ShooterSubsystem(new ShooterIOSparkMax());
@@ -49,10 +75,15 @@ public class RobotContainer {
       intake = new IntakeBase(new IntakeIOSim());
     }
 
-    if (hasDrive) {
-      drive = new DriveSwerveYAGSL();
-    } else {
-      drive = null;
+    switch (driveType) {
+      case SWERVE:
+        drive = new DriveSwerveYAGSL();
+        break;
+      case TANK:
+        drive = null;
+        break;
+      default:
+        drive = null;
     }
 
     configureBindings();
@@ -75,20 +106,20 @@ public class RobotContainer {
             () -> controller.rightBumper().getAsBoolean(),
             () -> controller.leftBumper().getAsBoolean()));
 
-    if (drive != null) {
-      drive.setDefaultCommand(
-          new DriveCommand(
-              drive,
-              () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.01),
-              () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.01),
-              () -> MathUtil.applyDeadband(-controller.getRightX(), 0.01)));
-      // TODO: Move deadband to constants file
+    drive.setDefaultCommand(
+        new DriveCommand(
+            drive,
+            () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.05),
+            () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.05),
+            () -> MathUtil.applyDeadband(-controller.getRightX(), 0.05)));
+    // TODO: Move deadband to constants file
 
-      controller
-          .start()
-          .onTrue(
-              new InstantCommand(() -> drive.setFieldOrientedDrive(!drive.isFieldOrientedDrive())));
-    }
+    controller
+        .start()
+        .onTrue(
+            new InstantCommand(() -> drive.setFieldOrientedDrive(!drive.isFieldOrientedDrive())));
+
+    controller.back().onTrue(new InstantCommand(() -> drive.resetOdometry()));
   }
 
   public Command getAutonomousCommand() {
