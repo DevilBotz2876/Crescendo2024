@@ -12,7 +12,9 @@ public interface Shooter {
    *
    * @param volts The volts to set. Value should be between -12.0 and 12.0.
    */
-  public default void setVoltage(double volts) {}
+  public default void runVoltage(double volts) {}
+
+  public default void runVelocity(double setPoint) {}
 
   public double getCurrentSpeed();
 
