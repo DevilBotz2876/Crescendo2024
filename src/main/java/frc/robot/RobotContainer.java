@@ -5,7 +5,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-//import com.pathplanner.lib.commands.PathPlannerAuto;
+// import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -52,7 +52,7 @@ public class RobotContainer {
 
     configureBindings();
     autoChooser = AutoBuilder.buildAutoChooser("Mobility Auto");
-     SmartDashboard.putData("Auto Chooser", autoChooser);
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   private void configureBindings() {

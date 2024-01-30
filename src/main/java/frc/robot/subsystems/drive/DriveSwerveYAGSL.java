@@ -6,7 +6,6 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import java.io.File;
@@ -15,8 +14,7 @@ import swervelib.SwerveDrive;
 import swervelib.parser.SwerveParser;
 
 public class DriveSwerveYAGSL extends DriveBase {
-  private final double maximumSpeed =
-      Units.feetToMeters(4.5); // * TODO: Calculate actual max speed */
+  private final double maximumSpeed = 4.5; // meters/sec
   private final File swerveJsonDirectory =
       new File(Filesystem.getDeployDirectory(), "swervePracticeBot");
   private SwerveDrive swerveDrive;
