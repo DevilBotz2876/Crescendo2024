@@ -108,8 +108,13 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getVoltage()" class="member-name-link">getVoltage</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#setVoltage(double)" class="member-name-link">setVoltage</a><wbr>(double&nbsp;volts)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#runVelocity(double)" class="member-name-link">runVelocity</a><wbr>(double&nbsp;velocityRPM)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="block">Run closed loop at the specified velocity</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#runVoltage(double)" class="member-name-link">runVoltage</a><wbr>(double&nbsp;volts)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Set the voltage of motors for the shooter.</div>
 </div>
 </div>
@@ -141,14 +146,21 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="setVoltage(double)">
-<h3>setVoltage</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setVoltage</span><wbr><span class="parameters">(double&nbsp;volts)</span></div>
+<section class="detail" id="runVoltage(double)">
+<h3>runVoltage</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">runVoltage</span><wbr><span class="parameters">(double&nbsp;volts)</span></div>
 <div class="block">Set the voltage of motors for the shooter.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>volts</code> - The volts to set. Value should be between -12.0 and 12.0.</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="runVelocity(double)">
+<h3>runVelocity</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">runVelocity</span><wbr><span class="parameters">(double&nbsp;velocityRPM)</span></div>
+<div class="block">Run closed loop at the specified velocity</div>
 </section>
 </li>
 <li>
