@@ -1,46 +1,61 @@
 package frc.robot.subsystems.shooter;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class ShooterSubsystem extends SubsystemBase implements Shooter {
   ShooterIO io;
+  private final SimpleMotorFeedforward ffModel;
   private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
   @AutoLogOutput private double voltage;
+  @AutoLogOutput private double velocityRPM;
 
   public ShooterSubsystem(ShooterIO io) {
     this.io = io;
+    // TODO: These are sample values.  Need to run sysid on shooter and get real values.
+    ffModel = new SimpleMotorFeedforward(0.1, 0.05);
     voltage = 0;
+    velocityRPM = 0.0;
   }
 
   @Override
   // Disable the shooter
   public void disable() {
-    voltage = 0;
-    io.setVoltage(voltage);
+    io.stop();
   }
 
   @Override
   // Enable the shooter
   public void enable() {
-    io.setVoltage(voltage);
+    // io.setVoltage(voltage);
   }
 
   @Override
   // Sets the voltage to volts. the volts value is -12 to 12
-  public void setVoltage(double volts) {
+  public void runVoltage(double volts) {
     voltage = volts;
   }
 
   @Override
+  public void runVelocity(double velocityRPM) {
+    this.velocityRPM = velocityRPM;
+    var velocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(velocityRPM);
+
+    io.setVelocity(velocityRadPerSec, ffModel.calculate(velocityRadPerSec));
+  }
+
+  @Override
   public double getVoltage() {
-    return inputs.appliedVolts;
+    return inputs.appliedVoltsTop;
   }
 
   @Override
   public double getCurrentSpeed() {
-    return inputs.velocityRadPerSec;
+    return inputs.velocityRadPerSecTop;
   }
 
   @Override
@@ -48,5 +63,7 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
     // Updates the inputs
     io.updateInputs(inputs);
     Logger.processInputs("Shooter", inputs);
+    SmartDashboard.putNumber("Shooter/TopRPM", inputs.velocityRadPerSecTop);
+    SmartDashboard.putNumber("Shooter/BottomRPM", inputs.velocityRadPerSecBottom);
   }
 }
