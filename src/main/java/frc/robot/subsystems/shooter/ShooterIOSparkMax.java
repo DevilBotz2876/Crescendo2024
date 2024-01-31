@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.SparkPIDController.ArbFFUnits;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -14,9 +15,13 @@ public class ShooterIOSparkMax implements ShooterIO {
   // define the 2 SparkMax Controllers. A top, and a bottom
   private final CANSparkMax top = new CANSparkMax(2, MotorType.kBrushless);
   private final CANSparkMax bottom = new CANSparkMax(1, MotorType.kBrushless);
+
   private SparkPIDController topPid = top.getPIDController();
   private SparkPIDController bottomPid = bottom.getPIDController();
+
   public double tkP, tkI, tkD, tkIz, tkFF, tkMaxOutput, tkMinOutput, tmaxRPS;
+
+  // TODO: probably remove bottom since shooter will have one motor, not two independent motors
   public double bkP, bkI, bkD, bkIz, bkFF, bkMaxOutput, bkMinOutput, bmaxRPS;
 
   // Gets the NEO encoder
@@ -34,6 +39,8 @@ public class ShooterIOSparkMax implements ShooterIO {
 
     top.burnFlash();
 
+    // TODO: these values are samples picked from REV example PID code.  Need to tune PID and choose
+    // real values.
     tkP = 6e-5;
     tkI = 0;
     tkD = 0;
@@ -43,6 +50,7 @@ public class ShooterIOSparkMax implements ShooterIO {
     tkMinOutput = -1;
     tmaxRPS = 300;
 
+    // TODO: probably remove bottom since shooter will have one motor, not two independent motors
     bkP = 6e-5;
     bkI = 0;
     bkD = 0;
@@ -59,6 +67,7 @@ public class ShooterIOSparkMax implements ShooterIO {
     topPid.setFF(tkFF);
     topPid.setOutputRange(tkMinOutput, tkMaxOutput);
 
+    // TODO: probably remove bottom since shooter will have one motor, not two independent motors
     bottomPid.setP(bkP);
     bottomPid.setI(bkI);
     bottomPid.setD(bkD);
@@ -74,6 +83,8 @@ public class ShooterIOSparkMax implements ShooterIO {
     SmartDashboard.putNumber("Shooter/top/Max Output", tkMaxOutput);
     SmartDashboard.putNumber("Shooter/top/Min Output", tkMinOutput);
 
+    // TODO: probably remove this since shooter will have one motor, not two independent motors
+    //
     // SmartDashboard.putNumber("Shooter/bot/P Gain", bkP);
     // SmartDashboard.putNumber("Shooter/bot/I Gain", bkI);
     // SmartDashboard.putNumber("Shooter/bot/D Gain", bkD);
@@ -111,6 +122,8 @@ public class ShooterIOSparkMax implements ShooterIO {
     double tmax = SmartDashboard.getNumber("Shooter/top/Max Output", 0);
     double tmin = SmartDashboard.getNumber("Shooter/top/Min Output", 0);
 
+    // TODO: probably remove this since shooter will have one motor, not two independent motors
+    //
     // double bp = SmartDashboard.getNumber("Shooter/bot/P Gain", 0);
     // double bi = SmartDashboard.getNumber("Shooter/bot/I Gain", 0);
     // double bd = SmartDashboard.getNumber("Shooter/bot/D Gain", 0);
@@ -145,6 +158,8 @@ public class ShooterIOSparkMax implements ShooterIO {
       tkMaxOutput = tmax;
     }
 
+    // TODO: probably remove bottom since shooter will have one motor, not two independent motors
+    //
     // if ((bp != bkP)) {
     //   bottomPid.setP(bp);
     //   bkP = bp;
@@ -173,16 +188,21 @@ public class ShooterIOSparkMax implements ShooterIO {
   }
 
   @Override
-  public void setVelocity(double setPoint, double ff) {
-    // topPid.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
+  public void setVelocity(double velocityRadPerSec, double ffVolts) {
+
     topPid.setReference(
-        Units.radiansPerSecondToRotationsPerMinute(setPoint) * GEAR_RATIO,
-        CANSparkMax.ControlType.kVelocity);
-    SmartDashboard.putNumber("Shooter/top/SetPoint", setPoint);
+        Units.radiansPerSecondToRotationsPerMinute(velocityRadPerSec) * GEAR_RATIO,
+        CANSparkMax.ControlType.kVelocity,
+        0,
+        ffVolts,
+        ArbFFUnits.kVoltage);
+
+    SmartDashboard.putNumber("Shooter/top/velocityRadPerSec", velocityRadPerSec);
     SmartDashboard.putNumber("Shooter/top/ProcessVariable", topEncoder.getVelocity());
 
+    // TODO: probably remove bottom since shooter will have one motor, not two independent motors
+    //
     // bottomPid.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
-
     // SmartDashboard.putNumber("Shooter/bot/SetPoint", setPoint);
     // SmartDashboard.putNumber("Shooter/bot/ProcessVariable", bottomEncoder.getVelocity());
   }

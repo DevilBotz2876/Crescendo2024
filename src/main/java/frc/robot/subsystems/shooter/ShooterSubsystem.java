@@ -12,14 +12,14 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
   private final SimpleMotorFeedforward ffModel;
   private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
   @AutoLogOutput private double voltage;
-  @AutoLogOutput private double setPoint;
+  @AutoLogOutput private double velocityRPM;
 
   public ShooterSubsystem(ShooterIO io) {
     this.io = io;
-    // TODO: need to run sysid on shooter and get these values.
+    // TODO: These are sample values.  Need to run sysid on shooter and get real values.
     ffModel = new SimpleMotorFeedforward(0.1, 0.05);
     voltage = 0;
-    setPoint = 0;
+    velocityRPM = 0.0;
   }
 
   @Override
@@ -41,11 +41,11 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
   }
 
   @Override
-  public void runVelocity(double setPoint) {
-    this.setPoint = setPoint;
-    var velocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(setPoint);
+  public void runVelocity(double velocityRPM) {
+    this.velocityRPM = velocityRPM;
+    var velocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(velocityRPM);
 
-    io.setVelocity(setPoint, ffModel.calculate(velocityRadPerSec));
+    io.setVelocity(velocityRadPerSec, ffModel.calculate(velocityRadPerSec));
   }
 
   @Override
