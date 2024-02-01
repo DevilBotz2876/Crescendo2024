@@ -19,10 +19,11 @@ import frc.robot.subsystems.drive.DriveBase;
 import frc.robot.subsystems.drive.DriveSwerveYAGSL;
 import frc.robot.subsystems.intake.IntakeBase;
 import frc.robot.subsystems.intake.IntakeIOSim;
-import frc.robot.subsystems.intake.IntakeIOSparkMax;
+import frc.robot.subsystems.intake.IntakeIOTalonSRX;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
+import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
 public class RobotContainer {
   public final CommandXboxController controller;
@@ -41,6 +42,9 @@ public class RobotContainer {
     SWERVE,
     TANK
   }
+
+  private final LoggedDashboardNumber shooterSpeedInput =
+      new LoggedDashboardNumber("Shooter Speed", 300.0);
 
   public RobotContainer() {
     RobotModel model = RobotModel.PHOENIX;
@@ -70,7 +74,7 @@ public class RobotContainer {
     }
 
     if (hasIntake) {
-      intake = new IntakeBase(new IntakeIOSparkMax());
+      intake = new IntakeBase(new IntakeIOTalonSRX());
     } else {
       intake = new IntakeBase(new IntakeIOSim());
     }
@@ -92,9 +96,16 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
+    // shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
 
     controller.rightTrigger().whileTrue(new ShooterEnable(shooter));
+
+    controller
+        .a()
+        .whileTrue(
+            Commands.startEnd(
+                () -> shooter.runVelocity(shooterSpeedInput.get()), shooter::disable, shooter));
+
     intake.setDefaultCommand(
         new IntakeBaseCommand(
             intake,
