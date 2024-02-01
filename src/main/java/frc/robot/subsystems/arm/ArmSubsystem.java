@@ -1,5 +1,6 @@
 package frc.robot.subsystems.arm;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -16,7 +17,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   @Override
   public double getAngle() {
     /* TODO */
-    return 0;
+    return Units.radiansToDegrees(inputs.positionRad);
+    //return 0;
   }
 
   // sets of the angle of the arm
@@ -24,6 +26,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   public void setAngle(double degrees) {
     /* TODO: Enforce arm physical min/max limits */
     this.degrees = degrees;
+    
   }
 
   @Override
