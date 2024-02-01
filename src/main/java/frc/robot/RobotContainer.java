@@ -4,7 +4,11 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+// import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -27,6 +31,7 @@ public class RobotContainer {
   public final ShooterSubsystem shooter;
   public final IntakeBase intake;
   public final DriveBase drive;
+  private final SendableChooser<Command> autoChooser;
 
   public enum RobotModel {
     PHOENIX, // Practice Swerve Bot
@@ -87,6 +92,8 @@ public class RobotContainer {
     }
 
     configureBindings();
+    autoChooser = AutoBuilder.buildAutoChooser("Mobility Auto");
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   private void configureBindings() {
@@ -123,6 +130,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return autoChooser.getSelected();
   }
 }

@@ -120,7 +120,10 @@ public class Robot extends LoggedRobot {
   }
 
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    // Allow moving robot on the sim field when in test mode
+    m_robotContainer.drive.setPoseToMatchField();
+  }
 
   @Override
   public void testExit() {}
