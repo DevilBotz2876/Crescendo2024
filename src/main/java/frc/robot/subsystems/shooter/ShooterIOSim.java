@@ -24,4 +24,10 @@ public class ShooterIOSim implements ShooterIO {
     appliedVolts = volts;
     sim.setInputVoltage(volts);
   }
+
+  @Override
+  public void stop() {
+    appliedVolts = 0;
+    sim.setInputVoltage(0);
+  }
 }
