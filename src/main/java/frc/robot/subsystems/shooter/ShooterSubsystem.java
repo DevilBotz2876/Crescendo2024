@@ -2,7 +2,6 @@ package frc.robot.subsystems.shooter;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -13,6 +12,7 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
   private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
   @AutoLogOutput private double voltage;
   @AutoLogOutput private double velocityRPM;
+  @AutoLogOutput private double targetVelocityRadPerSec;
 
   public ShooterSubsystem(ShooterIO io) {
     this.io = io;
@@ -25,6 +25,7 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
   @Override
   // Disable the shooter
   public void disable() {
+    targetVelocityRadPerSec = 0;
     io.stop();
   }
 
@@ -43,9 +44,9 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
   @Override
   public void runVelocity(double velocityRPM) {
     this.velocityRPM = velocityRPM;
-    var velocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(velocityRPM);
+    targetVelocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(velocityRPM);
 
-    io.setVelocity(velocityRadPerSec, ffModel.calculate(velocityRadPerSec));
+    io.setVelocity(targetVelocityRadPerSec, ffModel.calculate(targetVelocityRadPerSec));
   }
 
   @Override
@@ -63,7 +64,5 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
     // Updates the inputs
     io.updateInputs(inputs);
     Logger.processInputs("Shooter", inputs);
-    SmartDashboard.putNumber("Shooter/TopRPM", inputs.velocityRadPerSecTop);
-    SmartDashboard.putNumber("Shooter/BottomRPM", inputs.velocityRadPerSecBottom);
   }
 }
