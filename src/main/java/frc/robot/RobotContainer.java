@@ -31,7 +31,7 @@ public class RobotContainer {
   public final ShooterSubsystem shooter;
   public final IntakeBase intake;
   public final DriveBase drive;
-  private final SendableChooser<Command> autoChooser;
+  private SendableChooser<Command> autoChooser = null;
 
   public enum RobotModel {
     PHOENIX, // Practice Swerve Bot
@@ -83,17 +83,17 @@ public class RobotContainer {
     switch (driveType) {
       case SWERVE:
         drive = new DriveSwerveYAGSL();
+        autoChooser = AutoBuilder.buildAutoChooser("Mobility Auto");
+        SmartDashboard.putData("Auto Chooser", autoChooser);
         break;
       case TANK:
-        drive = null;
+        drive = new DriveBase();
         break;
       default:
-        drive = null;
+        drive = new DriveBase();
     }
 
     configureBindings();
-    autoChooser = AutoBuilder.buildAutoChooser("Mobility Auto");
-    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   private void configureBindings() {
@@ -130,6 +130,10 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    if (autoChooser != null) {
+      return autoChooser.getSelected();
+    } else {
+      return null;
+    }
   }
 }
