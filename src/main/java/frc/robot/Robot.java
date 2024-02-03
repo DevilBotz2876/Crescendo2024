@@ -11,6 +11,7 @@ import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import org.littletonrobotics.urcl.URCL;
 
 // END: Setup AdvantageKit
 public class Robot extends LoggedRobot {
@@ -66,9 +67,13 @@ public class Robot extends LoggedRobot {
     }
     // }
 
+    // https://github.com/Mechanical-Advantage/AdvantageScope/blob/main/docs/REV-LOGGING.md
+    Logger.registerURCL(URCL.startExternal());
+
     Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may
     // be added.
     // END: Setup AdvantageKit
+
     m_robotContainer = new RobotContainer();
   }
 
