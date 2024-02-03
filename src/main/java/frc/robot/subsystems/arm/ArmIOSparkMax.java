@@ -3,22 +3,21 @@ package frc.robot.subsystems.arm;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ArmIOSparkMax implements ArmIO {
   private final CANSparkMax left = new CANSparkMax(2, MotorType.kBrushless);
-    
-  private final CANSparkMax right = new CANSparkMax(3, MotorType.kBrushless);;
+
+  private final CANSparkMax right = new CANSparkMax(3, MotorType.kBrushless);
+  ;
   private final DutyCycleEncoder encoder;
-  
+
   private SparkPIDController leftPid = left.getPIDController();
   private SparkPIDController rightPid = right.getPIDController();
 
   public double lkP, lkI, lkD, lkIz, lkFF, lkMaxOutput, lkMinOutput, lmaxRPS;
-
   public double rkP, rkI, rkD, rkIz, rkFF, rkMaxOutput, rkMinOutput, rmaxRPS;
 
   public ArmIOSparkMax() {
@@ -50,7 +49,7 @@ public class ArmIOSparkMax implements ArmIO {
     lkMinOutput = -1;
     rmaxRPS = 300;
 
-    //right
+    // right
     rkP = 6e-5;
     rkI = 0;
     rkD = 0;
@@ -114,7 +113,6 @@ public class ArmIOSparkMax implements ArmIO {
     double lmax = SmartDashboard.getNumber("Arm/left/Max Output", 0);
     double lmin = SmartDashboard.getNumber("Arm/left/Min Output", 0);
 
-    
     double rp = SmartDashboard.getNumber("Arm/right/P Gain", 0);
     double ri = SmartDashboard.getNumber("Arm/right/I Gain", 0);
     double rd = SmartDashboard.getNumber("Arm/right/D Gain", 0);
@@ -182,22 +180,19 @@ public class ArmIOSparkMax implements ArmIO {
   public void setPosition(double radians, double ffVolts) {
 
     leftPid.setReference(
-          Units.radiansToRotations(radians), 
-          CANSparkMax.ControlType.kPosition,
-          0, // Arbitrary slotID, you may need to adjust this based on your configuration
-          ffVolts
-        );
+        Units.radiansToRotations(radians),
+        CANSparkMax.ControlType.kPosition,
+        0, // Arbitrary slotID, you may need to adjust this based on your configuration
+        ffVolts);
 
     SmartDashboard.putNumber("Shooter/left/positionRad", radians);
     SmartDashboard.putNumber("Shooter/left/ProcessVariable", encoder.getAbsolutePosition());
 
-
     rightPid.setReference(
-          Units.radiansToRotations(radians), 
-          CANSparkMax.ControlType.kPosition,
-          0, // Arbitrary slotID, you may need to adjust this based on your configuration
-          ffVolts
-        );
+        Units.radiansToRotations(radians),
+        CANSparkMax.ControlType.kPosition,
+        0, // Arbitrary slotID, you may need to adjust this based on your configuration
+        ffVolts);
     SmartDashboard.putNumber("Shooter/right/positionRad", radians);
     SmartDashboard.putNumber("Shooter/right/ProcessVariable", encoder.getAbsolutePosition());
   }

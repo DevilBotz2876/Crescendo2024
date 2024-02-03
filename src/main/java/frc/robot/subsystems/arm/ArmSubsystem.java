@@ -3,9 +3,6 @@ package frc.robot.subsystems.arm;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import java.lang.annotation.Target;
-
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -18,7 +15,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
   public ArmSubsystem(ArmIO io) {
     this.io = io;
-    // TODO: These are sample values. 
+    // TODO: These are sample values.
     Armff = new ArmFeedforward(0.1, 1, 0.05, 0);
   }
 
@@ -26,7 +23,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   public double getAngle() {
     /* TODO */
     return Units.radiansToDegrees(inputs.positionRad);
-    //return 0;
+    // return 0;
   }
 
   // sets of the angle of the arm
@@ -39,20 +36,20 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     // Check if the angle is below the minimum limit or above the maximum limit
     // If it is the it is set to min/max
     if (degrees < minAngle) {
-        this.degrees = minAngle; // Set to the minimum angle
+      this.degrees = minAngle; // Set to the minimum angle
     } else if (degrees > maxAngle) {
-        this.degrees = maxAngle; // Set to the maximum angle
+      this.degrees = maxAngle; // Set to the maximum angle
     }
     // The  angle is within the range and is set
     else {
-        this.degrees = degrees;
+      this.degrees = degrees;
     }
 
-    //target 
+    // target
     double TargetRad = Units.degreesToRadians(degrees);
 
     // Calculate feedforward voltage with ArmFeedforward
-    double ffVolts = Armff.calculate(TargetRad, 1); 
+    double ffVolts = Armff.calculate(TargetRad, 1);
 
     // Set the position reference with feedforward voltage
     io.setPosition(TargetRad, ffVolts);
