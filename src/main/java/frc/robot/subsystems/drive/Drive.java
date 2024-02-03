@@ -33,4 +33,6 @@ public interface Drive {
 
   public default void resetOdometry() {}
   ;
+
+  public default void setPoseToMatchField() {}
 }

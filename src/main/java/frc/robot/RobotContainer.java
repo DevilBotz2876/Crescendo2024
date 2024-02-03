@@ -4,7 +4,11 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+// import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -32,6 +36,7 @@ public class RobotContainer {
   public final IntakeBase intake;
   public final DriveBase drive;
   public final ArmSubsystem arm;
+  private SendableChooser<Command> autoChooser = null;
 
   public enum RobotModel {
     PHOENIX, // Practice Swerve Bot
@@ -85,12 +90,14 @@ public class RobotContainer {
     switch (driveType) {
       case SWERVE:
         drive = new DriveSwerveYAGSL();
+        autoChooser = AutoBuilder.buildAutoChooser("Mobility Auto");
+        SmartDashboard.putData("Auto Chooser", autoChooser);
         break;
       case TANK:
-        drive = null;
+        drive = new DriveBase();
         break;
       default:
-        drive = null;
+        drive = new DriveBase();
     }
 
     if (hasArm) {
@@ -111,7 +118,9 @@ public class RobotContainer {
         .a()
         .whileTrue(
             Commands.startEnd(
-                () -> shooter.runVelocity(shooterSpeedInput.get()), shooter::disable, shooter));
+                () -> shooter.runVelocity(shooterSpeedInput.get()),
+                () -> shooter.runVelocity(0),
+                shooter));
 
     intake.setDefaultCommand(
         new IntakeBaseCommand(
@@ -142,6 +151,10 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    if (autoChooser != null) {
+      return autoChooser.getSelected();
+    } else {
+      return null;
+    }
   }
 }
