@@ -15,4 +15,7 @@ public interface ArmIO {
 
   /** Run the arm motor at the specified voltage. */
   public default void setVoltage(double volts) {}
+
+  /** sets of the position of the arm */
+  public default void setPosition(double radians, double ffVolts) {}
 }

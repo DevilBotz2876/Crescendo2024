@@ -8,6 +8,7 @@ public class ArmCommand extends Command {
   ArmSubsystem arm;
   BooleanSupplier moveUp;
   BooleanSupplier moveDown;
+  double targetAngle = 0;
 
   public ArmCommand(ArmSubsystem arm, BooleanSupplier moveUp, BooleanSupplier moveDown) {
     this.arm = arm;
@@ -22,8 +23,11 @@ public class ArmCommand extends Command {
     /* TODO: Implement arm controls here to increase/decrease desired angle */
     if (moveUp.getAsBoolean()) {
       System.out.println("Arm Up");
+      targetAngle++;
     } else if (moveDown.getAsBoolean()) {
       System.out.println("Arm Down");
+      targetAngle--;
     }
+    arm.setAngle(targetAngle);
   }
 }
