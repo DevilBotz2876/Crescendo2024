@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.IntakeBaseCommand;
 import frc.robot.commands.ShooterEnable;
 import frc.robot.commands.drive.DriveCommand;
-import frc.robot.commands.drive.DriveTank;
 import frc.robot.subsystems.drive.DriveBase;
 import frc.robot.subsystems.drive.DriveSwerveYAGSL;
 import frc.robot.subsystems.drive.DriveTrain;
@@ -81,14 +80,6 @@ public class RobotContainer {
       case TANK:
         drive = new DriveTrain();
         // Once DriveTrain implements "runVelocity", we can delete starting from this...
-        DriveTrain m_drivetrain = (DriveTrain) drive;
-        m_drivetrain.setDefaultCommand(
-          new DriveTank(
-            m_drivetrain,
-            () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.05),
-            () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.05)
-          )
-        );
         // ...upto these lines
         break;
       default:

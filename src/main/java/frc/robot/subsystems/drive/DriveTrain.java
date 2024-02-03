@@ -3,8 +3,12 @@ package frc.robot.subsystems.drive;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveTrain extends DriveBase {
     // Define talons
@@ -27,6 +31,17 @@ public class DriveTrain extends DriveBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+    }
+
+    @Override
+    public void runVelocity(ChassisSpeeds velocity) {
+      DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(24.0));
+      DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(velocity);
+
+      double leftVelocity = wheelSpeeds.leftMetersPerSecond;
+      double rightVelocity = wheelSpeeds.rightMetersPerSecond;
+      
+      differentialDrive.tankDrive(leftVelocity, rightVelocity);
     }
 
     private void setupTalons() {
