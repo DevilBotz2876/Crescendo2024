@@ -26,12 +26,21 @@ import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import java.util.Map;
+
 public class RobotContainer {
   public final CommandXboxController controller;
   public final ShooterSubsystem shooter;
   public final IntakeBase intake;
   public final DriveBase drive;
   private SendableChooser<Command> autoChooser = null;
+
+  ShuffleboardTab tab;
+  GenericEntry speedLimiterEntry;
 
   public enum RobotModel {
     PHOENIX, // Practice Swerve Bot
@@ -55,6 +64,15 @@ public class RobotContainer {
     boolean hasIntake = false;
     boolean hasShooter = false;
     DriveType driveType = DriveType.NONE;
+
+    tab = Shuffleboard.getTab("Drive Speed");
+    speedLimiterEntry =
+        tab.add("Drive Speed", 0)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 100))
+            .getEntry();
+    
+    speedLimiterEntry.setValue(50);
 
     switch (model) {
       case PHOENIX:
@@ -98,7 +116,7 @@ public class RobotContainer {
 
   private void configureBindings() {
     // shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
-
+    
     controller.rightTrigger().whileTrue(new ShooterEnable(shooter));
 
     controller
@@ -118,9 +136,9 @@ public class RobotContainer {
     drive.setDefaultCommand(
         new DriveCommand(
             drive,
-            () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.05),
-            () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.05),
-            () -> MathUtil.applyDeadband(-controller.getRightX(), 0.05)));
+            () -> MathUtil.applyDeadband(-(controller.getLeftY()) * (speedLimiterEntry.getDouble(100) / 100), 0.05),
+            () -> MathUtil.applyDeadband(-(controller.getLeftX()) * (speedLimiterEntry.getDouble(100) / 100), 0.05),
+            () -> MathUtil.applyDeadband(-(controller.getRightX()) * (speedLimiterEntry.getDouble(100) / 100), 0.05)));
     // TODO: Move deadband to constants file
 
     controller

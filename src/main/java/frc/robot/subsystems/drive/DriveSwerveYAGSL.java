@@ -6,19 +6,29 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+// import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+// import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+// import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+// import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
 import java.io.File;
+// import java.util.Map;
+
 import org.littletonrobotics.junction.AutoLogOutput;
 import swervelib.SwerveDrive;
 import swervelib.parser.SwerveParser;
 
 public class DriveSwerveYAGSL extends DriveBase {
-  private final double maximumSpeed = 4.5; // meters/sec
+  private double maximumSpeed = 4.5; // meters/sec
   private final File swerveJsonDirectory =
       new File(Filesystem.getDeployDirectory(), "swervePracticeBot");
   private SwerveDrive swerveDrive;
   @AutoLogOutput private boolean fieldOrientedDrive = false;
+
+  // ShuffleboardTab tab;
+  // GenericEntry speedLimiterEntry;
 
   public DriveSwerveYAGSL() {
     try {
@@ -26,6 +36,16 @@ public class DriveSwerveYAGSL extends DriveBase {
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
+
+    // tab = Shuffleboard.getTab("Drive Speed");
+    // speedLimiterEntry =
+    //     tab.add("Drive Speed", 0)
+    //         .withWidget(BuiltInWidgets.kNumberSlider)
+    //         .withProperties(Map.of("min", 0, "max", 100))
+    //         .getEntry();
+    
+    // speedLimiterEntry.setValue(100);
+    // maximumSpeed = maximumSpeed * (speedLimiterEntry.getDouble(100) / 10);
 
     AutoBuilder.configureHolonomic(
         swerveDrive::getPose, // Robot pose supplier
@@ -38,7 +58,7 @@ public class DriveSwerveYAGSL extends DriveBase {
             // your Constants class
             new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
             new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
-            4.5, // Max module speed, in m/s
+            maximumSpeed, // Max module speed, in m/s
             0.4, // Drive base radius in meters. Distance from robot center to furthest module.
             new ReplanningConfig() // Default path replanning config. See the API for the options
             // here
