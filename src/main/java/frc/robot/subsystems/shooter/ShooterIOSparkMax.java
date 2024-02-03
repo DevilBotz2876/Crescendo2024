@@ -103,10 +103,10 @@ public class ShooterIOSparkMax implements ShooterIO {
     // Get applied voltage from the top motor
     inputs.appliedVolts = top.getAppliedOutput() * top.getBusVoltage();
 
-//    inputs.velocityRadPerSecBottom =
-//        Units.rotationsPerMinuteToRadiansPerSecond(bottomEncoder.getVelocity() / GEAR_RATIO);
+    //    inputs.velocityRadPerSecBottom =
+    //        Units.rotationsPerMinuteToRadiansPerSecond(bottomEncoder.getVelocity() / GEAR_RATIO);
     // Get applied voltage from the top motor
-//    inputs.appliedVoltsBottom = bottom.getAppliedOutput() * bottom.getBusVoltage();
+    //    inputs.appliedVoltsBottom = bottom.getAppliedOutput() * bottom.getBusVoltage();
 
     double tp = SmartDashboard.getNumber("Shooter/top/P Gain", 0);
     double ti = SmartDashboard.getNumber("Shooter/top/I Gain", 0);
