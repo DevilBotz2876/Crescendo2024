@@ -8,15 +8,15 @@ import org.littletonrobotics.junction.Logger;
 
 public class ArmSubsystem extends SubsystemBase implements Arm {
   private final ArmIO io;
-  private final ArmFeedforward Armff;
   private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
-  @AutoLogOutput private double degrees;
-  @AutoLogOutput private double positionRad;
+  @AutoLogOutput private double degrees = 0;
+  ArmFeedforward feedforward;
 
   public ArmSubsystem(ArmIO io) {
     this.io = io;
-    // TODO: These are sample values.
-    Armff = new ArmFeedforward(0.1, 1, 0.05, 0);
+
+    // TODO: These are sample values.  Need to run sysid on shooter and get real values.
+    feedforward = new ArmFeedforward(1, 1, 1);
   }
 
   @Override
@@ -45,14 +45,15 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
       this.degrees = degrees;
     }
 
-    // target
-    double TargetRad = Units.degreesToRadians(degrees);
+    // target position for 
+    double positionRad = Units.degreesToRadians(degrees);
 
     // Calculate feedforward voltage with ArmFeedforward
-    double ffVolts = Armff.calculate(TargetRad, 1);
+    // TODO: The actual feedforward voltage needs to be computed!
+    double ffVolts = feedforward.calculate(positionRad, 1);
 
     // Set the position reference with feedforward voltage
-    io.setPosition(TargetRad, ffVolts);
+    io.setPosition(positionRad, ffVolts);
   }
 
   @Override
