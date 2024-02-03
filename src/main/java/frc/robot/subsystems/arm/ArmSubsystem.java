@@ -1,8 +1,12 @@
 package frc.robot.subsystems.arm;
 
+import static edu.wpi.first.units.Units.Volts;
+
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -11,12 +15,23 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
   @AutoLogOutput private double degrees = 0;
   ArmFeedforward feedforward;
+  private final SysIdRoutine sysId;
 
   public ArmSubsystem(ArmIO io) {
     this.io = io;
 
     // TODO: These are sample values.  Need to run sysid on shooter and get real values.
     feedforward = new ArmFeedforward(1, 1, 1);
+
+    // Configure SysId based on the AdvantageKit example
+    sysId =
+        new SysIdRoutine(
+            new SysIdRoutine.Config(
+                null,
+                null,
+                null,
+                (state) -> Logger.recordOutput("Arm/SysIdState", state.toString())),
+            new SysIdRoutine.Mechanism((voltage) -> runVoltage(voltage.in(Volts)), null, this));
   }
 
   @Override
@@ -45,7 +60,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
       this.degrees = degrees;
     }
 
-    // target position for 
+    // target position for
     double positionRad = Units.degreesToRadians(degrees);
 
     // Calculate feedforward voltage with ArmFeedforward
@@ -54,6 +69,21 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
     // Set the position reference with feedforward voltage
     io.setPosition(positionRad, ffVolts);
+  }
+
+  // Sets the voltage to volts. the volts value is -12 to 12
+  public void runVoltage(double volts) {
+    io.setVoltage(volts);
+  }
+
+  /** Returns a command to run a quasistatic test in the specified direction. */
+  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+    return sysId.quasistatic(direction);
+  }
+
+  /** Returns a command to run a dynamic test in the specified direction. */
+  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+    return sysId.dynamic(direction);
   }
 
   @Override
