@@ -95,24 +95,18 @@ public class ShooterIOSparkMax implements ShooterIO {
   }
 
   @Override
-  public void stop() {
-    top.stopMotor();
-    bottom.stopMotor();
-  }
-
-  @Override
   public void updateInputs(ShooterIOInputs inputs) {
     // Set velocityRadPerSec to the encoder velocity(rotationsPerMinute) divided by the gear ratio
     // and converted into Radians Per Second
-    inputs.velocityRadPerSecTop =
+    inputs.velocityRadPerSec =
         Units.rotationsPerMinuteToRadiansPerSecond(topEncoder.getVelocity() / GEAR_RATIO);
     // Get applied voltage from the top motor
-    inputs.appliedVoltsTop = top.getAppliedOutput() * top.getBusVoltage();
+    inputs.appliedVolts = top.getAppliedOutput() * top.getBusVoltage();
 
-    inputs.velocityRadPerSecBottom =
-        Units.rotationsPerMinuteToRadiansPerSecond(bottomEncoder.getVelocity() / GEAR_RATIO);
+//    inputs.velocityRadPerSecBottom =
+//        Units.rotationsPerMinuteToRadiansPerSecond(bottomEncoder.getVelocity() / GEAR_RATIO);
     // Get applied voltage from the top motor
-    inputs.appliedVoltsBottom = bottom.getAppliedOutput() * bottom.getBusVoltage();
+//    inputs.appliedVoltsBottom = bottom.getAppliedOutput() * bottom.getBusVoltage();
 
     double tp = SmartDashboard.getNumber("Shooter/top/P Gain", 0);
     double ti = SmartDashboard.getNumber("Shooter/top/I Gain", 0);

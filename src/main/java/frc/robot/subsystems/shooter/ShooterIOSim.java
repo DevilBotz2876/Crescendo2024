@@ -1,33 +1,47 @@
 package frc.robot.subsystems.shooter;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 
 public class ShooterIOSim implements ShooterIO {
-  private FlywheelSim sim = new FlywheelSim(DCMotor.getNEO(1), 1.5, 0.004);
+  private FlywheelSim wheel = new FlywheelSim(DCMotor.getNEO(1), 1.5, 0.004);
 
+  private PIDController pid = new PIDController(1, 0, 0);
+  private double feedForwardVoltage = 0.0;
   private double appliedVolts = 0.0;
+  private double targetVelocityRadPerSec = 0.0;
 
   @Override
   public void updateInputs(ShooterIOInputs inputs) {
 
     // Update sim
-    sim.update(0.02);
+    wheel.update(0.02);
 
     // Update inputs
-    inputs.velocityRadPerSecTop = sim.getAngularVelocityRadPerSec();
-    inputs.appliedVoltsTop = appliedVolts;
+    inputs.velocityRadPerSec = wheel.getAngularVelocityRadPerSec();
+    inputs.appliedVolts = appliedVolts;
+
+    if (targetVelocityRadPerSec != 0) {
+      appliedVolts =
+          feedForwardVoltage + pid.calculate(inputs.velocityRadPerSec, targetVelocityRadPerSec);
+      wheel.setInputVoltage(appliedVolts);
+    }
   }
 
   @Override
   public void setVoltage(double volts) {
     appliedVolts = volts;
-    sim.setInputVoltage(volts);
+    wheel.setInputVoltage(volts);
   }
 
   @Override
-  public void stop() {
+  public void setVelocity(double velocityRadPerSec, double ffVolts) {
     appliedVolts = 0;
-    sim.setInputVoltage(0);
+    targetVelocityRadPerSec = velocityRadPerSec;
+    feedForwardVoltage = ffVolts;
+    if (velocityRadPerSec == 0) {
+      wheel.setInputVoltage(0);
+    }
   }
 }

@@ -105,7 +105,9 @@ public class RobotContainer {
         .a()
         .whileTrue(
             Commands.startEnd(
-                () -> shooter.runVelocity(shooterSpeedInput.get()), shooter::disable, shooter));
+                () -> shooter.runVelocity(shooterSpeedInput.get()),
+                () -> shooter.runVelocity(0),
+                shooter));
 
     intake.setDefaultCommand(
         new IntakeBaseCommand(

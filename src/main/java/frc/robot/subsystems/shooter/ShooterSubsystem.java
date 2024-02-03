@@ -23,26 +23,16 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
   }
 
   @Override
-  // Disable the shooter
-  public void disable() {
-    targetVelocityRadPerSec = 0;
-    io.stop();
-  }
-
-  @Override
-  // Enable the shooter
-  public void enable() {
-    // io.setVoltage(voltage);
-  }
-
-  @Override
   // Sets the voltage to volts. the volts value is -12 to 12
   public void runVoltage(double volts) {
     voltage = volts;
+    targetVelocityRadPerSec = 0;
+    io.setVoltage(voltage);
   }
 
   @Override
   public void runVelocity(double velocityRPM) {
+    voltage = 0;
     this.velocityRPM = velocityRPM;
     targetVelocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(velocityRPM);
 
@@ -51,12 +41,12 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
 
   @Override
   public double getVoltage() {
-    return inputs.appliedVoltsTop;
+    return inputs.appliedVolts;
   }
 
   @Override
   public double getCurrentSpeed() {
-    return inputs.velocityRadPerSecTop;
+    return inputs.velocityRadPerSec;
   }
 
   @Override
