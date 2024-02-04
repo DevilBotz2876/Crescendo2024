@@ -16,4 +16,8 @@ public class DriveBase extends SubsystemBase implements Drive {
   public double getMaxAngularSpeed() {
     return 0;
   }
+
+  public void stop() {
+    runVelocity(new ChassisSpeeds());
+  }
 }

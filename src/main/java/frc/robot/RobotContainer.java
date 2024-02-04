@@ -5,7 +5,6 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-// import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,12 +23,16 @@ import frc.robot.subsystems.intake.IntakeIOTalonSRX;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.subsystems.vision.VisionIOPhotonVision;
+import frc.robot.subsystems.vision.VisionIOSim;
+import frc.robot.subsystems.vision.VisionSubsystem;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
 public class RobotContainer {
   public final CommandXboxController controller;
   public final ShooterSubsystem shooter;
   public final IntakeBase intake;
+  public final VisionSubsystem vision;
   public final DriveBase drive;
   private SendableChooser<Command> autoChooser = null;
 
@@ -54,6 +57,8 @@ public class RobotContainer {
 
     boolean hasIntake = false;
     boolean hasShooter = false;
+    boolean hasVision = false;
+
     DriveType driveType = DriveType.NONE;
 
     switch (model) {
@@ -78,6 +83,12 @@ public class RobotContainer {
       intake = new IntakeBase(new IntakeIOTalonSRX());
     } else {
       intake = new IntakeBase(new IntakeIOSim());
+    }
+
+    if (hasVision) {
+      vision = new VisionSubsystem(new VisionIOPhotonVision());
+    } else {
+      vision = new VisionSubsystem(new VisionIOSim());
     }
 
     switch (driveType) {
