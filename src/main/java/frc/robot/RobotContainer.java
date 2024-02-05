@@ -71,7 +71,10 @@ public class RobotContainer {
     if (hasShooter) {
       shooter = new ShooterSubsystem(new ShooterIOSparkMax());
     } else {
-      shooter = new ShooterSubsystem(new ShooterIOSim());
+      shooter =
+          new ShooterSubsystem(
+              new ShooterIOSim(ShooterIOSim.ShooterId.SHOOTER_TOP),
+              new ShooterIOSim(ShooterIOSim.ShooterId.SHOOTER_BOTTOM));
     }
 
     if (hasIntake) {

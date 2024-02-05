@@ -5,12 +5,32 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 
 public class ShooterIOSim implements ShooterIO {
-  private FlywheelSim wheel = new FlywheelSim(DCMotor.getNEO(1), 1.5, 0.004);
+  private FlywheelSim wheel;
 
   private PIDController pid = new PIDController(1, 0, 0);
   private double feedForwardVoltage = 0.0;
   private double appliedVolts = 0.0;
   private double targetVelocityRadPerSec = 0.0;
+
+  public enum ShooterId {
+    SHOOTER_TOP,
+    SHOOTER_BOTTOM
+  }
+
+  public ShooterIOSim() {
+    this(ShooterId.SHOOTER_TOP);
+  }
+
+  public ShooterIOSim(ShooterId id) {
+    switch (id) {
+      case SHOOTER_TOP:
+        wheel = new FlywheelSim(DCMotor.getNEO(1), 1.5, 0.004);
+        break;
+      case SHOOTER_BOTTOM:
+        wheel = new FlywheelSim(DCMotor.getNEO(1), 1.5, 0.006);
+        break;
+    }
+  }
 
   @Override
   public void updateInputs(ShooterIOInputs inputs) {

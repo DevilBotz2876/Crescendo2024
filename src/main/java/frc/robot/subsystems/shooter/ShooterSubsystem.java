@@ -8,8 +8,10 @@ import org.littletonrobotics.junction.Logger;
 
 public class ShooterSubsystem extends SubsystemBase implements Shooter {
   ShooterIO io;
+  ShooterIO ioBottom = null;
   private final SimpleMotorFeedforward ffModel;
   private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
+  private final ShooterIOInputsAutoLogged inputsBottom = new ShooterIOInputsAutoLogged();
   @AutoLogOutput private double voltage;
   @AutoLogOutput private double velocityRPM;
   @AutoLogOutput private double targetVelocityRadPerSec;
@@ -22,12 +24,20 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
     velocityRPM = 0.0;
   }
 
+  public ShooterSubsystem(ShooterIO ioTop, ShooterIO ioBottom) {
+    this(ioTop);
+    this.ioBottom = ioBottom;
+  }
+
   @Override
   // Sets the voltage to volts. the volts value is -12 to 12
   public void runVoltage(double volts) {
     voltage = volts;
     targetVelocityRadPerSec = 0;
     io.setVoltage(voltage);
+    if (ioBottom != null) {
+      ioBottom.setVoltage(voltage);
+    }
   }
 
   @Override
@@ -37,6 +47,9 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
     targetVelocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(velocityRPM);
 
     io.setVelocity(targetVelocityRadPerSec, ffModel.calculate(targetVelocityRadPerSec));
+    if (ioBottom != null) {
+      ioBottom.setVelocity(targetVelocityRadPerSec, ffModel.calculate(targetVelocityRadPerSec));
+    }
   }
 
   @Override
@@ -54,5 +67,10 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
     // Updates the inputs
     io.updateInputs(inputs);
     Logger.processInputs("Shooter", inputs);
+
+    if (ioBottom != null) {
+      ioBottom.updateInputs(inputsBottom);
+      Logger.processInputs("Shooter Bottom", inputsBottom);
+    }
   }
 }
