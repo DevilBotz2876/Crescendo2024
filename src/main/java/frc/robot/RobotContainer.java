@@ -94,7 +94,7 @@ public class RobotContainer {
         drive = new DriveBase();
     }
 
-    // configureBindings();
+    configureBindings();
     shooterSysIdBindings();
   }
 
