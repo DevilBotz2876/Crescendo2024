@@ -35,4 +35,8 @@ public interface Drive {
   ;
 
   public default void setPoseToMatchField() {}
+
+  public default double getAngle() {
+    return 0.0;
+  }
 }

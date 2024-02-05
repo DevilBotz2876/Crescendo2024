@@ -93,4 +93,9 @@ public class DriveSwerveYAGSL extends DriveBase {
   public void setPoseToMatchField() {
     swerveDrive.resetOdometry(swerveDrive.field.getRobotPose());
   }
+
+  @Override
+  public double getAngle() {
+    return swerveDrive.getYaw().getDegrees();
+  }
 }

@@ -14,6 +14,7 @@ public class AlignToTarget extends Command {
   DriveBase drive;
   Vision vision;
   PIDController turnPID;
+  double setpoint;
 
   /** Creates a new AlignToTarget. */
   public AlignToTarget(DriveBase drive, Vision vision) {
@@ -25,21 +26,32 @@ public class AlignToTarget extends Command {
     turnPID.setSetpoint(0);
     turnPID.setTolerance(2);
 
+    setpoint = 0;
+
     addRequirements(drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    if (vision.hasTarget()) {
+      // Get the current heading of robot and how much we are offset from center of april tag.
+      // The difference is how much we need to turn the robot to line up to center.
+      //
+      // TODO: check sign/math is right
+      setpoint = drive.getAngle() - vision.getYaw();
+    } else {
+      System.out.println("AlignToTarget No target found");
+      setpoint = drive.getAngle();
+    }
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (vision.hasTarget()) {
-      double rotate = turnPID.calculate(vision.getYaw(), 0);
-      ChassisSpeeds speeds = new ChassisSpeeds(0, 0, rotate * drive.getMaxAngularSpeed());
-      drive.runVelocity(speeds);
-    }
+    double rotate = turnPID.calculate(drive.getAngle(), setpoint);
+    ChassisSpeeds speeds = new ChassisSpeeds(0, 0, rotate * drive.getMaxAngularSpeed());
+    drive.runVelocity(speeds);
   }
 
   // Called once the command ends or is interrupted.
