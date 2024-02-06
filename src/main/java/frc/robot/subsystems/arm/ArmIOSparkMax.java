@@ -9,10 +9,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ArmIOSparkMax implements ArmIO {
   //Leader
-  private final CANSparkMax left = new CANSparkMax(2, MotorType.kBrushless);
+  private final CANSparkMax left = new CANSparkMax(4, MotorType.kBrushless);
 
   //follower
-  private final CANSparkMax right = new CANSparkMax(3, MotorType.kBrushless);
+  //private final CANSparkMax right = new CANSparkMax(3, MotorType.kBrushless);
   
   private final DutyCycleEncoder encoder;
 
@@ -28,7 +28,7 @@ public class ArmIOSparkMax implements ArmIO {
     encoder.setDistancePerRotation(2 * Math.PI);
 
     left.setInverted(false);
-    right.follow(left, false);
+    //right.follow(left, false);
 
     left.enableVoltageCompensation(12.0);
     left.setSmartCurrentLimit(30);
@@ -67,10 +67,10 @@ public class ArmIOSparkMax implements ArmIO {
   @Override
   public void updateInputs(ArmIOInputs inputs) {
     /* TODO: Implement SparkMax/Absolute Encoder Code Here */
-    inputs.positionRad = Units.rotationsToRadians(encoder.getAbsolutePosition());
+    inputs.positionRad = encoder.getDistance();
 
     inputs.leftAppliedVolts = left.getAppliedOutput() * left.getBusVoltage();
-    inputs.rightAppliedVolts = right.getAppliedOutput() * right.getBusVoltage();
+    //inputs.rightAppliedVolts = right.getAppliedOutput() * right.getBusVoltage();
 
     double lp = SmartDashboard.getNumber("Arm/left/P Gain", 0);
     double li = SmartDashboard.getNumber("Arm/left/I Gain", 0);

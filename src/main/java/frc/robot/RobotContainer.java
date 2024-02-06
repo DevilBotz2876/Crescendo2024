@@ -54,7 +54,7 @@ public class RobotContainer {
       new LoggedDashboardNumber("Shooter Speed", 300.0);
 
   public RobotContainer() {
-    RobotModel model = RobotModel.PHOENIX;
+    RobotModel model = RobotModel.SHERMAN;
 
     controller = new CommandXboxController(0);
 
@@ -107,8 +107,8 @@ public class RobotContainer {
       arm = new ArmSubsystem(new ArmIOStub());
     }
 
-    //configureBindings();
-    ArmSysIdBindings();
+    configureBindings();
+    //ArmSysIdBindings();
   }
 
   private void ArmSysIdBindings() {
