@@ -104,30 +104,6 @@ implements <a href="ShooterIO.html" title="interface in frc.robot.subsystems.sho
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>double</code></div>
-<div class="col-second even-row-color"><code><a href="#bkD" class="member-name-link">bkD</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>double</code></div>
-<div class="col-second odd-row-color"><code><a href="#bkFF" class="member-name-link">bkFF</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>double</code></div>
-<div class="col-second even-row-color"><code><a href="#bkI" class="member-name-link">bkI</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>double</code></div>
-<div class="col-second odd-row-color"><code><a href="#bkIz" class="member-name-link">bkIz</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>double</code></div>
-<div class="col-second even-row-color"><code><a href="#bkMaxOutput" class="member-name-link">bkMaxOutput</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>double</code></div>
-<div class="col-second odd-row-color"><code><a href="#bkMinOutput" class="member-name-link">bkMinOutput</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>double</code></div>
-<div class="col-second even-row-color"><code><a href="#bkP" class="member-name-link">bkP</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>double</code></div>
-<div class="col-second odd-row-color"><code><a href="#bmaxRPS" class="member-name-link">bmaxRPS</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>double</code></div>
 <div class="col-second even-row-color"><code><a href="#tkD" class="member-name-link">tkD</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>double</code></div>
@@ -162,7 +138,7 @@ implements <a href="ShooterIO.html" title="interface in frc.robot.subsystems.sho
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">ShooterIOSparkMax</a>()</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(int)" class="member-name-link">ShooterIOSparkMax</a><wbr>(int&nbsp;id)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
@@ -259,54 +235,6 @@ implements <a href="ShooterIO.html" title="interface in frc.robot.subsystems.sho
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">tmaxRPS</span></div>
 </section>
 </li>
-<li>
-<section class="detail" id="bkP">
-<h3>bkP</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">bkP</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="bkI">
-<h3>bkI</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">bkI</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="bkD">
-<h3>bkD</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">bkD</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="bkIz">
-<h3>bkIz</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">bkIz</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="bkFF">
-<h3>bkFF</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">bkFF</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="bkMaxOutput">
-<h3>bkMaxOutput</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">bkMaxOutput</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="bkMinOutput">
-<h3>bkMinOutput</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">bkMinOutput</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="bmaxRPS">
-<h3>bmaxRPS</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">bmaxRPS</span></div>
-</section>
-</li>
 </ul>
 </section>
 </li>
@@ -316,9 +244,9 @@ implements <a href="ShooterIO.html" title="interface in frc.robot.subsystems.sho
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;()">
+<section class="detail" id="&lt;init&gt;(int)">
 <h3>ShooterIOSparkMax</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ShooterIOSparkMax</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ShooterIOSparkMax</span><wbr><span class="parameters">(int&nbsp;id)</span></div>
 </section>
 </li>
 </ul>
