@@ -69,7 +69,7 @@ public class RobotContainer {
     }
 
     if (hasShooter) {
-      shooter = new ShooterSubsystem(new ShooterIOSparkMax());
+      shooter = new ShooterSubsystem(new ShooterIOSparkMax(2), new ShooterIOSparkMax(1));
     } else {
       shooter =
           new ShooterSubsystem(

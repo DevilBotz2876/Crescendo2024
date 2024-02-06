@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 public class ShooterIOSim implements ShooterIO {
   private FlywheelSim wheel;
 
-  private PIDController pid = new PIDController(1, 0, 0);
+  private PIDController pid = new PIDController(0.6, 0.2, 0);
   private double feedForwardVoltage = 0.0;
   private double appliedVolts = 0.0;
   private double targetVelocityRadPerSec = 0.0;
