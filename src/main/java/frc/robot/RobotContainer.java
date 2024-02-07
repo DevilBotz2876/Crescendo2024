@@ -108,7 +108,7 @@ public class RobotContainer {
     }
 
     configureBindings();
-    //ArmSysIdBindings();
+    // ArmSysIdBindings();
   }
 
   private void ArmSysIdBindings() {
@@ -117,7 +117,6 @@ public class RobotContainer {
     controller.x().whileTrue(arm.sysIdDynamic(SysIdRoutine.Direction.kForward));
     controller.y().whileTrue(arm.sysIdDynamic(SysIdRoutine.Direction.kReverse));
   }
-
 
   private void configureBindings() {
     // shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
