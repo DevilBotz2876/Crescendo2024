@@ -8,6 +8,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 // import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -43,6 +44,7 @@ public class RobotContainer {
   public final DriveBase drive;
   public final ArmSubsystem arm;
   private SendableChooser<Command> autoChooser = null;
+  private static final String robotNameKey = "Robot Name";
 
   ShuffleboardTab ArmTab;
   GenericEntry ArmVoltsEntry;
@@ -59,10 +61,11 @@ public class RobotContainer {
   }
 
   private final LoggedDashboardNumber shooterSpeedInput =
-      new LoggedDashboardNumber("Shooter Speed", 300.0);
+      new LoggedDashboardNumber("Shooter Speed", 1000.0);
 
   public RobotContainer() {
-    RobotModel model = RobotModel.SHERMAN;
+    RobotModel model = RobotModel.PHOENIX; // Default if "Robot Name" not found in preferences
+    String robotName = "UNKNOWN";
 
     controller = new CommandXboxController(0);
 
@@ -70,6 +73,20 @@ public class RobotContainer {
     boolean hasShooter = false;
     DriveType driveType = DriveType.NONE;
     boolean hasArm = false;
+
+    Preferences.initString(robotNameKey, robotName);
+    robotName = Preferences.getString(robotNameKey, robotName);
+    System.out.println("Loading Settings for Robot Name = " + robotName);
+    switch (robotName) {
+      case "PHOENIX":
+        model = RobotModel.PHOENIX;
+        break;
+      case "SHERMAN":
+        model = RobotModel.SHERMAN;
+        break;
+      case "UNKNOWN":
+      default:
+    }
 
     switch (model) {
       case PHOENIX:
@@ -85,9 +102,12 @@ public class RobotContainer {
     }
 
     if (hasShooter) {
-      shooter = new ShooterSubsystem(new ShooterIOSparkMax());
+      shooter = new ShooterSubsystem(new ShooterIOSparkMax(2), new ShooterIOSparkMax(1));
     } else {
-      shooter = new ShooterSubsystem(new ShooterIOSim());
+      shooter =
+          new ShooterSubsystem(
+              new ShooterIOSim(ShooterIOSim.ShooterId.SHOOTER_TOP),
+              new ShooterIOSim(ShooterIOSim.ShooterId.SHOOTER_BOTTOM));
     }
 
     if (hasIntake) {
@@ -129,6 +149,7 @@ public class RobotContainer {
 
     configureBindings();
     // ArmSysIdBindings();
+    // shooterSysIdBindings();
   }
 
   private void ArmSysIdBindings() {
@@ -136,6 +157,13 @@ public class RobotContainer {
     controller.b().whileTrue(arm.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
     controller.x().whileTrue(arm.sysIdDynamic(SysIdRoutine.Direction.kForward));
     controller.y().whileTrue(arm.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+  }
+
+  private void shooterSysIdBindings() {
+    controller.a().whileTrue(shooter.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    controller.b().whileTrue(shooter.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    controller.x().whileTrue(shooter.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    controller.y().whileTrue(shooter.sysIdDynamic(SysIdRoutine.Direction.kReverse));
   }
 
   private void configureBindings() {
@@ -177,14 +205,13 @@ public class RobotContainer {
             arm,
             () -> controller.getHID().getPOV() == 0,
             () -> controller.getHID().getPOV() == 180));
-    
-    //run arm at voltage on Arm Tab
+
+    // run arm at voltage on Arm Tab
     controller
         .y()
-        .whileTrue(Commands.startEnd(
-                () -> arm.runVoltage(ArmVoltsEntry.getDouble(0.0)),
-                () -> arm.runVoltage(0),
-                arm));
+        .whileTrue(
+            Commands.startEnd(
+                () -> arm.runVoltage(ArmVoltsEntry.getDouble(0.0)), () -> arm.runVoltage(0), arm));
   }
 
   public Command getAutonomousCommand() {
