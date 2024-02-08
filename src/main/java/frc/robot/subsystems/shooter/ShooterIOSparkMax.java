@@ -38,11 +38,11 @@ public class ShooterIOSparkMax implements ShooterIO {
 
     // TODO: these values are samples picked from REV example PID code.  Need to tune PID and choose
     // real values.
-    tkP = 6e-5;
+    tkP = 0.0010514;
     tkI = 0;
     tkD = 0;
     tkIz = 0;
-    tkFF = 0.000015;
+    tkFF = 0.08134;
     tkMaxOutput = 1;
     tkMinOutput = -1;
     tmaxRPS = 300;
@@ -53,7 +53,7 @@ public class ShooterIOSparkMax implements ShooterIO {
     pid.setI(tkI);
     pid.setD(tkD);
     pid.setIZone(tkIz);
-    pid.setFF(tkFF);
+    // pid.setFF(tkFF);
     pid.setOutputRange(tkMinOutput, tkMaxOutput);
 
     // TODO: probably remove bottom since shooter will have one motor, not two independent motor
@@ -68,13 +68,6 @@ public class ShooterIOSparkMax implements ShooterIO {
 
     // TODO: probably remove this since shooter will have one motor, not two independent motors
     //
-    // SmartDashboard.putNumber("Shooter/bot/P Gain", bkP);
-    // SmartDashboard.putNumber("Shooter/bot/I Gain", bkI);
-    // SmartDashboard.putNumber("Shooter/bot/D Gain", bkD);
-    // SmartDashboard.putNumber("Shooter/bot/I Zone", bkIz);
-    // SmartDashboard.putNumber("Shooter/bot/Feed Forward", bkFF);
-    // SmartDashboard.putNumber("Shooter/bot/Max Output", bkMaxOutput);
-    // SmartDashboard.putNumber("Shooter/bot/Min Output", bkMinOutput);
   }
 
   @Override
@@ -85,7 +78,6 @@ public class ShooterIOSparkMax implements ShooterIO {
         Units.rotationsPerMinuteToRadiansPerSecond(encoder.getVelocity() / GEAR_RATIO);
     // Get applied voltage from the top motor
     inputs.appliedVolts = flywheel.getAppliedOutput() * flywheel.getBusVoltage();
-
     //    inputs.velocityRadPerSecBottom =
     //        Units.rotationsPerMinuteToRadiansPerSecond(bottomEncoder.getVelocity() / GEAR_RATIO);
     // Get applied voltage from the top motor
@@ -130,31 +122,6 @@ public class ShooterIOSparkMax implements ShooterIO {
 
     // TODO: probably remove bottom since shooter will have one motor, not two independent motors
     //
-    // if ((bp != bkP)) {
-    //   bottomPid.setP(bp);
-    //   bkP = bp;
-    // }
-    // if ((bi != bkI)) {
-    //   bottomPid.setI(bi);
-    //   bkI = bi;
-    // }
-    // if ((bd != bkD)) {
-    //   bottomPid.setD(bd);
-    //   bkD = bd;
-    // }
-    // if ((biz != bkIz)) {
-    //   bottomPid.setIZone(biz);
-    //   bkIz = biz;
-    // }
-    // if ((bff != bkFF)) {
-    //   bottomPid.setFF(bff);
-    //   bkFF = bff;
-    // }
-    // if ((bmax != bkMaxOutput) || (bmin != bkMinOutput)) {
-    //   bottomPid.setOutputRange(bmin, bmax);
-    //   bkMinOutput = bmin;
-    //   bkMaxOutput = bmax;
-    // }
   }
 
   @Override
@@ -172,9 +139,7 @@ public class ShooterIOSparkMax implements ShooterIO {
 
     // TODO: probably remove bottom since shooter will have one motor, not two independent motors
     //
-    // bottomPid.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
-    // SmartDashboard.putNumber("Shooter/bot/SetPoint", setPoint);
-    // SmartDashboard.putNumber("Shooter/bot/ProcessVariable", bottomEncoder.getVelocity());
+
   }
 
   @Override

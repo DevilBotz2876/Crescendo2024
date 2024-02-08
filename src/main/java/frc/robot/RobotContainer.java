@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.IntakeBaseCommand;
 import frc.robot.commands.ShooterEnable;
 import frc.robot.commands.drive.DriveCommand;
@@ -47,7 +48,7 @@ public class RobotContainer {
   }
 
   private final LoggedDashboardNumber shooterSpeedInput =
-      new LoggedDashboardNumber("Shooter Speed", 300.0);
+      new LoggedDashboardNumber("Shooter Speed", 1000.0);
 
   public RobotContainer() {
     RobotModel model = RobotModel.PHOENIX; // Default if "Robot Name" not found in preferences
@@ -114,6 +115,14 @@ public class RobotContainer {
     }
 
     configureBindings();
+    // shooterSysIdBindings();
+  }
+
+  private void shooterSysIdBindings() {
+    controller.a().whileTrue(shooter.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    controller.b().whileTrue(shooter.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    controller.x().whileTrue(shooter.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    controller.y().whileTrue(shooter.sysIdDynamic(SysIdRoutine.Direction.kReverse));
   }
 
   private void configureBindings() {

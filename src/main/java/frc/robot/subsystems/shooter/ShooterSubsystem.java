@@ -1,8 +1,12 @@
 package frc.robot.subsystems.shooter;
 
+import static edu.wpi.first.units.Units.Volts;
+
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -11,6 +15,7 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
   ShooterIO ioBottom = null;
   private final SimpleMotorFeedforward ffModel;
   private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
+  private final SysIdRoutine sysId;
   private final ShooterIOInputsAutoLogged inputsBottom = new ShooterIOInputsAutoLogged();
   @AutoLogOutput private double voltage;
   @AutoLogOutput private double velocityRPM;
@@ -19,9 +24,18 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
   public ShooterSubsystem(ShooterIO io) {
     this.io = io;
     // TODO: These are sample values.  Need to run sysid on shooter and get real values.
-    ffModel = new SimpleMotorFeedforward(0.1, 0.05);
+    ffModel = new SimpleMotorFeedforward(0.08134, 0.019999, 0.0054252);
     voltage = 0;
     velocityRPM = 0.0;
+
+    sysId =
+        new SysIdRoutine(
+            new SysIdRoutine.Config(
+                null,
+                null,
+                null,
+                (state) -> Logger.recordOutput("Shooter/SysIdState", state.toString())),
+            new SysIdRoutine.Mechanism((voltage) -> runVoltage(voltage.in(Volts)), null, this));
   }
 
   public ShooterSubsystem(ShooterIO ioTop, ShooterIO ioBottom) {
@@ -72,5 +86,13 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
       ioBottom.updateInputs(inputsBottom);
       Logger.processInputs("Shooter Bottom", inputsBottom);
     }
+  }
+
+  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+    return sysId.quasistatic(direction);
+  }
+
+  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+    return sysId.dynamic(direction);
   }
 }
