@@ -7,6 +7,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 // import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -33,6 +34,7 @@ public class RobotContainer {
   public final IntakeBase intake;
   public final DriveBase drive;
   private SendableChooser<Command> autoChooser = null;
+  private static final String robotNameKey = "Robot Name";
 
   public enum RobotModel {
     PHOENIX, // Practice Swerve Bot
@@ -49,13 +51,28 @@ public class RobotContainer {
       new LoggedDashboardNumber("Shooter Speed", 1000.0);
 
   public RobotContainer() {
-    RobotModel model = RobotModel.SHERMAN;
+    RobotModel model = RobotModel.PHOENIX; // Default if "Robot Name" not found in preferences
+    String robotName = "UNKNOWN";
 
     controller = new CommandXboxController(0);
 
     boolean hasIntake = false;
     boolean hasShooter = false;
     DriveType driveType = DriveType.NONE;
+
+    Preferences.initString(robotNameKey, robotName);
+    robotName = Preferences.getString(robotNameKey, robotName);
+    System.out.println("Loading Settings for Robot Name = " + robotName);
+    switch (robotName) {
+      case "PHOENIX":
+        model = RobotModel.PHOENIX;
+        break;
+      case "SHERMAN":
+        model = RobotModel.SHERMAN;
+        break;
+      case "UNKNOWN":
+      default:
+    }
 
     switch (model) {
       case PHOENIX:
