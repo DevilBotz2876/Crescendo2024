@@ -76,7 +76,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
   // Sets the voltage to volts. the volts value is -12 to 12
   public void runVoltage(double volts) {
-    io.setVoltage(volts);
+    io.setVoltage(voltageSafety(volts));
   }
 
   /** Returns a command to run a quasistatic test in the specified direction. */
@@ -97,12 +97,25 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     SmartDashboard.putNumber("Arm/encoder/anglSub", Units.radiansToDegrees(inputs.positionRad));
 
     /* TODO: Implement PID control here to achieve desired angle */
-    if (inputs.positionRad > positionRadMax && inputs.leftAppliedVolts > 0.0) {
-      runVoltage(0);
-      System.out.println("Max Hit");
-    } else if (inputs.positionRad < positionRadMin && inputs.leftAppliedVolts < 0.0) {
-      System.out.println("Min Hit");
-      runVoltage(0);
+    if (isLimitReached(inputs.leftAppliedVolts)) {
+      runVoltage(voltageSafety(inputs.leftAppliedVolts));
     }
+  }
+
+  protected boolean isLimitReached(double desiredVoltage) {
+    if (inputs.positionRad > positionRadMax && desiredVoltage > 0.0) {
+      System.out.println("Max Hit");
+      return true;
+    }
+    if (inputs.positionRad < positionRadMin && desiredVoltage < 0.0) {
+      System.out.println("Min Hit");
+      return true;
+    }
+    return false;
+  }
+
+  protected double voltageSafety(double desiredVoltage) {
+    if (isLimitReached(desiredVoltage)) return 0.0;
+    else return desiredVoltage;
   }
 }

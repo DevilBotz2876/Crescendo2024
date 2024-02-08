@@ -20,7 +20,7 @@ public class ArmIOStub implements ArmIO {
   private double armGearingReduction = 30;
   private double armLengthInMeters = .5;
   private double minAngleInRadians = 0;
-  private double maxAngleInRadians = 2*Math.PI;
+  private double maxAngleInRadians = 2 * Math.PI;
   private double armMassInKg = 8.0;
 
   // The arm gearbox represents a gearbox containing two Vex 775pro motors.
@@ -64,8 +64,7 @@ public class ArmIOStub implements ArmIO {
     arm.update(0.020);
     encoderSim.setDistance(arm.getAngleRads());
 
-    if (softwarePidEnabled)
-    {
+    if (softwarePidEnabled) {
       motor.setVoltage(
           feedForwardVolts
               + pid.calculate(encoder.getDistance(), targetRadians)
