@@ -200,11 +200,11 @@ public class RobotContainer {
 
     controller.back().onTrue(new InstantCommand(() -> drive.resetOdometry()));
 
-    arm.setDefaultCommand(
-        new ArmCommand(
-            arm,
-            () -> controller.getHID().getPOV() == 0,
-            () -> controller.getHID().getPOV() == 180));
+//    arm.setDefaultCommand(
+//        new ArmCommand(
+//            arm,
+//            () -> controller.getHID().getPOV() == 0,
+//            () -> controller.getHID().getPOV() == 180));
 
     // run arm at voltage on Arm Tab
     controller

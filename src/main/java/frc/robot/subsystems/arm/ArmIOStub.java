@@ -31,6 +31,7 @@ public class ArmIOStub implements ArmIO {
   private final DutyCycleEncoder encoder = new DutyCycleEncoder(0);
   private final DutyCycleEncoderSim encoderSim = new DutyCycleEncoderSim(encoder);
   private final Spark motor = new Spark(0);
+  private boolean softwarePidEnabled = false;
 
   // Simulation classes help us simulate what's going on, including gravity.
   // This arm sim represents an arm that can travel from -75 degrees (rotated down front)
@@ -63,10 +64,13 @@ public class ArmIOStub implements ArmIO {
     arm.update(0.020);
     encoderSim.setDistance(arm.getAngleRads());
 
-    motor.setVoltage(
-        feedForwardVolts
-            + pid.calculate(encoder.getDistance(), targetRadians)
-                * RobotController.getBatteryVoltage());
+    if (softwarePidEnabled)
+    {
+      motor.setVoltage(
+          feedForwardVolts
+              + pid.calculate(encoder.getDistance(), targetRadians)
+                  * RobotController.getBatteryVoltage());
+    }
   }
 
   /** Run the arm motor at the specified voltage. */
@@ -79,5 +83,6 @@ public class ArmIOStub implements ArmIO {
   public void setPosition(double radians, double ffVolts) {
     targetRadians = radians;
     feedForwardVolts = ffVolts;
+    softwarePidEnabled = true;
   }
 }
