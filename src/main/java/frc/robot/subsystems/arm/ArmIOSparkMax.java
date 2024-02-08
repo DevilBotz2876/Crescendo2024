@@ -27,13 +27,13 @@ public class ArmIOSparkMax implements ArmIO {
     // This will need to be set from a constant once we have the arm assembled and can measure the
     // offset.  Once the arm is done this value won't change.
     //
-    // encoder.setPositionOffset(0); // This is place holder
+    encoder.setPositionOffset(0.4154156603853915); // This is place holder
 
     encoder.setDutyCycleRange(1.0 / 1024.0, 1023.0 / 1024.0);
 
     // I don't think 2PI is correct.. try 360?
-    // encoder.setDistancePerRotation(2.0 * Math.PI);
-    encoder.setDistancePerRotation(360.0);
+    encoder.setDistancePerRotation(2.0 * Math.PI);
+    // encoder.setDistancePerRotation(360.0);
 
     left.setInverted(false);
     // right.follow(left, false);

@@ -49,8 +49,8 @@ public class ArmIOStub implements ArmIO {
 
   public ArmIOStub() {
     encoder.setPositionOffset(armAbsoluteOffset);
-    encoder.setDutyCycleRange(1 / 1025, 1024 / 1025);
-    encoder.setDistancePerRotation(2 * Math.PI);
+    encoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
+    encoder.setDistancePerRotation(2.0  * Math.PI);
   }
 
   /** Updates the set of loggable inputs. */

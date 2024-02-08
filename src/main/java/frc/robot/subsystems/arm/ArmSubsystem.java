@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -16,6 +17,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   @AutoLogOutput private double degrees = 0;
   ArmFeedforward feedforward;
   private final SysIdRoutine sysId;
+  private final double positionRadMax = 3.160;
+  private final double positionRadMin = 0.001;
 
   public ArmSubsystem(ArmIO io) {
     this.io = io;
@@ -91,7 +94,15 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     // Updates the inputs
     io.updateInputs(inputs);
     Logger.processInputs("Arm", inputs);
+    SmartDashboard.putNumber("Arm/encoder/anglSub", Units.radiansToDegrees(inputs.positionRad));
 
     /* TODO: Implement PID control here to achieve desired angle */
+    if (inputs.positionRad > positionRadMax && inputs.leftAppliedVolts > 0.0) {
+      runVoltage(0);
+      System.out.println("Max Hit");
+    } else if (inputs.positionRad < positionRadMin && inputs.leftAppliedVolts < 0.0) {
+      System.out.println("Min Hit");
+      runVoltage(0);
+    }
   }
 }

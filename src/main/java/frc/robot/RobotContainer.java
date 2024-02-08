@@ -7,6 +7,10 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 // import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -29,6 +33,7 @@ import frc.robot.subsystems.intake.IntakeIOTalonSRX;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
+import java.util.Map;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
 public class RobotContainer {
@@ -38,6 +43,9 @@ public class RobotContainer {
   public final DriveBase drive;
   public final ArmSubsystem arm;
   private SendableChooser<Command> autoChooser = null;
+
+  ShuffleboardTab ArmTab;
+  GenericEntry ArmVoltsEntry;
 
   public enum RobotModel {
     PHOENIX, // Practice Swerve Bot
@@ -71,7 +79,7 @@ public class RobotContainer {
         driveType = DriveType.TANK;
         hasIntake = true;
         hasShooter = true;
-        hasArm = true;
+        hasArm = false;
         break;
       default:
     }
@@ -106,6 +114,18 @@ public class RobotContainer {
     } else {
       arm = new ArmSubsystem(new ArmIOStub());
     }
+
+    // create arm tab on ShuffleBoard
+    ArmTab = Shuffleboard.getTab("Arm");
+    // Create volt entry under arm tab as a number sider with min = -4 and max = 4
+    ArmVoltsEntry =
+        ArmTab.add("Volts", 0)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", -4, "max", 4))
+            .getEntry();
+
+    // Sets default value to 0.0
+    ArmVoltsEntry.setValue(0.0);
 
     configureBindings();
     // ArmSysIdBindings();
@@ -157,6 +177,14 @@ public class RobotContainer {
             arm,
             () -> controller.getHID().getPOV() == 0,
             () -> controller.getHID().getPOV() == 180));
+    
+    //run arm at voltage on Arm Tab
+    controller
+        .y()
+        .whileTrue(Commands.startEnd(
+                () -> arm.runVoltage(ArmVoltsEntry.getDouble(0.0)),
+                () -> arm.runVoltage(0),
+                arm));
   }
 
   public Command getAutonomousCommand() {
