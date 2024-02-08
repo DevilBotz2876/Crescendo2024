@@ -26,19 +26,21 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
   @AutoLogOutput private double targetVelocityRadPerSec;
   boolean useSoftwarePid = false;
   boolean softwarePidEnabled = false;
+
+  // Values from Carter's Shooter SysId Run on Sherman 2024-02-07
   double ffKs = 0.08134;
   double ffKv = 0.019999;
   double ffKa = 0.0054252;
-  double ffKsBottom = ffKs; // Need to calculate bottom feedforward
-  double ffKvBottom = ffKv; // Need to calculate bottom feedforward
-  double ffKaBottom = ffKa; // Need to calculate bottom feedforward
+  double ffKsBottom = 0.058262;
+  double ffKvBottom = 0.019495;
+  double ffKaBottom = 0.0048198;
 
   double pidKp = 0.0010514;
   double pidKi = 0.0;
   double pidKd = 0.0;
-  double pidKpBottom = pidKp; // Need to calculate bottom PID
-  double pidKiBottom = pidKi; // Need to calculate bottom PID
-  double pidKdBottom = pidKd; // Need to calculate bottom PID
+  double pidKpBottom = 0.0001581;
+  double pidKiBottom = 0.0;
+  double pidKdBottom = 0.0;
 
   public ShooterSubsystem(ShooterIO io) {
     this.io = io;
