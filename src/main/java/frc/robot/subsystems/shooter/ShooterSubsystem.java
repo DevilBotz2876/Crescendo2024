@@ -24,7 +24,7 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
   public ShooterSubsystem(ShooterIO io) {
     this.io = io;
     // TODO: These are sample values.  Need to run sysid on shooter and get real values.
-    ffModel = new SimpleMotorFeedforward(0.1, 0.05);
+    ffModel = new SimpleMotorFeedforward(0.08134, 0.019999, 0.0054252);
     voltage = 0;
     velocityRPM = 0.0;
 

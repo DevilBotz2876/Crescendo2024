@@ -38,11 +38,11 @@ public class ShooterIOSparkMax implements ShooterIO {
 
     // TODO: these values are samples picked from REV example PID code.  Need to tune PID and choose
     // real values.
-    tkP = 6e-5;
+    tkP = 0.0010514;
     tkI = 0;
     tkD = 0;
     tkIz = 0;
-    tkFF = 0.000015;
+    tkFF = 0.08134;
     tkMaxOutput = 1;
     tkMinOutput = -1;
     tmaxRPS = 300;
@@ -53,7 +53,7 @@ public class ShooterIOSparkMax implements ShooterIO {
     pid.setI(tkI);
     pid.setD(tkD);
     pid.setIZone(tkIz);
-    pid.setFF(tkFF);
+    // pid.setFF(tkFF);
     pid.setOutputRange(tkMinOutput, tkMaxOutput);
 
     // TODO: probably remove bottom since shooter will have one motor, not two independent motor
