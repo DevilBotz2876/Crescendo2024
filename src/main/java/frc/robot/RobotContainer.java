@@ -8,6 +8,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 // import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -17,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.IntakeBaseCommand;
 import frc.robot.commands.ShooterEnable;
 import frc.robot.commands.drive.DriveCommand;
@@ -37,6 +39,7 @@ public class RobotContainer {
   public final IntakeBase intake;
   public final DriveBase drive;
   private SendableChooser<Command> autoChooser = null;
+  private static final String robotNameKey = "Robot Name";
 
   ShuffleboardTab tab;
   GenericEntry speedLimiterEntry;
@@ -53,10 +56,11 @@ public class RobotContainer {
   }
 
   private final LoggedDashboardNumber shooterSpeedInput =
-      new LoggedDashboardNumber("Shooter Speed", 300.0);
+      new LoggedDashboardNumber("Shooter Speed", 1000.0);
 
   public RobotContainer() {
-    RobotModel model = RobotModel.PHOENIX;
+    RobotModel model = RobotModel.PHOENIX; // Default if "Robot Name" not found in preferences
+    String robotName = "UNKNOWN";
 
     controller = new CommandXboxController(0);
 
@@ -64,14 +68,19 @@ public class RobotContainer {
     boolean hasShooter = false;
     DriveType driveType = DriveType.NONE;
 
-    tab = Shuffleboard.getTab("Drive Speed");
-    speedLimiterEntry =
-        tab.add("Drive Speed", 0)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0, "max", 100))
-            .getEntry();
-
-    speedLimiterEntry.setValue(50);
+    Preferences.initString(robotNameKey, robotName);
+    robotName = Preferences.getString(robotNameKey, robotName);
+    System.out.println("Loading Settings for Robot Name = " + robotName);
+    switch (robotName) {
+      case "PHOENIX":
+        model = RobotModel.PHOENIX;
+        break;
+      case "SHERMAN":
+        model = RobotModel.SHERMAN;
+        break;
+      case "UNKNOWN":
+      default:
+    }
 
     switch (model) {
       case PHOENIX:
@@ -86,9 +95,12 @@ public class RobotContainer {
     }
 
     if (hasShooter) {
-      shooter = new ShooterSubsystem(new ShooterIOSparkMax());
+      shooter = new ShooterSubsystem(new ShooterIOSparkMax(2), new ShooterIOSparkMax(1));
     } else {
-      shooter = new ShooterSubsystem(new ShooterIOSim());
+      shooter =
+          new ShooterSubsystem(
+              new ShooterIOSim(ShooterIOSim.ShooterId.SHOOTER_TOP),
+              new ShooterIOSim(ShooterIOSim.ShooterId.SHOOTER_BOTTOM));
     }
 
     if (hasIntake) {
@@ -111,6 +123,14 @@ public class RobotContainer {
     }
 
     configureBindings();
+    // shooterSysIdBindings();
+  }
+
+  private void shooterSysIdBindings() {
+    controller.a().whileTrue(shooter.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    controller.b().whileTrue(shooter.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    controller.x().whileTrue(shooter.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    controller.y().whileTrue(shooter.sysIdDynamic(SysIdRoutine.Direction.kReverse));
   }
 
   private void configureBindings() {
@@ -131,6 +151,15 @@ public class RobotContainer {
             intake,
             () -> controller.rightBumper().getAsBoolean(),
             () -> controller.leftBumper().getAsBoolean()));
+
+    tab = Shuffleboard.getTab("Drive Speed");
+    speedLimiterEntry =
+        tab.add("Drive Speed", 0)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 100))
+            .getEntry();
+
+    speedLimiterEntry.setValue(50);
 
     drive.setDefaultCommand(
         new DriveCommand(
