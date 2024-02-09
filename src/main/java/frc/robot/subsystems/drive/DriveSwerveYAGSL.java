@@ -15,12 +15,17 @@ import swervelib.parser.SwerveParser;
 
 public class DriveSwerveYAGSL extends DriveBase {
   private final double maximumSpeed = 4.5; // meters/sec
-  private final File swerveJsonDirectory =
-      new File(Filesystem.getDeployDirectory(), "swervePracticeBot");
+  private final File swerveJsonDirectory;
   private SwerveDrive swerveDrive;
   @AutoLogOutput private boolean fieldOrientedDrive = false;
 
   public DriveSwerveYAGSL() {
+    this("swervePracticeBot");
+  }
+
+  public DriveSwerveYAGSL(String configPath) {
+    swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), configPath);
+
     try {
       swerveDrive = new SwerveParser(swerveJsonDirectory).createSwerveDrive(maximumSpeed);
     } catch (Exception e) {
