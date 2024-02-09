@@ -35,16 +35,6 @@ public class DriveSwerveYAGSL extends DriveBase {
       throw new RuntimeException(e);
     }
 
-    // tab = Shuffleboard.getTab("Drive Speed");
-    // speedLimiterEntry =
-    //     tab.add("Drive Speed", 0)
-    //         .withWidget(BuiltInWidgets.kNumberSlider)
-    //         .withProperties(Map.of("min", 0, "max", 100))
-    //         .getEntry();
-
-    // speedLimiterEntry.setValue(100);
-    // maximumSpeed = maximumSpeed * (speedLimiterEntry.getDouble(100) / 10);
-
     AutoBuilder.configureHolonomic(
         swerveDrive::getPose, // Robot pose supplier
         swerveDrive

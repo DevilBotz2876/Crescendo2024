@@ -41,9 +41,6 @@ public class RobotContainer {
   private SendableChooser<Command> autoChooser = null;
   private static final String robotNameKey = "Robot Name";
 
-  ShuffleboardTab tab;
-  GenericEntry speedLimiterEntry;
-
   public enum RobotModel {
     PHOENIX, // Practice Swerve Bot
     SHERMAN, // Practice Tank Bot
@@ -152,27 +149,18 @@ public class RobotContainer {
             () -> controller.rightBumper().getAsBoolean(),
             () -> controller.leftBumper().getAsBoolean()));
 
-    tab = Shuffleboard.getTab("Drive Speed");
-    speedLimiterEntry =
-        tab.add("Drive Speed", 0)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0, "max", 100))
-            .getEntry();
-
-    speedLimiterEntry.setValue(50);
-
     drive.setDefaultCommand(
         new DriveCommand(
             drive,
             () ->
                 MathUtil.applyDeadband(
-                    -(controller.getLeftY()) * (speedLimiterEntry.getDouble(100) / 100), 0.05),
+                    -controller.getLeftY(), 0.05),
             () ->
                 MathUtil.applyDeadband(
-                    -(controller.getLeftX()) * (speedLimiterEntry.getDouble(100) / 100), 0.05),
+                    -controller.getLeftX(), 0.05),
             () ->
                 MathUtil.applyDeadband(
-                    -(controller.getRightX()) * (speedLimiterEntry.getDouble(100) / 100), 0.05)));
+                    -controller.getRightX(), 0.05)));
     // TODO: Move deadband to constants file
 
     controller
