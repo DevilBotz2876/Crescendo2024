@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.DriveBase;
-
 import java.util.Map;
 import java.util.function.DoubleSupplier;
 
@@ -18,8 +17,6 @@ public class DriveCommand extends Command {
   DoubleSupplier rot;
   ShuffleboardTab tab;
   GenericEntry speedLimiterEntry;
-
-
 
   public DriveCommand(
       DriveBase drive, DoubleSupplier speedX, DoubleSupplier speedY, DoubleSupplier rot) {
@@ -44,9 +41,15 @@ public class DriveCommand extends Command {
   public void execute() {
     ChassisSpeeds speeds =
         new ChassisSpeeds(
-            speedX.getAsDouble() * (speedLimiterEntry.getDouble(100) / 100) * drive.getMaxLinearSpeed(),
-            speedY.getAsDouble() * (speedLimiterEntry.getDouble(100) / 100) * drive.getMaxLinearSpeed(),
-            rot.getAsDouble() * (speedLimiterEntry.getDouble(100) / 100) * drive.getMaxAngularSpeed());
+            speedX.getAsDouble()
+                * (speedLimiterEntry.getDouble(100) / 100)
+                * drive.getMaxLinearSpeed(),
+            speedY.getAsDouble()
+                * (speedLimiterEntry.getDouble(100) / 100)
+                * drive.getMaxLinearSpeed(),
+            rot.getAsDouble()
+                * (speedLimiterEntry.getDouble(100) / 100)
+                * drive.getMaxAngularSpeed());
 
     drive.runVelocity(speeds);
   }
