@@ -3,7 +3,6 @@ package frc.robot.subsystems.drive;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -35,8 +34,8 @@ public class DriveTrain extends DriveBase {
   @Override
   public void runVelocity(ChassisSpeeds speeds) {
     DifferentialDriveKinematics kinematics =
-    new DifferentialDriveKinematics(Units.inchesToMeters(24.0));
-  DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(speeds);
+        new DifferentialDriveKinematics(Units.inchesToMeters(24.0));
+    DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(speeds);
 
     double leftVelocity = wheelSpeeds.leftMetersPerSecond;
     double rightVelocity = wheelSpeeds.rightMetersPerSecond;
