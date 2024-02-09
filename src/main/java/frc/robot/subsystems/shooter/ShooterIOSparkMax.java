@@ -143,7 +143,7 @@ public class ShooterIOSparkMax implements ShooterIO {
   }
 
   public boolean supportsHardwarePid() {
-    return true;
+    return false;
   }
 
   @Override
