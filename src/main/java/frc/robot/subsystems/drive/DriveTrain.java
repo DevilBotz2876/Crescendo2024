@@ -93,4 +93,22 @@ public class DriveTrain extends DriveBase {
   public WPI_TalonSRX getRightFollower() {
     return rightFollower;
   }
+
+  /**
+   * This returns the robot's max linear speed in meter/sec
+   *
+   * @return speed in meter/sec
+   */
+  public double getMaxLinearSpeed() {
+    return 4.5;
+  }
+
+  /**
+   * This returns the robot's max angular speed in radian/sec
+   *
+   * @return speed in radian/sec
+   */
+  public double getMaxAngularSpeed() {
+    return 2.0;
+  }
 }
