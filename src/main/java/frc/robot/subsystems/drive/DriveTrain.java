@@ -10,6 +10,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class DriveTrain extends DriveBase {
+  private final double maxVelocityMetersPerSec = 4.5; // meters/sec
   // Define talons
   private static final WPI_TalonSRX leftMaster = new WPI_TalonSRX(10);
   private static final WPI_TalonSRX rightMaster = new WPI_TalonSRX(11);
@@ -37,8 +38,8 @@ public class DriveTrain extends DriveBase {
         new DifferentialDriveKinematics(Units.inchesToMeters(24.0));
     DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(speeds);
 
-    double leftVelocity = wheelSpeeds.leftMetersPerSecond;
-    double rightVelocity = wheelSpeeds.rightMetersPerSecond;
+    double leftVelocity = wheelSpeeds.leftMetersPerSecond / maxVelocityMetersPerSec;
+    double rightVelocity = wheelSpeeds.rightMetersPerSecond / maxVelocityMetersPerSec;
 
     differentialDrive.tankDrive(leftVelocity, rightVelocity);
   }
