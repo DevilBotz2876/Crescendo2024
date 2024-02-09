@@ -7,6 +7,10 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 // import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,13 +28,8 @@ import frc.robot.subsystems.intake.IntakeIOTalonSRX;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
-import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
-
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import java.util.Map;
+import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
 public class RobotContainer {
   public final CommandXboxController controller;
@@ -71,7 +70,7 @@ public class RobotContainer {
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 100))
             .getEntry();
-    
+
     speedLimiterEntry.setValue(50);
 
     switch (model) {
@@ -116,7 +115,7 @@ public class RobotContainer {
 
   private void configureBindings() {
     // shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
-    
+
     controller.rightTrigger().whileTrue(new ShooterEnable(shooter));
 
     controller
@@ -136,9 +135,15 @@ public class RobotContainer {
     drive.setDefaultCommand(
         new DriveCommand(
             drive,
-            () -> MathUtil.applyDeadband(-(controller.getLeftY()) * (speedLimiterEntry.getDouble(100) / 100), 0.05),
-            () -> MathUtil.applyDeadband(-(controller.getLeftX()) * (speedLimiterEntry.getDouble(100) / 100), 0.05),
-            () -> MathUtil.applyDeadband(-(controller.getRightX()) * (speedLimiterEntry.getDouble(100) / 100), 0.05)));
+            () ->
+                MathUtil.applyDeadband(
+                    -(controller.getLeftY()) * (speedLimiterEntry.getDouble(100) / 100), 0.05),
+            () ->
+                MathUtil.applyDeadband(
+                    -(controller.getLeftX()) * (speedLimiterEntry.getDouble(100) / 100), 0.05),
+            () ->
+                MathUtil.applyDeadband(
+                    -(controller.getRightX()) * (speedLimiterEntry.getDouble(100) / 100), 0.05)));
     // TODO: Move deadband to constants file
 
     controller

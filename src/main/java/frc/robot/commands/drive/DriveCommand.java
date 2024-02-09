@@ -1,10 +1,9 @@
 package frc.robot.commands.drive;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.DriveBase;
+import java.util.function.DoubleSupplier;
 
 public class DriveCommand extends Command {
   DriveBase drive;
@@ -29,7 +28,7 @@ public class DriveCommand extends Command {
             speedX.getAsDouble() * drive.getMaxLinearSpeed(),
             speedY.getAsDouble() * drive.getMaxLinearSpeed(),
             rot.getAsDouble() * drive.getMaxAngularSpeed());
- 
+
     drive.runVelocity(speeds);
   }
 }
