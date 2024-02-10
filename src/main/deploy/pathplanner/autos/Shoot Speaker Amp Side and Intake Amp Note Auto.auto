@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.68,
-      "y": 6.74
+      "x": 0.7,
+      "y": 6.71
     },
-    "rotation": -118.9717622827917
+    "rotation": 60.9
   },
   "command": {
     "type": "sequential",
@@ -27,6 +27,12 @@
           "type": "path",
           "data": {
             "pathName": "Speaker to Amp Note Path"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pick Up Note"
           }
         }
       ]
