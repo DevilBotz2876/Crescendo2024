@@ -152,16 +152,16 @@ public class ArmIOSparkMax implements ArmIO {
   }
 
   @Override
-  public void setPosition(double radians, double ffVolts) {
-    SmartDashboard.putNumber("Arm/setPosition/setpoint_rotations", Units.radiansToRotations(radians));
+  public void setPosition(double degrees, double ffVolts) {
+    SmartDashboard.putNumber("Arm/setPosition/setpoint_rotations", degrees);
     leftPid.setReference(
-        45.0,//Units.radiansToRotations(radians),
+        degrees,//Units.radiansToRotations(radians),
         CANSparkMax.ControlType.kPosition,
         0, // Arbitrary slotID, you may need to adjust this based on your configuration
         ffVolts,
         ArbFFUnits.kVoltage);
 
-    SmartDashboard.putNumber("Shooter/left/positionRad", radians);
+    SmartDashboard.putNumber("Shooter/left/positionRad", degrees);
     SmartDashboard.putNumber("Shooter/left/ProcessVariable", encoder.getAbsolutePosition());
   }
 

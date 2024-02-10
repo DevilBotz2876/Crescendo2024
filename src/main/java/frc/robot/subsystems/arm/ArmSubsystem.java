@@ -49,8 +49,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   @Override
   public void setAngle(double degrees) {
     /* TODO: Enforce arm physical min/max limits */
-    final double minAngleDeg = Units.radiansToDegrees(positionRadMin);
-    final double maxAngleDeg = Units.radiansToDegrees(positionRadMax);
+    final double minAngleDeg = 0;
+    final double maxAngleDeg = 110;
 
     // Check if the angle is below the minimum limit or above the maximum limit
     // If it is the it is set to min/max
@@ -65,13 +65,12 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     }
 
     // target position for
-    double targetPositionRad = Units.degreesToRadians(degrees);
+    double setpoint = degrees;
 
     ArmFeedforward feedforward = new ArmFeedforward(0, 0.72, 6.18, 0.04);
-    ;
 
     // Set the position reference with feedforward voltage
-    io.setPosition(targetPositionRad, feedforward.calculate(targetPositionRad, 0));
+    io.setPosition(setpoint, feedforward.calculate(setpoint, 0));
   }
 
   // Sets the voltage to volts. the volts value is -12 to 12

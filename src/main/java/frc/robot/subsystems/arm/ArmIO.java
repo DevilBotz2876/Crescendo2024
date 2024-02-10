@@ -19,7 +19,7 @@ public interface ArmIO {
   public default void setVoltage(double volts) {}
 
   /** sets of the position of the arm */
-  public default void setPosition(double radians, double ffVolts) {}
+  public default void setPosition(double degree, double ffVolts) {}
 
   public default void resetPosition() {}
 }

@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.ArmToPosition;
 import frc.robot.commands.IntakeBaseCommand;
 import frc.robot.commands.ShooterEnable;
 import frc.robot.commands.drive.DriveCommand;
@@ -47,6 +48,7 @@ public class RobotContainer {
 
   ShuffleboardTab ArmTab;
   GenericEntry ArmVoltsEntry;
+  GenericEntry ArmDegreesEntry;
 
   public enum RobotModel {
     PHOENIX, // Practice Swerve Bot
@@ -146,6 +148,14 @@ public class RobotContainer {
     // Sets default value to 0.0
     ArmVoltsEntry.setValue(0.0);
 
+    // ArmDegreesEntry =
+    //     ArmTab.add("Degree Setpoint", 45.0)
+    //         .withWidget(BuiltInWidgets.kTextView)
+    //         .getEntry();
+
+    // Sets default value to 0.0
+    // ArmVoltsEntry.setValue(45.0);
+
     configureBindings();
     // ArmSysIdBindings();
     // shooterSysIdBindings();
@@ -218,9 +228,10 @@ public class RobotContainer {
             Commands.startEnd(
               () -> arm.runVoltage(-4), () -> arm.runVoltage(0), arm));
 
+    
     controller
         .b()
-        .whileTrue(Commands.startEnd(() -> arm.setAngle(45), () -> arm.runVoltage(0), arm));
+        .whileTrue(new ArmToPosition(arm));
  }
 
   public Command getAutonomousCommand() {
