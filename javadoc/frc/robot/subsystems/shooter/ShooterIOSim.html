@@ -130,19 +130,13 @@ implements <a href="ShooterIO.html" title="interface in frc.robot.subsystems.sho
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setVelocity(double,double)" class="member-name-link">setVelocity</a><wbr>(double&nbsp;velocityRadPerSec,
- double&nbsp;ffVolts)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setVoltage(double)" class="member-name-link">setVoltage</a><wbr>(double&nbsp;volts)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Run closed loop at the specified velocity</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setVoltage(double)" class="member-name-link">setVoltage</a><wbr>(double&nbsp;volts)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Run open loop at the specified voltage.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateInputs(frc.robot.subsystems.shooter.ShooterIO.ShooterIOInputs)" class="member-name-link">updateInputs</a><wbr>(<a href="ShooterIO.ShooterIOInputs.html" title="class in frc.robot.subsystems.shooter">ShooterIO.ShooterIOInputs</a>&nbsp;inputs)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateInputs(frc.robot.subsystems.shooter.ShooterIO.ShooterIOInputs)" class="member-name-link">updateInputs</a><wbr>(<a href="ShooterIO.ShooterIOInputs.html" title="class in frc.robot.subsystems.shooter">ShooterIO.ShooterIOInputs</a>&nbsp;inputs)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Updates the set of loggable inputs.</div>
 </div>
 </div>
@@ -151,6 +145,9 @@ implements <a href="ShooterIO.html" title="interface in frc.robot.subsystems.sho
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
+<div class="inherited-list">
+<h3 id="methods-inherited-from-class-frc.robot.subsystems.shooter.ShooterIO">Methods inherited from interface&nbsp;frc.robot.subsystems.shooter.<a href="ShooterIO.html" title="interface in frc.robot.subsystems.shooter">ShooterIO</a></h3>
+<code><a href="ShooterIO.html#setVelocity(double,double)">setVelocity</a>, <a href="ShooterIO.html#supportsHardwarePid()">supportsHardwarePid</a></code></div>
 </section>
 </li>
 </ul>
@@ -203,19 +200,6 @@ implements <a href="ShooterIO.html" title="interface in frc.robot.subsystems.sho
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="ShooterIO.html#setVoltage(double)">setVoltage</a></code>&nbsp;in interface&nbsp;<code><a href="ShooterIO.html" title="interface in frc.robot.subsystems.shooter">ShooterIO</a></code></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="setVelocity(double,double)">
-<h3>setVelocity</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setVelocity</span><wbr><span class="parameters">(double&nbsp;velocityRadPerSec,
- double&nbsp;ffVolts)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="ShooterIO.html#setVelocity(double,double)">ShooterIO</a></code></span></div>
-<div class="block">Run closed loop at the specified velocity</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="ShooterIO.html#setVelocity(double,double)">setVelocity</a></code>&nbsp;in interface&nbsp;<code><a href="ShooterIO.html" title="interface in frc.robot.subsystems.shooter">ShooterIO</a></code></dd>
 </dl>
 </section>
 </li>
