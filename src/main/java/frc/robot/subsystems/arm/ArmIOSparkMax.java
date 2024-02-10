@@ -2,7 +2,9 @@ package frc.robot.subsystems.arm;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.SparkPIDController.ArbFFUnits;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -10,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class ArmIOSparkMax implements ArmIO {
   // Leader
   private final CANSparkMax left = new CANSparkMax(4, MotorType.kBrushless);
+  RelativeEncoder leftEncoder = left.getEncoder();
 
   // follower
   // private final CANSparkMax right = new CANSparkMax(3, MotorType.kBrushless);
@@ -46,9 +49,9 @@ public class ArmIOSparkMax implements ArmIO {
     // TODO: these values are samples picked from REV example PID code.  Need to tune PID and choose
     // real values.
 
-    lkP = 6e-5;
-    lkI = 0;
-    lkD = 0;
+    lkP = 0.1;
+    lkI = 1e-4;
+    lkD = 1;
     lkIz = 0;
     lkFF = 0.000015;
     lkMaxOutput = 1;
@@ -80,6 +83,8 @@ public class ArmIOSparkMax implements ArmIO {
     inputs.leftAppliedVolts = left.getAppliedOutput() * left.getBusVoltage();
 
     inputs.current = left.getOutputCurrent();
+
+    inputs.relativePositionRad = Units.rotationsToRadians(leftEncoder.getPosition());
     // inputs.rightAppliedVolts = right.getAppliedOutput() * right.getBusVoltage();
 
     double lp = SmartDashboard.getNumber("Arm/left/P Gain", 0);
@@ -146,7 +151,8 @@ public class ArmIOSparkMax implements ArmIO {
         Units.radiansToRotations(radians),
         CANSparkMax.ControlType.kPosition,
         0, // Arbitrary slotID, you may need to adjust this based on your configuration
-        ffVolts);
+        ffVolts,
+        ArbFFUnits.kVoltage);
 
     SmartDashboard.putNumber("Shooter/left/positionRad", radians);
     SmartDashboard.putNumber("Shooter/left/ProcessVariable", encoder.getAbsolutePosition());
