@@ -210,12 +210,18 @@ public class RobotContainer {
         .y()
         .whileTrue(
             Commands.startEnd(
-                () -> arm.runVoltage(ArmVoltsEntry.getDouble(0.0)), () -> arm.runVoltage(0), arm));
+              () -> arm.runVoltage(4), () -> arm.runVoltage(0), arm));
+                //() -> arm.runVoltage(ArmVoltsEntry.getDouble(0.0)), () -> arm.runVoltage(0), arm));
+  controller
+        .x()
+        .whileTrue(
+            Commands.startEnd(
+              () -> arm.runVoltage(-4), () -> arm.runVoltage(0), arm));
 
     controller
-        .x()
+        .b()
         .whileTrue(Commands.startEnd(() -> arm.setAngle(45), () -> arm.runVoltage(0), arm));
-  }
+ }
 
   public Command getAutonomousCommand() {
     if (autoChooser != null) {

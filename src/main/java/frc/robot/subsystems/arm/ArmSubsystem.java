@@ -49,15 +49,15 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   @Override
   public void setAngle(double degrees) {
     /* TODO: Enforce arm physical min/max limits */
-    final double minAngle = Units.radiansToDegrees(positionRadMin);
-    final double maxAngle = Units.radiansToDegrees(positionRadMax);
+    final double minAngleDeg = Units.radiansToDegrees(positionRadMin);
+    final double maxAngleDeg = Units.radiansToDegrees(positionRadMax);
 
     // Check if the angle is below the minimum limit or above the maximum limit
     // If it is the it is set to min/max
-    if (degrees < minAngle) {
-      this.degrees = minAngle; // Set to the minimum angle
-    } else if (degrees > maxAngle) {
-      this.degrees = maxAngle; // Set to the maximum angle
+    if (degrees < minAngleDeg) {
+      this.degrees = minAngleDeg; // Set to the minimum angle
+    } else if (degrees > maxAngleDeg) {
+      this.degrees = maxAngleDeg; // Set to the maximum angle
     }
     // The  angle is within the range and is set
     else {
@@ -116,6 +116,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
       //System.out.println("Min Hit");
       SmartDashboard.putBoolean("Arm/minHit", true);
       limitHit = true;
+      io.resetPosition();
     } else {
       SmartDashboard.putBoolean("Arm/minHit", false);
     }

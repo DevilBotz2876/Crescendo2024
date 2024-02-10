@@ -20,4 +20,6 @@ public interface ArmIO {
 
   /** sets of the position of the arm */
   public default void setPosition(double radians, double ffVolts) {}
+
+  public default void resetPosition() {}
 }

@@ -5,6 +5,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.SparkPIDController.ArbFFUnits;
+
+import edu.wpi.first.cscore.CameraServerJNI.LoggerFunction;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -46,16 +48,18 @@ public class ArmIOSparkMax implements ArmIO {
 
     left.burnFlash();
 
+    leftEncoder.setPosition(0);
+
     // TODO: these values are samples picked from REV example PID code.  Need to tune PID and choose
     // real values.
 
     lkP = 0.1;
-    lkI = 1e-4;
-    lkD = 1;
+    lkI = 0;
+    lkD = 0;
     lkIz = 0;
     lkFF = 0;
-    lkMaxOutput = 1;
-    lkMinOutput = -1;
+    lkMaxOutput = .5;
+    lkMinOutput = -.5;
     lmaxRPS = 300;
 
     leftPid.setP(lkP);
@@ -142,13 +146,16 @@ public class ArmIOSparkMax implements ArmIO {
     // Try out different encoder.get methods here and see if you can get a range of values that
     // works by applying different math/operations to the get values.  This is one example.
     SmartDashboard.putNumber("Arm/encoder/angle", encoder.get() * 360.0);
+
+    SmartDashboard.putNumber("Arm/setPosition/current_rotations", left.getEncoder().getPosition());
+
   }
 
   @Override
   public void setPosition(double radians, double ffVolts) {
-
+    SmartDashboard.putNumber("Arm/setPosition/setpoint_rotations", Units.radiansToRotations(radians));
     leftPid.setReference(
-        Units.radiansToRotations(radians),
+        45.0,//Units.radiansToRotations(radians),
         CANSparkMax.ControlType.kPosition,
         0, // Arbitrary slotID, you may need to adjust this based on your configuration
         ffVolts,
@@ -163,5 +170,9 @@ public class ArmIOSparkMax implements ArmIO {
   public void setVoltage(double volts) {
     /* TODO: Implement SparkMax Code Here */
     left.setVoltage(volts);
+  }
+
+  public void resetPosition() {
+    leftEncoder.setPosition(0);
   }
 }
