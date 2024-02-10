@@ -73,6 +73,12 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     io.setPosition(setpoint, feedforward.calculate(setpoint, 0));
   }
 
+  @Override
+  public boolean isEncoderConnected() {
+    
+    return io.isEncoderConnected();
+  }
+
   // Sets the voltage to volts. the volts value is -12 to 12
   public void runVoltage(double volts) {
     this.volts = volts;

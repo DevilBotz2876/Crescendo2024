@@ -21,34 +21,35 @@ public class ArmToPosition extends Command {
   public ArmToPosition(ArmSubsystem arm) {
     this.arm = arm;
 
-    // tab = Shuffleboard.getTab("Arm");
+    tab = Shuffleboard.getTab("Arm");
 
-    // degreesEntry =
-    //     tab.add("Degrees Setpoint", 0.0)
-    //         .withWidget(BuiltInWidgets.kNumberSlider)
-    //         .withProperties(Map.of("min", 0, "max", 110))
-    //         .getEntry();
+    degreesEntry =
+        tab.add("Degrees Setpoint", 0.0)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 110))
+            .getEntry();
 
-    // degreesEntry.setValue(0.0);
-
-    
-
+  
     addRequirements(arm);
   }
 
   @Override
   public void initialize() {
+    //System.out.println("armToPos init: "+degreesEntry.getDouble(0));
   }
 
   @Override
   public void execute() {
-    //SmartDashboard.putNumber("ShuffleBoard/Arm/Degree", degreesEntry.getDouble(1.0));
+    double setpoint  = degreesEntry.getDouble(1.0);
+    //System.out.println("armToPos setpoint: "+setpoint);
+    SmartDashboard.putNumber("ShuffleBoard/Arm/Degree", setpoint);
     // Checks the degree Entry for the degree setpoint and sets the degree setpoint of motor 
-    //arm.setAngle(degreesEntry.getDouble(1.0));
+    arm.setAngle(setpoint);
   }
 
   @Override
   public void end(boolean interrupted) {
     arm.runVoltage(0);
+    //arm.setAngle(5);
   }
 }
