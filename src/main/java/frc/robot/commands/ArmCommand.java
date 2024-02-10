@@ -1,17 +1,20 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import java.util.function.BooleanSupplier;
+import org.littletonrobotics.junction.AutoLogOutput;
 
 public class ArmCommand extends Command {
   ArmSubsystem arm;
   BooleanSupplier moveUp;
   BooleanSupplier moveDown;
-  double targetAngle = 0;
+  @AutoLogOutput double targetAngle = 0;
 
   public ArmCommand(ArmSubsystem arm, BooleanSupplier moveUp, BooleanSupplier moveDown) {
     this.arm = arm;
+    targetAngle = arm.getAngle();
     this.moveUp = moveUp;
     this.moveDown = moveDown;
 
@@ -28,6 +31,7 @@ public class ArmCommand extends Command {
       System.out.println("Arm Down");
       targetAngle--;
     }
+    SmartDashboard.putNumber("ArmCommand/targetAngle", targetAngle);
     arm.setAngle(targetAngle);
   }
 }

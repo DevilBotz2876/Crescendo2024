@@ -53,7 +53,7 @@ public class ArmIOSparkMax implements ArmIO {
     lkI = 1e-4;
     lkD = 1;
     lkIz = 0;
-    lkFF = 0.000015;
+    lkFF = 0;
     lkMaxOutput = 1;
     lkMinOutput = -1;
     lmaxRPS = 300;
@@ -62,7 +62,7 @@ public class ArmIOSparkMax implements ArmIO {
     leftPid.setI(lkI);
     leftPid.setD(lkD);
     leftPid.setIZone(lkIz);
-    leftPid.setFF(lkFF);
+    // leftPid.setFF(lkFF);
     leftPid.setOutputRange(lkMinOutput, lkMaxOutput);
 
     SmartDashboard.putNumber("Arm/left/P Gain", lkP);

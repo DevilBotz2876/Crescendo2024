@@ -25,7 +25,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     this.io = io;
 
     // TODO: These are sample values.  Need to run sysid on shooter and get real values.
-    feedforward = new ArmFeedforward(1, 1, 1);
+    // feedforward = new ArmFeedforward(1, 1, 1);
 
     // Configure SysId based on the AdvantageKit example
     sysId =
@@ -49,8 +49,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   @Override
   public void setAngle(double degrees) {
     /* TODO: Enforce arm physical min/max limits */
-    final double minAngle = 0;
-    final double maxAngle = 180;
+    final double minAngle = Units.radiansToDegrees(positionRadMin);
+    final double maxAngle = Units.radiansToDegrees(positionRadMax);
 
     // Check if the angle is below the minimum limit or above the maximum limit
     // If it is the it is set to min/max
@@ -65,14 +65,13 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     }
 
     // target position for
-    double positionRad = Units.degreesToRadians(degrees);
+    double targetPositionRad = Units.degreesToRadians(degrees);
 
-    // Calculate feedforward voltage with ArmFeedforward
-    // TODO: The actual feedforward voltage needs to be computed!
-    double ffVolts = feedforward.calculate(positionRad, 1);
+    ArmFeedforward feedforward = new ArmFeedforward(0, 0.72, 6.18, 0.04);
+    ;
 
     // Set the position reference with feedforward voltage
-    io.setPosition(positionRad, ffVolts);
+    io.setPosition(targetPositionRad, feedforward.calculate(targetPositionRad, 0));
   }
 
   // Sets the voltage to volts. the volts value is -12 to 12
