@@ -82,7 +82,7 @@ public class RobotContainer {
     switch (model) {
       case PHOENIX:
         driveType = DriveType.SWERVE;
-        yagslConfigPath = "yagsl/sherman";
+        yagslConfigPath = "yagsl/phoenix";
         break;
       case SHERMAN:
         driveType = DriveType.TANK;
