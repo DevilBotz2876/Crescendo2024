@@ -99,21 +99,28 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     SmartDashboard.putNumber("Arm/encoder/anglSub", Units.radiansToDegrees(inputs.positionRad));
 
     /* TODO: Implement PID control here to achieve desired angle */
-    if (isLimitReached(inputs.leftAppliedVolts)) {
-      runVoltage(voltageSafety(inputs.leftAppliedVolts));
-    }
+    // if (isLimitReached(inputs.leftAppliedVolts)) {
+    //   runVoltage(voltageSafety(inputs.leftAppliedVolts));
+    // }
   }
 
   protected boolean isLimitReached(double desiredVoltage) {
+    boolean limitHit = false;
     if (inputs.positionRad > positionRadMax && desiredVoltage > 0.0) {
-      System.out.println("Max Hit");
-      return true;
+      //System.out.println("Max Hit");
+      SmartDashboard.putBoolean("Arm/maxHit", true);
+      limitHit = true;
+    } else {
+      SmartDashboard.putBoolean("Arm/maxHit", false);
     }
     if (inputs.positionRad < positionRadMin && desiredVoltage < 0.0) {
-      System.out.println("Min Hit");
-      return true;
+      //System.out.println("Min Hit");
+      SmartDashboard.putBoolean("Arm/minHit", true);
+      limitHit = true;
+    } else {
+      SmartDashboard.putBoolean("Arm/minHit", false);
     }
-    return false;
+    return limitHit;
   }
 
   protected double voltageSafety(double desiredVoltage) {
