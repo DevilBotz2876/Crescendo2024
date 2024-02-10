@@ -18,4 +18,8 @@ public interface ShooterIO {
 
   /** Run closed loop at the specified velocity */
   public default void setVelocity(double velocityRadPerSec, double ffVolts) {}
+
+  public default boolean supportsHardwarePid() {
+    return false;
+  }
 }

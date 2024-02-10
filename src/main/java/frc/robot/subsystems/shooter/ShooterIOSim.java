@@ -1,16 +1,12 @@
 package frc.robot.subsystems.shooter;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 
 public class ShooterIOSim implements ShooterIO {
   private FlywheelSim wheel;
 
-  private PIDController pid = new PIDController(0.6, 0.2, 0);
-  private double feedForwardVoltage = 0.0;
   private double appliedVolts = 0.0;
-  private double targetVelocityRadPerSec = 0.0;
 
   public enum ShooterId {
     SHOOTER_TOP,
@@ -41,27 +37,11 @@ public class ShooterIOSim implements ShooterIO {
     // Update inputs
     inputs.velocityRadPerSec = wheel.getAngularVelocityRadPerSec();
     inputs.appliedVolts = appliedVolts;
-
-    if (targetVelocityRadPerSec != 0) {
-      appliedVolts =
-          feedForwardVoltage + pid.calculate(inputs.velocityRadPerSec, targetVelocityRadPerSec);
-      wheel.setInputVoltage(appliedVolts);
-    }
   }
 
   @Override
   public void setVoltage(double volts) {
     appliedVolts = volts;
     wheel.setInputVoltage(volts);
-  }
-
-  @Override
-  public void setVelocity(double velocityRadPerSec, double ffVolts) {
-    appliedVolts = 0;
-    targetVelocityRadPerSec = velocityRadPerSec;
-    feedForwardVoltage = ffVolts;
-    if (velocityRadPerSec == 0) {
-      wheel.setInputVoltage(0);
-    }
   }
 }
