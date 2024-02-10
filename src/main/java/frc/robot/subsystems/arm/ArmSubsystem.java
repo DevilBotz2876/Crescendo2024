@@ -19,6 +19,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   private final SysIdRoutine sysId;
   private final double positionRadMax = 3.160;
   private final double positionRadMin = 0.001;
+  @AutoLogOutput private double volts;
 
   public ArmSubsystem(ArmIO io) {
     this.io = io;
@@ -76,6 +77,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
   // Sets the voltage to volts. the volts value is -12 to 12
   public void runVoltage(double volts) {
+    this.volts = volts;
     io.setVoltage(voltageSafety(volts));
   }
 

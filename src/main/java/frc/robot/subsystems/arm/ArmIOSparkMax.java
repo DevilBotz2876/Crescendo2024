@@ -78,6 +78,8 @@ public class ArmIOSparkMax implements ArmIO {
     inputs.positionRad = encoder.getDistance();
 
     inputs.leftAppliedVolts = left.getAppliedOutput() * left.getBusVoltage();
+
+    inputs.current = left.getOutputCurrent();
     // inputs.rightAppliedVolts = right.getAppliedOutput() * right.getBusVoltage();
 
     double lp = SmartDashboard.getNumber("Arm/left/P Gain", 0);

@@ -95,7 +95,7 @@ public class RobotContainer {
         driveType = DriveType.TANK;
         hasIntake = true;
         hasShooter = true;
-        hasArm = false;
+        hasArm = true;
         break;
       default:
     }
