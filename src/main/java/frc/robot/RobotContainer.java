@@ -7,11 +7,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 // import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.Preferences;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -34,7 +30,6 @@ import frc.robot.subsystems.intake.IntakeIOTalonSRX;
 import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
-import java.util.Map;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
 public class RobotContainer {
@@ -45,10 +40,6 @@ public class RobotContainer {
   public final ArmSubsystem arm;
   private SendableChooser<Command> autoChooser = null;
   private static final String robotNameKey = "Robot Name";
-
-  ShuffleboardTab ArmTab;
-  GenericEntry ArmVoltsEntry;
-  GenericEntry ArmDegreesEntry;
 
   public enum RobotModel {
     PHOENIX, // Practice Swerve Bot
@@ -136,18 +127,6 @@ public class RobotContainer {
       arm = new ArmSubsystem(new ArmIOStub());
     }
 
-    // create arm tab on ShuffleBoard
-    ArmTab = Shuffleboard.getTab("Arm");
-    // Create volt entry under arm tab as a number sider with min = -4 and max = 4
-    ArmVoltsEntry =
-        ArmTab.add("Volts", 0)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", -4, "max", 4))
-            .getEntry();
-
-    // Sets default value to 0.0
-    ArmVoltsEntry.setValue(0.0);
-
     // ArmDegreesEntry =
     //     ArmTab.add("Degree Setpoint", 45.0)
     //         .withWidget(BuiltInWidgets.kTextView)
@@ -156,7 +135,7 @@ public class RobotContainer {
     // Sets default value to 0.0
     // ArmVoltsEntry.setValue(45.0);
 
-    configureBindings();
+    // configureBindings();
     // ArmSysIdBindings();
     // shooterSysIdBindings();
   }
@@ -218,21 +197,14 @@ public class RobotContainer {
     // run arm at voltage on Arm Tab
     controller
         .y()
-        .whileTrue(
-            Commands.startEnd(
-              () -> arm.runVoltage(4), () -> arm.runVoltage(0), arm));
-                //() -> arm.runVoltage(ArmVoltsEntry.getDouble(0.0)), () -> arm.runVoltage(0), arm));
-  controller
-        .x()
-        .whileTrue(
-            Commands.startEnd(
-              () -> arm.runVoltage(-4), () -> arm.runVoltage(0), arm));
-
-    
+        .whileTrue(Commands.startEnd(() -> arm.runVoltage(4), () -> arm.runVoltage(0), arm));
+    // () -> arm.runVoltage(ArmVoltsEntry.getDouble(0.0)), () -> arm.runVoltage(0), arm));
     controller
-        .b()
-        .whileTrue(new ArmToPosition(arm));
- }
+        .x()
+        .whileTrue(Commands.startEnd(() -> arm.runVoltage(-4), () -> arm.runVoltage(0), arm));
+
+    controller.b().whileTrue(new ArmToPosition(arm));
+  }
 
   public Command getAutonomousCommand() {
     if (autoChooser != null) {

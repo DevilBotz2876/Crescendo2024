@@ -5,8 +5,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.SparkPIDController.ArbFFUnits;
-
-import edu.wpi.first.cscore.CameraServerJNI.LoggerFunction;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,7 +17,7 @@ public class ArmIOSparkMax implements ArmIO {
   // follower
   // private final CANSparkMax right = new CANSparkMax(3, MotorType.kBrushless);
 
-  private final DutyCycleEncoder encoder;
+  private final DutyCycleEncoder absoluteEncoder;
 
   private SparkPIDController leftPid = left.getPIDController();
 
@@ -27,17 +25,17 @@ public class ArmIOSparkMax implements ArmIO {
 
   public ArmIOSparkMax() {
     /* TODO: Instantiate 2x SparkMax motors and absolute encoder */
-    encoder = new DutyCycleEncoder(0);
+    absoluteEncoder = new DutyCycleEncoder(0);
 
     // This will need to be set from a constant once we have the arm assembled and can measure the
     // offset.  Once the arm is done this value won't change.
     //
-    encoder.setPositionOffset(0.4154156603853915); // This is place holder
+    absoluteEncoder.setPositionOffset(0.4154156603853915); // This is place holder
 
-    encoder.setDutyCycleRange(1.0 / 1024.0, 1023.0 / 1024.0);
+    absoluteEncoder.setDutyCycleRange(1.0 / 1024.0, 1023.0 / 1024.0);
 
     // I don't think 2PI is correct.. try 360?
-    encoder.setDistancePerRotation(2.0 * Math.PI);
+    absoluteEncoder.setDistancePerRotation(2.0 * Math.PI);
     // encoder.setDistancePerRotation(360.0);
 
     left.setInverted(false);
@@ -82,7 +80,7 @@ public class ArmIOSparkMax implements ArmIO {
   @Override
   public void updateInputs(ArmIOInputs inputs) {
     /* TODO: Implement SparkMax/Absolute Encoder Code Here */
-    inputs.positionRad = encoder.getDistance();
+    inputs.positionRad = absoluteEncoder.getDistance();
 
     inputs.leftAppliedVolts = left.getAppliedOutput() * left.getBusVoltage();
 
@@ -129,50 +127,61 @@ public class ArmIOSparkMax implements ArmIO {
     // which of these values we might want to include in advantagekit logging.
 
     // I think isConnected would be good so we know if/when and how long encoder was disconnected.
-    SmartDashboard.putBoolean("Arm/encoder/connected", encoder.isConnected());
+    SmartDashboard.putBoolean("Arm/encoder/connected", absoluteEncoder.isConnected());
 
     // Try rebooting the robot with the arm/encoder in different positions.  Do these value change?
     // How? Record observations so you can share with rest of us
-    SmartDashboard.putNumber("Arm/encoder/absolutePos", encoder.getAbsolutePosition());
-    SmartDashboard.putNumber("Arm/encoder/getPositionOffset", encoder.getPositionOffset());
+    SmartDashboard.putNumber("Arm/encoder/absolutePos", absoluteEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Arm/encoder/getPositionOffset", absoluteEncoder.getPositionOffset());
 
     // I don't think this number changes if you rotate the arm/encoder.  What does affect it?
     SmartDashboard.putNumber(
-        "Arm/encoder/getDistancePerRotation", encoder.getDistancePerRotation());
+        "Arm/encoder/getDistancePerRotation", absoluteEncoder.getDistancePerRotation());
 
-    SmartDashboard.putNumber("Arm/encoder/get", encoder.get());
-    SmartDashboard.putNumber("Arm/encoder/getDistance", encoder.getDistance());
+    SmartDashboard.putNumber("Arm/encoder/get", absoluteEncoder.get());
+    SmartDashboard.putNumber("Arm/encoder/getDistance", absoluteEncoder.getDistance());
 
     // Try out different encoder.get methods here and see if you can get a range of values that
     // works by applying different math/operations to the get values.  This is one example.
-    SmartDashboard.putNumber("Arm/encoder/angle", encoder.get() * 360.0);
+    SmartDashboard.putNumber("Arm/encoder/angle", absoluteEncoder.get() * 360.0);
 
     SmartDashboard.putNumber("Arm/setPosition/current_rotations", left.getEncoder().getPosition());
-
   }
 
   @Override
   public void setPosition(double degrees, double ffVolts) {
     SmartDashboard.putNumber("Arm/setPosition/setpoint_rotations", degrees);
     leftPid.setReference(
-        degrees,//Units.radiansToRotations(radians),
+        degrees, // Units.radiansToRotations(radians),
         CANSparkMax.ControlType.kPosition,
         0, // Arbitrary slotID, you may need to adjust this based on your configuration
         ffVolts,
         ArbFFUnits.kVoltage);
 
     SmartDashboard.putNumber("Shooter/left/positionRad", degrees);
-    SmartDashboard.putNumber("Shooter/left/ProcessVariable", encoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Shooter/left/ProcessVariable", absoluteEncoder.getAbsolutePosition());
   }
 
   /** Run the arm motor at the specified voltage. */
   @Override
   public void setVoltage(double volts) {
-    /* TODO: Implement SparkMax Code Here */
     left.setVoltage(volts);
   }
 
-  public void resetPosition() {
-    leftEncoder.setPosition(0);
+  @Override
+  public void setFeedback(double kP, double kI, double kD) {
+    leftPid.setP(kP);
+    leftPid.setI(kI);
+    leftPid.setD(kD);
+  }
+
+  @Override
+  public boolean isAbsoluteEncoderConnected() {
+    return absoluteEncoder.isConnected();
+  }
+
+  @Override
+  public void resetRelativeEncoder(double position) {
+    leftEncoder.setPosition(position);
   }
 }
