@@ -4,7 +4,12 @@ import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -21,6 +26,20 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   private final double positionRadMin = 0.001;
   @AutoLogOutput private double volts;
 
+  // Create a Mechanism2d display of an Arm with a fixed ArmTower and moving Arm.
+  private final Mechanism2d mech2d = new Mechanism2d(60, 60);
+  private final MechanismRoot2d armPivot2d = mech2d.getRoot("ArmPivot", 30, 30);
+  private final MechanismLigament2d armTower2d =
+      armPivot2d.append(new MechanismLigament2d("ArmTower", 30, -90));
+  private final MechanismLigament2d arm2d =
+      armPivot2d.append(
+          new MechanismLigament2d(
+              "Arm",
+              30,
+              Units.radiansToDegrees(inputs.positionRad),
+              6,
+              new Color8Bit(Color.kYellow)));
+
   public ArmSubsystem(ArmIO io) {
     this.io = io;
 
@@ -36,6 +55,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
                 null,
                 (state) -> Logger.recordOutput("Arm/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism((voltage) -> runVoltage(voltage.in(Volts)), null, this));
+
+    SmartDashboard.putData("Arm Simulation", mech2d);
   }
 
   @Override
@@ -106,6 +127,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     // if (isLimitReached(inputs.leftAppliedVolts)) {
     //   runVoltage(voltageSafety(inputs.leftAppliedVolts));
     // }
+
+    arm2d.setAngle(Units.radiansToDegrees(inputs.positionRad));
   }
 
   protected boolean isLimitReached(double desiredVoltage) {
