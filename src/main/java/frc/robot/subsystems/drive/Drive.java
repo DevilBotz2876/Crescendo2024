@@ -1,6 +1,7 @@
 package frc.robot.subsystems.drive;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj2.command.Command;
 
 public interface Drive {
   /**
@@ -35,4 +36,22 @@ public interface Drive {
   ;
 
   public default void setPoseToMatchField() {}
+
+  /**
+   * Command to characterize the robot drive motors using SysId
+   *
+   * @return SysId Drive Command
+   */
+  public default Command sysIdDriveMotorCommand() {
+    return null;
+  }
+
+  /**
+   * Command to characterize the robot angle motors using SysId
+   *
+   * @return SysId Angle Command
+   */
+  public default Command sysIdAngleMotorCommand() {
+    return null;
+  }
 }

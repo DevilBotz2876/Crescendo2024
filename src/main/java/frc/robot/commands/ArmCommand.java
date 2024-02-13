@@ -25,7 +25,7 @@ public class ArmCommand extends Command {
   @Override
   public void execute() {
     /* TODO: Implement arm controls here to increase/decrease desired angle */
-    //targetAngle = arm.getAngle();
+    // targetAngle = arm.getAngle();
 
     if (moveUp.getAsBoolean()) {
       targetAngle = arm.getAngle();
@@ -36,7 +36,7 @@ public class ArmCommand extends Command {
       System.out.println("Arm Down");
       targetAngle -= angleIncrement;
     }
-    if(targetAngle < 0) {
+    if (targetAngle < 0) {
       targetAngle = 0;
     } else if (targetAngle > 90) {
       targetAngle = 90;

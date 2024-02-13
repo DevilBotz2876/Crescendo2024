@@ -25,6 +25,7 @@ import frc.robot.subsystems.arm.ArmIOStub;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.drive.DriveBase;
 import frc.robot.subsystems.drive.DriveSwerveYAGSL;
+import frc.robot.subsystems.drive.DriveTrain;
 import frc.robot.subsystems.intake.IntakeBase;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.intake.IntakeIOTalonSRX;
@@ -45,6 +46,7 @@ public class RobotContainer {
   public enum RobotModel {
     PHOENIX, // Practice Swerve Bot
     SHERMAN, // Practice Tank Bot
+    INFERNO, // Competition Swerve Bot
   }
 
   public enum DriveType {
@@ -65,6 +67,7 @@ public class RobotContainer {
     boolean hasIntake = false;
     boolean hasShooter = false;
     DriveType driveType = DriveType.NONE;
+    String yagslConfigPath = null;
     boolean hasArm = false;
 
     Preferences.initString(robotNameKey, robotName);
@@ -77,6 +80,9 @@ public class RobotContainer {
       case "SHERMAN":
         model = RobotModel.SHERMAN;
         break;
+      case "INFERNO":
+        model = RobotModel.INFERNO;
+        break;
       case "UNKNOWN":
       default:
     }
@@ -84,6 +90,7 @@ public class RobotContainer {
     switch (model) {
       case PHOENIX:
         driveType = DriveType.SWERVE;
+        yagslConfigPath = "yagsl/phoenix";
         break;
       case SHERMAN:
         driveType = DriveType.TANK;
@@ -91,6 +98,9 @@ public class RobotContainer {
         hasShooter = true;
         hasArm = true;
         break;
+      case INFERNO:
+        driveType = DriveType.SWERVE;
+        yagslConfigPath = "yagsl/inferno";
       default:
     }
 
@@ -111,12 +121,12 @@ public class RobotContainer {
 
     switch (driveType) {
       case SWERVE:
-        drive = new DriveSwerveYAGSL();
+        drive = new DriveSwerveYAGSL(yagslConfigPath);
         autoChooser = AutoBuilder.buildAutoChooser("Mobility Auto");
         SmartDashboard.putData("Auto Chooser", autoChooser);
         break;
       case TANK:
-        drive = new DriveBase();
+        drive = new DriveTrain();
         break;
       default:
         drive = new DriveBase();
@@ -139,6 +149,7 @@ public class RobotContainer {
     configureBindings();
     // ArmSysIdBindings();
     // shooterSysIdBindings();
+    // driveSysIdBindings();
   }
 
   private void ArmSysIdBindings() {
@@ -155,9 +166,13 @@ public class RobotContainer {
     controller.y().whileTrue(shooter.sysIdDynamic(SysIdRoutine.Direction.kReverse));
   }
 
+  private void driveSysIdBindings() {
+    controller.a().whileTrue(drive.sysIdDriveMotorCommand());
+    controller.b().whileTrue(drive.sysIdAngleMotorCommand());
+  }
+
   private void configureBindings() {
     // shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
-
     controller.rightTrigger().whileTrue(new ShooterEnable(shooter));
 
     controller

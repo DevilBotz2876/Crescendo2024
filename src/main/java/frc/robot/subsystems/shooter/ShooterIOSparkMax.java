@@ -142,6 +142,10 @@ public class ShooterIOSparkMax implements ShooterIO {
 
   }
 
+  public boolean supportsHardwarePid() {
+    return false;
+  }
+
   @Override
   public void setVoltage(double volts) {
     // Set the voltage output for the top motor
