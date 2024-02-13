@@ -125,6 +125,7 @@ public class RobotContainer {
 
     configureBindings();
     // shooterSysIdBindings();
+    driveSysIdBindings();
   }
 
   private void shooterSysIdBindings() {
@@ -134,9 +135,14 @@ public class RobotContainer {
     controller.y().whileTrue(shooter.sysIdDynamic(SysIdRoutine.Direction.kReverse));
   }
 
+  private void driveSysIdBindings() {
+    controller.a().whileTrue(drive.sysIdDriveMotorCommand());
+    controller.b().whileTrue(drive.sysIdAngleMotorCommand());
+  }
+
   private void configureBindings() {
     // shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
-
+/*
     controller.rightTrigger().whileTrue(new ShooterEnable(shooter));
 
     controller
@@ -152,7 +158,7 @@ public class RobotContainer {
             intake,
             () -> controller.rightBumper().getAsBoolean(),
             () -> controller.leftBumper().getAsBoolean()));
-
+*/
     drive.setDefaultCommand(
         new DriveCommand(
             drive,
