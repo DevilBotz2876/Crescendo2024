@@ -40,6 +40,7 @@ public class RobotContainer {
   public enum RobotModel {
     PHOENIX, // Practice Swerve Bot
     SHERMAN, // Practice Tank Bot
+    INFERNO, // Competition Swerve Bot
   }
 
   public enum DriveType {
@@ -60,6 +61,7 @@ public class RobotContainer {
     boolean hasIntake = false;
     boolean hasShooter = false;
     DriveType driveType = DriveType.NONE;
+    String yagslConfigPath = null;
 
     Preferences.initString(robotNameKey, robotName);
     robotName = Preferences.getString(robotNameKey, robotName);
@@ -71,6 +73,9 @@ public class RobotContainer {
       case "SHERMAN":
         model = RobotModel.SHERMAN;
         break;
+      case "INFERNO":
+        model = RobotModel.INFERNO;
+        break;
       case "UNKNOWN":
       default:
     }
@@ -78,12 +83,16 @@ public class RobotContainer {
     switch (model) {
       case PHOENIX:
         driveType = DriveType.SWERVE;
+        yagslConfigPath = "yagsl/phoenix";
         break;
       case SHERMAN:
         driveType = DriveType.TANK;
         hasIntake = true;
         hasShooter = true;
         break;
+      case INFERNO:
+        driveType = DriveType.SWERVE;
+        yagslConfigPath = "yagsl/inferno";
       default:
     }
 
@@ -104,7 +113,7 @@ public class RobotContainer {
 
     switch (driveType) {
       case SWERVE:
-        drive = new DriveSwerveYAGSL();
+        drive = new DriveSwerveYAGSL(yagslConfigPath);
         autoChooser = AutoBuilder.buildAutoChooser("Mobility Auto");
         SmartDashboard.putData("Auto Chooser", autoChooser);
         break;
@@ -117,6 +126,7 @@ public class RobotContainer {
 
     configureBindings();
     // shooterSysIdBindings();
+    // driveSysIdBindings();
   }
 
   private void shooterSysIdBindings() {
@@ -126,9 +136,13 @@ public class RobotContainer {
     controller.y().whileTrue(shooter.sysIdDynamic(SysIdRoutine.Direction.kReverse));
   }
 
+  private void driveSysIdBindings() {
+    controller.a().whileTrue(drive.sysIdDriveMotorCommand());
+    controller.b().whileTrue(drive.sysIdAngleMotorCommand());
+  }
+
   private void configureBindings() {
     // shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
-
     controller.rightTrigger().whileTrue(new ShooterEnable(shooter));
 
     controller
