@@ -42,12 +42,16 @@ public interface Drive {
    *
    * @return SysId Drive Command
    */
-  public default Command sysIdDriveMotorCommand() { return null; }
+  public default Command sysIdDriveMotorCommand() {
+    return null;
+  }
 
   /**
    * Command to characterize the robot angle motors using SysId
    *
    * @return SysId Angle Command
    */
-  public default Command sysIdAngleMotorCommand() { return null; }
+  public default Command sysIdAngleMotorCommand() {
+    return null;
+  }
 }
