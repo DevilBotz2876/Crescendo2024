@@ -10,7 +10,8 @@ public class ArmCommand extends Command {
   ArmSubsystem arm;
   BooleanSupplier moveUp;
   BooleanSupplier moveDown;
-  @AutoLogOutput double targetAngle = 0;
+  @AutoLogOutput private double angleIncrement = 6;
+  @AutoLogOutput private double targetAngle = 0;
 
   public ArmCommand(ArmSubsystem arm, BooleanSupplier moveUp, BooleanSupplier moveDown) {
     this.arm = arm;
@@ -24,12 +25,20 @@ public class ArmCommand extends Command {
   @Override
   public void execute() {
     /* TODO: Implement arm controls here to increase/decrease desired angle */
+    targetAngle = arm.getAngle();
+
     if (moveUp.getAsBoolean()) {
       System.out.println("Arm Up");
-      targetAngle++;
+      targetAngle += angleIncrement;
     } else if (moveDown.getAsBoolean()) {
+      
       System.out.println("Arm Down");
-      targetAngle--;
+      targetAngle -= angleIncrement;
+    }
+    if(targetAngle < 0) {
+      targetAngle = 0;
+    } else if (targetAngle > 180) {
+      targetAngle = 180;
     }
     SmartDashboard.putNumber("ArmCommand/targetAngle", targetAngle);
     arm.setAngle(targetAngle);
