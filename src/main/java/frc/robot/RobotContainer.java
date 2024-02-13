@@ -20,6 +20,7 @@ import frc.robot.commands.ShooterEnable;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.subsystems.drive.DriveBase;
 import frc.robot.subsystems.drive.DriveSwerveYAGSL;
+import frc.robot.subsystems.drive.DriveTrain;
 import frc.robot.subsystems.intake.IntakeBase;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.intake.IntakeIOTalonSRX;
@@ -117,7 +118,7 @@ public class RobotContainer {
         SmartDashboard.putData("Auto Chooser", autoChooser);
         break;
       case TANK:
-        drive = new DriveBase();
+        drive = new DriveTrain();
         break;
       default:
         drive = new DriveBase();
