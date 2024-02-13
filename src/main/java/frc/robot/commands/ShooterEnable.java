@@ -11,22 +11,30 @@ import java.util.Map;
 public class ShooterEnable extends Command {
   ShooterSubsystem shooter;
   ShuffleboardTab tab;
-  GenericEntry voltsEntry;
+  GenericEntry velocityEntry;
+  GenericEntry degreeEntry;
 
   public ShooterEnable(ShooterSubsystem shooter) {
     this.shooter = shooter;
 
     // create shooter tab on ShuffleBoard
-    tab = Shuffleboard.getTab("Shooter");
+    tab = Shuffleboard.getTab("Assist");
     // Create volt entry under Shooter tab as a number sider with min = -1 and max = 1
-    voltsEntry =
-        tab.add("Volts", 0)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", -12, "max", 12))
+    velocityEntry =
+        tab.add("Shooter Velocity", 0)
+            .withWidget(BuiltInWidgets.kTextView)
+            .withProperties(Map.of("min", 0, "max", 6000))
             .getEntry();
 
+    tab = Shuffleboard.getTab("Assist");
+    degreeEntry = 
+            tab.add("Shooter Angle", 60)
+                .withWidget(BuiltInWidgets.kNumberSlider)
+                .withProperties(Map.of("min", 0, "max", 180 ))
+                .getEntry();
+        degreeEntry.setValue(60);
     // Sets default value to 0.0
-    voltsEntry.setValue(0.0);
+    velocityEntry.setValue(0.0);
 
     addRequirements(shooter);
   }
@@ -37,11 +45,11 @@ public class ShooterEnable extends Command {
   @Override
   public void execute() {
     // Checks the volt Entry for the volt and sets the voltage of motors
-    shooter.runVoltage(voltsEntry.getDouble(0.0));
+    shooter.runVelocity(velocityEntry.getDouble(0.0));
   }
 
   @Override
   public void end(boolean interrupted) {
-    shooter.runVoltage(0);
+    shooter.runVelocity(0);
   }
 }

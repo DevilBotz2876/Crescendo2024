@@ -13,6 +13,7 @@ public class IntakeBaseCommand extends Command {
   IntakeBase intake;
   BooleanSupplier inEnable;
   GenericEntry voltsEntry;
+  GenericEntry degreeEntry;
   ShuffleboardTab tab;
   BooleanSupplier outEnable;
 
@@ -22,14 +23,22 @@ public class IntakeBaseCommand extends Command {
     this.outEnable = outEnable;
 
     addRequirements(intake);
-    tab = Shuffleboard.getTab("Intake");
+    tab = Shuffleboard.getTab("Assist");
     // Create volt entry under Shooter tab as a number sider with min = -1 and max = 1
     voltsEntry =
-        tab.add("Volts", 0)
+        tab.add("Intake Volts", 0)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 12))
             .getEntry();
     voltsEntry.setValue(0.0);
+    tab = Shuffleboard.getTab("Assist");
+    degreeEntry = 
+        tab.add("Intake Angle", 1)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 180 ))
+            .getEntry();
+    degreeEntry.setValue(1);
+
   }
 
   @Override

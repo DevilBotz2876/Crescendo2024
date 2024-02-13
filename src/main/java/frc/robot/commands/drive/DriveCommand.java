@@ -25,7 +25,7 @@ public class DriveCommand extends Command {
     this.speedY = speedY;
     this.rot = rot;
 
-    tab = Shuffleboard.getTab("Drive");
+    tab = Shuffleboard.getTab("Assist");
     speedLimiterEntry =
         tab.add("Drive Speed Limit", 0)
             .withWidget(BuiltInWidgets.kNumberSlider)

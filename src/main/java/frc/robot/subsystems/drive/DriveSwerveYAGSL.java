@@ -14,7 +14,7 @@ import swervelib.SwerveDrive;
 import swervelib.parser.SwerveParser;
 
 public class DriveSwerveYAGSL extends DriveBase {
-  private final double maximumSpeed = 4.5; // meters/sec
+  private final double maximumSpeed = 40.5; // meters/sec
   private final File swerveJsonDirectory =
       new File(Filesystem.getDeployDirectory(), "swervePracticeBot");
   private SwerveDrive swerveDrive;
