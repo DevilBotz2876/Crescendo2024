@@ -200,7 +200,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   }
 
   private boolean isLowLimit() {
-    if (inputs.positionRad < positionRadMin && desiredVoltage < 0.0) {
+    if (inputs.positionRad < positionRadMin) {
       inputs.lowLimit = true;
       lowLimitEntry.setBoolean(true);
     } else {
