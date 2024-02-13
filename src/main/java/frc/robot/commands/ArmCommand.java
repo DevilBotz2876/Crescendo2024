@@ -37,7 +37,7 @@ public class ArmCommand extends Command {
     }
     if(targetAngle < 0) {
       targetAngle = 0;
-    } else if (targetAngle > 180) {
+    } else if (targetAngle > 110) {
       targetAngle = 180;
     }
     SmartDashboard.putNumber("ArmCommand/targetAngle", targetAngle);
