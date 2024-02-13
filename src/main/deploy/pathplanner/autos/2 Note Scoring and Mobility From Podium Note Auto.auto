@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.66,
-      "y": 6.65
+      "x": 0.6670448729521022,
+      "y": 4.44
     },
-    "rotation": 60.9
+    "rotation": -60.18000000000001
   },
   "command": {
     "type": "sequential",
@@ -20,19 +20,37 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.0
+            "waitTime": 0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Speaker to Amp Note Path"
+            "pathName": "Speaker to Podium Note Path"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Pick Up Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Pivot to Speaker from Podium Note Path"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Note From Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Go To Center Note from Podium Note Path"
           }
         }
       ]

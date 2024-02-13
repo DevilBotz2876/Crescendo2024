@@ -1,0 +1,61 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.66,
+      "y": 6.65
+    },
+    "rotation": 60.9
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Note Close"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Speaker to Amp Note Path"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Pick Up Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Pivot to Speaker from Amp Note Path"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Note From Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Go To Center Note from Amp Note Path"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

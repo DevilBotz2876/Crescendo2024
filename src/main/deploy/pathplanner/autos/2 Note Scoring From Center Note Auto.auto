@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.6670448729521022,
-      "y": 4.44
+      "x": 1.28,
+      "y": 5.54
     },
-    "rotation": -60.18000000000001
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -26,7 +26,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Speaker to Podium Note Path"
+            "pathName": "Speaker to Center Note Path"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Note From Note"
           }
         }
       ]
