@@ -13,6 +13,7 @@ public interface ArmIO {
     public double absolutePosition;
     public boolean highLimit = false;
     public boolean lowLimit = false;
+    public boolean absoluteEncoderConnected = false;
   }
 
   /** Updates the set of loggable inputs. */
@@ -34,4 +35,7 @@ public interface ArmIO {
 
   /** Set PID constants */
   public default void setFeedback(double kP, double kI, double kD) {}
+
+  /** Set brake mode on motors */
+  public default void setBrakeMode(boolean brake) {}
 }

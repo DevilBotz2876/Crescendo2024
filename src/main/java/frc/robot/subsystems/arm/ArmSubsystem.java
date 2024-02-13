@@ -25,12 +25,13 @@ import org.littletonrobotics.junction.Logger;
 public class ArmSubsystem extends SubsystemBase implements Arm {
   private final ArmIO io;
   private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
-  @AutoLogOutput private double degrees = 0;
   private ArmFeedforward feedforward;
   private final SysIdRoutine sysId;
   private final double positionRadMax = 3.160;
   private final double positionRadMin = 0.001;
-  @AutoLogOutput private double volts;
+
+  @AutoLogOutput private double desiredVoltage;
+  @AutoLogOutput private double setPoint;
 
   // Create a Mechanism2d display of an Arm with a fixed ArmTower and moving Arm.
   private final Mechanism2d mech2d = new Mechanism2d(60, 60);
@@ -58,6 +59,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   GenericEntry highLimitEntry;
   GenericEntry lowLimitEntry;
 
+  private double kG, kV, kA;
+
   public ArmSubsystem(ArmIO io) {
     this.io = io;
 
@@ -66,6 +69,10 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     armKg.initDefault(.72);
     armKv.initDefault(6.18);
     armKa.initDefault(.04);
+
+    kG = armKg.get();
+    kV = armKv.get();
+    kA = armKa.get();
 
     // create arm tab on ShuffleBoard
     armTab = Shuffleboard.getTab("Arm");
@@ -112,34 +119,34 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     // Check if the angle is below the minimum limit or above the maximum limit
     // If it is the it is set to min/max
     if (degrees < minAngleDeg) {
-      this.degrees = minAngleDeg; // Set to the minimum angle
+      this.setPoint = minAngleDeg; // Set to the minimum angle
     } else if (degrees > maxAngleDeg) {
-      this.degrees = maxAngleDeg; // Set to the maximum angle
-    }
-    // The  angle is within the range and is set
-    else {
-      this.degrees = degrees;
+      this.setPoint = maxAngleDeg; // Set to the maximum angle
+    } else {
+      // The  angle is within the range and is set
+      this.setPoint = degrees;
     }
 
-    // target position for
-    double setpoint = degrees;
-
-    feedforward = new ArmFeedforward(0, armKg.get(), armKv.get(), armKa.get());
+    feedforward = new ArmFeedforward(0, kG, kV, kA);
 
     // Set the position reference with feedforward voltage
-    io.setPosition(setpoint, feedforward.calculate(setpoint, 0));
+    io.setPosition(this.setPoint, feedforward.calculate(this.setPoint, 0));
   }
 
   @Override
   public boolean isAbsoluteEncoderConnected() {
-
     return io.isAbsoluteEncoderConnected();
   }
 
   // Sets the voltage to volts. the volts value is -12 to 12
   public void runVoltage(double volts) {
-    this.volts = volts;
-    io.setVoltage(voltageSafety(volts));
+    desiredVoltage = voltageSafety(volts);
+    io.setVoltage(desiredVoltage);
+  }
+
+  protected double voltageSafety(double voltage) {
+    if (isLimitReached(voltage)) return 0.0;
+    else return voltage;
   }
 
   /** Returns a command to run a quasistatic test in the specified direction. */
@@ -154,46 +161,62 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
   @Override
   public void periodic() {
-    if (armKp.hasChanged(hashCode()))
-      // Updates the inputs
-      io.updateInputs(inputs);
+    if (armKp.hasChanged(hashCode()) || armKd.hasChanged(hashCode())) {
+      io.setFeedback(armKp.get(), 0.0, armKd.get());
+    }
+    if (armKg.hasChanged(hashCode())) {
+      kG = armKg.get();
+    }
+    if (armKv.hasChanged(hashCode())) {
+      kV = armKv.get();
+    }
+    if (armKa.hasChanged(hashCode())) {
+      kA = armKa.get();
+    }
+    // Updates the inputs
+    io.updateInputs(inputs);
     Logger.processInputs("Arm", inputs);
-    // SmartDashboard.putNumber("Arm/encoder/anglSub", Units.radiansToDegrees(inputs.positionRad));
 
-    /* TODO: Implement PID control here to achieve desired angle */
-    // if (isLimitReached(inputs.leftAppliedVolts)) {
-    //   runVoltage(voltageSafety(inputs.leftAppliedVolts));
-    // }
+    if (isHighLimit()) {
+      // TODO: turn off voltage or stop pid
+    }
+    if (isLowLimit()) {
+      // TODO: turn off voltage or stop pid
+      io.resetRelativeEncoder(0.0);
+    }
 
     arm2d.setAngle(inputs.positionDegree);
   }
 
-  protected boolean isLimitReached(double desiredVoltage) {
-    boolean limitHit = false;
-    if (inputs.positionRad > positionRadMax && desiredVoltage > 0.0) {
-      // SmartDashboard.putBoolean("Arm/maxHit", true);
+  private boolean isHighLimit() {
+    if (inputs.positionRad > positionRadMax) {
       highLimitEntry.setBoolean(true);
-      limitHit = true;
       inputs.highLimit = true;
     } else {
-      // SmartDashboard.putBoolean("Arm/maxHit", false);
       highLimitEntry.setBoolean(false);
       inputs.highLimit = false;
     }
-    if (inputs.positionRad < positionRadMin && desiredVoltage < 0.0) {
-      // SmartDashboard.putBoolean("Arm/minHit", true);
-      limitHit = true;
-      inputs.lowLimit = true;
-      io.resetRelativeEncoder(0.0);
-    } else {
-      // SmartDashboard.putBoolean("Arm/minHit", false);
-      inputs.lowLimit = false;
-    }
-    return limitHit;
+    return inputs.highLimit;
   }
 
-  protected double voltageSafety(double desiredVoltage) {
-    if (isLimitReached(desiredVoltage)) return 0.0;
-    else return desiredVoltage;
+  private boolean isLowLimit() {
+    if (inputs.positionRad < positionRadMin && desiredVoltage < 0.0) {
+      inputs.lowLimit = true;
+      lowLimitEntry.setBoolean(true);
+    } else {
+      lowLimitEntry.setBoolean(false);
+      inputs.lowLimit = false;
+    }
+    return inputs.lowLimit;
+  }
+
+  private boolean isLimitReached(double desiredVoltage) {
+    if (isHighLimit() && desiredVoltage > 0.0) {
+      return true;
+    }
+    if (isLowLimit() && desiredVoltage < 0.0) {
+      return true;
+    }
+    return false;
   }
 }
