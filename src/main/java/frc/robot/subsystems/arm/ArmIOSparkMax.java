@@ -82,6 +82,8 @@ public class ArmIOSparkMax implements ArmIO {
     /* TODO: Implement SparkMax/Absolute Encoder Code Here */
     inputs.positionRad = absoluteEncoder.getDistance();
 
+    inputs.positionDegree = absoluteEncoder.get() * 360;
+
     inputs.leftAppliedVolts = left.getAppliedOutput() * left.getBusVoltage();
 
     inputs.current = left.getOutputCurrent();

@@ -98,7 +98,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   @Override
   public double getAngle() {
     /* TODO */
-    return Units.radiansToDegrees(inputs.positionRad);
+    return inputs.positionDegree;
     // return 0;
   }
 
@@ -158,14 +158,14 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
       // Updates the inputs
       io.updateInputs(inputs);
     Logger.processInputs("Arm", inputs);
-    SmartDashboard.putNumber("Arm/encoder/anglSub", Units.radiansToDegrees(inputs.positionRad));
+    // SmartDashboard.putNumber("Arm/encoder/anglSub", Units.radiansToDegrees(inputs.positionRad));
 
     /* TODO: Implement PID control here to achieve desired angle */
     // if (isLimitReached(inputs.leftAppliedVolts)) {
     //   runVoltage(voltageSafety(inputs.leftAppliedVolts));
     // }
 
-    arm2d.setAngle(Units.radiansToDegrees(inputs.positionRad));
+    arm2d.setAngle(inputs.positionDegree);
   }
 
   protected boolean isLimitReached(double desiredVoltage) {

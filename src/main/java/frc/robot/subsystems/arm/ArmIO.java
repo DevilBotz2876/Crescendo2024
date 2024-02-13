@@ -6,6 +6,7 @@ public interface ArmIO {
   @AutoLog
   public static class ArmIOInputs {
     public double positionRad = 0.0;
+    public double positionDegree = 0.0;
     public double current;
     public double leftAppliedVolts = 0.0;
     public double relativePositionRad = 0.0;
