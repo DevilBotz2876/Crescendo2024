@@ -27,7 +27,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
   private ArmFeedforward feedforward;
   private final SysIdRoutine sysId;
-  private final double positionRadMax = 3.160;
+  private final double positionRadMax = 1.3;
   private final double positionRadMin = 0.001;
 
   @AutoLogOutput private double desiredVoltage;
@@ -114,7 +114,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   public void setAngle(double degrees) {
     /* TODO: Enforce arm physical min/max limits */
     final double minAngleDeg = 0;
-    final double maxAngleDeg = 110;
+    final double maxAngleDeg = 103;
 
     // Check if the angle is below the minimum limit or above the maximum limit
     // If it is the it is set to min/max
