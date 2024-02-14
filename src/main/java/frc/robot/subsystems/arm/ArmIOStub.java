@@ -3,6 +3,7 @@ package frc.robot.subsystems.arm;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotController;
@@ -16,14 +17,14 @@ public class ArmIOStub implements ArmIO {
   // The P gain for the PID controller that drives this arm.
   private double armKp = .1;
   private double armKd = 0;
-  @AutoLogOutput private double targetRadians = 0;
+  @AutoLogOutput private double targetDegrees = 0;
   @AutoLogOutput private double feedForwardVolts = 0;
   private double armAbsoluteOffset = 0.0;
-  private double armGearingReduction = 30;
+  private double armGearingReduction = 317;
   private double armLengthInMeters = .5;
-  private double minAngleInRadians = 0;
-  private double maxAngleInRadians = 2 * Math.PI;
-  private double armMassInKg = 8.0;
+  private double minAngleInDegrees = 0;
+  private double maxAngleInDegrees = 103;
+  private double armMassInKg = 11.3398;
 
   // The arm gearbox represents a gearbox containing two Vex 775pro motors.
   private final DCMotor motorPlant = DCMotor.getNEO(1);
@@ -46,8 +47,8 @@ public class ArmIOStub implements ArmIO {
           armGearingReduction,
           SingleJointedArmSim.estimateMOI(armLengthInMeters, armMassInKg),
           armLengthInMeters,
-          minAngleInRadians,
-          maxAngleInRadians,
+          Units.degreesToRadians(minAngleInDegrees),
+          Units.degreesToRadians(maxAngleInDegrees),
           true,
           0,
           VecBuilder.fill(0));
@@ -55,24 +56,24 @@ public class ArmIOStub implements ArmIO {
   public ArmIOStub() {
     absEncoder.setPositionOffset(armAbsoluteOffset);
     absEncoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
-    absEncoder.setDistancePerRotation(2.0 * Math.PI);
+    absEncoder.setDistancePerRotation(360.0); 
   }
 
   /** Updates the set of loggable inputs. */
   @Override
   public void updateInputs(ArmIOInputs inputs) {
-    inputs.positionRad = absEncoder.getDistance();
-    inputs.positionDegree = absEncoder.get() * 360;
+    inputs.positionDegree = absEncoder.getDistance();
+    inputs.positionRad = Units.degreesToRadians(absEncoder.getDistance());
     inputs.leftAppliedVolts = motor.get() * RobotController.getBatteryVoltage();
 
     arm.setInput(inputs.leftAppliedVolts);
     arm.update(0.020);
-    absEncoderSim.setDistance(arm.getAngleRads());
+    absEncoderSim.setDistance(Units.radiansToDegrees(arm.getAngleRads()));
 
     if (softwarePidEnabled) {
       motor.setVoltage(
           feedForwardVolts
-              + pid.calculate(absEncoder.getDistance(), targetRadians)
+              + pid.calculate(absEncoder.getDistance(), targetDegrees)
                   * RobotController.getBatteryVoltage());
     }
   }
@@ -84,8 +85,8 @@ public class ArmIOStub implements ArmIO {
   }
 
   @Override
-  public void setPosition(double radians, double ffVolts) {
-    targetRadians = radians;
+  public void setPosition(double degrees, double ffVolts) {
+    targetDegrees = degrees;
     feedForwardVolts = ffVolts;
     softwarePidEnabled = true;
   }
