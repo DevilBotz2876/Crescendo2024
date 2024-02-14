@@ -5,9 +5,11 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-// import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -16,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.ArmCommand;
-import frc.robot.commands.ArmToPosition;
+import frc.robot.commands.ArmToPositionDebug;
 import frc.robot.commands.IntakeBaseCommand;
 import frc.robot.commands.ShooterEnable;
 import frc.robot.commands.drive.DriveCommand;
@@ -138,14 +140,6 @@ public class RobotContainer {
       arm = new ArmSubsystem(new ArmIOStub());
     }
 
-    // ArmDegreesEntry =
-    //     ArmTab.add("Degree Setpoint", 45.0)
-    //         .withWidget(BuiltInWidgets.kTextView)
-    //         .getEntry();
-
-    // Sets default value to 0.0
-    // ArmVoltsEntry.setValue(45.0);
-
     configureBindings();
     // ArmSysIdBindings();
     // shooterSysIdBindings();
@@ -219,7 +213,7 @@ public class RobotContainer {
         .x()
         .whileTrue(Commands.startEnd(() -> arm.runVoltage(-4), () -> arm.runVoltage(0), arm));
 
-    controller.b().whileTrue(new ArmToPosition(arm));
+    controller.b().whileTrue(new ArmToPositionDebug(arm));
   }
 
   public Command getAutonomousCommand() {
@@ -228,5 +222,11 @@ public class RobotContainer {
     } else {
       return null;
     }
+  }
+
+  public void commandsToShuffleboard() {
+    // SmartDashboard.putData(new ArmToPosition(arm));
+    ShuffleboardTab armTab = Shuffleboard.getTab("Arm");
+    armTab.add("armToPosition", new ArmToPositionDebug(arm)).withWidget(BuiltInWidgets.kCommand);
   }
 }

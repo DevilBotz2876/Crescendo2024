@@ -1,13 +1,16 @@
 package frc.robot.subsystems.arm;
 
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.SparkPIDController.ArbFFUnits;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 
 public class ArmIOSparkMax implements ArmIO {
   // Leader
@@ -79,7 +82,7 @@ public class ArmIOSparkMax implements ArmIO {
   /** Updates the set of loggable inputs. */
   @Override
   public void updateInputs(ArmIOInputs inputs) {
-    /* TODO: Implement SparkMax/Absolute Encoder Code Here */
+
     inputs.positionRad = absoluteEncoder.getDistance();
 
     inputs.positionDegree = absoluteEncoder.get() * 360;
@@ -89,79 +92,79 @@ public class ArmIOSparkMax implements ArmIO {
     inputs.current = left.getOutputCurrent();
 
     inputs.relativePositionRad = Units.rotationsToRadians(leftEncoder.getPosition());
-    // inputs.rightAppliedVolts = right.getAppliedOutput() * right.getBusVoltage();
 
-    double lp = SmartDashboard.getNumber("Arm/left/P Gain", 0);
-    double li = SmartDashboard.getNumber("Arm/left/I Gain", 0);
-    double ld = SmartDashboard.getNumber("Arm/left/D Gain", 0);
-    double liz = SmartDashboard.getNumber("Arm/left/I Zone", 0);
-    double lff = SmartDashboard.getNumber("Arm/left/Feed Forward", 0);
-    double lmax = SmartDashboard.getNumber("Arm/left/Max Output", 0);
-    double lmin = SmartDashboard.getNumber("Arm/left/Min Output", 0);
+    // Code below allows PID to be tuned using SmartDashboard.  And outputs extra data to
+    // SmartDashboard.
+    if (Constants.debugMode) {
+      double lp = SmartDashboard.getNumber("Arm/left/P Gain", 0);
+      double li = SmartDashboard.getNumber("Arm/left/I Gain", 0);
+      double ld = SmartDashboard.getNumber("Arm/left/D Gain", 0);
+      double liz = SmartDashboard.getNumber("Arm/left/I Zone", 0);
+      double lff = SmartDashboard.getNumber("Arm/left/Feed Forward", 0);
+      double lmax = SmartDashboard.getNumber("Arm/left/Max Output", 0);
+      double lmin = SmartDashboard.getNumber("Arm/left/Min Output", 0);
 
-    if ((lp != lkP)) {
-      leftPid.setP(lp);
-      lkP = lp;
+      if ((lp != lkP)) {
+        leftPid.setP(lp);
+        lkP = lp;
+      }
+      if ((li != lkI)) {
+        leftPid.setI(li);
+        lkI = li;
+      }
+      if ((ld != lkD)) {
+        leftPid.setD(ld);
+        lkD = ld;
+      }
+      if ((liz != lkIz)) {
+        leftPid.setIZone(liz);
+        lkIz = liz;
+      }
+      if ((lff != lkFF)) {
+        leftPid.setFF(lff);
+        lkFF = lff;
+      }
+      if ((lmax != lkMaxOutput) || (lmin != lkMinOutput)) {
+        leftPid.setOutputRange(lmin, lmax);
+        lkMinOutput = lmin;
+        lkMaxOutput = lmax;
+      }
+
+      SmartDashboard.putBoolean("Arm/absEncoder/connected", absoluteEncoder.isConnected());
+
+      // Try rebooting the robot with the arm/encoder in different positions.  Do these value
+      // change?
+      // How? Record observations so you can share with rest of us
+      SmartDashboard.putNumber("Arm/absEncoder/absolutePos", absoluteEncoder.getAbsolutePosition());
+      SmartDashboard.putNumber(
+          "Arm/absEncoder/getPositionOffset", absoluteEncoder.getPositionOffset());
+
+      // I don't think this number changes if you rotate the arm/encoder.  What does affect it?
+      SmartDashboard.putNumber(
+          "Arm/absEncoder/getDistancePerRotation", absoluteEncoder.getDistancePerRotation());
+
+      SmartDashboard.putNumber("Arm/absEncoder/get", absoluteEncoder.get());
+      SmartDashboard.putNumber("Arm/absEncoder/getDistance", absoluteEncoder.getDistance());
+
+      // Try out different encoder.get methods here and see if you can get a range of values that
+      // works by applying different math/operations to the get values.  This is one example.
+      SmartDashboard.putNumber("Arm/absEncoder/angle", absoluteEncoder.get() * 360.0);
+
+      // This should show what the relative encoder is reading.  When you use the sparkmax position
+      // PID it expects a setpoint in rotations.  Not clear if that means degrees or what unit is
+      // used.
+      SmartDashboard.putNumber("Arm/relEncoder/getPosition", leftEncoder.getPosition());
     }
-    if ((li != lkI)) {
-      leftPid.setI(li);
-      lkI = li;
-    }
-    if ((ld != lkD)) {
-      leftPid.setD(ld);
-      lkD = ld;
-    }
-    if ((liz != lkIz)) {
-      leftPid.setIZone(liz);
-      lkIz = liz;
-    }
-    if ((lff != lkFF)) {
-      leftPid.setFF(lff);
-      lkFF = lff;
-    }
-    if ((lmax != lkMaxOutput) || (lmin != lkMinOutput)) {
-      leftPid.setOutputRange(lmin, lmax);
-      lkMinOutput = lmin;
-      lkMaxOutput = lmax;
-    }
-
-    // Debug code to show all data from encoder.  Comment this out when done.  Need to figure out
-    // which of these values we might want to include in advantagekit logging.
-
-    // I think isConnected would be good so we know if/when and how long encoder was disconnected.
-    SmartDashboard.putBoolean("Arm/encoder/connected", absoluteEncoder.isConnected());
-
-    // Try rebooting the robot with the arm/encoder in different positions.  Do these value change?
-    // How? Record observations so you can share with rest of us
-    SmartDashboard.putNumber("Arm/encoder/absolutePos", absoluteEncoder.getAbsolutePosition());
-    SmartDashboard.putNumber("Arm/encoder/getPositionOffset", absoluteEncoder.getPositionOffset());
-
-    // I don't think this number changes if you rotate the arm/encoder.  What does affect it?
-    SmartDashboard.putNumber(
-        "Arm/encoder/getDistancePerRotation", absoluteEncoder.getDistancePerRotation());
-
-    SmartDashboard.putNumber("Arm/encoder/get", absoluteEncoder.get());
-    SmartDashboard.putNumber("Arm/encoder/getDistance", absoluteEncoder.getDistance());
-
-    // Try out different encoder.get methods here and see if you can get a range of values that
-    // works by applying different math/operations to the get values.  This is one example.
-    SmartDashboard.putNumber("Arm/encoder/angle", absoluteEncoder.get() * 360.0);
-
-    SmartDashboard.putNumber("Arm/setPosition/current_rotations", left.getEncoder().getPosition());
   }
 
   @Override
   public void setPosition(double degrees, double ffVolts) {
-    SmartDashboard.putNumber("Arm/setPosition/setpoint_rotations", degrees);
+    if (Constants.debugMode) {
+      SmartDashboard.putNumber("Arm/setPosition/degrees", degrees);
+      SmartDashboard.putNumber("Arm/setPosition/ffVolts", ffVolts);
+    }
     leftPid.setReference(
-        degrees, // Units.radiansToRotations(radians),
-        CANSparkMax.ControlType.kPosition,
-        0, // Arbitrary slotID, you may need to adjust this based on your configuration
-        ffVolts,
-        ArbFFUnits.kVoltage);
-
-    SmartDashboard.putNumber("Shooter/left/positionRad", degrees);
-    SmartDashboard.putNumber("Shooter/left/ProcessVariable", absoluteEncoder.getAbsolutePosition());
+        degrees, CANSparkMax.ControlType.kPosition, 0, ffVolts, ArbFFUnits.kVoltage);
   }
 
   /** Run the arm motor at the specified voltage. */
@@ -185,5 +188,20 @@ public class ArmIOSparkMax implements ArmIO {
   @Override
   public void resetRelativeEncoder(double position) {
     leftEncoder.setPosition(position);
+  }
+
+  @Override
+  public void setBrakeMode(boolean brake) {
+    IdleMode mode;
+    if (brake) {
+      mode = CANSparkMax.IdleMode.kBrake;
+      SmartDashboard.putString("Arm/Idle Mode", "kBrake");
+    } else {
+      mode = CANSparkMax.IdleMode.kCoast;
+      SmartDashboard.putString("Arm/Idle Mode", "kCoast");
+    }
+    if (left.setIdleMode(mode) != REVLibError.kOk) {
+      SmartDashboard.putString("Arm/Idle Mode", "Error");
+    }
   }
 }

@@ -4,9 +4,11 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.simulation.DutyCycleEncoderSim;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import org.littletonrobotics.junction.AutoLogOutput;
 
@@ -28,8 +30,10 @@ public class ArmIOStub implements ArmIO {
 
   // Standard classes for controlling our arm
   private final PIDController pid = new PIDController(armKp, 0, armKd);
-  private final DutyCycleEncoder encoder = new DutyCycleEncoder(0);
-  private final DutyCycleEncoderSim encoderSim = new DutyCycleEncoderSim(encoder);
+  private final DutyCycleEncoder absEncoder = new DutyCycleEncoder(0);
+  private final DutyCycleEncoderSim absEncoderSim = new DutyCycleEncoderSim(absEncoder);
+  private final Encoder relEncoder = new Encoder(0, 1);
+  private final EncoderSim relEncoderSim = new EncoderSim(relEncoder);
   private final Spark motor = new Spark(0);
   private boolean softwarePidEnabled = false;
 
@@ -49,26 +53,26 @@ public class ArmIOStub implements ArmIO {
           VecBuilder.fill(0));
 
   public ArmIOStub() {
-    encoder.setPositionOffset(armAbsoluteOffset);
-    encoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
-    encoder.setDistancePerRotation(2.0 * Math.PI);
+    absEncoder.setPositionOffset(armAbsoluteOffset);
+    absEncoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
+    absEncoder.setDistancePerRotation(2.0 * Math.PI);
   }
 
   /** Updates the set of loggable inputs. */
   @Override
   public void updateInputs(ArmIOInputs inputs) {
-    inputs.positionRad = encoder.getDistance();
-    inputs.positionDegree = encoder.get() * 360;
+    inputs.positionRad = absEncoder.getDistance();
+    inputs.positionDegree = absEncoder.get() * 360;
     inputs.leftAppliedVolts = motor.get() * RobotController.getBatteryVoltage();
 
     arm.setInput(inputs.leftAppliedVolts);
     arm.update(0.020);
-    encoderSim.setDistance(arm.getAngleRads());
+    absEncoderSim.setDistance(arm.getAngleRads());
 
     if (softwarePidEnabled) {
       motor.setVoltage(
           feedForwardVolts
-              + pid.calculate(encoder.getDistance(), targetRadians)
+              + pid.calculate(absEncoder.getDistance(), targetRadians)
                   * RobotController.getBatteryVoltage());
     }
   }
@@ -84,5 +88,17 @@ public class ArmIOStub implements ArmIO {
     targetRadians = radians;
     feedForwardVolts = ffVolts;
     softwarePidEnabled = true;
+  }
+
+  @Override
+  public void setFeedback(double kP, double kI, double kD) {
+    pid.setP(kP);
+    pid.setI(kI);
+    pid.setD(kD);
+  }
+
+  @Override
+  public void resetRelativeEncoder(double position) {
+    relEncoderSim.setDistance(position);
   }
 }

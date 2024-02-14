@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants;
 import frc.robot.util.LoggedTunableNumber;
 import java.util.Map;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -112,9 +113,13 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   // sets of the angle of the arm
   @Override
   public void setAngle(double degrees) {
+    // Don't try to set position if absolute encoder is broken/missing.
+    if (isAbsoluteEncoderConnected() == false) {
+      return;
+    }
     /* TODO: Enforce arm physical min/max limits */
-    final double minAngleDeg = 0;
-    final double maxAngleDeg = 103;
+    final double minAngleDeg = Constants.armMinDegrees;
+    final double maxAngleDeg = Constants.armMaxDegrees;
 
     // Check if the angle is below the minimum limit or above the maximum limit
     // If it is the it is set to min/max
@@ -189,6 +194,10 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   }
 
   private boolean isHighLimit() {
+    // if abs encoder is broken/missing then we cannot detect limits, assume we are at limit.
+    if (isAbsoluteEncoderConnected() == false) {
+      return true;
+    }
     if (inputs.positionRad > positionRadMax) {
       highLimitEntry.setBoolean(true);
       inputs.highLimit = true;
@@ -200,6 +209,10 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   }
 
   private boolean isLowLimit() {
+    // if abs encoder is broken/missing then we cannot detect limits, assume we are at limit.
+    if (isAbsoluteEncoderConnected() == false) {
+      return true;
+    }
     if (inputs.positionRad < positionRadMin) {
       inputs.lowLimit = true;
       lowLimitEntry.setBoolean(true);
