@@ -32,7 +32,7 @@ public class ArmIOStub implements ArmIO {
   private final PIDController pid = new PIDController(armKp, 0, armKd);
   private final DutyCycleEncoder absEncoder = new DutyCycleEncoder(0);
   private final DutyCycleEncoderSim absEncoderSim = new DutyCycleEncoderSim(absEncoder);
-  private final Encoder relEncoder = new Encoder(0, 1);
+  private final Encoder relEncoder = new Encoder(1, 2);
   private final EncoderSim relEncoderSim = new EncoderSim(relEncoder);
   private final Spark motor = new Spark(0);
   private boolean softwarePidEnabled = false;
