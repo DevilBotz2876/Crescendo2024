@@ -116,7 +116,7 @@ public class RobotContainer {
     }
 
     configureBindings();
-    shooterSysIdBindings();
+    //shooterSysIdBindings();
   }
 
   private void shooterSysIdBindings() {

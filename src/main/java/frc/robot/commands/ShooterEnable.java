@@ -27,12 +27,12 @@ public class ShooterEnable extends Command {
             .getEntry();
 
     tab = Shuffleboard.getTab("Assist");
-    degreeEntry = 
-            tab.add("Shooter Angle", 60)
-                .withWidget(BuiltInWidgets.kNumberSlider)
-                .withProperties(Map.of("min", 0, "max", 180 ))
-                .getEntry();
-        degreeEntry.setValue(60);
+    degreeEntry =
+        tab.add("Shooter Angle", 60)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 180))
+            .getEntry();
+    degreeEntry.setValue(60);
     // Sets default value to 0.0
     velocityEntry.setValue(0.0);
 

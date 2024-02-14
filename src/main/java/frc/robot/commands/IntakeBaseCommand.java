@@ -32,13 +32,12 @@ public class IntakeBaseCommand extends Command {
             .getEntry();
     voltsEntry.setValue(0.0);
     tab = Shuffleboard.getTab("Assist");
-    degreeEntry = 
+    degreeEntry =
         tab.add("Intake Angle", 1)
             .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0, "max", 180 ))
+            .withProperties(Map.of("min", 0, "max", 180))
             .getEntry();
     degreeEntry.setValue(1);
-
   }
 
   @Override
