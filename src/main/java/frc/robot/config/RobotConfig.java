@@ -1,5 +1,8 @@
 package frc.robot.config;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.arm.ArmIOStub;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.drive.DriveBase;
@@ -14,6 +17,7 @@ public class RobotConfig {
   public static IntakeBase intake;
   public static ShooterSubsystem shooter;
   public static ArmSubsystem arm;
+  public static SendableChooser<Command> autoChooser;
 
   public static class DriveConstants {
     public static double maxVelocityMetersPerSec = 4.5;
@@ -78,5 +82,7 @@ public class RobotConfig {
     if (stubArm) {
       arm = new ArmSubsystem(new ArmIOStub());
     }
+
+    autoChooser = AutoBuilder.buildAutoChooser("Mobility Auto");
   }
 }
