@@ -197,6 +197,7 @@ public class RobotContainer {
 
     controller.back().onTrue(new InstantCommand(() -> drive.resetOdometry()));
 
+    /*
     // run arm at 4 volts
     controller
         .y()
@@ -205,6 +206,7 @@ public class RobotContainer {
     controller
         .x()
         .whileTrue(Commands.startEnd(() -> arm.runVoltage(-4), () -> arm.runVoltage(0), arm));
+    */
 
     controller.b().whileTrue(new ArmToPositionDebug(arm));
   }
