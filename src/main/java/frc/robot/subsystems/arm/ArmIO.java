@@ -9,10 +9,10 @@ public interface ArmIO {
     public double positionDegree = 0.0;
     public double current;
     public double leftAppliedVolts = 0.0;
-    public double relativePositionRad = 0.0;
+    public double relativePositionRotations = 0.0;
     public double absolutePosition;
-    public boolean highLimit = false;
-    public boolean lowLimit = false;
+    public boolean limitHigh = false;
+    public boolean limitLow = false;
     public boolean absoluteEncoderConnected = false;
   }
 

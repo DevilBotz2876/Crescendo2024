@@ -45,7 +45,7 @@ public class ArmIOSparkMax implements ArmIO {
     // right.follow(left, false);
 
     left.enableVoltageCompensation(12.0);
-    left.setSmartCurrentLimit(30);
+    left.setSmartCurrentLimit(20);
 
     left.burnFlash();
 
@@ -91,7 +91,7 @@ public class ArmIOSparkMax implements ArmIO {
 
     inputs.current = left.getOutputCurrent();
 
-    inputs.relativePositionRad = Units.rotationsToRadians(leftEncoder.getPosition());
+    inputs.relativePositionRotations = leftEncoder.getPosition();
 
     // Code below allows PID to be tuned using SmartDashboard.  And outputs extra data to
     // SmartDashboard.

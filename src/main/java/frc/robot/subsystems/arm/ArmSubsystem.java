@@ -116,16 +116,17 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return;
     }
-    /* TODO: Enforce arm physical min/max limits */
-    final double minAngleDeg = Constants.armMinDegrees;
-    final double maxAngleDeg = Constants.armMaxDegrees;
+    // Check if the arm angle is within limits.  Don't try to move the arm to new angle if it is already at limit.
+    // if (isHighLimit() || isLowLimit()) {
+    //   return;
+    // }
 
     // Check if the angle is below the minimum limit or above the maximum limit
     // If it is the it is set to min/max
-    if (degrees < minAngleDeg) {
-      this.setPoint = minAngleDeg; // Set to the minimum angle
-    } else if (degrees > maxAngleDeg) {
-      this.setPoint = maxAngleDeg; // Set to the maximum angle
+    if (degrees < Constants.armMinDegrees) {
+      this.setPoint = Constants.armMinDegrees; // Set to the minimum angle
+    } else if (degrees > Constants.armMaxDegrees) {
+      this.setPoint = Constants.armMaxDegrees; // Set to the maximum angle
     } else {
       // The  angle is within the range and is set
       this.setPoint = degrees;
@@ -181,52 +182,62 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     io.updateInputs(inputs);
     Logger.processInputs("Arm", inputs);
 
-    if (isHighLimit()) {
+    if (isLimitHigh()) {
       // TODO: turn off voltage or stop pid
+      io.setVoltage(0);
     }
-    if (isLowLimit()) {
+    if (isLimitLow()) {
       // TODO: turn off voltage or stop pid
       io.resetRelativeEncoder(0.0);
+      io.setVoltage(0);
     }
 
     arm2d.setAngle(inputs.positionDegree);
   }
 
-  private boolean isHighLimit() {
+  private boolean isLimitHigh() {
     // if abs encoder is broken/missing then we cannot detect limits, assume we are at limit.
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
     if (inputs.positionDegree > positionDegreeMax) {
       highLimitEntry.setBoolean(true);
-      inputs.highLimit = true;
+      inputs.limitHigh = true;
     } else {
       highLimitEntry.setBoolean(false);
-      inputs.highLimit = false;
+      inputs.limitHigh = false;
     }
-    return inputs.highLimit;
+    return inputs.limitHigh;
   }
 
-  private boolean isLowLimit() {
+  private boolean isLimitLow() {
     // if abs encoder is broken/missing then we cannot detect limits, assume we are at limit.
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
+<<<<<<< Updated upstream
     if (inputs.positionDegree < positionDegreeMin) {
       inputs.lowLimit = true;
+||||||| constructed merge base
+    if (inputs.positionRad < positionRadMin) {
+      inputs.lowLimit = true;
+=======
+    if (inputs.positionRad < positionRadMin) {
+      inputs.limitLow = true;
+>>>>>>> Stashed changes
       lowLimitEntry.setBoolean(true);
     } else {
       lowLimitEntry.setBoolean(false);
-      inputs.lowLimit = false;
+      inputs.limitLow = false;
     }
-    return inputs.lowLimit;
+    return inputs.limitLow;
   }
 
   private boolean isLimitReached(double desiredVoltage) {
-    if (isHighLimit() && desiredVoltage > 0.0) {
+    if (isLimitHigh() && desiredVoltage > 0.0) {
       return true;
     }
-    if (isLowLimit() && desiredVoltage < 0.0) {
+    if (isLimitLow() && desiredVoltage < 0.0) {
       return true;
     }
     return false;
