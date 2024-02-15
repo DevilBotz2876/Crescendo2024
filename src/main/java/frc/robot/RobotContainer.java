@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.commands.ArmCommand;
 import frc.robot.commands.ArmToPositionDebug;
 import frc.robot.commands.IntakeBaseCommand;
 import frc.robot.commands.ShooterEnable;
@@ -197,12 +196,6 @@ public class RobotContainer {
             new InstantCommand(() -> drive.setFieldOrientedDrive(!drive.isFieldOrientedDrive())));
 
     controller.back().onTrue(new InstantCommand(() -> drive.resetOdometry()));
-
-    arm.setDefaultCommand(
-        new ArmCommand(
-            arm,
-            () -> controller.getHID().getPOV() == 0,
-            () -> controller.getHID().getPOV() == 180));
 
     // run arm at 4 volts
     controller
