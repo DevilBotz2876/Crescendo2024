@@ -8,4 +8,8 @@ public interface Arm {
 
   // sets of the angle of the arm
   public default void setAngle(double degrees) {}
+
+  public default boolean isAbsoluteEncoderConnected() {
+    return true;
+  }
 }
