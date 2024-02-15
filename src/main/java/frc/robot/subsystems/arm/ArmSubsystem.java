@@ -3,7 +3,6 @@ package frc.robot.subsystems.arm;
 import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -28,8 +27,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
   private ArmFeedforward feedforward;
   private final SysIdRoutine sysId;
-  private final double positionRadMax = 0.8;
-  private final double positionRadMin = 0.001;
+  private final double positionDegreeMax = Constants.armMaxDegrees;;
+  private final double positionDegreeMin = Constants.armMinDegrees;;
 
   @AutoLogOutput private double desiredVoltage;
   @AutoLogOutput private double setPoint;
@@ -44,7 +43,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
           new MechanismLigament2d(
               "Arm",
               30,
-              Units.radiansToDegrees(inputs.positionRad),
+              inputs.positionDegree,
               6,
               new Color8Bit(Color.kYellow)));
 
@@ -198,7 +197,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-    if (inputs.positionRad > positionRadMax) {
+    if (inputs.positionDegree > positionDegreeMax) {
       highLimitEntry.setBoolean(true);
       inputs.highLimit = true;
     } else {
@@ -213,7 +212,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-    if (inputs.positionRad < positionRadMin) {
+    if (inputs.positionDegree < positionDegreeMin) {
       inputs.lowLimit = true;
       lowLimitEntry.setBoolean(true);
     } else {
