@@ -28,7 +28,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
   private ArmFeedforward feedforward;
   private final SysIdRoutine sysId;
-  private final double positionRadMax = 1.3;
+  private final double positionRadMax = 0.8;
   private final double positionRadMin = 0.001;
 
   @AutoLogOutput private double desiredVoltage;

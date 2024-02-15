@@ -50,7 +50,7 @@ public class ArmIOStub implements ArmIO {
           Units.degreesToRadians(minAngleInDegrees),
           Units.degreesToRadians(maxAngleInDegrees),
           true,
-          0,
+          1.0,
           VecBuilder.fill(0));
 
   public ArmIOStub() {
