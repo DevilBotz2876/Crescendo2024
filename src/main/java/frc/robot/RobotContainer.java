@@ -4,15 +4,18 @@
 
 package frc.robot;
 
-// import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.ArmToPositionDebug;
 import frc.robot.commands.IntakeBaseCommand;
 import frc.robot.commands.ShooterEnable;
 import frc.robot.commands.drive.DriveCommand;
@@ -20,11 +23,15 @@ import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfigInferno;
 import frc.robot.config.RobotConfigPhoenix;
 import frc.robot.config.RobotConfigSherman;
+import frc.robot.subsystems.arm.ArmIOSparkMax;
+import frc.robot.subsystems.arm.ArmIOStub;
+import frc.robot.subsystems.arm.ArmSubsystem;
 import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
 public class RobotContainer {
   public final CommandXboxController controller;
   public final RobotConfig robotConfig;
+  public final ArmSubsystem arm;
   private SendableChooser<Command> autoChooser = null;
   private static final String robotNameKey = "Robot Name";
 
@@ -35,6 +42,8 @@ public class RobotContainer {
     String robotName = "UNKNOWN";
 
     controller = new CommandXboxController(0);
+
+    boolean hasArm = false;
 
     Preferences.initString(robotNameKey, robotName);
     robotName = Preferences.getString(robotNameKey, robotName);
@@ -55,9 +64,23 @@ public class RobotContainer {
         robotConfig = new RobotConfigInferno();
     }
 
+    if (hasArm) {
+      arm = new ArmSubsystem(new ArmIOSparkMax());
+    } else {
+      arm = new ArmSubsystem(new ArmIOStub());
+    }
+
     configureBindings();
+    // ArmSysIdBindings();
     // shooterSysIdBindings();
     // driveSysIdBindings();
+  }
+
+  private void ArmSysIdBindings() {
+    controller.a().whileTrue(arm.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    controller.b().whileTrue(arm.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    controller.x().whileTrue(arm.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    controller.y().whileTrue(arm.sysIdDynamic(SysIdRoutine.Direction.kReverse));
   }
 
   private void shooterSysIdBindings() {
@@ -107,6 +130,19 @@ public class RobotContainer {
                         !RobotConfig.drive.isFieldOrientedDrive())));
 
     controller.back().onTrue(new InstantCommand(() -> RobotConfig.drive.resetOdometry()));
+
+    /*
+    // run arm at 4 volts
+    controller
+        .y()
+        .whileTrue(Commands.startEnd(() -> arm.runVoltage(4), () -> arm.runVoltage(0), arm));
+    // () -> arm.runVoltage(ArmVoltsEntry.getDouble(0.0)), () -> arm.runVoltage(0), arm));
+    controller
+        .x()
+        .whileTrue(Commands.startEnd(() -> arm.runVoltage(-4), () -> arm.runVoltage(0), arm));
+    */
+
+    controller.b().whileTrue(new ArmToPositionDebug(arm));
   }
 
   public Command getAutonomousCommand() {
@@ -115,5 +151,11 @@ public class RobotContainer {
     } else {
       return null;
     }
+  }
+
+  public void commandsToShuffleboard() {
+    // SmartDashboard.putData(new ArmToPosition(arm));
+    ShuffleboardTab armTab = Shuffleboard.getTab("Arm");
+    armTab.add("armToPosition", new ArmToPositionDebug(arm)).withWidget(BuiltInWidgets.kCommand);
   }
 }
