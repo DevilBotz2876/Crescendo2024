@@ -35,8 +35,8 @@ public class DriveCommand extends Command {
 
     // tab = Shuffleboard.getTab("Driver Control");
 
-    driveSpeedChooser.setDefaultOption("Linear Mode", "Linear Mode");
-    driveSpeedChooser.addOption("Squared Mode", "Squared Mode");
+    driveSpeedChooser.addOption("Linear Mode", "Linear Mode");
+    driveSpeedChooser.setDefaultOption("Squared Mode", "Squared Mode");
     driveSpeedChooser.addOption("Cubed Mode", "Cubed Mode");
 
     SmartDashboard.putData(driveSpeedChooser);
