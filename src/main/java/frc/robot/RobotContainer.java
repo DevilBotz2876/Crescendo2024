@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -29,7 +28,6 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 public class RobotContainer {
   public final CommandXboxController controller;
   public final RobotConfig robotConfig;
-  private SendableChooser<Command> autoChooser = null;
   private static final String robotNameKey = "Robot Name";
 
   private final LoggedDashboardNumber shooterSpeedInput =
@@ -136,8 +134,8 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    if (autoChooser != null) {
-      return autoChooser.getSelected();
+    if (RobotConfig.autoChooser != null) {
+      return RobotConfig.autoChooser.getSelected();
     } else {
       return null;
     }
