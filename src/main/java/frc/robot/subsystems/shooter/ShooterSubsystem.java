@@ -8,6 +8,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.config.RobotConfig.ShooterConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -27,30 +28,26 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
   boolean useSoftwarePid = false;
   boolean softwarePidEnabled = false;
 
-  // Values from Carter's Shooter SysId Run on Sherman 2024-02-07
-  double ffKs = 0.08134;
-  double ffKv = 0.019999;
-  double ffKa = 0.0054252;
-  double ffKsBottom = 0.058262;
-  double ffKvBottom = 0.019495;
-  double ffKaBottom = 0.0048198;
-
-  double pidKp = 0.0010514;
-  double pidKi = 0.0;
-  double pidKd = 0.0;
-  double pidKpBottom = 0.0001581;
-  double pidKiBottom = 0.0;
-  double pidKdBottom = 0.0;
-
   public ShooterSubsystem(ShooterIO io) {
     this.io = io;
     // TODO: These are sample values.  Need to run sysid on shooter and get real values.
     useSoftwarePid = !io.supportsHardwarePid();
     if (useSoftwarePid) {
-      feedforward = new SimpleMotorFeedforward(ffKs, ffKv, ffKa);
-      feedforwardBottom = new SimpleMotorFeedforward(ffKsBottom, ffKvBottom, ffKaBottom);
-      pid = new PIDController(pidKp, pidKi, pidKd);
-      pidBottom = new PIDController(pidKpBottom, pidKiBottom, pidKdBottom);
+      feedforward =
+          new SimpleMotorFeedforward(
+              ShooterConstants.ffKs, ShooterConstants.ffKv, ShooterConstants.ffKa);
+      feedforwardBottom =
+          new SimpleMotorFeedforward(
+              ShooterConstants.ffKsBottom,
+              ShooterConstants.ffKvBottom,
+              ShooterConstants.ffKaBottom);
+      pid =
+          new PIDController(ShooterConstants.pidKp, ShooterConstants.pidKi, ShooterConstants.pidKd);
+      pidBottom =
+          new PIDController(
+              ShooterConstants.pidKpBottom,
+              ShooterConstants.pidKiBottom,
+              ShooterConstants.pidKdBottom);
     } else {
       feedforward = null;
       feedforwardBottom = null;

@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
+import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.util.LoggedTunableNumber;
 import java.util.Map;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -62,11 +63,11 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   public ArmSubsystem(ArmIO io) {
     this.io = io;
 
-    armKp.initDefault(.1);
-    armKd.initDefault(0.0);
-    armKg.initDefault(.72);
-    armKv.initDefault(6.18);
-    armKa.initDefault(.04);
+    armKp.initDefault(ArmConstants.pidKp);
+    armKd.initDefault(ArmConstants.pidKd);
+    armKg.initDefault(ArmConstants.ffKg);
+    armKv.initDefault(ArmConstants.ffKv);
+    armKa.initDefault(ArmConstants.ffKa);
 
     kG = armKg.get();
     kV = armKv.get();
