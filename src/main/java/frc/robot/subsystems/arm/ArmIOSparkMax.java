@@ -7,7 +7,6 @@ import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.SparkPIDController.ArbFFUnits;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
@@ -44,8 +43,8 @@ public class ArmIOSparkMax implements ArmIO {
     left.setInverted(false);
     // right.follow(left, false);
 
-    left.enableVoltageCompensation(12.0);
-    left.setSmartCurrentLimit(20);
+    // left.enableVoltageCompensation(12.0);
+    left.setSmartCurrentLimit(40);
 
     left.burnFlash();
 

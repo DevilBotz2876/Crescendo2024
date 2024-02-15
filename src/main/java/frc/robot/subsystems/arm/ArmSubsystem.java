@@ -27,8 +27,10 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
   private ArmFeedforward feedforward;
   private final SysIdRoutine sysId;
-  private final double positionDegreeMax = Constants.armMaxDegrees;;
-  private final double positionDegreeMin = Constants.armMinDegrees;;
+  private final double positionDegreeMax = Constants.armMaxDegrees;
+  ;
+  private final double positionDegreeMin = Constants.armMinDegrees;
+  ;
 
   @AutoLogOutput private double desiredVoltage;
   @AutoLogOutput private double setPoint;
@@ -41,11 +43,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   private final MechanismLigament2d arm2d =
       armPivot2d.append(
           new MechanismLigament2d(
-              "Arm",
-              30,
-              inputs.positionDegree,
-              6,
-              new Color8Bit(Color.kYellow)));
+              "Arm", 30, inputs.positionDegree, 6, new Color8Bit(Color.kYellow)));
 
   private static final LoggedTunableNumber armKp = new LoggedTunableNumber("Arm/kP");
   private static final LoggedTunableNumber armKd = new LoggedTunableNumber("Arm/kD");
@@ -116,7 +114,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return;
     }
-    // Check if the arm angle is within limits.  Don't try to move the arm to new angle if it is already at limit.
+    // Check if the arm angle is within limits.  Don't try to move the arm to new angle if it is
+    // already at limit.
     // if (isHighLimit() || isLowLimit()) {
     //   return;
     // }
@@ -215,16 +214,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-<<<<<<< Updated upstream
     if (inputs.positionDegree < positionDegreeMin) {
-      inputs.lowLimit = true;
-||||||| constructed merge base
-    if (inputs.positionRad < positionRadMin) {
-      inputs.lowLimit = true;
-=======
-    if (inputs.positionRad < positionRadMin) {
       inputs.limitLow = true;
->>>>>>> Stashed changes
       lowLimitEntry.setBoolean(true);
     } else {
       lowLimitEntry.setBoolean(false);
