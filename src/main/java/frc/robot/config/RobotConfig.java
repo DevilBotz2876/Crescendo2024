@@ -1,8 +1,8 @@
 package frc.robot.config;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.arm.ArmIOStub;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.drive.DriveBase;
@@ -60,10 +60,15 @@ public class RobotConfig {
   }
 
   public RobotConfig(boolean stubDrive, boolean stubShooter, boolean stubIntake) {
-    this(stubDrive, stubShooter, stubIntake, true);
+    this(stubDrive, stubShooter, stubIntake, true, true);
   }
 
-  public RobotConfig(boolean stubDrive, boolean stubShooter, boolean stubIntake, boolean stubArm) {
+  public RobotConfig(
+      boolean stubDrive,
+      boolean stubShooter,
+      boolean stubIntake,
+      boolean stubArm,
+      boolean stubAuto) {
     if (stubDrive) {
       drive = new DriveBase();
     }
@@ -83,6 +88,9 @@ public class RobotConfig {
       arm = new ArmSubsystem(new ArmIOStub());
     }
 
-    autoChooser = AutoBuilder.buildAutoChooser("Mobility Auto");
+    if (stubAuto) {
+      autoChooser = new SendableChooser<>();
+      autoChooser.setDefaultOption("No Auto Routines Specified", Commands.none());
+    }
   }
 }

@@ -54,6 +54,7 @@ public class RobotContainer {
       default:
         /* If running simulation, put the robot config you want here */
         robotConfig = new RobotConfigInferno();
+        // robotConfig = new RobotConfigSherman();
     }
 
     SmartDashboard.putData("Auto Chooser", RobotConfig.autoChooser);
@@ -134,11 +135,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    if (RobotConfig.autoChooser != null) {
-      return RobotConfig.autoChooser.getSelected();
-    } else {
-      return null;
-    }
+    return RobotConfig.autoChooser.getSelected();
   }
 
   public void commandsToShuffleboard() {

@@ -11,7 +11,7 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 /* Override Sherman specific constants here */
 public class RobotConfigSherman extends RobotConfig {
   public RobotConfigSherman() {
-    super(false, false, false, false);
+    super(false, false, false, false, true);
 
     // Sherman has a tank drive train
     // TODO: set DriveConstants.maxVelocityMetersPerSec
