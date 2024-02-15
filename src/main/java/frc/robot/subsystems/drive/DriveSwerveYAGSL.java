@@ -8,21 +8,27 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import frc.robot.config.RobotConfig.DriveConstants;
 import java.io.File;
 import org.littletonrobotics.junction.AutoLogOutput;
 import swervelib.SwerveDrive;
+import swervelib.SwerveDriveTest;
 import swervelib.parser.SwerveParser;
 
 public class DriveSwerveYAGSL extends DriveBase {
-  private final double maximumSpeed = 4.5; // meters/sec
-  private final File swerveJsonDirectory =
-      new File(Filesystem.getDeployDirectory(), "swervePracticeBot");
+  private final File swerveJsonDirectory;
   private SwerveDrive swerveDrive;
   @AutoLogOutput private boolean fieldOrientedDrive = false;
 
-  public DriveSwerveYAGSL() {
+  public DriveSwerveYAGSL(String configPath) {
+    swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), configPath);
+
     try {
-      swerveDrive = new SwerveParser(swerveJsonDirectory).createSwerveDrive(maximumSpeed);
+      swerveDrive =
+          new SwerveParser(swerveJsonDirectory)
+              .createSwerveDrive(DriveConstants.maxVelocityMetersPerSec);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -92,5 +98,25 @@ public class DriveSwerveYAGSL extends DriveBase {
   @Override
   public void setPoseToMatchField() {
     swerveDrive.resetOdometry(swerveDrive.field.getRobotPose());
+  }
+
+  /**
+   * Command to characterize the robot drive motors using SysId
+   *
+   * @return SysId Drive Command
+   */
+  public Command sysIdDriveMotorCommand() {
+    return SwerveDriveTest.generateSysIdCommand(
+        SwerveDriveTest.setDriveSysIdRoutine(new Config(), this, swerveDrive, 12), 3.0, 5.0, 3.0);
+  }
+
+  /**
+   * Command to characterize the robot angle motors using SysId
+   *
+   * @return SysId Angle Command
+   */
+  public Command sysIdAngleMotorCommand() {
+    return SwerveDriveTest.generateSysIdCommand(
+        SwerveDriveTest.setAngleSysIdRoutine(new Config(), this, swerveDrive), 3.0, 5.0, 3.0);
   }
 }

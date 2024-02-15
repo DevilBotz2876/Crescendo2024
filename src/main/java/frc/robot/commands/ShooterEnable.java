@@ -37,12 +37,11 @@ public class ShooterEnable extends Command {
   @Override
   public void execute() {
     // Checks the volt Entry for the volt and sets the voltage of motors
-    shooter.setVoltage(voltsEntry.getDouble(0.0));
-
-    // Enable motors, It has to be called regularly for voltage compensation to work properly
-    shooter.enable();
+    shooter.runVoltage(voltsEntry.getDouble(0.0));
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    shooter.runVoltage(0);
+  }
 }
