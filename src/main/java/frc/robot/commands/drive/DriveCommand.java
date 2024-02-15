@@ -16,7 +16,9 @@ public class DriveCommand extends Command {
   DoubleSupplier speedY;
   DoubleSupplier rot;
   ShuffleboardTab tab;
+
   GenericEntry speedLimiterEntry;
+  GenericEntry turnLimiterEntry;
 
   public DriveCommand(
       DriveBase drive, DoubleSupplier speedX, DoubleSupplier speedY, DoubleSupplier rot) {
@@ -31,7 +33,13 @@ public class DriveCommand extends Command {
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 100))
             .getEntry();
-
+    turnLimiterEntry =
+      tab.add("Turn (%)", 0)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 100))
+            .getEntry();
+   
+    turnLimiterEntry.setValue(100);
     speedLimiterEntry.setValue(50);
 
     addRequirements(drive);
@@ -48,8 +56,8 @@ public class DriveCommand extends Command {
                 * (speedLimiterEntry.getDouble(100) / 100)
                 * drive.getMaxLinearSpeed(),
             rot.getAsDouble()
-                * (speedLimiterEntry.getDouble(100) / 100)
-                * drive.getMaxAngularSpeed());
+                * (((speedLimiterEntry.getDouble(100) / 100)
+                * drive.getMaxAngularSpeed())) * (turnLimiterEntry.getDouble(100) / 100));
 
     drive.runVelocity(speeds);
   }
