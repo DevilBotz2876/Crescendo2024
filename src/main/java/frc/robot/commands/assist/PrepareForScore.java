@@ -10,8 +10,9 @@ import frc.robot.subsystems.shooter.Shooter;
 public class PrepareForScore extends SequentialCommandGroup {
   // TODO:  read arm angle and shooter velocity from GUI
   NetworkTable assistGUI = NetworkTableInstance.getDefault().getTable("Shuffleboard/Assist");
-  //Moves arm to ideal angle for shooting
-  //Turns on shooter to ideal speed for scoring
+
+  // Moves arm to ideal angle for shooting
+  // Turns on shooter to ideal speed for scoring
   public PrepareForScore(Arm arm, Shooter shooter) {
     addCommands(
         new InstantCommand(() -> arm.setAngle(assistGUI.getEntry("Shooter Angle").getDouble(100))));
