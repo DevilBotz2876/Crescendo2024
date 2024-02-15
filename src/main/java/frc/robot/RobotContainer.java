@@ -87,11 +87,11 @@ public class RobotContainer {
 
   private void configureBindings() {
     // shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
-    controller.rightTrigger().onTrue(new ScorePiece(intake, shooter));
+    controller.rightTrigger().onTrue(new ScorePiece(RobotConfig.intake, RobotConfig.shooter));
 
-    controller.a().onTrue(new PrepareForIntake(null, intake));
+    controller.a().onTrue(new PrepareForIntake(RobotConfig.arm, RobotConfig.intake));
 
-    controller.b().onTrue(new PrepareForScore(null, shooter));
+    controller.b().onTrue(new PrepareForScore(RobotConfig.arm, RobotConfig.shooter));
 
     /*
     controller.rightTrigger().whileTrue(new ShooterEnable(RobotConfig.shooter));
