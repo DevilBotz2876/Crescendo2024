@@ -1,5 +1,7 @@
 package frc.robot.config;
 
+import frc.robot.subsystems.arm.ArmIOSparkMax;
+import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.drive.DriveTrain;
 import frc.robot.subsystems.intake.IntakeBase;
 import frc.robot.subsystems.intake.IntakeIOTalonSRX;
@@ -9,7 +11,7 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 /* Override Sherman specific constants here */
 public class RobotConfigSherman extends RobotConfig {
   public RobotConfigSherman() {
-    super(false, false, false);
+    super(false, false, false, false);
 
     // Sherman has a tank drive train
     // TODO: set DriveConstants.maxVelocityMetersPerSec
@@ -36,5 +38,16 @@ public class RobotConfigSherman extends RobotConfig {
     ShooterConstants.pidKdBottom = 0.0;
 
     shooter = new ShooterSubsystem(new ShooterIOSparkMax(2), new ShooterIOSparkMax(1));
+
+    ArmConstants.absolutePositionOffset = 0.4154156603853915; // This is place holder
+
+    ArmConstants.pidKp = 0.1;
+    ArmConstants.pidKi = 0.0;
+    ArmConstants.pidKd = 0.0;
+    ArmConstants.ffKs = 0.0;
+    ArmConstants.ffKg = 0.72;
+    ArmConstants.ffKv = 6.18;
+    ArmConstants.ffKa = 0.04;
+    arm = new ArmSubsystem(new ArmIOSparkMax());
   }
 }

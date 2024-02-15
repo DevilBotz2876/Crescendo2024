@@ -10,6 +10,7 @@ import com.revrobotics.SparkPIDController.ArbFFUnits;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.config.RobotConfig.ArmConstants;
 
 public class ArmIOSparkMax implements ArmIO {
   // Leader
@@ -32,7 +33,7 @@ public class ArmIOSparkMax implements ArmIO {
     // This will need to be set from a constant once we have the arm assembled and can measure the
     // offset.  Once the arm is done this value won't change.
     //
-    absoluteEncoder.setPositionOffset(0.4154156603853915); // This is place holder
+    absoluteEncoder.setPositionOffset(ArmConstants.absolutePositionOffset); // This is place holder
 
     absoluteEncoder.setDutyCycleRange(1.0 / 1024.0, 1023.0 / 1024.0);
 

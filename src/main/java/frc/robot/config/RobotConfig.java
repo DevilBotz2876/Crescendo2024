@@ -1,5 +1,7 @@
 package frc.robot.config;
 
+import frc.robot.subsystems.arm.ArmIOStub;
+import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.drive.DriveBase;
 import frc.robot.subsystems.intake.IntakeBase;
 import frc.robot.subsystems.intake.IntakeIOSim;
@@ -11,12 +13,23 @@ public class RobotConfig {
   public static DriveBase drive;
   public static IntakeBase intake;
   public static ShooterSubsystem shooter;
+  public static ArmSubsystem arm;
 
   public static class DriveConstants {
     public static double maxVelocityMetersPerSec = 4.5;
   }
 
-  public static class ArmConstants {}
+  public static class ArmConstants {
+    public static double absolutePositionOffset = 0; /* 0-1 */
+
+    public static double pidKp = 0.1;
+    public static double pidKi = 0.0;
+    public static double pidKd = 0.0;
+    public static double ffKs = 0.0;
+    public static double ffKg = 0.1;
+    public static double ffKv = 0.0;
+    public static double ffKa = 0.0;
+  }
 
   public static class ShooterConstants {
     /* Feedforward */
@@ -43,6 +56,10 @@ public class RobotConfig {
   }
 
   public RobotConfig(boolean stubDrive, boolean stubShooter, boolean stubIntake) {
+    this(stubDrive, stubShooter, stubIntake, true);
+  }
+
+  public RobotConfig(boolean stubDrive, boolean stubShooter, boolean stubIntake, boolean stubArm) {
     if (stubDrive) {
       drive = new DriveBase();
     }
@@ -56,6 +73,10 @@ public class RobotConfig {
 
     if (stubIntake) {
       intake = new IntakeBase(new IntakeIOSim());
+    }
+
+    if (stubArm) {
+      arm = new ArmSubsystem(new ArmIOStub());
     }
   }
 }
