@@ -33,6 +33,12 @@ public class RobotConfig {
     public static double ffKg = 0.1;
     public static double ffKv = 0.0;
     public static double ffKa = 0.0;
+
+    public static double pidAngleErrorInDegrees = 2.0;
+    public static double maxAngleInDegrees = 90.0;
+    public static double minAngleInDegrees = 0.0;
+    public static double intakeAngleInDegrees = 1;
+    public static double shooterAngleInDegrees = 45;
   }
 
   public static class ShooterConstants {
@@ -51,9 +57,15 @@ public class RobotConfig {
     public static double pidKpBottom = 0.1;
     public static double pidKiBottom = 0.0;
     public static double pidKdBottom = 0.0;
+
+    public static double velocityInRPMs = 3000;
   }
 
-  public static class IntakeConstants {}
+  public static class IntakeConstants {
+    public static double intakeSpeedInVolts = 6.0;
+    public static double indexSpeedInVolts = 6.0;
+    public static double feedSpeedInVolts = 6.0;
+  }
 
   public RobotConfig() {
     this(true, true, true);

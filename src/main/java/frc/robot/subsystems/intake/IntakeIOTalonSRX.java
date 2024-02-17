@@ -2,6 +2,7 @@ package frc.robot.subsystems.intake;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
 
 public class IntakeIOTalonSRX implements IntakeIO {
@@ -9,6 +10,8 @@ public class IntakeIOTalonSRX implements IntakeIO {
 
   // define the 1 SparkMax Controller
   private final TalonSRX leader = new TalonSRX(3);
+  DigitalInput limitSwitchIntake = new DigitalInput(1);
+  DigitalInput limitSwitchShooter = new DigitalInput(2);
 
   public IntakeIOTalonSRX() {
     // leader motor is not inverted, and set follower motor to follow the leader
@@ -22,7 +25,9 @@ public class IntakeIOTalonSRX implements IntakeIO {
     //  inputs.velocityRadPerSec =
     //      Units.rotationsPerMinuteToRadiansPerSecond(encoder.getVelocity() / GEAR_RATIO);
     // Get applied voltage from the leader motor
-    //    inputs.appliedVolts = leader.getAppliedOutput() * leader.getBusVoltage();
+    inputs.appliedVolts = leader.getMotorOutputVoltage();
+    inputs.limitSwitchIntake = limitSwitchIntake.get();
+    inputs.limitSwitchShooter = limitSwitchShooter.get();
   }
 
   @Override
