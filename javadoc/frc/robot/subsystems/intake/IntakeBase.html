@@ -111,22 +111,15 @@ implements <a href="Intake.html" title="interface in frc.robot.subsystems.intake
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#disable()" class="member-name-link">disable</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Disable the speed of the motor for the intake.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#enable()" class="member-name-link">enable</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Enable the speed of the motor for the intake.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#periodic()" class="member-name-link">periodic</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isPieceDetected(boolean)" class="member-name-link">isPieceDetected</a><wbr>(boolean&nbsp;intakePieceDetection)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setVoltage(double)" class="member-name-link">setVoltage</a><wbr>(double&nbsp;volts)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#periodic()" class="member-name-link">periodic</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setVoltage(double)" class="member-name-link">setVoltage</a><wbr>(double&nbsp;volts)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -165,30 +158,6 @@ implements <a href="Intake.html" title="interface in frc.robot.subsystems.intake
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="disable()">
-<h3>disable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">disable</span>()</div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="Intake.html#disable()">Intake</a></code></span></div>
-<div class="block">Disable the speed of the motor for the intake.</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="Intake.html#disable()">disable</a></code>&nbsp;in interface&nbsp;<code><a href="Intake.html" title="interface in frc.robot.subsystems.intake">Intake</a></code></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="enable()">
-<h3>enable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">enable</span>()</div>
-<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="Intake.html#enable()">Intake</a></code></span></div>
-<div class="block">Enable the speed of the motor for the intake.</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="Intake.html#enable()">enable</a></code>&nbsp;in interface&nbsp;<code><a href="Intake.html" title="interface in frc.robot.subsystems.intake">Intake</a></code></dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="setVoltage(double)">
 <h3>setVoltage</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setVoltage</span><wbr><span class="parameters">(double&nbsp;volts)</span></div>
@@ -205,6 +174,16 @@ implements <a href="Intake.html" title="interface in frc.robot.subsystems.intake
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>periodic</code>&nbsp;in interface&nbsp;<code>edu.wpi.first.wpilibj2.command.Subsystem</code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isPieceDetected(boolean)">
+<h3>isPieceDetected</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isPieceDetected</span><wbr><span class="parameters">(boolean&nbsp;intakePieceDetection)</span></div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="Intake.html#isPieceDetected(boolean)">isPieceDetected</a></code>&nbsp;in interface&nbsp;<code><a href="Intake.html" title="interface in frc.robot.subsystems.intake">Intake</a></code></dd>
 </dl>
 </section>
 </li>
