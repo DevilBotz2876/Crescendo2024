@@ -15,4 +15,5 @@ public final class Constants {
 
   public static final double armMaxDegrees = 45.0;
   public static final double armMinDegrees = 0.0;
+  public static final double armErroDegrees = 4.0;
 }

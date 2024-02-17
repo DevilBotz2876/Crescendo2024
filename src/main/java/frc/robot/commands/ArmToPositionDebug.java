@@ -18,6 +18,9 @@ public class ArmToPositionDebug extends Command {
   ShuffleboardTab tab;
   GenericEntry degreesEntry;
 
+  // double setpoint;
+  // double timeMS;
+
   public ArmToPositionDebug(ArmSubsystem arm) {
     this.arm = arm;
 
@@ -38,11 +41,29 @@ public class ArmToPositionDebug extends Command {
   @Override
   public void execute() {
     double setpoint = degreesEntry.getDouble(1.0);
+    // this.setpoint = setpoint;
     arm.setAngle(setpoint);
   }
 
+  // @Override
+  // public boolean isFinished() {
+
+  //   if (arm.getAngle() > setpoint - Constants.armErroDegrees && arm.getAngle() < setpoint +
+  // Constants.armErroDegrees) {
+  //     timeMS += 20.0;
+  //     if (timeMS == 1000) {
+  //       SmartDashboard.putBoolean("Arm/ArmToPositionDebug/isFinished", true);
+  //       return true;
+  //     }
+  //   } else {
+  //     timeMS = 0.0;
+  //   }
+  //   SmartDashboard.putBoolean("Arm/ArmToPositionDebug/isFinished", false);
+  //   return false;
+  // }
+
   @Override
   public void end(boolean interrupted) {
-    arm.runVoltage(0);
+    // arm.runVoltage(0);
   }
 }
