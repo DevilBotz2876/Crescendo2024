@@ -53,8 +53,8 @@ public class RobotContainer {
       case "UNKNOWN":
       default:
         /* If running simulation, put the robot config you want here */
-        // robotConfig = new RobotConfigInferno();
-        robotConfig = new RobotConfigSherman();
+        robotConfig = new RobotConfigInferno();
+        // robotConfig = new RobotConfigSherman();
     }
 
     // SmartDashboard.putData("Subsystems/Arm", RobotConfig.arm);
