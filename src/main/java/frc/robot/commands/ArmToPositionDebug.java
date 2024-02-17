@@ -4,12 +4,10 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.arm.ArmSubsystem;
 import java.util.Map;
 
 /**
@@ -20,7 +18,6 @@ public class ArmToPositionDebug extends Command {
   Arm arm;
   ShuffleboardTab tab;
   GenericEntry degreesEntry;
-
 
   public ArmToPositionDebug(Arm arm) {
     this.arm = arm;
@@ -35,7 +32,7 @@ public class ArmToPositionDebug extends Command {
                     "min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
             .getEntry();
 
-    addRequirements((SubsystemBase)arm);
+    addRequirements((SubsystemBase) arm);
   }
 
   @Override

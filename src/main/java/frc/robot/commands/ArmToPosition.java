@@ -20,7 +20,7 @@ public class ArmToPosition extends Command {
     this.arm = arm;
     this.positionDegrees = positionDegrees;
 
-    addRequirements((SubsystemBase)arm);
+    addRequirements((SubsystemBase) arm);
   }
 
   @Override
