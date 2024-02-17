@@ -113,8 +113,6 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
             new SysIdRoutine.Mechanism((voltage) -> runVoltage(voltage.in(Volts)), null, this));
 
     SmartDashboard.putData("Arm Simulation", mech2d);
-
-    relEncoderInit = true;
   }
 
   @Override
@@ -197,11 +195,6 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     // Updates the inputs
     io.updateInputs(inputs);
     Logger.processInputs("Arm", inputs);
-
-    if (relEncoderInit) {
-      io.resetRelativeEncoder(inputs.positionDegree);
-      relEncoderInit = false;
-    }
 
     if (isLimitHigh()) {
       // TODO: turn off voltage or stop pid

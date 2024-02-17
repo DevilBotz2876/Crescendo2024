@@ -21,6 +21,7 @@ public class RobotConfig {
 
   public static class DriveConstants {
     public static double maxVelocityMetersPerSec = 4.5;
+    public static double maxAngularVelocityRadiansSec = 2 * Math.PI;
   }
 
   public static class ArmConstants {
@@ -51,6 +52,7 @@ public class RobotConfig {
     public static double ffKaBottom = 0.0;
 
     /* PID */
+    public static double pidVelocityErrorInRPMS = 20;
     public static double pidKp = 0.1;
     public static double pidKi = 0.0;
     public static double pidKd = 0.0;
