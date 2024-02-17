@@ -140,7 +140,8 @@ public class RobotContainer {
         .whileTrue(Commands.startEnd(() -> RobotConfig.arm.runVoltage(-4), () -> RobotConfig.arm.runVoltage(0), arm));
     */
 
-    controller.b().whileTrue(new ArmToPositionDebug(RobotConfig.arm));
+   
+   // controller.b().whileTrue(new ArmToPositionDebug(RobotConfig.arm));
   }
 
   public Command getAutonomousCommand() {

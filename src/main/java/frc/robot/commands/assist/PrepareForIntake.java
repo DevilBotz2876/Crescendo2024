@@ -16,7 +16,7 @@ public class PrepareForIntake extends SequentialCommandGroup {
   // Turns the intake motor on
   public PrepareForIntake(Arm arm, Intake intake) {
     addCommands(
-        new ArmToPosition((ArmSubsystem) arm, assistGUI.getEntry("Intake Angle").getDouble(1)));
+        new ArmToPosition((ArmSubsystem) arm, 30/* assistGUI.getEntry("Intake Angle").getDouble(1)*/));
     addCommands(new IndexPiece(intake));
   }
 }
