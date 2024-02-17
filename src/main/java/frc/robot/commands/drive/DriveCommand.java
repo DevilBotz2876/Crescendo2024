@@ -57,7 +57,7 @@ public class DriveCommand extends Command {
     ySpeed = speedY.getAsDouble();
     newRot = rot.getAsDouble();
     speedLimiter = speedLimiterEntry.getDouble(100);
-    
+
     switch (driveSpeedSelceted) {
       case "Linear Mode":
         break;
