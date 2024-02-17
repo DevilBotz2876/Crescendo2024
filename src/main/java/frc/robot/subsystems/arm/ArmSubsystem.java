@@ -100,8 +100,6 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
         .withProperties(
             Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees));
 
-    // assistTab.add("Subsystem/Arm", this).withWidget(null);
-
     // Configure SysId based on the AdvantageKit example
     sysId =
         new SysIdRoutine(
