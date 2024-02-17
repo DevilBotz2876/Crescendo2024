@@ -51,7 +51,13 @@ public class DriveCommand extends Command {
 
   @Override
   public void execute() {
-    switch (driveSpeedChooser.getSelected()) {
+    String driveSpeedSelceted = driveSpeedChooser.getSelected();
+    xSpeed = speedX.getAsDouble();
+    ySpeed = speedY.getAsDouble();
+    newRot = rot.getAsDouble();
+    speedLimiter = speedLimiterEntry.getDouble(100);
+
+    switch (driveSpeedSelceted) {
       case "Linear Mode":
         xSpeed = speedX.getAsDouble();
         ySpeed = speedY.getAsDouble();

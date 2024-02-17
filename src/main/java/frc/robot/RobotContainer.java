@@ -17,10 +17,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.ArmToPositionDebug;
 import frc.robot.commands.IntakeBaseCommand;
-import frc.robot.commands.assist.IndexPiece;
-import frc.robot.commands.assist.PrepareForIntake;
-import frc.robot.commands.assist.PrepareForScore;
-import frc.robot.commands.assist.ScorePiece;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfigInferno;
@@ -52,8 +48,8 @@ public class RobotContainer {
       case "UNKNOWN":
       default:
         /* If running simulation, put the robot config you want here */
-        robotConfig = new RobotConfigInferno();
-        // robotConfig = new RobotConfigSherman();
+        // robotConfig = new RobotConfigInferno();
+        robotConfig = new RobotConfigSherman();
     }
 
     // SmartDashboard.putData("Subsystems/Arm", RobotConfig.arm);

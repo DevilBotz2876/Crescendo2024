@@ -8,6 +8,8 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import frc.robot.config.RobotConfig.DriveConstants;
+import org.littletonrobotics.junction.AutoLogOutput;
 
 public class DriveTrain extends DriveBase {
   private final double maxVelocityMetersPerSec = 4.5; // meters/sec
@@ -16,6 +18,10 @@ public class DriveTrain extends DriveBase {
   private static final WPI_TalonSRX rightMaster = new WPI_TalonSRX(11);
   private static final WPI_TalonSRX leftFollower = new WPI_TalonSRX(12);
   private static final WPI_TalonSRX rightFollower = new WPI_TalonSRX(13);
+  @AutoLogOutput private double leftVoltage = 0.0;
+  @AutoLogOutput private double rightVoltage = 0.0;
+  @AutoLogOutput private double rightVelocity = 0.0;
+  @AutoLogOutput private double leftVelocity = 0.0;
 
   // Define differential drive
   private final DifferentialDrive differentialDrive =
@@ -30,6 +36,8 @@ public class DriveTrain extends DriveBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    leftVoltage = leftMaster.getMotorOutputVoltage();
+    rightVoltage = rightMaster.getMotorOutputVoltage();
   }
 
   @Override
@@ -38,8 +46,8 @@ public class DriveTrain extends DriveBase {
         new DifferentialDriveKinematics(Units.inchesToMeters(24.0));
     DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(speeds);
 
-    double leftVelocity = wheelSpeeds.leftMetersPerSecond / maxVelocityMetersPerSec;
-    double rightVelocity = wheelSpeeds.rightMetersPerSecond / maxVelocityMetersPerSec;
+    leftVelocity = wheelSpeeds.leftMetersPerSecond / maxVelocityMetersPerSec;
+    rightVelocity = wheelSpeeds.rightMetersPerSecond / maxVelocityMetersPerSec;
 
     differentialDrive.tankDrive(leftVelocity, rightVelocity);
   }
@@ -100,7 +108,7 @@ public class DriveTrain extends DriveBase {
    * @return speed in meter/sec
    */
   public double getMaxLinearSpeed() {
-    return 4.5;
+    return DriveConstants.maxVelocityMetersPerSec;
   }
 
   /**
@@ -109,6 +117,6 @@ public class DriveTrain extends DriveBase {
    * @return speed in radian/sec
    */
   public double getMaxAngularSpeed() {
-    return 2.0;
+    return DriveConstants.maxAngularVelocityRadiansSec;
   }
 }
