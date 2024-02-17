@@ -2,9 +2,9 @@ package frc.robot.commands.assist;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.ArmToPosition;
+import frc.robot.commands.SetShooterVelocity;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.subsystems.arm.Arm;
@@ -24,11 +24,9 @@ public class PrepareForScore extends ParallelCommandGroup {
             () ->
                 assistGUI.getEntry("Shooter Angle").getDouble(ArmConstants.shooterAngleInDegrees)));
     addCommands(
-        new InstantCommand(
+        new SetShooterVelocity(
+            shooter,
             () ->
-                shooter.runVelocity(
-                    assistGUI
-                        .getEntry("Shooter Velocity")
-                        .getDouble(ShooterConstants.velocityInRPMs))));
+                assistGUI.getEntry("Shooter Velocity").getDouble(ShooterConstants.velocityInRPMs)));
   }
 }
