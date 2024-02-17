@@ -50,23 +50,6 @@ public class ArmToPositionDebug extends Command {
     arm.setAngle(setpoint);
   }
 
-   @Override
-  public boolean isFinished() {
-
-    if (arm.getAngle() > setpoint - ArmConstants.pidAngleErrorInDegrees
-        && arm.getAngle() < setpoint + ArmConstants.pidAngleErrorInDegrees) {
-      timeMS += 20.0;
-      if (timeMS == 1000) {
-        SmartDashboard.putBoolean("Arm/ArmToPosition/isFinished", true);
-        return true;
-      }
-    } else {
-      timeMS = 0.0;
-    }
-    SmartDashboard.putBoolean("Arm/ArmToPosition/isFinished", false);
-    return false;
-  }
-
   @Override
   public void end(boolean interrupted) {
     // arm.runVoltage(0);

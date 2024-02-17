@@ -86,11 +86,11 @@ public class RobotContainer {
 
   private void configureBindings() {
     // shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
-    controller.rightTrigger().onTrue(new ScorePiece(RobotConfig.intake, RobotConfig.shooter));
+    // controller.rightTrigger().onTrue(new ScorePiece(RobotConfig.intake, RobotConfig.shooter));
 
-    controller.a().onTrue(new PrepareForIntake(RobotConfig.arm, RobotConfig.intake));
+    // controller.a().onTrue(new PrepareForIntake(RobotConfig.arm, RobotConfig.intake));
 
-    controller.b().onTrue(new PrepareForScore(RobotConfig.arm, RobotConfig.shooter));
+    // controller.b().onTrue(new PrepareForScore(RobotConfig.arm, RobotConfig.shooter));
 
     /*
     controller.rightTrigger().whileTrue(new ShooterEnable(RobotConfig.shooter));
@@ -142,7 +142,7 @@ public class RobotContainer {
         .whileTrue(Commands.startEnd(() -> RobotConfig.arm.runVoltage(-4), () -> RobotConfig.arm.runVoltage(0), arm));
     */
 
-    // controller.b().whileTrue(new ArmToPositionDebug(RobotConfig.arm));
+    controller.b().whileTrue(new ArmToPositionDebug(RobotConfig.arm));
   }
 
   public Command getAutonomousCommand() {
