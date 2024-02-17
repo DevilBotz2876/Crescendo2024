@@ -21,8 +21,6 @@ public class ArmToPositionDebug extends Command {
   ShuffleboardTab tab;
   GenericEntry degreesEntry;
 
-  double setpoint;
-  double timeMS;
 
   public ArmToPositionDebug(Arm arm) {
     this.arm = arm;
@@ -46,7 +44,6 @@ public class ArmToPositionDebug extends Command {
   @Override
   public void execute() {
     double setpoint = degreesEntry.getDouble(1.0);
-    this.setpoint = setpoint;
     arm.setAngle(setpoint);
   }
 
