@@ -33,21 +33,18 @@ public class DriveCommand extends Command {
     this.speedY = speedY;
     this.rot = rot;
 
-    // tab = Shuffleboard.getTab("Driver Control");
-
-    driveSpeedChooser.addOption("Linear Mode", "Linear Mode");
-    driveSpeedChooser.setDefaultOption("Squared Mode", "Squared Mode");
-    driveSpeedChooser.addOption("Cubed Mode", "Cubed Mode");
-
     SmartDashboard.putData(driveSpeedChooser);
     tab = Shuffleboard.getTab("Drive");
     speedLimiterEntry =
-        tab.add("Drive Speed Limit", 0)
+        tab.add("Drive Speed Limit", 50)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 100))
             .getEntry();
 
-    speedLimiterEntry.setValue(50);
+    driveSpeedChooser.addOption("Linear Mode", "Linear Mode");
+    driveSpeedChooser.setDefaultOption("Squared Mode", "Squared Mode");
+    driveSpeedChooser.addOption("Cubed Mode", "Cubed Mode");
+    tab.add("Drive Response Curve", driveSpeedChooser);
 
     addRequirements(drive);
   }

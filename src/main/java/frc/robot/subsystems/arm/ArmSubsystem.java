@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.Constants;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.util.LoggedTunableNumber;
 import java.util.Map;
@@ -28,9 +27,9 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
   private ArmFeedforward feedforward;
   private final SysIdRoutine sysId;
-  private final double positionDegreeMax = Constants.armMaxDegrees;
+  private final double positionDegreeMax = ArmConstants.maxAngleInDegrees;
   ;
-  private final double positionDegreeMin = Constants.armMinDegrees;
+  private final double positionDegreeMin = ArmConstants.minAngleInDegrees;
   ;
 
   @AutoLogOutput private double desiredVoltage;
@@ -88,6 +87,19 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
     lowLimitEntry = armTab.add("LowLimit", false).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
 
+    ShuffleboardTab assistTab = Shuffleboard.getTab("Assist");
+    assistTab
+        .add("Intake Angle", ArmConstants.minAngleInDegrees)
+        .withWidget(BuiltInWidgets.kNumberSlider)
+        .withProperties(
+            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees));
+
+    assistTab
+        .add("Shooter Angle", 45)
+        .withWidget(BuiltInWidgets.kNumberSlider)
+        .withProperties(
+            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees));
+
     // Configure SysId based on the AdvantageKit example
     sysId =
         new SysIdRoutine(
@@ -123,10 +135,10 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
     // Check if the angle is below the minimum limit or above the maximum limit
     // If it is the it is set to min/max
-    if (degrees < Constants.armMinDegrees) {
-      this.setPoint = Constants.armMinDegrees; // Set to the minimum angle
-    } else if (degrees > Constants.armMaxDegrees) {
-      this.setPoint = Constants.armMaxDegrees; // Set to the maximum angle
+    if (degrees < ArmConstants.minAngleInDegrees) {
+      this.setPoint = ArmConstants.minAngleInDegrees; // Set to the minimum angle
+    } else if (degrees > ArmConstants.maxAngleInDegrees) {
+      this.setPoint = ArmConstants.maxAngleInDegrees; // Set to the maximum angle
     } else {
       // The  angle is within the range and is set
       this.setPoint = degrees;
