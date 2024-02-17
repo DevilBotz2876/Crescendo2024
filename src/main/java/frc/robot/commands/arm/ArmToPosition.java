@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,7 +20,7 @@ public class ArmToPosition extends Command {
     this.arm = arm;
     this.positionDegrees = positionDegrees;
 
-    addRequirements((SubsystemBase)arm);
+    addRequirements((SubsystemBase) arm);
   }
 
   @Override

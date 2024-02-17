@@ -89,6 +89,13 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
     lowLimitEntry = armTab.add("LowLimit", false).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
 
+    armTab
+        .add("Degrees Setpoint", 0.0)
+        .withWidget(BuiltInWidgets.kNumberSlider)
+        .withProperties(
+            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
+        .getEntry();
+
     ShuffleboardTab assistTab = Shuffleboard.getTab("Assist");
     assistTab
         .add("Intake Angle", ArmConstants.minAngleInDegrees)
@@ -113,7 +120,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
             new SysIdRoutine.Mechanism((voltage) -> runVoltage(voltage.in(Volts)), null, this));
 
     SmartDashboard.putData("Arm Simulation", mech2d);
-    
+
     relEncoderInit = true;
   }
 
@@ -201,7 +208,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (relEncoderInit) {
       io.resetRelativeEncoder(inputs.positionDegree);
       relEncoderInit = false;
-    } 
+    }
 
     if (isLimitHigh()) {
       // TODO: turn off voltage or stop pid
