@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.ArmToPositionDebug;
 import frc.robot.commands.IntakeBaseCommand;
+import frc.robot.commands.TestShooterAngle;
 import frc.robot.commands.assist.IndexPiece;
 import frc.robot.commands.assist.PrepareForIntake;
 import frc.robot.commands.assist.PrepareForScore;
@@ -174,6 +175,8 @@ public class RobotContainer {
     commandLayout.add(new PrepareForIntake(RobotConfig.arm, RobotConfig.intake));
     commandLayout.add(new PrepareForScore(RobotConfig.arm, RobotConfig.shooter));
     commandLayout.add(new ScorePiece(RobotConfig.intake, RobotConfig.shooter));
+    commandLayout.add(
+        new TestShooterAngle(RobotConfig.shooter, RobotConfig.intake, RobotConfig.arm));
 
     subLayout.add(RobotConfig.arm);
     subLayout.add(RobotConfig.intake);
