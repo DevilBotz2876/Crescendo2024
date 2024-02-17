@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -24,15 +23,11 @@ import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfigInferno;
 import frc.robot.config.RobotConfigPhoenix;
 import frc.robot.config.RobotConfigSherman;
-import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
 
 public class RobotContainer {
   public final CommandXboxController controller;
   public final RobotConfig robotConfig;
   private static final String robotNameKey = "Robot Name";
-
-  private final LoggedDashboardNumber shooterSpeedInput =
-      new LoggedDashboardNumber("Shooter Speed", 1000.0);
 
   public RobotContainer() {
     String robotName = "UNKNOWN";
@@ -58,7 +53,11 @@ public class RobotContainer {
         // robotConfig = new RobotConfigSherman();
     }
 
-    SmartDashboard.putData("Auto Chooser", RobotConfig.autoChooser);
+    ShuffleboardTab autoTab = Shuffleboard.getTab("Autonomous");
+    // Create volt entry under Shooter tab as a number sider with min = -1 and max = 1
+    autoTab
+        .add("Auto Chooser", RobotConfig.autoChooser)
+        .withWidget(BuiltInWidgets.kComboBoxChooser);
 
     configureBindings();
     // ArmSysIdBindings();
@@ -95,6 +94,9 @@ public class RobotContainer {
 
     /*
     controller.rightTrigger().whileTrue(new ShooterEnable(RobotConfig.shooter));
+
+    private final LoggedDashboardNumber shooterSpeedInput =
+    new LoggedDashboardNumber("Shooter Speed", 1000.0);
 
     controller
         .a()
@@ -140,8 +142,7 @@ public class RobotContainer {
         .whileTrue(Commands.startEnd(() -> RobotConfig.arm.runVoltage(-4), () -> RobotConfig.arm.runVoltage(0), arm));
     */
 
-   
-   // controller.b().whileTrue(new ArmToPositionDebug(RobotConfig.arm));
+    // controller.b().whileTrue(new ArmToPositionDebug(RobotConfig.arm));
   }
 
   public Command getAutonomousCommand() {

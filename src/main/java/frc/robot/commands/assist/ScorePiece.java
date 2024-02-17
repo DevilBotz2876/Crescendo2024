@@ -2,13 +2,16 @@ package frc.robot.commands.assist;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.config.RobotConfig.IntakeConstants;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 
-public class ScorePiece extends SequentialCommandGroup {
+public class ScorePiece extends Command {
+  Intake intake;
+  Shooter shooter;
+
   // TODO: read intake voltage and read piece sensor
   NetworkTable assistGUI = NetworkTableInstance.getDefault().getTable("Shuffleboard/Assist");
 
@@ -17,11 +20,27 @@ public class ScorePiece extends SequentialCommandGroup {
   // Turn off intake
   // Turn off shooter
   public ScorePiece(Intake intake, Shooter shooter) {
-    addCommands(
-        new InstantCommand(
-            () -> intake.setVoltage(assistGUI.getEntry("Intake Volts").getDouble(60))));
-    addCommands(new WaitCommand(3));
-    addCommands(new InstantCommand(() -> intake.setVoltage(0)));
-    addCommands(new InstantCommand(() -> shooter.runVelocity(0)));
+    this.intake = intake;
+    this.shooter = shooter;
+
+    addRequirements((SubsystemBase) intake);
+    addRequirements((SubsystemBase) shooter);
+  }
+
+  @Override
+  public void initialize() {
+    intake.setVoltage(
+        assistGUI.getEntry("Feed Piece Volts").getDouble(IntakeConstants.feedSpeedInVolts));
+  }
+
+  @Override
+  public boolean isFinished() {
+    return !intake.isPieceDetected(false);
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    intake.setVoltage(0);
+    shooter.runVelocity(0);
   }
 }

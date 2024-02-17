@@ -2,8 +2,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
+import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.subsystems.arm.ArmSubsystem;
+import java.util.function.DoubleSupplier;
 
 /**
  * This class uses a widget on Shuffleboard to control the arm setpoint. It is meant to be used for
@@ -11,10 +12,10 @@ import frc.robot.subsystems.arm.ArmSubsystem;
  */
 public class ArmToPosition extends Command {
   ArmSubsystem arm;
-  double positionDegrees;
+  DoubleSupplier positionDegrees;
   double timeMS;
 
-  public ArmToPosition(ArmSubsystem arm, double positionDegrees) {
+  public ArmToPosition(ArmSubsystem arm, DoubleSupplier positionDegrees) {
     this.arm = arm;
     this.positionDegrees = positionDegrees;
 
@@ -26,14 +27,14 @@ public class ArmToPosition extends Command {
 
   @Override
   public void execute() {
-    arm.setAngle(positionDegrees);
+    arm.setAngle(positionDegrees.getAsDouble());
   }
 
   @Override
   public boolean isFinished() {
 
-    if (arm.getAngle() > positionDegrees - Constants.armErroDegrees
-        && arm.getAngle() < positionDegrees + Constants.armErroDegrees) {
+    if (arm.getAngle() > positionDegrees.getAsDouble() - ArmConstants.pidAngleErrorInDegrees
+        && arm.getAngle() < positionDegrees.getAsDouble() + ArmConstants.pidAngleErrorInDegrees) {
       timeMS += 20.0;
       if (timeMS == 1000) {
         SmartDashboard.putBoolean("Arm/ArmToPosition/isFinished", true);
