@@ -51,6 +51,7 @@ public class RobotConfig {
     public static double ffKaBottom = 0.0;
 
     /* PID */
+    public static double pidVelocityErrorInRPMS = 20;
     public static double pidKp = 0.1;
     public static double pidKi = 0.0;
     public static double pidKd = 0.0;
