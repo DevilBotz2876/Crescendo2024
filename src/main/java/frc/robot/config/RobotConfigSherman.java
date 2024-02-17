@@ -14,7 +14,8 @@ public class RobotConfigSherman extends RobotConfig {
     super(false, false, false, false, true);
 
     // Sherman has a tank drive train
-    // TODO: set DriveConstants.maxVelocityMetersPerSec
+    DriveConstants.maxVelocityMetersPerSec = 4.5;
+    DriveConstants.maxAngularVelocityRadiansSec = 2 * Math.PI;
     drive = new DriveTrain();
 
     // Sherman has a TalonSRX based intake
