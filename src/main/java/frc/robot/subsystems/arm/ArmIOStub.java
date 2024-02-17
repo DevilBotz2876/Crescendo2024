@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.simulation.DutyCycleEncoderSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import frc.robot.config.RobotConfig.ArmConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
 
 public class ArmIOStub implements ArmIO {
@@ -22,8 +23,8 @@ public class ArmIOStub implements ArmIO {
   private double armAbsoluteOffset = 0.0;
   private double armGearingReduction = 317;
   private double armLengthInMeters = .5;
-  private double minAngleInDegrees = 0;
-  private double maxAngleInDegrees = 103;
+  private double minAngleInDegrees = ArmConstants.minAngleInDegrees;
+  private double maxAngleInDegrees = ArmConstants.maxAngleInDegrees;
   private double armMassInKg = 11.3398;
 
   // The arm gearbox represents a gearbox containing two Vex 775pro motors.
@@ -33,7 +34,7 @@ public class ArmIOStub implements ArmIO {
   private final PIDController pid = new PIDController(armKp, 0, armKd);
   private final DutyCycleEncoder absEncoder = new DutyCycleEncoder(0);
   private final DutyCycleEncoderSim absEncoderSim = new DutyCycleEncoderSim(absEncoder);
-  private final Encoder relEncoder = new Encoder(1, 2);
+  private final Encoder relEncoder = new Encoder(3, 4);
   private final EncoderSim relEncoderSim = new EncoderSim(relEncoder);
   private final Spark motor = new Spark(0);
   private boolean softwarePidEnabled = false;
@@ -50,7 +51,7 @@ public class ArmIOStub implements ArmIO {
           Units.degreesToRadians(minAngleInDegrees),
           Units.degreesToRadians(maxAngleInDegrees),
           true,
-          1.0,
+          Units.degreesToRadians(minAngleInDegrees),
           VecBuilder.fill(0));
 
   public ArmIOStub() {

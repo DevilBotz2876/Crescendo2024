@@ -7,6 +7,8 @@ public interface IntakeIO {
   public static class IntakeIOInputs {
     public double velocityRadPerSec = 0.0;
     public double appliedVolts = 0.0;
+    public boolean limitSwitchIntake = false;
+    public boolean limitSwitchShooter = false;
   }
 
   /** Updates the set of loggable inputs. */

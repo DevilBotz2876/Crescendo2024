@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
+import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import java.util.Map;
 
@@ -29,7 +29,9 @@ public class ArmToPositionDebug extends Command {
     degreesEntry =
         tab.add("Degrees Setpoint", 0.0)
             .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", Constants.armMinDegrees, "max", Constants.armMaxDegrees))
+            .withProperties(
+                Map.of(
+                    "min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
             .getEntry();
 
     addRequirements(arm);

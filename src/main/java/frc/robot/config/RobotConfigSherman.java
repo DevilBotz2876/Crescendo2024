@@ -18,6 +18,10 @@ public class RobotConfigSherman extends RobotConfig {
     drive = new DriveTrain();
 
     // Sherman has a TalonSRX based intake
+    IntakeConstants.intakeSpeedInVolts = 6.0;
+    IntakeConstants.indexSpeedInVolts = 6.0;
+    IntakeConstants.feedSpeedInVolts = 6.0;
+
     intake = new IntakeBase(new IntakeIOTalonSRX());
 
     // Sherman has a dual SparkMax based shooter
@@ -37,6 +41,7 @@ public class RobotConfigSherman extends RobotConfig {
     ShooterConstants.pidKiBottom = 0.0;
     ShooterConstants.pidKdBottom = 0.0;
 
+    ShooterConstants.velocityInRPMs = 3000;
     shooter = new ShooterSubsystem(new ShooterIOSparkMax(2), new ShooterIOSparkMax(1));
 
     ArmConstants.absolutePositionOffset = 0.4154156603853915; // This is place holder
@@ -48,6 +53,13 @@ public class RobotConfigSherman extends RobotConfig {
     ArmConstants.ffKg = 0.72;
     ArmConstants.ffKv = 6.18;
     ArmConstants.ffKa = 0.04;
+
+    ArmConstants.pidAngleErrorInDegrees = 6.0;
+    ArmConstants.maxAngleInDegrees = 84.0;
+    ArmConstants.minAngleInDegrees = 0.0;
+    ArmConstants.intakeAngleInDegrees = 1;
+    ArmConstants.shooterAngleInDegrees = 30;
+
     arm = new ArmSubsystem(new ArmIOSparkMax());
   }
 }
