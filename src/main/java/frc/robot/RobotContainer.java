@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.ArmToPositionDebug;
@@ -121,15 +120,15 @@ public class RobotContainer {
             () -> MathUtil.applyDeadband(-controller.getRightX(), 0.05)));
     // TODO: Move deadband to constants file
 
-    controller
-        .start()
-        .onTrue(
-            new InstantCommand(
-                () ->
-                    RobotConfig.drive.setFieldOrientedDrive(
-                        !RobotConfig.drive.isFieldOrientedDrive())));
+    // controller
+    //     .start()
+    //     .onTrue(
+    //         new InstantCommand(
+    //             () ->
+    //                 RobotConfig.drive.setFieldOrientedDrive(
+    //                     !RobotConfig.drive.isFieldOrientedDrive())));
 
-    controller.back().onTrue(new InstantCommand(() -> RobotConfig.drive.resetOdometry()));
+    // controller.back().onTrue(new InstantCommand(() -> RobotConfig.drive.resetOdometry()));
 
     /*
     // run arm at 4 volts
@@ -143,6 +142,7 @@ public class RobotContainer {
     */
 
     // controller.b().whileTrue(new ArmToPositionDebug(RobotConfig.arm));
+    RobotConfig.arm.setDefaultCommand(new ArmToPositionDebug(RobotConfig.arm));
   }
 
   public Command getAutonomousCommand() {

@@ -42,8 +42,8 @@ public class ArmToPositionDebug extends Command {
 
   @Override
   public void execute() {
+
     double setpoint = degreesEntry.getDouble(1.0);
-    // this.setpoint = setpoint;
     arm.setAngle(setpoint);
   }
 
