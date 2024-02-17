@@ -14,7 +14,8 @@ public class RobotConfigSherman extends RobotConfig {
     super(false, false, false, false, true);
 
     // Sherman has a tank drive train
-    // TODO: set DriveConstants.maxVelocityMetersPerSec
+    DriveConstants.maxVelocityMetersPerSec = 4.5;
+    DriveConstants.maxAngularVelocityRadiansSec = 2 * Math.PI;
     drive = new DriveTrain();
 
     // Sherman has a TalonSRX based intake
@@ -45,7 +46,7 @@ public class RobotConfigSherman extends RobotConfig {
     ShooterConstants.velocityInRPMs = 3000;
     shooter = new ShooterSubsystem(new ShooterIOSparkMax(2), new ShooterIOSparkMax(1));
 
-    ArmConstants.absolutePositionOffset = 0.4154156603853915; // This is place holder
+    ArmConstants.absolutePositionOffset = 0.42925653052604144; // This is place holder
 
     ArmConstants.pidKp = 0.1;
     ArmConstants.pidKi = 0.0;

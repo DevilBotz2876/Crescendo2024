@@ -6,14 +6,18 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.ArmToPositionDebug;
 import frc.robot.commands.IntakeBaseCommand;
+import frc.robot.commands.TestShooterAngle;
+import frc.robot.commands.assist.IndexPiece;
 import frc.robot.commands.assist.PrepareForIntake;
 import frc.robot.commands.assist.PrepareForScore;
 import frc.robot.commands.assist.ScorePiece;
@@ -52,6 +56,9 @@ public class RobotContainer {
         // robotConfig = new RobotConfigSherman();
     }
 
+    // SmartDashboard.putData("Subsystems/Arm", RobotConfig.arm);
+    // SmartDashboard.putData(CommandScheduler.getInstance());
+
     ShuffleboardTab autoTab = Shuffleboard.getTab("Autonomous");
     // Create volt entry under Shooter tab as a number sider with min = -1 and max = 1
     autoTab
@@ -62,6 +69,8 @@ public class RobotContainer {
     // ArmSysIdBindings();
     // shooterSysIdBindings();
     // driveSysIdBindings();
+
+    commandsToShuffleboard();
   }
 
   private void ArmSysIdBindings() {
@@ -151,9 +160,27 @@ public class RobotContainer {
 
   public void commandsToShuffleboard() {
     // SmartDashboard.putData(new ArmToPosition(arm));
-    ShuffleboardTab armTab = Shuffleboard.getTab("Arm");
-    armTab
-        .add("armToPosition", new ArmToPositionDebug(RobotConfig.arm))
-        .withWidget(BuiltInWidgets.kCommand);
+    ShuffleboardTab armTab = Shuffleboard.getTab("SubsCommands");
+
+    // Create a layout to hold commands
+    ShuffleboardLayout commandLayout =
+        armTab.getLayout("Commands", BuiltInLayouts.kList).withPosition(0, 0).withSize(2, 4);
+
+    // Create a layout to hold subsystems
+    ShuffleboardLayout subLayout =
+        armTab.getLayout("Subsystems", BuiltInLayouts.kList).withPosition(2, 0).withSize(3, 4);
+
+    commandLayout.add(new ArmToPositionDebug(RobotConfig.arm));
+    commandLayout.add(new IndexPiece(RobotConfig.intake));
+    commandLayout.add(new PrepareForIntake(RobotConfig.arm, RobotConfig.intake));
+    commandLayout.add(new PrepareForScore(RobotConfig.arm, RobotConfig.shooter));
+    commandLayout.add(new ScorePiece(RobotConfig.intake, RobotConfig.shooter));
+    commandLayout.add(
+        new TestShooterAngle(RobotConfig.shooter, RobotConfig.intake, RobotConfig.arm));
+
+    subLayout.add(RobotConfig.arm);
+    subLayout.add(RobotConfig.intake);
+    subLayout.add(RobotConfig.shooter);
+    subLayout.add(RobotConfig.drive);
   }
 }
