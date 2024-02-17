@@ -4,6 +4,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.IntakeConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
@@ -27,6 +28,9 @@ public class TestShooterAngle extends Command {
     this.ShooterVelocity = assistGUI.getEntry("Shooter Velocity");
     this.IntakeVoltage = assistGUI.getEntry("Feed Piece Volts");
     this.ArmAngle = assistGUI.getEntry("Shooter Angle");
+    addRequirements((SubsystemBase) shooter);
+    addRequirements((SubsystemBase) intake);
+    addRequirements((SubsystemBase) arm);
   }
 
   @Override
