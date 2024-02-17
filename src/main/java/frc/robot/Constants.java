@@ -13,6 +13,7 @@ public final class Constants {
   /** Use this to output Smartdashboard or other debug messages */
   public static final boolean debugMode = true;
 
-  public static final double armMaxDegrees = 45.0;
+  public static final double armMaxDegrees = 84.0;
   public static final double armMinDegrees = 0.0;
+  public static final double armErroDegrees = 4.0;
 }
