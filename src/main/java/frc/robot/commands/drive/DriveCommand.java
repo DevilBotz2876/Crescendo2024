@@ -35,19 +35,16 @@ public class DriveCommand extends Command {
 
     tab = Shuffleboard.getTab("Drive");
     speedLimiterEntry =
-        tab.add("Drive Speed Limit", 50)
+        tab.add("Drive Speed Limit", 100)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 100))
             .getEntry();
 
     turnLimiterEntry =
-        tab.add("Drive Turn Limit", 0)
+        tab.add("Drive Turn Limit", 100)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 100))
             .getEntry();
-
-    turnLimiterEntry.setValue(100);
-    speedLimiterEntry.setValue(50);
 
     driveSpeedChooser.addOption("Linear Mode", "Linear Mode");
     driveSpeedChooser.setDefaultOption("Squared Mode", "Squared Mode");
