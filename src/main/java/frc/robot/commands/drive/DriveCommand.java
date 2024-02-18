@@ -41,7 +41,7 @@ public class DriveCommand extends Command {
             .getEntry();
 
     turnLimiterEntry =
-        tab.add("Turn (%)", 0)
+        tab.add("Drive Turn Limit", 0)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 100))
             .getEntry();
