@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.arm.ArmIOStub;
 import frc.robot.subsystems.arm.ArmSubsystem;
+import frc.robot.subsystems.climber.ClimberIOStub;
+import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.DriveBase;
 import frc.robot.subsystems.intake.IntakeBase;
 import frc.robot.subsystems.intake.IntakeIOSim;
@@ -18,6 +20,7 @@ public class RobotConfig {
   public static ShooterSubsystem shooter;
   public static ArmSubsystem arm;
   public static SendableChooser<Command> autoChooser;
+  public static ClimberSubsystem climber;
 
   public static class DriveConstants {
     public static double maxVelocityMetersPerSec = 4.5;
@@ -69,6 +72,12 @@ public class RobotConfig {
     public static double feedSpeedInVolts = 6.0;
   }
 
+  public static class ClimberConstants {
+    public static double maxSpeedInVolts = 6.0;
+    public static double minPositionInMeters = 0.0;
+    public static double maxPositionInMeters = 1.0;
+  }
+
   public RobotConfig() {
     this(true, true, true);
   }
@@ -83,6 +92,16 @@ public class RobotConfig {
       boolean stubIntake,
       boolean stubArm,
       boolean stubAuto) {
+    this(stubDrive, stubShooter, stubIntake, stubArm, stubAuto, true);
+  }
+
+  public RobotConfig(
+      boolean stubDrive,
+      boolean stubShooter,
+      boolean stubIntake,
+      boolean stubArm,
+      boolean stubAuto,
+      boolean stubClimber) {
     if (stubDrive) {
       drive = new DriveBase();
     }
@@ -105,6 +124,10 @@ public class RobotConfig {
     if (stubAuto) {
       autoChooser = new SendableChooser<>();
       autoChooser.setDefaultOption("No Auto Routines Specified", Commands.none());
+    }
+
+    if (stubClimber) {
+      climber = new ClimberSubsystem(new ClimberIOStub(), new ClimberIOStub());
     }
   }
 }

@@ -20,6 +20,7 @@ import frc.robot.commands.assist.IndexPiece;
 import frc.robot.commands.assist.PrepareForIntake;
 import frc.robot.commands.assist.PrepareForScore;
 import frc.robot.commands.assist.ScorePiece;
+import frc.robot.commands.climber.ClimberToPosition;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.intake.IntakeBaseCommand;
 import frc.robot.commands.shooter.TestShooterAngle;
@@ -177,10 +178,13 @@ public class RobotContainer {
     commandLayout.add(new ScorePiece(RobotConfig.intake, RobotConfig.shooter));
     commandLayout.add(
         new TestShooterAngle(RobotConfig.shooter, RobotConfig.intake, RobotConfig.arm));
+    commandLayout.add("Climber Extend", new ClimberToPosition(RobotConfig.climber, true));
+    commandLayout.add("Climber Retract", new ClimberToPosition(RobotConfig.climber, false));
 
     subLayout.add(RobotConfig.arm);
     subLayout.add(RobotConfig.intake);
     subLayout.add(RobotConfig.shooter);
     subLayout.add(RobotConfig.drive);
+    subLayout.add(RobotConfig.climber);
   }
 }
