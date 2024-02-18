@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.drive.DriveBase;
 import java.util.Map;
@@ -25,6 +24,7 @@ public class DriveCommand extends Command {
   double newRot;
 
   GenericEntry speedLimiterEntry;
+  GenericEntry turnLimiterEntry;
 
   public DriveCommand(
       DriveBase drive, DoubleSupplier speedX, DoubleSupplier speedY, DoubleSupplier rot) {
@@ -33,10 +33,15 @@ public class DriveCommand extends Command {
     this.speedY = speedY;
     this.rot = rot;
 
-    SmartDashboard.putData(driveSpeedChooser);
     tab = Shuffleboard.getTab("Drive");
     speedLimiterEntry =
-        tab.add("Drive Speed Limit", 50)
+        tab.add("Drive Speed Limit", 100)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 100))
+            .getEntry();
+
+    turnLimiterEntry =
+        tab.add("Drive Turn Limit", 100)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 100))
             .getEntry();
@@ -87,7 +92,7 @@ public class DriveCommand extends Command {
         new ChassisSpeeds(
             xSpeed * (speedLimiterEntry.getDouble(100) / 100) * drive.getMaxLinearSpeed(),
             ySpeed * (speedLimiterEntry.getDouble(100) / 100) * drive.getMaxLinearSpeed(),
-            newRot * (speedLimiterEntry.getDouble(100) / 100) * drive.getMaxAngularSpeed());
+            newRot * (turnLimiterEntry.getDouble(100) / 100) * drive.getMaxAngularSpeed());
 
     drive.runVelocity(speeds);
   }
