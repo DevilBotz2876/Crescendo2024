@@ -1,9 +1,10 @@
-package frc.robot.commands;
+package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.config.RobotConfig.ArmConstants;
-import frc.robot.subsystems.arm.ArmSubsystem;
+import frc.robot.subsystems.arm.Arm;
 import java.util.function.DoubleSupplier;
 
 /**
@@ -11,15 +12,15 @@ import java.util.function.DoubleSupplier;
  * debug/test/bring type work.
  */
 public class ArmToPosition extends Command {
-  ArmSubsystem arm;
+  Arm arm;
   DoubleSupplier positionDegrees;
   double timeMS;
 
-  public ArmToPosition(ArmSubsystem arm, DoubleSupplier positionDegrees) {
+  public ArmToPosition(Arm arm, DoubleSupplier positionDegrees) {
     this.arm = arm;
     this.positionDegrees = positionDegrees;
 
-    addRequirements(arm);
+    addRequirements((SubsystemBase) arm);
   }
 
   @Override

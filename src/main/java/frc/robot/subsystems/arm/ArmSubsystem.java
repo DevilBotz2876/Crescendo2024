@@ -59,6 +59,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
   private double kG, kV, kA;
 
+  private boolean relEncoderInit;
+
   public ArmSubsystem(ArmIO io) {
     this.io = io;
 
@@ -87,6 +89,13 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
     lowLimitEntry = armTab.add("LowLimit", false).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
 
+    armTab
+        .add("Degrees Setpoint", 0.0)
+        .withWidget(BuiltInWidgets.kNumberSlider)
+        .withProperties(
+            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
+        .getEntry();
+
     ShuffleboardTab assistTab = Shuffleboard.getTab("Assist");
     assistTab
         .add("Intake Angle", ArmConstants.minAngleInDegrees)
@@ -111,6 +120,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
             new SysIdRoutine.Mechanism((voltage) -> runVoltage(voltage.in(Volts)), null, this));
 
     SmartDashboard.putData("Arm Simulation", mech2d);
+
+    relEncoderInit = true;
   }
 
   @Override
@@ -193,6 +204,11 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     // Updates the inputs
     io.updateInputs(inputs);
     Logger.processInputs("Arm", inputs);
+
+    if (relEncoderInit) {
+      io.resetRelativeEncoder(inputs.positionDegree);
+      relEncoderInit = false;
+    }
 
     if (isLimitHigh()) {
       // TODO: turn off voltage or stop pid
