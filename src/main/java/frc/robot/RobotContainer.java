@@ -27,6 +27,8 @@ import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfigInferno;
 import frc.robot.config.RobotConfigPhoenix;
 import frc.robot.config.RobotConfigSherman;
+import frc.robot.subsystems.camera.DriverCamera;
+import java.util.Map;
 
 public class RobotContainer {
   public final CommandXboxController controller;
@@ -72,6 +74,8 @@ public class RobotContainer {
     // driveSysIdBindings();
 
     commandsToShuffleboard();
+
+    setupDriverCamera();
   }
 
   private void ArmSysIdBindings() {
@@ -164,11 +168,21 @@ public class RobotContainer {
 
     // Create a layout to hold commands
     ShuffleboardLayout commandLayout =
-        armTab.getLayout("Commands", BuiltInLayouts.kList).withPosition(0, 0).withSize(2, 4);
+        armTab
+            .getLayout("Commands", BuiltInLayouts.kList)
+            .withPosition(0, 0)
+            .withSize(2, 4)
+            .withProperties(Map.of("Label position", "HIDDEN"));
+    ;
 
     // Create a layout to hold subsystems
     ShuffleboardLayout subLayout =
-        armTab.getLayout("Subsystems", BuiltInLayouts.kList).withPosition(2, 0).withSize(3, 4);
+        armTab
+            .getLayout("Subsystems", BuiltInLayouts.kList)
+            .withPosition(2, 0)
+            .withSize(3, 4)
+            .withProperties(Map.of("Label position", "HIDDEN"));
+    ;
 
     commandLayout.add(new ArmToPositionDebug(RobotConfig.arm));
     commandLayout.add(new IndexPiece(RobotConfig.intake));
@@ -182,5 +196,11 @@ public class RobotContainer {
     subLayout.add(RobotConfig.intake);
     subLayout.add(RobotConfig.shooter);
     subLayout.add(RobotConfig.drive);
+  }
+
+  private void setupDriverCamera() {
+    DriverCamera driveCamera = new DriverCamera();
+    // driveCamera.setup();
+    driveCamera.simpleSetup();
   }
 }
