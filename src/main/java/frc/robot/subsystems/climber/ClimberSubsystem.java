@@ -14,8 +14,12 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
   private final ClimberIO right;
   private final ClimberIOInputsAutoLogged inputsLeft = new ClimberIOInputsAutoLogged();
   private final ClimberIOInputsAutoLogged inputsRight = new ClimberIOInputsAutoLogged();
-  private double voltage = 0.0;
-  @AutoLogOutput private boolean bExtend = false;
+  @AutoLogOutput private double leftVoltage = 0.0;
+  @AutoLogOutput private double rightVoltage = 0.0;
+  @AutoLogOutput private boolean bExtendLeft = false;
+  @AutoLogOutput private boolean bExtendRight = false;
+  @AutoLogOutput private boolean leftAtLimit = false;
+  @AutoLogOutput private boolean rightAtLimit = false;
 
   public ClimberSubsystem(ClimberIO left, ClimberIO right) {
     this.left = left;
@@ -37,39 +41,67 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
     Logger.processInputs("Climber Left", inputsLeft);
     Logger.processInputs("Climber Right", inputsRight);
 
-    if (!leftAtLimits()) left.setVoltage(voltage);
+    if (!leftAtLimits()) left.setVoltage(leftVoltage);
     else left.setVoltage(0);
 
-    if (!rightAtLimits()) right.setVoltage(voltage);
+    if (!rightAtLimits()) right.setVoltage(rightVoltage);
     else right.setVoltage(0);
   }
 
   /** Extends climber arms min limit */
   public void extend() {
-    bExtend = true;
-    voltage = ClimberConstants.maxSpeedInVolts;
+    runVoltage(ClimberConstants.maxSpeedInVolts);
   }
 
   /** Retracts climber to min limit */
   public void retract() {
-    bExtend = false;
-    voltage = -ClimberConstants.maxSpeedInVolts;
+    runVoltage(-ClimberConstants.maxSpeedInVolts);
   }
 
   @Override
-  public void setVoltage(double volts) {
-    voltage = volts;
+  public void runVoltage(double volts) {
+    runVoltageLeft(volts);
+    runVoltageRight(volts);
+  }
+
+  @Override
+  public void runVoltageLeft(double volts) {
+    if (volts > 0) {
+      bExtendLeft = true;
+    } else {
+      bExtendLeft = false;
+    }
+    leftVoltage = volts;
+  }
+
+  @Override
+  public void runVoltageRight(double volts) {
+    if (volts > 0) {
+      bExtendRight = true;
+    } else {
+      bExtendRight = false;
+    }
+    rightVoltage = volts;
   }
 
   private boolean leftAtLimits() {
-    return bExtend
-        ? (inputsLeft.positionRadians >= ClimberConstants.maxPositionInRadians)
-        : (inputsLeft.positionRadians <= ClimberConstants.minPositionInRadians);
+    leftAtLimit =
+        bExtendLeft
+            ? (inputsLeft.positionRadians >= ClimberConstants.maxPositionInRadians)
+            : (inputsLeft.positionRadians <= ClimberConstants.minPositionInRadians);
+    return leftAtLimit;
   }
 
   private boolean rightAtLimits() {
-    return bExtend
-        ? (inputsRight.positionRadians >= ClimberConstants.maxPositionInRadians)
-        : (inputsRight.positionRadians <= ClimberConstants.minPositionInRadians);
+    rightAtLimit =
+        bExtendRight
+            ? (inputsRight.positionRadians >= ClimberConstants.maxPositionInRadians)
+            : (inputsRight.positionRadians <= ClimberConstants.minPositionInRadians);
+    return rightAtLimit;
+  }
+
+  public void resetPosition() {
+    left.resetPosition();
+    right.resetPosition();
   }
 }

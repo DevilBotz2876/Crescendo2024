@@ -23,6 +23,7 @@ import frc.robot.commands.assist.ScorePiece;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.intake.IntakeBaseCommand;
 import frc.robot.config.RobotConfig;
+import frc.robot.config.RobotConfig.ClimberConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.config.RobotConfigInferno;
 import frc.robot.config.RobotConfigPhoenix;
@@ -187,14 +188,44 @@ public class RobotContainer {
       commandLayout.add(
           "Intake Stop", new IntakeBaseCommand(RobotConfig.intake, () -> false, () -> false));
 
-      //      commandLayout.add("Climber Up", new InstantCommand(() ->
-      // RobotConfig.climber.setVoltage(assistGUI.getEntry("Climber
-      // Volts").getDouble(ClimberConstants.maxSpeedInVolts))));
-      //      commandLayout.add("Climber Down", new InstantCommand(() ->
-      // RobotConfig.climber.setVoltage(-assistGUI.getEntry("Climber
-      // Volts").getDouble(ClimberConstants.maxSpeedInVolts))));
-      //      commandLayout.add("Climber Stop", new InstantCommand(() ->
-      // RobotConfig.climber.setVoltage(0)));
+      commandLayout.add(
+          "Climber Left Up",
+          new InstantCommand(
+              () ->
+                  RobotConfig.climber.runVoltageLeft(
+                      assistGUI
+                          .getEntry("Climber Volts")
+                          .getDouble(ClimberConstants.maxSpeedInVolts))));
+      commandLayout.add(
+          "Climber Left Down",
+          new InstantCommand(
+              () ->
+                  RobotConfig.climber.runVoltageLeft(
+                      -assistGUI
+                          .getEntry("Climber Volts")
+                          .getDouble(ClimberConstants.maxSpeedInVolts))));
+      commandLayout.add(
+          "Climber Right Up",
+          new InstantCommand(
+              () ->
+                  RobotConfig.climber.runVoltageRight(
+                      assistGUI
+                          .getEntry("Climber Volts")
+                          .getDouble(ClimberConstants.maxSpeedInVolts))));
+      commandLayout.add(
+          "Climber Right Down",
+          new InstantCommand(
+              () ->
+                  RobotConfig.climber.runVoltageRight(
+                      -assistGUI
+                          .getEntry("Climber Volts")
+                          .getDouble(ClimberConstants.maxSpeedInVolts))));
+
+      commandLayout.add(
+          "Climber Stop", new InstantCommand(() -> RobotConfig.climber.runVoltage(0)));
+
+      commandLayout.add(
+          "Climber Zero", new InstantCommand(() -> RobotConfig.climber.resetPosition()));
 
       //      commandLayout.add("Climber Extend", new ClimberToPosition(RobotConfig.climber, true));
       //      commandLayout.add("Climber Retract", new ClimberToPosition(RobotConfig.climber,

@@ -16,11 +16,13 @@ public class ClimberIOSparkMax implements ClimberIO {
 
   private final RelativeEncoder encoder;
 
-  public ClimberIOSparkMax(int id) {
+  public ClimberIOSparkMax(int id, boolean inverted) {
     motor = new CANSparkMax(id, MotorType.kBrushless);
 
     encoder = motor.getEncoder();
-    motor.setInverted(false);
+    resetPosition();
+
+    motor.setInverted(inverted);
 
     motor.enableVoltageCompensation(12.0);
     motor.setSmartCurrentLimit(30);
@@ -37,6 +39,8 @@ public class ClimberIOSparkMax implements ClimberIO {
     // Get applied voltage from the top motor
     inputs.appliedVolts = motor.getAppliedOutput() * motor.getBusVoltage();
     inputs.current = motor.getOutputCurrent();
+    inputs.positionRadians =
+        Units.rotationsPerMinuteToRadiansPerSecond(encoder.getPosition() / GEAR_RATIO);
   }
 
   @Override
@@ -44,5 +48,10 @@ public class ClimberIOSparkMax implements ClimberIO {
     // Set the voltage output for the top motor
     motor.setVoltage(volts);
     // bottom.setVoltage(volts);
+  }
+
+  @Override
+  public void resetPosition() {
+    encoder.setPosition(0);
   }
 }

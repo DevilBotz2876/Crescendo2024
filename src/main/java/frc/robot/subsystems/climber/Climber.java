@@ -7,5 +7,11 @@ public interface Climber {
   /** Retracts climber to min limit */
   public void retract();
 
-  public void setVoltage(double volts);
+  public void runVoltage(double volts);
+
+  public default void runVoltageLeft(double volts) {}
+
+  public default void runVoltageRight(double volts) {}
+
+  public void resetPosition();
 }

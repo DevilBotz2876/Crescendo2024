@@ -61,8 +61,8 @@ public class RobotConfigInferno extends RobotConfig {
 
     arm = new ArmSubsystem(new ArmIOSparkMax(4));
 
-    climber = new ClimberSubsystem(new ClimberIOSparkMax(6), new ClimberIOSparkMax(7));
-    ClimberConstants.maxPositionInRadians = 4;
+    climber = new ClimberSubsystem(new ClimberIOSparkMax(7, false), new ClimberIOSparkMax(6, true));
+    ClimberConstants.maxPositionInRadians = .4;
     // 16 inchea extension, 5/8 radius from the center of the spoke
     // formula is 16/ 2 * pi * 5/8 to get 4.07 that rounds 4 (SIG FIGS )
   }

@@ -14,4 +14,6 @@ public interface ClimberIO {
   public void updateInputs(ClimberIOInputs inputs);
 
   public void setVoltage(double volts);
+
+  public default void resetPosition() {}
 }
