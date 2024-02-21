@@ -12,6 +12,7 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
   private final ClimberIOInputsAutoLogged inputsRight = new ClimberIOInputsAutoLogged();
   private double voltage = 0.0;
   @AutoLogOutput private boolean bExtend = false;
+  public double maxPositionInRadians;
 
   public ClimberSubsystem(ClimberIO left, ClimberIO right) {
     this.left = left;
@@ -47,13 +48,13 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
 
   private boolean leftAtLimits() {
     return bExtend
-        ? (inputsLeft.positionRadians >= ClimberConstants.maxPositionInMeters)
-        : (inputsLeft.positionRadians <= ClimberConstants.minPositionInMeters);
+        ? (inputsLeft.positionRadians >= ClimberConstants.maxPositionInRadians)
+        : (inputsLeft.positionRadians <= ClimberConstants.minPositionInRadians);
   }
 
   private boolean rightAtLimits() {
     return bExtend
-        ? (inputsRight.positionRadians >= ClimberConstants.maxPositionInMeters)
-        : (inputsRight.positionRadians <= ClimberConstants.minPositionInMeters);
+        ? (inputsRight.positionRadians >= ClimberConstants.maxPositionInRadians)
+        : (inputsRight.positionRadians <= ClimberConstants.minPositionInRadians);
   }
 }

@@ -74,8 +74,8 @@ public class RobotConfig {
 
   public static class ClimberConstants {
     public static double maxSpeedInVolts = 6.0;
-    public static double minPositionInMeters = 0.0;
-    public static double maxPositionInMeters = 1.0;
+    public static double minPositionInRadians = 0.0;
+    public static double maxPositionInRadians = 1.0;
   }
 
   public RobotConfig() {
