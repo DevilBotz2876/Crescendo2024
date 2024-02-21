@@ -14,20 +14,23 @@ import frc.robot.config.RobotConfig.ArmConstants;
 
 public class ArmIOSparkMax implements ArmIO {
   // Leader
-  private final CANSparkMax left = new CANSparkMax(4, MotorType.kBrushless);
-  RelativeEncoder leftEncoder = left.getEncoder();
+  private final CANSparkMax left;
+  RelativeEncoder leftEncoder;
 
   // follower
   // private final CANSparkMax right = new CANSparkMax(3, MotorType.kBrushless);
 
   private final DutyCycleEncoder absoluteEncoder;
 
-  private SparkPIDController leftPid = left.getPIDController();
+  private SparkPIDController leftPid;
 
   public double lkP, lkI, lkD, lkIz, lkFF, lkMaxOutput, lkMinOutput, lmaxRPS;
 
-  public ArmIOSparkMax() {
-    /* TODO: Instantiate 2x SparkMax motors and absolute encoder */
+  public ArmIOSparkMax(int id) {
+    /* Instantiate 1x SparkMax motors and absolute encoder */
+    left = new CANSparkMax(id, MotorType.kBrushless);
+    leftEncoder = left.getEncoder();
+    leftPid = left.getPIDController();
     absoluteEncoder = new DutyCycleEncoder(0);
 
     // This will need to be set from a constant once we have the arm assembled and can measure the

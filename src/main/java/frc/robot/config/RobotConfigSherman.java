@@ -23,7 +23,7 @@ public class RobotConfigSherman extends RobotConfig {
     IntakeConstants.indexSpeedInVolts = 6.0;
     IntakeConstants.feedSpeedInVolts = 6.0;
 
-    intake = new IntakeBase(new IntakeIOTalonSRX());
+    intake = new IntakeBase(new IntakeIOTalonSRX(3));
 
     // Sherman has a dual SparkMax based shooter
 
@@ -62,6 +62,6 @@ public class RobotConfigSherman extends RobotConfig {
     ArmConstants.intakeAngleInDegrees = 1;
     ArmConstants.shooterAngleInDegrees = 30;
 
-    arm = new ArmSubsystem(new ArmIOSparkMax());
+    arm = new ArmSubsystem(new ArmIOSparkMax(4));
   }
 }

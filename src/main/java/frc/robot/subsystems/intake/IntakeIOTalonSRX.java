@@ -9,11 +9,12 @@ public class IntakeIOTalonSRX implements IntakeIO {
   //  private static final double GEAR_RATIO = 10.0;
 
   // define the 1 SparkMax Controller
-  private final TalonSRX leader = new TalonSRX(3);
+  private final TalonSRX leader;
   DigitalInput limitSwitchIntake = new DigitalInput(1);
   DigitalInput limitSwitchShooter = new DigitalInput(2);
 
-  public IntakeIOTalonSRX() {
+  public IntakeIOTalonSRX(int id) {
+    leader = new TalonSRX(id);
     // leader motor is not inverted, and set follower motor to follow the leader
     leader.setInverted(false);
   }
