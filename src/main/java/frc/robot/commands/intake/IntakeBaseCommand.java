@@ -25,19 +25,19 @@ public class IntakeBaseCommand extends Command {
 
   @Override
   public void execute() {
-
+    double volts = voltsEntry.getDouble(IntakeConstants.intakeSpeedInVolts);
+    boolean in = inEnable.getAsBoolean();
+    boolean out = outEnable.getAsBoolean();
     // Turns off motors if No/All bumpers
-    if (inEnable.getAsBoolean() == true && outEnable.getAsBoolean() == true) {
+    if (in && out) {
       // Disable the intake motors
       intake.setVoltage(0);
-      // System.out.println(outEnable.getAsBoolean());
-    } else if (inEnable.getAsBoolean() == false && outEnable.getAsBoolean() == false) {
+    } else if (in == false && out == false) {
       intake.setVoltage(0);
-      // System.out.println(outEnable.getAsBoolean());
-    } else if (inEnable.getAsBoolean() == true) { // Motors on (IN) if right bumper pressed
-      intake.setVoltage(voltsEntry.getDouble(IntakeConstants.intakeSpeedInVolts));
-    } else if (outEnable.getAsBoolean() == true) { // Motors on (Out) if right bumper pressed
-      intake.setVoltage(voltsEntry.getDouble(IntakeConstants.intakeSpeedInVolts) * -1);
+    } else if (in) { // Motors on (IN) if right bumper pressed
+      intake.setVoltage(volts);
+    } else if (out) { // Motors on (Out) if right bumper pressed
+      intake.setVoltage(volts * -1);
     } else { // Disable the intake motors
       intake.setVoltage(0);
     }

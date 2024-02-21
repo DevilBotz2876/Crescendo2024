@@ -83,42 +83,42 @@ public class ShooterIOSparkMax implements ShooterIO {
     // Get applied voltage from the top motor
     //    inputs.appliedVoltsBottom = bottom.getAppliedOutput() * bottom.getBusVoltage();
 
-    double tp = SmartDashboard.getNumber("Shooter/P Gain", 0);
-    double ti = SmartDashboard.getNumber("Shooter/I Gain", 0);
-    double td = SmartDashboard.getNumber("Shooter/D Gain", 0);
-    double tiz = SmartDashboard.getNumber("Shooter/I Zone", 0);
-    double tff = SmartDashboard.getNumber("Shooter/Feed Forward", 0);
-    double tmax = SmartDashboard.getNumber("Shooter/Max Output", 0);
-    double tmin = SmartDashboard.getNumber("Shooter/Min Output", 0);
+    // double tp = SmartDashboard.getNumber("Shooter/P Gain", 0);
+    // double ti = SmartDashboard.getNumber("Shooter/I Gain", 0);
+    // double td = SmartDashboard.getNumber("Shooter/D Gain", 0);
+    // double tiz = SmartDashboard.getNumber("Shooter/I Zone", 0);
+    // double tff = SmartDashboard.getNumber("Shooter/Feed Forward", 0);
+    // double tmax = SmartDashboard.getNumber("Shooter/Max Output", 0);
+    // double tmin = SmartDashboard.getNumber("Shooter/Min Output", 0);
 
-    // TODO: probably remove this since shooter will have one motor, not two independent motors
-    //
+    // // TODO: probably remove this since shooter will have one motor, not two independent motors
+    // //
 
-    if ((tp != tkP)) {
-      pid.setP(tp);
-      tkP = tp;
-    }
-    if ((ti != tkI)) {
-      pid.setI(ti);
-      tkI = ti;
-    }
-    if ((td != tkD)) {
-      pid.setD(td);
-      tkD = td;
-    }
-    if ((tiz != tkIz)) {
-      pid.setIZone(tiz);
-      tkIz = tiz;
-    }
-    if ((tff != tkFF)) {
-      pid.setFF(tff);
-      tkFF = tff;
-    }
-    if ((tmax != tkMaxOutput) || (tmin != tkMinOutput)) {
-      pid.setOutputRange(tmin, tmax);
-      tkMinOutput = tmin;
-      tkMaxOutput = tmax;
-    }
+    // if ((tp != tkP)) {
+    //   pid.setP(tp);
+    //   tkP = tp;
+    // }
+    // if ((ti != tkI)) {
+    //   pid.setI(ti);
+    //   tkI = ti;
+    // }
+    // if ((td != tkD)) {
+    //   pid.setD(td);
+    //   tkD = td;
+    // }
+    // if ((tiz != tkIz)) {
+    //   pid.setIZone(tiz);
+    //   tkIz = tiz;
+    // }
+    // if ((tff != tkFF)) {
+    //   pid.setFF(tff);
+    //   tkFF = tff;
+    // }
+    // if ((tmax != tkMaxOutput) || (tmin != tkMinOutput)) {
+    //   pid.setOutputRange(tmin, tmax);
+    //   tkMinOutput = tmin;
+    //   tkMaxOutput = tmax;
+    // }
 
     // TODO: probably remove bottom since shooter will have one motor, not two independent motors
     //
