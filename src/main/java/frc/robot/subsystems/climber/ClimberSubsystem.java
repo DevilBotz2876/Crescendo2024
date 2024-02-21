@@ -12,7 +12,6 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
   private final ClimberIOInputsAutoLogged inputsRight = new ClimberIOInputsAutoLogged();
   private double voltage = 0.0;
   @AutoLogOutput private boolean bExtend = false;
-  public double maxPositionInRadians;
 
   public ClimberSubsystem(ClimberIO left, ClimberIO right) {
     this.left = left;
