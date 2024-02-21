@@ -1,7 +1,11 @@
 package frc.robot.subsystems.climber;
 
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.config.RobotConfig.ClimberConstants;
+import java.util.Map;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -16,6 +20,13 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
   public ClimberSubsystem(ClimberIO left, ClimberIO right) {
     this.left = left;
     this.right = right;
+
+    ShuffleboardTab assistTab = Shuffleboard.getTab("Assist");
+    // Create volt entry under Shooter tab as a number sider with min = -1 and max = 1
+    assistTab
+        .add("Climber Volts", ClimberConstants.maxSpeedInVolts)
+        .withWidget(BuiltInWidgets.kNumberSlider)
+        .withProperties(Map.of("min", 0, "max", 12));
   }
 
   @Override
@@ -43,6 +54,11 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
   public void retract() {
     bExtend = false;
     voltage = -ClimberConstants.maxSpeedInVolts;
+  }
+
+  @Override
+  public void setVoltage(double volts) {
+    voltage = volts;
   }
 
   private boolean leftAtLimits() {

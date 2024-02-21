@@ -64,6 +64,7 @@ public class RobotConfig {
     public static double pidKdBottom = 0.0;
 
     public static double velocityInRPMs = 3000;
+    public static double maxSpeedInVolts = 6.0;
   }
 
   public static class IntakeConstants {

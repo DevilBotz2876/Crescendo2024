@@ -6,4 +6,6 @@ public interface Climber {
 
   /** Retracts climber to min limit */
   public void retract();
+
+  public void setVoltage(double volts);
 }

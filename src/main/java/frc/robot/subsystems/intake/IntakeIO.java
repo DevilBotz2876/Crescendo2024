@@ -9,6 +9,7 @@ public interface IntakeIO {
     public double appliedVolts = 0.0;
     public boolean limitSwitchIntake = false;
     public boolean limitSwitchShooter = false;
+    public double current;
   }
 
   /** Updates the set of loggable inputs. */

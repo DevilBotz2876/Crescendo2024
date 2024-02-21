@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -15,16 +17,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.commands.arm.ArmToPositionDebug;
-import frc.robot.commands.assist.IndexPiece;
 import frc.robot.commands.assist.PrepareForIntake;
 import frc.robot.commands.assist.PrepareForScore;
 import frc.robot.commands.assist.ScorePiece;
-import frc.robot.commands.climber.ClimberToPosition;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.intake.IntakeBaseCommand;
-import frc.robot.commands.shooter.TestShooterAngle;
 import frc.robot.config.RobotConfig;
+import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.config.RobotConfigInferno;
 import frc.robot.config.RobotConfigPhoenix;
 import frc.robot.config.RobotConfigSherman;
@@ -171,15 +170,50 @@ public class RobotContainer {
     ShuffleboardLayout subLayout =
         armTab.getLayout("Subsystems", BuiltInLayouts.kList).withPosition(2, 0).withSize(3, 4);
 
-    commandLayout.add(new ArmToPositionDebug(RobotConfig.arm));
-    commandLayout.add(new IndexPiece(RobotConfig.intake));
-    commandLayout.add(new PrepareForIntake(RobotConfig.arm, RobotConfig.intake));
-    commandLayout.add(new PrepareForScore(RobotConfig.arm, RobotConfig.shooter));
-    commandLayout.add(new ScorePiece(RobotConfig.intake, RobotConfig.shooter));
-    commandLayout.add(
-        new TestShooterAngle(RobotConfig.shooter, RobotConfig.intake, RobotConfig.arm));
-    commandLayout.add("Climber Extend", new ClimberToPosition(RobotConfig.climber, true));
-    commandLayout.add("Climber Retract", new ClimberToPosition(RobotConfig.climber, false));
+    {
+      NetworkTable assistGUI = NetworkTableInstance.getDefault().getTable("Shuffleboard/Assist");
+      //      commandLayout.add(new ArmToPositionDebug(RobotConfig.arm));
+      //      commandLayout.add(new IndexPiece(RobotConfig.intake));
+      //      commandLayout.add(new PrepareForIntake(RobotConfig.arm, RobotConfig.intake));
+      //      commandLayout.add(new PrepareForScore(RobotConfig.arm, RobotConfig.shooter));
+      //      commandLayout.add(new ScorePiece(RobotConfig.intake, RobotConfig.shooter));
+      //      commandLayout.add(
+      //          new TestShooterAngle(RobotConfig.shooter, RobotConfig.intake, RobotConfig.arm));
+
+      commandLayout.add(
+          "Intake In", new IntakeBaseCommand(RobotConfig.intake, () -> true, () -> false));
+      commandLayout.add(
+          "Intake Out", new IntakeBaseCommand(RobotConfig.intake, () -> false, () -> true));
+      commandLayout.add(
+          "Intake Stop", new IntakeBaseCommand(RobotConfig.intake, () -> false, () -> false));
+
+      //      commandLayout.add("Climber Up", new InstantCommand(() ->
+      // RobotConfig.climber.setVoltage(assistGUI.getEntry("Climber
+      // Volts").getDouble(ClimberConstants.maxSpeedInVolts))));
+      //      commandLayout.add("Climber Down", new InstantCommand(() ->
+      // RobotConfig.climber.setVoltage(-assistGUI.getEntry("Climber
+      // Volts").getDouble(ClimberConstants.maxSpeedInVolts))));
+      //      commandLayout.add("Climber Stop", new InstantCommand(() ->
+      // RobotConfig.climber.setVoltage(0)));
+
+      //      commandLayout.add("Climber Extend", new ClimberToPosition(RobotConfig.climber, true));
+      //      commandLayout.add("Climber Retract", new ClimberToPosition(RobotConfig.climber,
+      // false));
+
+      commandLayout.add(
+          "Shooter On",
+          new InstantCommand(
+              () ->
+                  RobotConfig.shooter.runVoltage(
+                      assistGUI
+                          .getEntry("Shooter Voltage")
+                          .getDouble(ShooterConstants.maxSpeedInVolts))));
+      commandLayout.add(
+          "Shooter Stop", new InstantCommand(() -> RobotConfig.shooter.runVoltage(0)));
+
+      //      commandLayout.add("Shooter Velocity", new SetShooterVelocity(RobotConfig.shooter, ()
+      // -> assistGUI.getEntry("Shooter Velocity").getDouble(ShooterConstants.velocityInRPMs)));
+    }
 
     subLayout.add(RobotConfig.arm);
     subLayout.add(RobotConfig.intake);

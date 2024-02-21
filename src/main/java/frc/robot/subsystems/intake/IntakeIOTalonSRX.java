@@ -29,6 +29,7 @@ public class IntakeIOTalonSRX implements IntakeIO {
     inputs.appliedVolts = leader.getMotorOutputVoltage();
     inputs.limitSwitchIntake = !limitSwitchIntake.get();
     inputs.limitSwitchShooter = !limitSwitchShooter.get();
+    inputs.current = leader.getStatorCurrent();
   }
 
   @Override

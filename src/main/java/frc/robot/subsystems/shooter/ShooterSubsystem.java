@@ -76,6 +76,11 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
     tab.add("Shooter Velocity", ShooterConstants.velocityInRPMs)
         .withWidget(BuiltInWidgets.kTextView)
         .withProperties(Map.of("min", 0, "max", 6000));
+
+    // Create volt entry under Shooter tab as a number sider with min = -1 and max = 1
+    tab.add("Shooter Voltage", ShooterConstants.maxSpeedInVolts)
+        .withWidget(BuiltInWidgets.kTextView)
+        .withProperties(Map.of("min", -12, "max", 12));
   }
 
   public ShooterSubsystem(ShooterIO ioTop, ShooterIO ioBottom) {

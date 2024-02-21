@@ -36,6 +36,7 @@ public class ClimberIOSparkMax implements ClimberIO {
         Units.rotationsPerMinuteToRadiansPerSecond(encoder.getVelocity() / GEAR_RATIO);
     // Get applied voltage from the top motor
     inputs.appliedVolts = motor.getAppliedOutput() * motor.getBusVoltage();
+    inputs.current = motor.getOutputCurrent();
   }
 
   @Override
