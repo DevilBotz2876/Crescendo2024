@@ -6,14 +6,14 @@ public class ClimberIOStub implements ClimberIO {
 
   public void updateInputs(ClimberIOInputs inputs) {
     if (voltage > 0) {
-      inputs.velocityMetersPerSecond = .25;
+      inputs.velocityRadiansPerSecond = .25;
     } else if (voltage < 0) {
-      inputs.velocityMetersPerSecond = -.25;
+      inputs.velocityRadiansPerSecond = -.25;
     } else {
-      inputs.velocityMetersPerSecond = 0;
+      inputs.velocityRadiansPerSecond = 0;
     }
 
-    position += inputs.velocityMetersPerSecond / 20;
+    position += inputs.velocityRadiansPerSecond / 50;
 
     inputs.positionMeters = position;
     inputs.appliedVolts = voltage;
