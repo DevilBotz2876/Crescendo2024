@@ -10,7 +10,7 @@ import edu.wpi.first.math.util.Units;
 
 
 public class ClimberIOSparkMax implements ClimberIO{
-    private static final double GEAR_RATIO = 1.25; 
+    private static final double GEAR_RATIO = 25; // make sure to change if nessessary 
 
     // define the 2 SparkMax Controllers. A top, and a bottom
     private final CANSparkMax motor;
