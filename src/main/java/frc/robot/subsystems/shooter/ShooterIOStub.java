@@ -3,7 +3,7 @@ package frc.robot.subsystems.shooter;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 
-public class ShooterIOSim implements ShooterIO {
+public class ShooterIOStub implements ShooterIO {
   private FlywheelSim wheel;
 
   private double appliedVolts = 0.0;
@@ -13,11 +13,11 @@ public class ShooterIOSim implements ShooterIO {
     SHOOTER_BOTTOM
   }
 
-  public ShooterIOSim() {
+  public ShooterIOStub() {
     this(ShooterId.SHOOTER_TOP);
   }
 
-  public ShooterIOSim(ShooterId id) {
+  public ShooterIOStub(ShooterId id) {
     switch (id) {
       case SHOOTER_TOP:
         wheel = new FlywheelSim(DCMotor.getNEO(1), 1.5, 0.004);

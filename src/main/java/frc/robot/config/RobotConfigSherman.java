@@ -3,8 +3,8 @@ package frc.robot.config;
 import frc.robot.subsystems.arm.ArmIOSparkMax;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.drive.DriveTrain;
-import frc.robot.subsystems.intake.IntakeBase;
 import frc.robot.subsystems.intake.IntakeIOTalonSRX;
+import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
@@ -23,7 +23,7 @@ public class RobotConfigSherman extends RobotConfig {
     IntakeConstants.indexSpeedInVolts = 6.0;
     IntakeConstants.feedSpeedInVolts = 6.0;
 
-    intake = new IntakeBase(new IntakeIOTalonSRX(3));
+    intake = new IntakeSubsystem(new IntakeIOTalonSRX(3));
 
     // Sherman has a dual SparkMax based shooter
 

@@ -9,12 +9,12 @@ import java.util.Map;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-public class IntakeBase extends SubsystemBase implements Intake {
+public class IntakeSubsystem extends SubsystemBase implements Intake {
   private final IntakeIO IO;
   private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
   @AutoLogOutput private double targetVoltage;
 
-  public IntakeBase(IntakeIO IO) {
+  public IntakeSubsystem(IntakeIO IO) {
     this.IO = IO;
 
     targetVoltage = 0;

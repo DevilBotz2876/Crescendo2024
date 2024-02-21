@@ -6,8 +6,8 @@ import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.climber.ClimberIOSparkMax;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.DriveSwerveYAGSL;
-import frc.robot.subsystems.intake.IntakeBase;
 import frc.robot.subsystems.intake.IntakeIOTalonSRX;
+import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
@@ -26,7 +26,7 @@ public class RobotConfigInferno extends RobotConfig {
     IntakeConstants.indexSpeedInVolts = 6.0;
     IntakeConstants.feedSpeedInVolts = 6.0;
 
-    intake = new IntakeBase(new IntakeIOTalonSRX(3));
+    intake = new IntakeSubsystem(new IntakeIOTalonSRX(3));
 
     // Sherman has a dual SparkMax based shooter
 

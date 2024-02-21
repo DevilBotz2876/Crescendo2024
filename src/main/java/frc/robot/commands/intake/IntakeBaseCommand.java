@@ -5,17 +5,18 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.config.RobotConfig.IntakeConstants;
-import frc.robot.subsystems.intake.IntakeBase;
+import frc.robot.subsystems.intake.IntakeSubsystem;
 import java.util.function.BooleanSupplier;
 
 public class IntakeBaseCommand extends Command {
-  IntakeBase intake;
+  IntakeSubsystem intake;
   BooleanSupplier inEnable;
   BooleanSupplier outEnable;
   NetworkTable assistGUI = NetworkTableInstance.getDefault().getTable("Shuffleboard/Assist");
   NetworkTableEntry voltsEntry = assistGUI.getEntry("Intake Piece Volts");
 
-  public IntakeBaseCommand(IntakeBase intake, BooleanSupplier inEnable, BooleanSupplier outEnable) {
+  public IntakeBaseCommand(
+      IntakeSubsystem intake, BooleanSupplier inEnable, BooleanSupplier outEnable) {
     this.intake = intake;
     this.inEnable = inEnable;
     this.outEnable = outEnable;

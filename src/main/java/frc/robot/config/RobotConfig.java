@@ -8,15 +8,15 @@ import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.climber.ClimberIOStub;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.DriveBase;
-import frc.robot.subsystems.intake.IntakeBase;
-import frc.robot.subsystems.intake.IntakeIOSim;
-import frc.robot.subsystems.shooter.ShooterIOSim;
+import frc.robot.subsystems.intake.IntakeIOStub;
+import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.shooter.ShooterIOStub;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 /* Put all constants here with reasonable defaults */
 public class RobotConfig {
   public static DriveBase drive;
-  public static IntakeBase intake;
+  public static IntakeSubsystem intake;
   public static ShooterSubsystem shooter;
   public static ArmSubsystem arm;
   public static SendableChooser<Command> autoChooser;
@@ -109,12 +109,12 @@ public class RobotConfig {
     if (stubShooter) {
       shooter =
           new ShooterSubsystem(
-              new ShooterIOSim(ShooterIOSim.ShooterId.SHOOTER_TOP),
-              new ShooterIOSim(ShooterIOSim.ShooterId.SHOOTER_BOTTOM));
+              new ShooterIOStub(ShooterIOStub.ShooterId.SHOOTER_TOP),
+              new ShooterIOStub(ShooterIOStub.ShooterId.SHOOTER_BOTTOM));
     }
 
     if (stubIntake) {
-      intake = new IntakeBase(new IntakeIOSim());
+      intake = new IntakeSubsystem(new IntakeIOStub());
     }
 
     if (stubArm) {
