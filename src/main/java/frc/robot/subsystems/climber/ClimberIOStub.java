@@ -3,12 +3,13 @@ package frc.robot.subsystems.climber;
 public class ClimberIOStub implements ClimberIO {
   private double voltage = 0.0;
   private double position = 0.0;
+  private double velocityRadiansPerSec = 1;
 
   public void updateInputs(ClimberIOInputs inputs) {
     if (voltage > 0) {
-      inputs.velocityRadiansPerSecond = .25;
+      inputs.velocityRadiansPerSecond = velocityRadiansPerSec;
     } else if (voltage < 0) {
-      inputs.velocityRadiansPerSecond = -.25;
+      inputs.velocityRadiansPerSecond = -velocityRadiansPerSec;
     } else {
       inputs.velocityRadiansPerSecond = 0;
     }
