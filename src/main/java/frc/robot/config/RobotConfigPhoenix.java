@@ -10,7 +10,8 @@ public class RobotConfigPhoenix extends RobotConfig {
 
     // Phoenix has a Swerve drive train
     // TODO: set DriveConstants.maxVelocityMetersPerSec
+    DriveConstants.baseRadius = 0.350266;
     drive = new DriveSwerveYAGSL("yagsl/phoenix");
-    autoChooser = AutoBuilder.buildAutoChooser("Mobility Auto");
+    autoChooser = AutoBuilder.buildAutoChooser("Sit Still");
   }
 }

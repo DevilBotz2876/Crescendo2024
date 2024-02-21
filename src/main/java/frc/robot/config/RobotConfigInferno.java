@@ -10,7 +10,8 @@ public class RobotConfigInferno extends RobotConfig {
 
     // Inferno has a Swerve drive train
     // TODO: set DriveConstants.maxVelocityMetersPerSec
+    DriveConstants.baseRadius = 0.4086;
     drive = new DriveSwerveYAGSL("yagsl/inferno");
-    autoChooser = AutoBuilder.buildAutoChooser("Mobility Auto");
+    autoChooser = AutoBuilder.buildAutoChooser("Sit Still");
   }
 }
