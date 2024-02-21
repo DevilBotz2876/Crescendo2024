@@ -15,7 +15,7 @@ public class ClimberIOStub implements ClimberIO {
 
     position += inputs.velocityRadiansPerSecond / 50;
 
-    inputs.positionMeters = position;
+    inputs.positionRadians = position;
     inputs.appliedVolts = voltage;
   }
 

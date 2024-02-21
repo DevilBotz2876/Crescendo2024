@@ -47,13 +47,13 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
 
   private boolean leftAtLimits() {
     return bExtend
-        ? (inputsLeft.positionMeters >= ClimberConstants.maxPositionInMeters)
-        : (inputsLeft.positionMeters <= ClimberConstants.minPositionInMeters);
+        ? (inputsLeft.positionRadians >= ClimberConstants.maxPositionInMeters)
+        : (inputsLeft.positionRadians <= ClimberConstants.minPositionInMeters);
   }
 
   private boolean rightAtLimits() {
     return bExtend
-        ? (inputsRight.positionMeters >= ClimberConstants.maxPositionInMeters)
-        : (inputsRight.positionMeters <= ClimberConstants.minPositionInMeters);
+        ? (inputsRight.positionRadians >= ClimberConstants.maxPositionInMeters)
+        : (inputsRight.positionRadians <= ClimberConstants.minPositionInMeters);
   }
 }
