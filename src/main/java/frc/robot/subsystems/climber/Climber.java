@@ -14,4 +14,6 @@ public interface Climber {
   public default void runVoltageRight(double volts) {}
 
   public void resetPosition();
+
+  public default void enableLimits(boolean enable) {}
 }

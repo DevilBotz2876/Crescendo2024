@@ -20,6 +20,7 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
   @AutoLogOutput private boolean bExtendRight = false;
   @AutoLogOutput private boolean leftAtLimit = false;
   @AutoLogOutput private boolean rightAtLimit = false;
+  @AutoLogOutput private boolean enableLimits = true;
 
   public ClimberSubsystem(ClimberIO left, ClimberIO right) {
     this.left = left;
@@ -89,7 +90,7 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
         bExtendLeft
             ? (inputsLeft.positionRadians >= ClimberConstants.maxPositionInRadians)
             : (inputsLeft.positionRadians <= ClimberConstants.minPositionInRadians);
-    return leftAtLimit;
+    return enableLimits ? leftAtLimit : false;
   }
 
   private boolean rightAtLimits() {
@@ -97,11 +98,15 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
         bExtendRight
             ? (inputsRight.positionRadians >= ClimberConstants.maxPositionInRadians)
             : (inputsRight.positionRadians <= ClimberConstants.minPositionInRadians);
-    return rightAtLimit;
+    return enableLimits ? rightAtLimit : false;
   }
 
   public void resetPosition() {
     left.resetPosition();
     right.resetPosition();
+  }
+
+  public void enableLimits(boolean enable) {
+    enableLimits = enable;
   }
 }

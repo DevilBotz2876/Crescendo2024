@@ -8,13 +8,12 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Preferences;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.assist.PrepareForIntake;
@@ -160,16 +159,10 @@ public class RobotContainer {
   }
 
   public void commandsToShuffleboard() {
+    int colIndex = 0;
+    int rowIndex = 0;
     // SmartDashboard.putData(new ArmToPosition(arm));
-    ShuffleboardTab armTab = Shuffleboard.getTab("SubsCommands");
-
-    // Create a layout to hold commands
-    ShuffleboardLayout commandLayout =
-        armTab.getLayout("Commands", BuiltInLayouts.kList).withPosition(0, 0).withSize(2, 4);
-
-    // Create a layout to hold subsystems
-    ShuffleboardLayout subLayout =
-        armTab.getLayout("Subsystems", BuiltInLayouts.kList).withPosition(2, 0).withSize(3, 4);
+    ShuffleboardTab commandTestTab = Shuffleboard.getTab("Commands");
 
     {
       NetworkTable assistGUI = NetworkTableInstance.getDefault().getTable("Shuffleboard/Assist");
@@ -181,75 +174,109 @@ public class RobotContainer {
       //      commandLayout.add(
       //          new TestShooterAngle(RobotConfig.shooter, RobotConfig.intake, RobotConfig.arm));
 
-      commandLayout.add(
-          "Intake In", new IntakeBaseCommand(RobotConfig.intake, () -> true, () -> false));
-      commandLayout.add(
-          "Intake Out", new IntakeBaseCommand(RobotConfig.intake, () -> false, () -> true));
-      commandLayout.add(
-          "Intake Stop", new IntakeBaseCommand(RobotConfig.intake, () -> false, () -> false));
+      commandTestTab.add("Intake: Command", RobotConfig.intake).withPosition(colIndex, rowIndex++);
+      commandTestTab
+          .add("Intake: Stop", new IntakeBaseCommand(RobotConfig.intake, () -> false, () -> false))
+          .withPosition(colIndex, rowIndex++);
+      commandTestTab
+          .add("Intake: In", new IntakeBaseCommand(RobotConfig.intake, () -> true, () -> false))
+          .withPosition(colIndex, rowIndex++);
+      commandTestTab
+          .add("Intake: Out", new IntakeBaseCommand(RobotConfig.intake, () -> false, () -> true))
+          .withPosition(colIndex, rowIndex++);
 
-      commandLayout.add(
-          "Climber Left Up",
-          new InstantCommand(
-              () ->
-                  RobotConfig.climber.runVoltageLeft(
-                      assistGUI
-                          .getEntry("Climber Volts")
-                          .getDouble(ClimberConstants.maxSpeedInVolts))));
-      commandLayout.add(
-          "Climber Left Down",
-          new InstantCommand(
-              () ->
-                  RobotConfig.climber.runVoltageLeft(
-                      -assistGUI
-                          .getEntry("Climber Volts")
-                          .getDouble(ClimberConstants.maxSpeedInVolts))));
-      commandLayout.add(
-          "Climber Right Up",
-          new InstantCommand(
-              () ->
-                  RobotConfig.climber.runVoltageRight(
-                      assistGUI
-                          .getEntry("Climber Volts")
-                          .getDouble(ClimberConstants.maxSpeedInVolts))));
-      commandLayout.add(
-          "Climber Right Down",
-          new InstantCommand(
-              () ->
-                  RobotConfig.climber.runVoltageRight(
-                      -assistGUI
-                          .getEntry("Climber Volts")
-                          .getDouble(ClimberConstants.maxSpeedInVolts))));
+      colIndex += 2;
+      rowIndex = 0;
+      commandTestTab
+          .add("Climber: Command", RobotConfig.climber)
+          .withPosition(colIndex, rowIndex++);
+      commandTestTab
+          .add("Climber: Stop", new InstantCommand(() -> RobotConfig.climber.runVoltage(0)))
+          .withPosition(colIndex + 0, rowIndex);
+      commandTestTab
+          .add("Climber: Zero", new InstantCommand(() -> RobotConfig.climber.resetPosition()))
+          .withPosition(colIndex + 1, rowIndex);
 
-      commandLayout.add(
-          "Climber Stop", new InstantCommand(() -> RobotConfig.climber.runVoltage(0)));
+      rowIndex++;
+      commandTestTab
+          .add(
+              "Climber: L Up",
+              new InstantCommand(
+                  () ->
+                      RobotConfig.climber.runVoltageLeft(
+                          assistGUI
+                              .getEntry("Climber Volts")
+                              .getDouble(ClimberConstants.maxSpeedInVolts))))
+          .withPosition(colIndex + 0, rowIndex);
 
-      commandLayout.add(
-          "Climber Zero", new InstantCommand(() -> RobotConfig.climber.resetPosition()));
+      commandTestTab
+          .add(
+              "Climber: R Up",
+              new InstantCommand(
+                  () ->
+                      RobotConfig.climber.runVoltageRight(
+                          assistGUI
+                              .getEntry("Climber Volts")
+                              .getDouble(ClimberConstants.maxSpeedInVolts))))
+          .withPosition(colIndex + 1, rowIndex);
+
+      rowIndex++;
+      commandTestTab
+          .add(
+              "Climber: L Down",
+              new SequentialCommandGroup(
+                  new InstantCommand(() -> RobotConfig.climber.enableLimits(false)),
+                  new InstantCommand(
+                      () ->
+                          RobotConfig.climber.runVoltageLeft(
+                              -assistGUI
+                                  .getEntry("Climber Volts")
+                                  .getDouble(ClimberConstants.maxSpeedInVolts))),
+                  new InstantCommand(() -> RobotConfig.climber.enableLimits(true))))
+          .withPosition(colIndex + 0, rowIndex);
+      commandTestTab
+          .add(
+              "Climber: R Down",
+              new SequentialCommandGroup(
+                  new InstantCommand(() -> RobotConfig.climber.enableLimits(false)),
+                  new InstantCommand(
+                      () ->
+                          RobotConfig.climber.runVoltageRight(
+                              -assistGUI
+                                  .getEntry("Climber Volts")
+                                  .getDouble(ClimberConstants.maxSpeedInVolts))),
+                  new InstantCommand(() -> RobotConfig.climber.enableLimits(false))))
+          .withPosition(colIndex + 1, rowIndex);
 
       //      commandLayout.add("Climber Extend", new ClimberToPosition(RobotConfig.climber, true));
       //      commandLayout.add("Climber Retract", new ClimberToPosition(RobotConfig.climber,
       // false));
 
-      commandLayout.add(
-          "Shooter On",
-          new InstantCommand(
-              () ->
-                  RobotConfig.shooter.runVoltage(
-                      assistGUI
-                          .getEntry("Shooter Voltage")
-                          .getDouble(ShooterConstants.maxSpeedInVolts))));
-      commandLayout.add(
-          "Shooter Stop", new InstantCommand(() -> RobotConfig.shooter.runVoltage(0)));
+      colIndex += 2;
+      rowIndex = 0;
+      commandTestTab
+          .add("Shooter: Command", RobotConfig.shooter)
+          .withPosition(colIndex, rowIndex++);
+      commandTestTab
+          .add("Shooter: Stop", new InstantCommand(() -> RobotConfig.shooter.runVoltage(0)))
+          .withPosition(colIndex, rowIndex++);
+      commandTestTab
+          .add(
+              "Shooter: On",
+              new InstantCommand(
+                  () ->
+                      RobotConfig.shooter.runVoltage(
+                          assistGUI
+                              .getEntry("Shooter Voltage")
+                              .getDouble(ShooterConstants.maxSpeedInVolts))))
+          .withPosition(colIndex, rowIndex++);
 
       //      commandLayout.add("Shooter Velocity", new SetShooterVelocity(RobotConfig.shooter, ()
       // -> assistGUI.getEntry("Shooter Velocity").getDouble(ShooterConstants.velocityInRPMs)));
     }
 
-    subLayout.add(RobotConfig.arm);
-    subLayout.add(RobotConfig.intake);
-    subLayout.add(RobotConfig.shooter);
-    subLayout.add(RobotConfig.drive);
-    subLayout.add(RobotConfig.climber);
+    colIndex += 2;
+    rowIndex = 0;
+    commandTestTab.add("Arm: Command", RobotConfig.arm).withPosition(colIndex, rowIndex++);
   }
 }
