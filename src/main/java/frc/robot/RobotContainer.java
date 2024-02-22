@@ -368,13 +368,15 @@ public class RobotContainer {
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
     assistTab
-        .add("Intake Angle", ArmConstants.minAngleInDegrees)
+        .add("Intake: Angle", ArmConstants.minAngleInDegrees)
         .withWidget(BuiltInWidgets.kNumberSlider)
         .withProperties(
-            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees));
+            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
 
     assistTab
-        .add("Index Piece Volts", IntakeConstants.indexSpeedInVolts)
+        .add("Intake: Index Volts", IntakeConstants.indexSpeedInVolts)
         .withWidget(BuiltInWidgets.kNumberSlider)
         .withProperties(Map.of("min", 0, "max", 12))
         .withPosition(colIndex, rowIndex++)
@@ -407,7 +409,7 @@ public class RobotContainer {
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
     assistTab
-        .add("Feed Piece Volts", IntakeConstants.feedSpeedInVolts)
+        .add("Intake: Feed Volts", IntakeConstants.feedSpeedInVolts)
         .withWidget(BuiltInWidgets.kNumberSlider)
         .withProperties(Map.of("min", 0, "max", 12))
         .withPosition(colIndex, rowIndex++)

@@ -30,7 +30,7 @@ public class ScorePiece extends Command {
   @Override
   public void initialize() {
     intake.runVoltage(
-        assistGUI.getEntry("Feed Piece Volts").getDouble(IntakeConstants.feedSpeedInVolts));
+        assistGUI.getEntry("Intake: Feed Volts").getDouble(IntakeConstants.feedSpeedInVolts));
   }
 
   @Override

@@ -85,7 +85,6 @@ public class ArmIOSparkMax implements ArmIO {
   /** Updates the set of loggable inputs. */
   @Override
   public void updateInputs(ArmIOInputs inputs) {
-
     inputs.positionRad = absoluteEncoder.getDistance();
 
     inputs.positionDegree = absoluteEncoder.get() * 360;
