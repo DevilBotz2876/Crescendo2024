@@ -5,19 +5,22 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.arm.ArmIOStub;
 import frc.robot.subsystems.arm.ArmSubsystem;
+import frc.robot.subsystems.climber.ClimberIOStub;
+import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.DriveBase;
-import frc.robot.subsystems.intake.IntakeBase;
-import frc.robot.subsystems.intake.IntakeIOSim;
-import frc.robot.subsystems.shooter.ShooterIOSim;
+import frc.robot.subsystems.intake.IntakeIOStub;
+import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.shooter.ShooterIOStub;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 /* Put all constants here with reasonable defaults */
 public class RobotConfig {
   public static DriveBase drive;
-  public static IntakeBase intake;
+  public static IntakeSubsystem intake;
   public static ShooterSubsystem shooter;
   public static ArmSubsystem arm;
   public static SendableChooser<Command> autoChooser;
+  public static ClimberSubsystem climber;
 
   public static class DriveConstants {
     public static double maxVelocityMetersPerSec = 4.5;
@@ -41,6 +44,8 @@ public class RobotConfig {
     public static double minAngleInDegrees = 0.0;
     public static double intakeAngleInDegrees = 1;
     public static double shooterAngleInDegrees = 45;
+
+    public static double defaultSpeedInVolts = 6.0;
   }
 
   public static class ShooterConstants {
@@ -62,12 +67,19 @@ public class RobotConfig {
     public static double pidKdBottom = 0.0;
 
     public static double velocityInRPMs = 3000;
+    public static double defaultSpeedInVolts = 6.0;
   }
 
   public static class IntakeConstants {
-    public static double intakeSpeedInVolts = 6.0;
+    public static double defaultSpeedInVolts = 6.0;
     public static double indexSpeedInVolts = 6.0;
     public static double feedSpeedInVolts = 6.0;
+  }
+
+  public static class ClimberConstants {
+    public static double minPositionInRadians = 0.0;
+    public static double maxPositionInRadians = 4.0;
+    public static double defaultSpeedInVolts = 2.0;
   }
 
   public RobotConfig() {
@@ -84,6 +96,16 @@ public class RobotConfig {
       boolean stubIntake,
       boolean stubArm,
       boolean stubAuto) {
+    this(stubDrive, stubShooter, stubIntake, stubArm, stubAuto, true);
+  }
+
+  public RobotConfig(
+      boolean stubDrive,
+      boolean stubShooter,
+      boolean stubIntake,
+      boolean stubArm,
+      boolean stubAuto,
+      boolean stubClimber) {
     if (stubDrive) {
       drive = new DriveBase();
     }
@@ -91,12 +113,12 @@ public class RobotConfig {
     if (stubShooter) {
       shooter =
           new ShooterSubsystem(
-              new ShooterIOSim(ShooterIOSim.ShooterId.SHOOTER_TOP),
-              new ShooterIOSim(ShooterIOSim.ShooterId.SHOOTER_BOTTOM));
+              new ShooterIOStub(ShooterIOStub.ShooterId.SHOOTER_TOP),
+              new ShooterIOStub(ShooterIOStub.ShooterId.SHOOTER_BOTTOM));
     }
 
     if (stubIntake) {
-      intake = new IntakeBase(new IntakeIOSim());
+      intake = new IntakeSubsystem(new IntakeIOStub());
     }
 
     if (stubArm) {
@@ -106,6 +128,10 @@ public class RobotConfig {
     if (stubAuto) {
       autoChooser = new SendableChooser<>();
       autoChooser.setDefaultOption("No Auto Routines Specified", Commands.none());
+    }
+
+    if (stubClimber) {
+      climber = new ClimberSubsystem(new ClimberIOStub(), new ClimberIOStub());
     }
   }
 }

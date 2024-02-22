@@ -2,6 +2,7 @@ package frc.robot.subsystems.drive;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -24,6 +25,7 @@ public class DriveSwerveYAGSL extends DriveBase {
   public DriveSwerveYAGSL(String configPath) {
     swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), configPath);
 
+    // SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     try {
       swerveDrive =
           new SwerveParser(swerveJsonDirectory)
@@ -38,12 +40,16 @@ public class DriveSwerveYAGSL extends DriveBase {
             ::resetOdometry, // Method to reset odometry (will be called if your auto has a starting
         // pose)
         swerveDrive::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-        swerveDrive::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-        new HolonomicPathFollowerConfig( // Rotation PID constants
-            DriveConstants.maxVelocityMetersPerSec, // Max module speed, in m/s
-            DriveConstants
-                .baseRadius, // Drive base radius in meters. Distance from robot center to furthest
-            // module.
+        swerveDrive::setChassisSpeeds, // Method that will drive the robot given ROBOT RELATIVE
+        // ChassisSpeeds
+        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in
+            // your Constants class
+            new PIDConstants(0.0020645, 0.0, 0.0), // Translation PID constants
+            new PIDConstants(0.01, 0.0, 0.00), // Rotation PID constants
+            swerveDrive.getMaximumVelocity(), // Max module speed, in m/s
+            swerveDrive.swerveDriveConfiguration
+                .getDriveBaseRadiusMeters(), // Drive base radius in meters. Distance from robot
+            // center to furthest module.
             new ReplanningConfig() // Default path replanning config. See the API for the options
             // here
             ),

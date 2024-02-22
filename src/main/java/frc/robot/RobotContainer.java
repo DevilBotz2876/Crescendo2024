@@ -6,30 +6,35 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Preferences;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.commands.arm.ArmToPositionDebug;
-import frc.robot.commands.assist.IndexPiece;
 import frc.robot.commands.assist.PrepareForIntake;
 import frc.robot.commands.assist.PrepareForScore;
 import frc.robot.commands.assist.ScorePiece;
 import frc.robot.commands.auto.AutoIntakePiece;
 import frc.robot.commands.auto.AutoShootPiece;
+import frc.robot.commands.climber.ClimberToPosition;
 import frc.robot.commands.drive.DriveCommand;
-import frc.robot.commands.intake.IntakeBaseCommand;
 import frc.robot.commands.shooter.TestShooterAngle;
 import frc.robot.config.RobotConfig;
+import frc.robot.config.RobotConfig.ArmConstants;
+import frc.robot.config.RobotConfig.ClimberConstants;
+import frc.robot.config.RobotConfig.IntakeConstants;
+import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.config.RobotConfigInferno;
 import frc.robot.config.RobotConfigPhoenix;
 import frc.robot.config.RobotConfigSherman;
+import frc.robot.config.RobotConfigStub;
+import java.util.Map;
 
 public class RobotContainer {
   public final CommandXboxController controller;
@@ -59,8 +64,9 @@ public class RobotContainer {
       case "UNKNOWN":
       default:
         /* If running simulation, put the robot config you want here */
-        robotConfig = new RobotConfigInferno();
+        // robotConfig = new RobotConfigInferno();
         // robotConfig = new RobotConfigSherman();
+        robotConfig = new RobotConfigStub();
     }
 
     // SmartDashboard.putData("Subsystems/Arm", RobotConfig.arm);
@@ -73,30 +79,67 @@ public class RobotContainer {
         .withWidget(BuiltInWidgets.kComboBoxChooser);
 
     configureBindings();
-    // ArmSysIdBindings();
-    // shooterSysIdBindings();
-    // driveSysIdBindings();
-
+    assistToShuffleboard();
     commandsToShuffleboard();
+    sysIdToShuffleboard();
   }
 
-  private void ArmSysIdBindings() {
-    controller.a().whileTrue(RobotConfig.arm.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    controller.b().whileTrue(RobotConfig.arm.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    controller.x().whileTrue(RobotConfig.arm.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    controller.y().whileTrue(RobotConfig.arm.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-  }
+  private void sysIdToShuffleboard() {
+    int rowIndex = 0;
+    int colIndex = 0;
 
-  private void shooterSysIdBindings() {
-    controller.a().whileTrue(RobotConfig.shooter.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    controller.b().whileTrue(RobotConfig.shooter.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-    controller.x().whileTrue(RobotConfig.shooter.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    controller.y().whileTrue(RobotConfig.shooter.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-  }
+    ShuffleboardTab sysIdTestTab = Shuffleboard.getTab("SysId");
 
-  private void driveSysIdBindings() {
-    controller.a().whileTrue(RobotConfig.drive.sysIdDriveMotorCommand());
-    controller.b().whileTrue(RobotConfig.drive.sysIdAngleMotorCommand());
+    sysIdTestTab
+        .add(
+            "Arm: Quasistatic Forward",
+            RobotConfig.arm.sysIdQuasistatic(SysIdRoutine.Direction.kForward))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+    sysIdTestTab
+        .add(
+            "Arm: Quasistatic Reverse",
+            RobotConfig.arm.sysIdQuasistatic(SysIdRoutine.Direction.kReverse))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+    sysIdTestTab
+        .add("Arm: Dynamic Forward", RobotConfig.arm.sysIdDynamic(SysIdRoutine.Direction.kForward))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+    sysIdTestTab
+        .add("Arm: Dynamic Reverse", RobotConfig.arm.sysIdDynamic(SysIdRoutine.Direction.kReverse))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+
+    rowIndex = 0;
+    colIndex += 2;
+    sysIdTestTab
+        .add(
+            "Shooter: Quasistatic Forward",
+            RobotConfig.shooter.sysIdQuasistatic(SysIdRoutine.Direction.kForward))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+    sysIdTestTab
+        .add(
+            "Shooter: Quasistatic Reverse",
+            RobotConfig.shooter.sysIdQuasistatic(SysIdRoutine.Direction.kReverse))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+    sysIdTestTab
+        .add(
+            "Shooter: Dynamic Forward",
+            RobotConfig.shooter.sysIdDynamic(SysIdRoutine.Direction.kForward))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+    sysIdTestTab
+        .add(
+            "Shooter: Dynamic Reverse",
+            RobotConfig.shooter.sysIdDynamic(SysIdRoutine.Direction.kReverse))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+
+    // sysIdTestTab.add("Drive: Drive Motors", RobotConfig.drive.sysIdDriveMotorCommand());
+    // sysIdTestTab.add("Drive: Angle Motors", RobotConfig.drive.sysIdAngleMotorCommand());
   }
 
   private void configureBindings() {
@@ -107,26 +150,11 @@ public class RobotContainer {
 
     controller.b().onTrue(new PrepareForScore(RobotConfig.arm, RobotConfig.shooter));
 
-    /*
-    controller.rightTrigger().whileTrue(new ShooterEnable(RobotConfig.shooter));
-
-    private final LoggedDashboardNumber shooterSpeedInput =
-    new LoggedDashboardNumber("Shooter Speed", 1000.0);
-
-    controller
-        .a()
-        .whileTrue(
-            Commands.startEnd(
-                () -> RobotConfig.shooter.runVelocity(shooterSpeedInput.get()),
-                () -> RobotConfig.shooter.runVelocity(0),
-                RobotConfig.shooter));
-    */
-
-    RobotConfig.intake.setDefaultCommand(
-        new IntakeBaseCommand(
-            RobotConfig.intake,
-            () -> controller.rightBumper().getAsBoolean(),
-            () -> controller.leftBumper().getAsBoolean()));
+    //    RobotConfig.intake.setDefaultCommand(
+    //        new IntakeBaseCommand(
+    //            RobotConfig.intake,
+    //            () -> controller.rightBumper().getAsBoolean(),
+    //            () -> controller.leftBumper().getAsBoolean()));
 
     RobotConfig.drive.setDefaultCommand(
         new DriveCommand(
@@ -134,7 +162,6 @@ public class RobotContainer {
             () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.05),
             () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.05),
             () -> MathUtil.applyDeadband(-controller.getRightX(), 0.05)));
-    // TODO: Move deadband to constants file
 
     controller
         .start()
@@ -142,22 +169,12 @@ public class RobotContainer {
             new InstantCommand(
                 () ->
                     RobotConfig.drive.setFieldOrientedDrive(
-                        !RobotConfig.drive.isFieldOrientedDrive())));
+                        !RobotConfig.drive.isFieldOrientedDrive()),
+                RobotConfig.drive));
 
-    controller.back().onTrue(new InstantCommand(() -> RobotConfig.drive.resetOdometry()));
-
-    /*
-    // run arm at 4 volts
     controller
-        .y()
-        .whileTrue(Commands.startEnd(() -> RobotConfig.arm.runVoltage(4), () -> RobotConfig.arm.runVoltage(0), arm));
-    // () -> arm.runVoltage(ArmVoltsEntry.getDouble(0.0)), () -> arm.runVoltage(0), arm));
-    controller
-        .x()
-        .whileTrue(Commands.startEnd(() -> RobotConfig.arm.runVoltage(-4), () -> RobotConfig.arm.runVoltage(0), arm));
-    */
-
-    // controller.b().whileTrue(new ArmToPositionDebug(RobotConfig.arm));
+        .back()
+        .onTrue(new InstantCommand(() -> RobotConfig.drive.resetOdometry(), RobotConfig.drive));
   }
 
   public Command getAutonomousCommand() {
@@ -165,28 +182,250 @@ public class RobotContainer {
   }
 
   public void commandsToShuffleboard() {
+    int colIndex = 0;
+    int rowIndex = 0;
     // SmartDashboard.putData(new ArmToPosition(arm));
-    ShuffleboardTab armTab = Shuffleboard.getTab("SubsCommands");
+    ShuffleboardTab commandTestTab = Shuffleboard.getTab("Commands");
+    NetworkTable commandGUI = NetworkTableInstance.getDefault().getTable("Shuffleboard/Commands");
 
-    // Create a layout to hold commands
-    ShuffleboardLayout commandLayout =
-        armTab.getLayout("Commands", BuiltInLayouts.kList).withPosition(0, 0).withSize(2, 4);
+    commandTestTab.add("Intake: Command", RobotConfig.intake).withPosition(colIndex, rowIndex++);
+    commandTestTab
+        .add("Intake: Volts", IntakeConstants.defaultSpeedInVolts)
+        .withWidget(BuiltInWidgets.kNumberSlider)
+        .withProperties(Map.of("min", 0, "max", 12))
+        .withPosition(colIndex, rowIndex++);
+    commandTestTab
+        .add(
+            "Intake: Stop",
+            new InstantCommand(() -> RobotConfig.intake.runVoltage(0), RobotConfig.intake))
+        .withPosition(colIndex, rowIndex++);
+    commandTestTab
+        .add(
+            "Intake: In",
+            new InstantCommand(
+                () ->
+                    RobotConfig.intake.runVoltage(
+                        commandGUI
+                            .getEntry("Intake: Volts")
+                            .getDouble(IntakeConstants.defaultSpeedInVolts)),
+                RobotConfig.intake))
+        .withPosition(colIndex, rowIndex++);
+    commandTestTab
+        .add(
+            "Intake: Out",
+            new InstantCommand(
+                () ->
+                    RobotConfig.intake.runVoltage(
+                        -commandGUI
+                            .getEntry("Intake: Volts")
+                            .getDouble(IntakeConstants.defaultSpeedInVolts)),
+                RobotConfig.intake))
+        .withPosition(colIndex, rowIndex++);
 
-    // Create a layout to hold subsystems
-    ShuffleboardLayout subLayout =
-        armTab.getLayout("Subsystems", BuiltInLayouts.kList).withPosition(2, 0).withSize(3, 4);
+    colIndex += 2;
+    rowIndex = 0;
 
-    commandLayout.add(new ArmToPositionDebug(RobotConfig.arm));
-    commandLayout.add(new IndexPiece(RobotConfig.intake));
-    commandLayout.add(new PrepareForIntake(RobotConfig.arm, RobotConfig.intake));
-    commandLayout.add(new PrepareForScore(RobotConfig.arm, RobotConfig.shooter));
-    commandLayout.add(new ScorePiece(RobotConfig.intake, RobotConfig.shooter));
-    commandLayout.add(
-        new TestShooterAngle(RobotConfig.shooter, RobotConfig.intake, RobotConfig.arm));
+    commandTestTab.add("Climber: Command", RobotConfig.climber).withPosition(colIndex, rowIndex++);
 
-    subLayout.add(RobotConfig.arm);
-    subLayout.add(RobotConfig.intake);
-    subLayout.add(RobotConfig.shooter);
-    subLayout.add(RobotConfig.drive);
+    // Create volt entry under Shooter tab as a number sider with min = -1 and max = 1
+    commandTestTab
+        .add("Climber: Volts", ClimberConstants.defaultSpeedInVolts)
+        .withWidget(BuiltInWidgets.kNumberSlider)
+        .withProperties(Map.of("min", 0, "max", 12))
+        .withPosition(colIndex, rowIndex++);
+    commandTestTab
+        .add(
+            "Climber: Stop",
+            new SequentialCommandGroup(
+                new InstantCommand(() -> RobotConfig.climber.runVoltage(0), RobotConfig.climber),
+                new InstantCommand(
+                    () -> RobotConfig.climber.enableLimits(true), RobotConfig.climber)))
+        .withPosition(colIndex + 0, rowIndex);
+    commandTestTab
+        .add(
+            "Climber: Zero",
+            new InstantCommand(() -> RobotConfig.climber.resetPosition(), RobotConfig.climber))
+        .withPosition(colIndex + 1, rowIndex);
+
+    rowIndex++;
+    commandTestTab
+        .add(
+            "Climber: L Up",
+            new InstantCommand(
+                () ->
+                    RobotConfig.climber.runVoltageLeft(
+                        commandGUI
+                            .getEntry("Climber: Volts")
+                            .getDouble(ClimberConstants.defaultSpeedInVolts)),
+                RobotConfig.climber))
+        .withPosition(colIndex + 0, rowIndex);
+
+    commandTestTab
+        .add(
+            "Climber: R Up",
+            new InstantCommand(
+                () ->
+                    RobotConfig.climber.runVoltageRight(
+                        commandGUI
+                            .getEntry("Climber: Volts")
+                            .getDouble(ClimberConstants.defaultSpeedInVolts)),
+                RobotConfig.climber))
+        .withPosition(colIndex + 1, rowIndex);
+
+    rowIndex++;
+    commandTestTab
+        .add(
+            "Climber: L Down",
+            new SequentialCommandGroup(
+                new InstantCommand(
+                    () -> RobotConfig.climber.enableLimits(false), RobotConfig.climber),
+                new InstantCommand(
+                    () ->
+                        RobotConfig.climber.runVoltageLeft(
+                            -commandGUI
+                                .getEntry("Climber: Volts")
+                                .getDouble(ClimberConstants.defaultSpeedInVolts)),
+                    RobotConfig.climber)))
+        .withPosition(colIndex + 0, rowIndex);
+    commandTestTab
+        .add(
+            "Climber: R Down",
+            new SequentialCommandGroup(
+                new InstantCommand(
+                    () -> RobotConfig.climber.enableLimits(false), RobotConfig.climber),
+                new InstantCommand(
+                    () ->
+                        RobotConfig.climber.runVoltageRight(
+                            -commandGUI
+                                .getEntry("Climber: Volts")
+                                .getDouble(ClimberConstants.defaultSpeedInVolts)),
+                    RobotConfig.climber)))
+        .withPosition(colIndex + 1, rowIndex);
+
+    rowIndex++;
+    commandTestTab
+        .add("Climber: Extend", new ClimberToPosition(RobotConfig.climber, true))
+        .withPosition(colIndex, rowIndex++);
+    commandTestTab
+        .add("Climber: Retract", new ClimberToPosition(RobotConfig.climber, false))
+        .withPosition(colIndex, rowIndex++);
+
+    colIndex += 2;
+    rowIndex = 0;
+    commandTestTab.add("Shooter: Command", RobotConfig.shooter).withPosition(colIndex, rowIndex++);
+    // Create volt entry under Shooter tab as a number sider with min = -1 and max = 1
+    commandTestTab
+        .add("Shooter: Volts", ShooterConstants.defaultSpeedInVolts)
+        .withWidget(BuiltInWidgets.kNumberSlider)
+        .withProperties(Map.of("min", -12, "max", 12))
+        .withPosition(colIndex, rowIndex++);
+    commandTestTab
+        .add(
+            "Shooter: Stop",
+            new InstantCommand(() -> RobotConfig.shooter.runVoltage(0), RobotConfig.shooter))
+        .withPosition(colIndex, rowIndex++);
+    commandTestTab
+        .add(
+            "Shooter: On",
+            new InstantCommand(
+                () ->
+                    RobotConfig.shooter.runVoltage(
+                        commandGUI
+                            .getEntry("Shooter: Volts")
+                            .getDouble(ShooterConstants.defaultSpeedInVolts)),
+                RobotConfig.shooter))
+        .withPosition(colIndex, rowIndex++);
+
+    colIndex += 2;
+    rowIndex = 0;
+    commandTestTab.add("Arm: Command", RobotConfig.arm).withPosition(colIndex, rowIndex++);
+    // Create volt entry under Shooter tab as a number sider with min = -1 and max = 1
+    commandTestTab
+        .add("Arm: Volts", ArmConstants.defaultSpeedInVolts)
+        .withWidget(BuiltInWidgets.kNumberSlider)
+        .withProperties(Map.of("min", -12, "max", 12))
+        .withPosition(colIndex, rowIndex++);
+    commandTestTab
+        .add("Arm: Stop", new InstantCommand(() -> RobotConfig.arm.runVoltage(0), RobotConfig.arm))
+        .withPosition(colIndex, rowIndex++);
+    commandTestTab
+        .add(
+            "Arm: On",
+            new InstantCommand(
+                () ->
+                    RobotConfig.arm.runVoltage(
+                        commandGUI
+                            .getEntry("Arm: Volts")
+                            .getDouble(ArmConstants.defaultSpeedInVolts)),
+                RobotConfig.arm))
+        .withPosition(colIndex, rowIndex++);
+  }
+
+  void assistToShuffleboard() {
+    int colIndex = 0;
+    int rowIndex = 0;
+    ShuffleboardTab assistTab = Shuffleboard.getTab("Assist");
+
+    assistTab
+        .add(
+            "Assist: Prepare For Intake", new PrepareForIntake(RobotConfig.arm, RobotConfig.intake))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+    assistTab
+        .add("Intake: Angle", ArmConstants.minAngleInDegrees)
+        .withWidget(BuiltInWidgets.kNumberSlider)
+        .withProperties(
+            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+
+    assistTab
+        .add("Intake: Index Volts", IntakeConstants.indexSpeedInVolts)
+        .withWidget(BuiltInWidgets.kNumberSlider)
+        .withProperties(Map.of("min", 0, "max", 12))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+
+    colIndex += 2;
+    rowIndex = 0;
+    assistTab
+        .add("Assist: Prepare For Score", new PrepareForScore(RobotConfig.arm, RobotConfig.shooter))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+    assistTab
+        .add("Shooter Velocity", ShooterConstants.velocityInRPMs)
+        .withWidget(BuiltInWidgets.kNumberSlider)
+        .withProperties(Map.of("min", 0, "max", 6000))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+    assistTab
+        .add("Shooter Angle", 45)
+        .withWidget(BuiltInWidgets.kNumberSlider)
+        .withProperties(
+            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+
+    colIndex += 2;
+    rowIndex = 0;
+    assistTab
+        .add("Assist: Shoot Piece", new ScorePiece(RobotConfig.intake, RobotConfig.shooter))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+    assistTab
+        .add("Intake: Feed Volts", IntakeConstants.feedSpeedInVolts)
+        .withWidget(BuiltInWidgets.kNumberSlider)
+        .withProperties(Map.of("min", 0, "max", 12))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+
+    colIndex += 2;
+    rowIndex = 0;
+    assistTab
+        .add(
+            "Test: Shooter Angle",
+            new TestShooterAngle(RobotConfig.shooter, RobotConfig.intake, RobotConfig.arm))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
   }
 }

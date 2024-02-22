@@ -19,7 +19,8 @@ public class PrepareForIntake extends ParallelCommandGroup {
     addCommands(
         new ArmToPosition(
             (ArmSubsystem) arm,
-            () -> assistGUI.getEntry("Intake Angle").getDouble(ArmConstants.intakeAngleInDegrees)));
+            () ->
+                assistGUI.getEntry("Intake: Angle").getDouble(ArmConstants.intakeAngleInDegrees)));
     addCommands(new IndexPiece(intake));
   }
 }

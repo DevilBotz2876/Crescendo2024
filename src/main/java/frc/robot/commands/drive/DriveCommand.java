@@ -22,6 +22,8 @@ public class DriveCommand extends Command {
   double xSpeed;
   double ySpeed;
   double newRot;
+  double speedLimiter;
+  double turnLimiter;
 
   GenericEntry speedLimiterEntry;
   GenericEntry turnLimiterEntry;
@@ -56,43 +58,47 @@ public class DriveCommand extends Command {
 
   @Override
   public void execute() {
-    switch (driveSpeedChooser.getSelected()) {
+    String driveSpeedSelceted = driveSpeedChooser.getSelected();
+    xSpeed = speedX.getAsDouble();
+    ySpeed = speedY.getAsDouble();
+    newRot = rot.getAsDouble();
+    speedLimiter = speedLimiterEntry.getDouble(100);
+    turnLimiter = turnLimiterEntry.getDouble(100);
+
+    switch (driveSpeedSelceted) {
       case "Linear Mode":
-        xSpeed = speedX.getAsDouble();
-        ySpeed = speedY.getAsDouble();
-        newRot = rot.getAsDouble();
         break;
 
       case "Squared Mode":
-        if (speedX.getAsDouble() < 0) {
-          xSpeed = Math.pow(speedX.getAsDouble(), 2) * -1;
+        if (xSpeed < 0) {
+          xSpeed = Math.pow(xSpeed, 2) * -1;
 
         } else {
-          xSpeed = Math.pow(speedX.getAsDouble(), 2);
+          xSpeed = Math.pow(xSpeed, 2);
         }
-        if (speedY.getAsDouble() < 0) {
-          ySpeed = Math.pow(speedY.getAsDouble(), 2) * -1;
+        if (ySpeed < 0) {
+          ySpeed = Math.pow(ySpeed, 2) * -1;
         } else {
-          ySpeed = Math.pow(speedY.getAsDouble(), 2);
+          ySpeed = Math.pow(ySpeed, 2);
         }
-        if (rot.getAsDouble() < 0) {
-          newRot = Math.pow(rot.getAsDouble(), 2) * -1;
+        if (newRot < 0) {
+          newRot = Math.pow(newRot, 2) * -1;
         } else {
-          newRot = Math.pow(rot.getAsDouble(), 2);
+          newRot = Math.pow(newRot, 2);
         }
         break;
 
       case "Cubed Mode":
-        xSpeed = Math.pow(speedX.getAsDouble(), 3);
-        ySpeed = Math.pow(speedY.getAsDouble(), 3);
-        newRot = Math.pow(rot.getAsDouble(), 3);
+        xSpeed = Math.pow(xSpeed, 3);
+        ySpeed = Math.pow(xSpeed, 3);
+        newRot = Math.pow(newRot, 3);
         break;
     }
     ChassisSpeeds speeds =
         new ChassisSpeeds(
-            xSpeed * (speedLimiterEntry.getDouble(100) / 100) * drive.getMaxLinearSpeed(),
-            ySpeed * (speedLimiterEntry.getDouble(100) / 100) * drive.getMaxLinearSpeed(),
-            newRot * (turnLimiterEntry.getDouble(100) / 100) * drive.getMaxAngularSpeed());
+            xSpeed * (speedLimiter / 100) * drive.getMaxLinearSpeed(),
+            ySpeed * (speedLimiter / 100) * drive.getMaxLinearSpeed(),
+            newRot * (turnLimiter / 100) * drive.getMaxAngularSpeed());
 
     drive.runVelocity(speeds);
   }

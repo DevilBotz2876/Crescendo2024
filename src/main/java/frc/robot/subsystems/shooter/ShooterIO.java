@@ -8,6 +8,7 @@ public interface ShooterIO {
     public double velocityRadPerSec = 0.0;
     public double appliedVolts = 0.0;
     public double positionRad = 0.0;
+    public double current = 0.0;
   }
 
   /** Updates the set of loggable inputs. */

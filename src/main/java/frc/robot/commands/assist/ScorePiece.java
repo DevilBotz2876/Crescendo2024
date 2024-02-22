@@ -29,8 +29,8 @@ public class ScorePiece extends Command {
 
   @Override
   public void initialize() {
-    intake.setVoltage(
-        assistGUI.getEntry("Feed Piece Volts").getDouble(IntakeConstants.feedSpeedInVolts));
+    intake.runVoltage(
+        assistGUI.getEntry("Intake: Feed Volts").getDouble(IntakeConstants.feedSpeedInVolts));
   }
 
   @Override
@@ -40,7 +40,7 @@ public class ScorePiece extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    intake.setVoltage(0);
+    intake.runVoltage(0);
     shooter.runVelocity(0);
   }
 }
