@@ -62,11 +62,11 @@ public class ArmIOStub implements ArmIO {
   /** Updates the set of loggable inputs. */
   @Override
   public void updateInputs(ArmIOInputs inputs) {
-    inputs.positionDegree = absEncoder.getDistance();
-    inputs.positionRad = Units.degreesToRadians(absEncoder.getDistance());
-    inputs.leftAppliedVolts = motor.get() * RobotController.getBatteryVoltage();
+    inputs.absolutePositionDegree = absEncoder.getDistance();
+    inputs.absolutePositionRad = Units.degreesToRadians(absEncoder.getDistance());
+    inputs.appliedVolts = motor.get() * RobotController.getBatteryVoltage();
 
-    arm.setInput(inputs.leftAppliedVolts);
+    arm.setInput(inputs.appliedVolts);
     arm.update(0.020);
     //    absEncoderSim.setDistance(Units.radiansToDegrees(arm.getAngleRads()));
 
