@@ -21,21 +21,21 @@ public class RobotConfigInferno extends RobotConfig {
     drive = new DriveSwerveYAGSL("yagsl/inferno");
     autoChooser = AutoBuilder.buildAutoChooser("Mobility Auto");
 
-    // Sherman has a TalonSRX based intake
+    // Inferno has a TalonSRX based intake
     IntakeConstants.defaultSpeedInVolts = 6.0;
     IntakeConstants.indexSpeedInVolts = 6.0;
     IntakeConstants.feedSpeedInVolts = 6.0;
 
     intake = new IntakeSubsystem(new IntakeIOTalonSRX(3));
 
-    // Sherman has a dual SparkMax based shooter
+    // Inferno has a single SparkMax based shooter
 
-    // Values from Carter's Shooter SysId Run on Sherman 2024-02-07
-    ShooterConstants.ffKs = 0.08134;
-    ShooterConstants.ffKv = 0.019999;
-    ShooterConstants.ffKa = 0.0054252;
+    // Values from Nilesh's Shooter SysId Run on Inferno 2024-02-22
+    ShooterConstants.ffKs = 0.0084987;
+    ShooterConstants.ffKv = 0.021041;
+    ShooterConstants.ffKa = 0.010693;
 
-    ShooterConstants.pidKp = 0.0010514;
+    ShooterConstants.pidKp = 0.0072355;
     ShooterConstants.pidKi = 0.0;
     ShooterConstants.pidKd = 0.0;
     ShooterConstants.pidVelocityErrorInRPMS = 20;
