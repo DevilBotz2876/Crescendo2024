@@ -36,12 +36,12 @@ public class TestShooterAngle extends Command {
   @Override
   public void execute() {
     shooter.runVelocity(ShooterVelocity.getDouble(ShooterConstants.velocityInRPMs));
-    intake.setVoltage(IntakeVoltage.getDouble(IntakeConstants.feedSpeedInVolts));
+    intake.runVoltage(IntakeVoltage.getDouble(IntakeConstants.feedSpeedInVolts));
     arm.setAngle(ArmAngle.getDouble(ArmConstants.shooterAngleInDegrees));
   }
 
   public void end(boolean interrupted) {
     shooter.runVelocity(0);
-    intake.setVoltage(0);
+    intake.runVoltage(0);
   }
 }

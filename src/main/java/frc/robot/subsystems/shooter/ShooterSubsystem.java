@@ -5,14 +5,10 @@ import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.config.RobotConfig.ShooterConstants;
-import java.util.Map;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -69,18 +65,6 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
                 null,
                 (state) -> Logger.recordOutput("Shooter/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism((voltage) -> runVoltage(voltage.in(Volts)), null, this));
-
-    // create shooter tab on ShuffleBoard
-    ShuffleboardTab tab = Shuffleboard.getTab("Assist");
-    // Create volt entry under Shooter tab as a number sider with min = -1 and max = 1
-    tab.add("Shooter Velocity", ShooterConstants.velocityInRPMs)
-        .withWidget(BuiltInWidgets.kTextView)
-        .withProperties(Map.of("min", 0, "max", 6000));
-
-    // Create volt entry under Shooter tab as a number sider with min = -1 and max = 1
-    tab.add("Shooter Voltage", ShooterConstants.maxSpeedInVolts)
-        .withWidget(BuiltInWidgets.kTextView)
-        .withProperties(Map.of("min", -12, "max", 12));
   }
 
   public ShooterSubsystem(ShooterIO ioTop, ShooterIO ioBottom) {

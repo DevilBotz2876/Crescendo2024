@@ -5,5 +5,5 @@ public interface Intake {
     return false;
   }
 
-  public default void setVoltage(double volts) {}
+  public default void runVoltage(double volts) {}
 }

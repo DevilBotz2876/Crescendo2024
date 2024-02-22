@@ -96,19 +96,6 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
             Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
         .getEntry();
 
-    ShuffleboardTab assistTab = Shuffleboard.getTab("Assist");
-    assistTab
-        .add("Intake Angle", ArmConstants.minAngleInDegrees)
-        .withWidget(BuiltInWidgets.kNumberSlider)
-        .withProperties(
-            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees));
-
-    assistTab
-        .add("Shooter Angle", 45)
-        .withWidget(BuiltInWidgets.kNumberSlider)
-        .withProperties(
-            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees));
-
     // Configure SysId based on the AdvantageKit example
     sysId =
         new SysIdRoutine(

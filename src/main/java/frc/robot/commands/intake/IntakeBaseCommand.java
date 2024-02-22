@@ -13,8 +13,8 @@ public class IntakeBaseCommand extends Command {
   Intake intake;
   BooleanSupplier inEnable;
   BooleanSupplier outEnable;
-  NetworkTable assistGUI = NetworkTableInstance.getDefault().getTable("Shuffleboard/Assist");
-  NetworkTableEntry voltsEntry = assistGUI.getEntry("Intake Piece Volts");
+  NetworkTable assistGUI = NetworkTableInstance.getDefault().getTable("Shuffleboard/Commands");
+  NetworkTableEntry voltsEntry = assistGUI.getEntry("Intake: Volts");
 
   public IntakeBaseCommand(Intake intake, BooleanSupplier inEnable, BooleanSupplier outEnable) {
     this.intake = intake;
@@ -26,21 +26,21 @@ public class IntakeBaseCommand extends Command {
 
   @Override
   public void execute() {
+    boolean inEnable = this.inEnable.getAsBoolean();
+    boolean outEnable = this.outEnable.getAsBoolean();
 
     // Turns off motors if No/All bumpers
-    if (inEnable.getAsBoolean() == true && outEnable.getAsBoolean() == true) {
+    if (inEnable == true && outEnable == true) {
       // Disable the intake motors
-      intake.setVoltage(0);
-      // System.out.println(outEnable.getAsBoolean());
-    } else if (inEnable.getAsBoolean() == false && outEnable.getAsBoolean() == false) {
-      intake.setVoltage(0);
-      // System.out.println(outEnable.getAsBoolean());
-    } else if (inEnable.getAsBoolean() == true) { // Motors on (IN) if right bumper pressed
-      intake.setVoltage(voltsEntry.getDouble(IntakeConstants.intakeSpeedInVolts));
-    } else if (outEnable.getAsBoolean() == true) { // Motors on (Out) if right bumper pressed
-      intake.setVoltage(voltsEntry.getDouble(IntakeConstants.intakeSpeedInVolts) * -1);
+      intake.runVoltage(0);
+    } else if (inEnable == false && outEnable == false) {
+      intake.runVoltage(0);
+    } else if (inEnable == true) { // Motors on (IN) if right bumper pressed
+      intake.runVoltage(voltsEntry.getDouble(IntakeConstants.defaultSpeedInVolts));
+    } else if (outEnable == true) { // Motors on (Out) if right bumper pressed
+      intake.runVoltage(-voltsEntry.getDouble(IntakeConstants.defaultSpeedInVolts));
     } else { // Disable the intake motors
-      intake.setVoltage(0);
+      intake.runVoltage(0);
     }
   }
 }

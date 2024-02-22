@@ -43,6 +43,8 @@ public class RobotConfig {
     public static double minAngleInDegrees = 0.0;
     public static double intakeAngleInDegrees = 1;
     public static double shooterAngleInDegrees = 45;
+
+    public static double defaultSpeedInVolts = 6.0;
   }
 
   public static class ShooterConstants {
@@ -64,19 +66,19 @@ public class RobotConfig {
     public static double pidKdBottom = 0.0;
 
     public static double velocityInRPMs = 3000;
-    public static double maxSpeedInVolts = 6.0;
+    public static double defaultSpeedInVolts = 6.0;
   }
 
   public static class IntakeConstants {
-    public static double intakeSpeedInVolts = 6.0;
+    public static double defaultSpeedInVolts = 6.0;
     public static double indexSpeedInVolts = 6.0;
     public static double feedSpeedInVolts = 6.0;
   }
 
   public static class ClimberConstants {
-    public static double maxSpeedInVolts = 6.0;
     public static double minPositionInRadians = 0.0;
     public static double maxPositionInRadians = 4.0;
+    public static double defaultSpeedInVolts = 2.0;
   }
 
   public RobotConfig() {
