@@ -72,7 +72,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>Direct Known Subclasses:</dt>
-<dd><code><a href="RobotConfigInferno.html" title="class in frc.robot.config">RobotConfigInferno</a></code>, <code><a href="RobotConfigPhoenix.html" title="class in frc.robot.config">RobotConfigPhoenix</a></code>, <code><a href="RobotConfigSherman.html" title="class in frc.robot.config">RobotConfigSherman</a></code></dd>
+<dd><code><a href="RobotConfigInferno.html" title="class in frc.robot.config">RobotConfigInferno</a></code>, <code><a href="RobotConfigPhoenix.html" title="class in frc.robot.config">RobotConfigPhoenix</a></code>, <code><a href="RobotConfigSherman.html" title="class in frc.robot.config">RobotConfigSherman</a></code>, <code><a href="RobotConfigStub.html" title="class in frc.robot.config">RobotConfigStub</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">RobotConfig</span>
@@ -93,14 +93,17 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="RobotConfig.ArmConstants.html" class="type-name-link" title="class in frc.robot.config">RobotConfig.ArmConstants</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="RobotConfig.DriveConstants.html" class="type-name-link" title="class in frc.robot.config">RobotConfig.DriveConstants</a></code></div>
+<div class="col-second odd-row-color"><code><a href="RobotConfig.ClimberConstants.html" class="type-name-link" title="class in frc.robot.config">RobotConfig.ClimberConstants</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="RobotConfig.IntakeConstants.html" class="type-name-link" title="class in frc.robot.config">RobotConfig.IntakeConstants</a></code></div>
+<div class="col-second even-row-color"><code><a href="RobotConfig.DriveConstants.html" class="type-name-link" title="class in frc.robot.config">RobotConfig.DriveConstants</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="RobotConfig.ShooterConstants.html" class="type-name-link" title="class in frc.robot.config">RobotConfig.ShooterConstants</a></code></div>
+<div class="col-second odd-row-color"><code><a href="RobotConfig.IntakeConstants.html" class="type-name-link" title="class in frc.robot.config">RobotConfig.IntakeConstants</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="RobotConfig.ShooterConstants.html" class="type-name-link" title="class in frc.robot.config">RobotConfig.ShooterConstants</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -119,15 +122,18 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code>static edu.wpi.first.wpilibj.smartdashboard.SendableChooser&lt;edu.wpi.first.wpilibj2.command.Command&gt;</code></div>
 <div class="col-second odd-row-color"><code><a href="#autoChooser" class="member-name-link">autoChooser</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static <a href="../subsystems/drive/DriveBase.html" title="class in frc.robot.subsystems.drive">DriveBase</a></code></div>
-<div class="col-second even-row-color"><code><a href="#drive" class="member-name-link">drive</a></code></div>
+<div class="col-first even-row-color"><code>static <a href="../subsystems/climber/ClimberSubsystem.html" title="class in frc.robot.subsystems.climber">ClimberSubsystem</a></code></div>
+<div class="col-second even-row-color"><code><a href="#climber" class="member-name-link">climber</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static <a href="../subsystems/intake/IntakeBase.html" title="class in frc.robot.subsystems.intake">IntakeBase</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#intake" class="member-name-link">intake</a></code></div>
+<div class="col-first odd-row-color"><code>static <a href="../subsystems/drive/DriveBase.html" title="class in frc.robot.subsystems.drive">DriveBase</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#drive" class="member-name-link">drive</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static <a href="../subsystems/shooter/ShooterSubsystem.html" title="class in frc.robot.subsystems.shooter">ShooterSubsystem</a></code></div>
-<div class="col-second even-row-color"><code><a href="#shooter" class="member-name-link">shooter</a></code></div>
+<div class="col-first even-row-color"><code>static <a href="../subsystems/intake/IntakeSubsystem.html" title="class in frc.robot.subsystems.intake">IntakeSubsystem</a></code></div>
+<div class="col-second even-row-color"><code><a href="#intake" class="member-name-link">intake</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static <a href="../subsystems/shooter/ShooterSubsystem.html" title="class in frc.robot.subsystems.shooter">ShooterSubsystem</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#shooter" class="member-name-link">shooter</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -151,6 +157,13 @@ loadScripts(document, 'script');</script>
  boolean&nbsp;stubArm,
  boolean&nbsp;stubAuto)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(boolean,boolean,boolean,boolean,boolean,boolean)" class="member-name-link">RobotConfig</a><wbr>(boolean&nbsp;stubDrive,
+ boolean&nbsp;stubShooter,
+ boolean&nbsp;stubIntake,
+ boolean&nbsp;stubArm,
+ boolean&nbsp;stubAuto,
+ boolean&nbsp;stubClimber)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -181,7 +194,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="intake">
 <h3>intake</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../subsystems/intake/IntakeBase.html" title="class in frc.robot.subsystems.intake">IntakeBase</a></span>&nbsp;<span class="element-name">intake</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../subsystems/intake/IntakeSubsystem.html" title="class in frc.robot.subsystems.intake">IntakeSubsystem</a></span>&nbsp;<span class="element-name">intake</span></div>
 </section>
 </li>
 <li>
@@ -200,6 +213,12 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="autoChooser">
 <h3>autoChooser</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">edu.wpi.first.wpilibj.smartdashboard.SendableChooser&lt;edu.wpi.first.wpilibj2.command.Command&gt;</span>&nbsp;<span class="element-name">autoChooser</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="climber">
+<h3>climber</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../subsystems/climber/ClimberSubsystem.html" title="class in frc.robot.subsystems.climber">ClimberSubsystem</a></span>&nbsp;<span class="element-name">climber</span></div>
 </section>
 </li>
 </ul>
@@ -232,6 +251,17 @@ loadScripts(document, 'script');</script>
  boolean&nbsp;stubIntake,
  boolean&nbsp;stubArm,
  boolean&nbsp;stubAuto)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(boolean,boolean,boolean,boolean,boolean,boolean)">
+<h3>RobotConfig</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RobotConfig</span><wbr><span class="parameters">(boolean&nbsp;stubDrive,
+ boolean&nbsp;stubShooter,
+ boolean&nbsp;stubIntake,
+ boolean&nbsp;stubArm,
+ boolean&nbsp;stubAuto,
+ boolean&nbsp;stubClimber)</span></div>
 </section>
 </li>
 </ul>

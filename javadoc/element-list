@@ -1,11 +1,13 @@
 frc.robot
 frc.robot.commands.arm
 frc.robot.commands.assist
+frc.robot.commands.climber
 frc.robot.commands.drive
 frc.robot.commands.intake
 frc.robot.commands.shooter
 frc.robot.config
 frc.robot.subsystems.arm
+frc.robot.subsystems.climber
 frc.robot.subsystems.drive
 frc.robot.subsystems.intake
 frc.robot.subsystems.shooter
