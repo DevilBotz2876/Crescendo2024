@@ -231,7 +231,10 @@ public class RobotContainer {
     commandTestTab
         .add(
             "Climber: Stop",
-            new InstantCommand(() -> RobotConfig.climber.runVoltage(0), RobotConfig.climber))
+            new SequentialCommandGroup(
+                new InstantCommand(() -> RobotConfig.climber.runVoltage(0), RobotConfig.climber),
+                new InstantCommand(
+                    () -> RobotConfig.climber.enableLimits(true), RobotConfig.climber)))
         .withPosition(colIndex + 0, rowIndex);
     commandTestTab
         .add(
@@ -277,9 +280,7 @@ public class RobotContainer {
                             -commandGUI
                                 .getEntry("Climber: Volts")
                                 .getDouble(ClimberConstants.defaultSpeedInVolts)),
-                    RobotConfig.climber),
-                new InstantCommand(
-                    () -> RobotConfig.climber.enableLimits(true), RobotConfig.climber)))
+                    RobotConfig.climber)))
         .withPosition(colIndex + 0, rowIndex);
     commandTestTab
         .add(
@@ -293,9 +294,7 @@ public class RobotContainer {
                             -commandGUI
                                 .getEntry("Climber: Volts")
                                 .getDouble(ClimberConstants.defaultSpeedInVolts)),
-                    RobotConfig.climber),
-                new InstantCommand(
-                    () -> RobotConfig.climber.enableLimits(false), RobotConfig.climber)))
+                    RobotConfig.climber)))
         .withPosition(colIndex + 1, rowIndex);
 
     rowIndex++;
