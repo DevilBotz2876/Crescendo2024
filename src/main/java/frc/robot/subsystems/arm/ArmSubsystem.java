@@ -160,8 +160,9 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   }
 
   protected double voltageSafety(double voltage) {
-    if (isLimitReached(voltage)) return 0.0;
-    else return voltage;
+    //    if (isLimitReached(voltage)) return 0.0;
+    //    else return voltage;
+    return voltage;
   }
 
   /** Returns a command to run a quasistatic test in the specified direction. */
@@ -199,6 +200,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
       relEncoderInit = false;
     }
 
+    /*
     if (isLimitHigh()) {
       // TODO: turn off voltage or stop pid
       io.setVoltage(0);
@@ -208,7 +210,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
       // io.resetRelativeEncoder(0.0);
       io.setVoltage(0);
     }
-
+    */
     arm2d.setAngle(inputs.absolutePositionDegree);
   }
 
