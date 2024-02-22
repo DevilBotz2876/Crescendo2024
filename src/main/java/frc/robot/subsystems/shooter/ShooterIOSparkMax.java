@@ -82,6 +82,7 @@ public class ShooterIOSparkMax implements ShooterIO {
     //        Units.rotationsPerMinuteToRadiansPerSecond(bottomEncoder.getVelocity() / GEAR_RATIO);
     // Get applied voltage from the top motor
     //    inputs.appliedVoltsBottom = bottom.getAppliedOutput() * bottom.getBusVoltage();
+    inputs.current = flywheel.getOutputCurrent();
 
     // double tp = SmartDashboard.getNumber("Shooter/P Gain", 0);
     // double ti = SmartDashboard.getNumber("Shooter/I Gain", 0);

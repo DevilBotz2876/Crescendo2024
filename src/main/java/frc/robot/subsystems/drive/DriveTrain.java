@@ -12,7 +12,6 @@ import frc.robot.config.RobotConfig.DriveConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
 
 public class DriveTrain extends DriveBase {
-  private final double maxVelocityMetersPerSec = 4.5; // meters/sec
   // Define talons
   private static final WPI_TalonSRX leftMaster = new WPI_TalonSRX(10);
   private static final WPI_TalonSRX rightMaster = new WPI_TalonSRX(11);
@@ -46,8 +45,8 @@ public class DriveTrain extends DriveBase {
         new DifferentialDriveKinematics(Units.inchesToMeters(24.0));
     DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.toWheelSpeeds(speeds);
 
-    leftVelocity = wheelSpeeds.leftMetersPerSecond / maxVelocityMetersPerSec;
-    rightVelocity = wheelSpeeds.rightMetersPerSecond / maxVelocityMetersPerSec;
+    leftVelocity = wheelSpeeds.leftMetersPerSecond / DriveConstants.maxVelocityMetersPerSec;
+    rightVelocity = wheelSpeeds.rightMetersPerSecond / DriveConstants.maxVelocityMetersPerSec;
 
     differentialDrive.tankDrive(leftVelocity, rightVelocity);
   }

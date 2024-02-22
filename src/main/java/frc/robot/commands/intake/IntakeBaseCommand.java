@@ -4,42 +4,44 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.config.RobotConfig.IntakeConstants;
-import frc.robot.subsystems.intake.IntakeBase;
+import frc.robot.subsystems.intake.Intake;
 import java.util.function.BooleanSupplier;
 
 public class IntakeBaseCommand extends Command {
-  IntakeBase intake;
+  Intake intake;
   BooleanSupplier inEnable;
   BooleanSupplier outEnable;
-  NetworkTable assistGUI = NetworkTableInstance.getDefault().getTable("Shuffleboard/Assist");
-  NetworkTableEntry voltsEntry = assistGUI.getEntry("Intake Piece Volts");
+  NetworkTable assistGUI = NetworkTableInstance.getDefault().getTable("Shuffleboard/Commands");
+  NetworkTableEntry voltsEntry = assistGUI.getEntry("Intake: Volts");
 
-  public IntakeBaseCommand(IntakeBase intake, BooleanSupplier inEnable, BooleanSupplier outEnable) {
+  public IntakeBaseCommand(Intake intake, BooleanSupplier inEnable, BooleanSupplier outEnable) {
     this.intake = intake;
     this.inEnable = inEnable;
     this.outEnable = outEnable;
 
-    addRequirements(intake);
+    addRequirements((Subsystem) intake);
   }
 
   @Override
   public void execute() {
-    double volts = voltsEntry.getDouble(IntakeConstants.intakeSpeedInVolts);
-    boolean in = inEnable.getAsBoolean();
-    boolean out = outEnable.getAsBoolean();
+    double volts = voltsEntry.getDouble(IntakeConstants.defaultSpeedInVolts);
+    boolean in = this.inEnable.getAsBoolean();
+    boolean out = this.outEnable.getAsBoolean();
+
     // Turns off motors if No/All bumpers
     if (in && out) {
       // Disable the intake motors
-      intake.setVoltage(0);
+      intake.runVoltage(0);
     } else if (in == false && out == false) {
-      intake.setVoltage(0);
+      intake.runVoltage(0);
     } else if (in) { // Motors on (IN) if right bumper pressed
-      intake.setVoltage(volts);
+      intake.runVoltage(volts);
     } else if (out) { // Motors on (Out) if right bumper pressed
-      intake.setVoltage(volts * -1);
+      intake.runVoltage(volts * -1);
     } else { // Disable the intake motors
-      intake.setVoltage(0);
+      intake.runVoltage(0);
     }
   }
 }

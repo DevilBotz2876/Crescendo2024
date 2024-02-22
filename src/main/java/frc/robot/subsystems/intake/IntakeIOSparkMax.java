@@ -27,6 +27,8 @@ public class IntakeIOSparkMax implements IntakeIO {
         Units.rotationsPerMinuteToRadiansPerSecond(encoder.getVelocity() / GEAR_RATIO);
     // Get applied voltage from the leader motor
     inputs.appliedVolts = leader.getAppliedOutput() * leader.getBusVoltage();
+
+    inputs.current = leader.getOutputCurrent();
   }
 
   @Override

@@ -26,7 +26,7 @@ public class TestShooterAngle extends Command {
     this.intake = intake;
     this.arm = arm;
     this.ShooterVelocity = assistGUI.getEntry("Shooter Velocity");
-    this.IntakeVoltage = assistGUI.getEntry("Feed Piece Volts");
+    this.IntakeVoltage = assistGUI.getEntry("Intake: Feed Volts");
     this.ArmAngle = assistGUI.getEntry("Shooter Angle");
     addRequirements((SubsystemBase) shooter);
     addRequirements((SubsystemBase) intake);
@@ -36,12 +36,12 @@ public class TestShooterAngle extends Command {
   @Override
   public void execute() {
     shooter.runVelocity(ShooterVelocity.getDouble(ShooterConstants.velocityInRPMs));
-    intake.setVoltage(IntakeVoltage.getDouble(IntakeConstants.feedSpeedInVolts));
+    intake.runVoltage(IntakeVoltage.getDouble(IntakeConstants.feedSpeedInVolts));
     arm.setAngle(ArmAngle.getDouble(ArmConstants.shooterAngleInDegrees));
   }
 
   public void end(boolean interrupted) {
     shooter.runVelocity(0);
-    intake.setVoltage(0);
+    intake.runVoltage(0);
   }
 }

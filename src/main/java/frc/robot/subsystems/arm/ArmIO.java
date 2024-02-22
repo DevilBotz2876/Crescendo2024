@@ -5,14 +5,15 @@ import org.littletonrobotics.junction.AutoLog;
 public interface ArmIO {
   @AutoLog
   public static class ArmIOInputs {
-    public double positionRad = 0.0;
-    public double positionDegree = 0.0;
+    public double absolutePositionRad = 0.0;
+    public double absolutePositionDegree = 0.0;
+    public double absolutePositionRaw;
+    public boolean absoluteEncoderConnected = false;
     public double current;
-    public double leftAppliedVolts = 0.0;
+    public double appliedVolts = 0.0;
     public double relativePositionRotations = 0.0;
     public boolean limitHigh = false;
     public boolean limitLow = false;
-    public boolean absoluteEncoderConnected = false;
   }
 
   /** Updates the set of loggable inputs. */

@@ -43,7 +43,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   private final MechanismLigament2d arm2d =
       armPivot2d.append(
           new MechanismLigament2d(
-              "Arm", 30, inputs.positionDegree, 6, new Color8Bit(Color.kYellow)));
+              "Arm", 30, inputs.absolutePositionDegree, 6, new Color8Bit(Color.kYellow)));
 
   private static final LoggedTunableNumber armKp = new LoggedTunableNumber("Arm/kP");
   private static final LoggedTunableNumber armKd = new LoggedTunableNumber("Arm/kD");
@@ -96,19 +96,6 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
             Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
         .getEntry();
 
-    ShuffleboardTab assistTab = Shuffleboard.getTab("Assist");
-    assistTab
-        .add("Intake Angle", ArmConstants.minAngleInDegrees)
-        .withWidget(BuiltInWidgets.kNumberSlider)
-        .withProperties(
-            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees));
-
-    assistTab
-        .add("Shooter Angle", 45)
-        .withWidget(BuiltInWidgets.kNumberSlider)
-        .withProperties(
-            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees));
-
     // Configure SysId based on the AdvantageKit example
     sysId =
         new SysIdRoutine(
@@ -127,7 +114,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   @Override
   public double getAngle() {
     /* TODO */
-    return inputs.positionDegree;
+    return inputs.absolutePositionDegree;
     // return 0;
   }
 
@@ -206,7 +193,9 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     Logger.processInputs("Arm", inputs);
 
     if (relEncoderInit) {
-      io.resetRelativeEncoder(inputs.positionDegree);
+      io.resetRelativeEncoder(
+          0); // TODO: We need to figure out the mapping for the absolute encoder to relative
+      // encoder
       relEncoderInit = false;
     }
 
@@ -216,11 +205,11 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     }
     if (isLimitLow()) {
       // TODO: turn off voltage or stop pid
-      io.resetRelativeEncoder(0.0);
+      // io.resetRelativeEncoder(0.0);
       io.setVoltage(0);
     }
 
-    arm2d.setAngle(inputs.positionDegree);
+    arm2d.setAngle(inputs.absolutePositionDegree);
   }
 
   private boolean isLimitHigh() {
@@ -228,7 +217,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-    if (inputs.positionDegree > positionDegreeMax) {
+    if (inputs.absolutePositionDegree > positionDegreeMax) {
       highLimitEntry.setBoolean(true);
       inputs.limitHigh = true;
     } else {
@@ -243,7 +232,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-    if (inputs.positionDegree < positionDegreeMin) {
+    if (inputs.absolutePositionDegree < positionDegreeMin) {
       inputs.limitLow = true;
       lowLimitEntry.setBoolean(true);
     } else {
