@@ -43,7 +43,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   private final MechanismLigament2d arm2d =
       armPivot2d.append(
           new MechanismLigament2d(
-              "Arm", 30, inputs.positionDegree, 6, new Color8Bit(Color.kYellow)));
+              "Arm", 30, inputs.absolutePositionDegree, 6, new Color8Bit(Color.kYellow)));
 
   private static final LoggedTunableNumber armKp = new LoggedTunableNumber("Arm/kP");
   private static final LoggedTunableNumber armKd = new LoggedTunableNumber("Arm/kD");
@@ -114,7 +114,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   @Override
   public double getAngle() {
     /* TODO */
-    return inputs.positionDegree;
+    return inputs.absolutePositionDegree;
     // return 0;
   }
 
@@ -209,7 +209,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
       io.setVoltage(0);
     }
 
-    arm2d.setAngle(inputs.positionDegree);
+    arm2d.setAngle(inputs.absolutePositionDegree);
   }
 
   private boolean isLimitHigh() {
@@ -217,7 +217,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-    if (inputs.positionDegree > positionDegreeMax) {
+    if (inputs.absolutePositionDegree > positionDegreeMax) {
       highLimitEntry.setBoolean(true);
       inputs.limitHigh = true;
     } else {
@@ -232,7 +232,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-    if (inputs.positionDegree < positionDegreeMin) {
+    if (inputs.absolutePositionDegree < positionDegreeMin) {
       inputs.limitLow = true;
       lowLimitEntry.setBoolean(true);
     } else {
