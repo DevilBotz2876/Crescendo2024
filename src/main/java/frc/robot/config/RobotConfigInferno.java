@@ -43,7 +43,7 @@ public class RobotConfigInferno extends RobotConfig {
     ShooterConstants.velocityInRPMs = 3000;
     shooter = new ShooterSubsystem(new ShooterIOSparkMax(2));
 
-    ArmConstants.absolutePositionOffset = 0.42925653052604144; // This is place holder
+    ArmConstants.absolutePositionOffset = 0.35; // Determined empirically on 2024-02-22
 
     ArmConstants.pidKp = 0.1;
     ArmConstants.pidKi = 0.0;
@@ -59,7 +59,7 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.intakeAngleInDegrees = 1;
     ArmConstants.shooterAngleInDegrees = 30;
 
-    arm = new ArmSubsystem(new ArmIOSparkMax(4));
+    arm = new ArmSubsystem(new ArmIOSparkMax(4, true));
 
     climber = new ClimberSubsystem(new ClimberIOSparkMax(7, false), new ClimberIOSparkMax(6, true));
     ClimberConstants.maxPositionInRadians = .4;
