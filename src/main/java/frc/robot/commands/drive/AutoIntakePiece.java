@@ -1,15 +1,11 @@
 package frc.robot.commands.drive;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class SimPrint extends Command {
-  int isFinished = 0;
-  int shotPieces = 0;
-
+public class AutoIntakePiece extends Command {
   @Override
   public void execute() {
-    System.out.println("Shot a piece.");
+    System.out.println("Prepare For Intake");
   }
 
   @Override

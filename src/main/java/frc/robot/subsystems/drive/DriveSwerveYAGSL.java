@@ -2,7 +2,6 @@ package frc.robot.subsystems.drive;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -42,7 +41,9 @@ public class DriveSwerveYAGSL extends DriveBase {
         swerveDrive::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
         new HolonomicPathFollowerConfig( // Rotation PID constants
             DriveConstants.maxVelocityMetersPerSec, // Max module speed, in m/s
-            DriveConstants.baseRadius, // Drive base radius in meters. Distance from robot center to furthest module.
+            DriveConstants
+                .baseRadius, // Drive base radius in meters. Distance from robot center to furthest
+            // module.
             new ReplanningConfig() // Default path replanning config. See the API for the options
             // here
             ),

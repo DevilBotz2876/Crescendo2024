@@ -4,10 +4,7 @@
 
 package frc.robot;
 
-import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
-
 import com.pathplanner.lib.auto.NamedCommands;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -15,7 +12,6 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -25,15 +21,15 @@ import frc.robot.commands.assist.IndexPiece;
 import frc.robot.commands.assist.PrepareForIntake;
 import frc.robot.commands.assist.PrepareForScore;
 import frc.robot.commands.assist.ScorePiece;
+import frc.robot.commands.drive.AutoIntakePiece;
+import frc.robot.commands.drive.AutoShootPiece;
 import frc.robot.commands.drive.DriveCommand;
-import frc.robot.commands.drive.PrepSim;
 import frc.robot.commands.intake.IntakeBaseCommand;
 import frc.robot.commands.shooter.TestShooterAngle;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfigInferno;
 import frc.robot.config.RobotConfigPhoenix;
 import frc.robot.config.RobotConfigSherman;
-import frc.robot.commands.drive.SimPrint;
 
 public class RobotContainer {
   public final CommandXboxController controller;
@@ -44,8 +40,8 @@ public class RobotContainer {
     String robotName = "UNKNOWN";
     controller = new CommandXboxController(0);
 
-    NamedCommands.registerCommand("Shoot Piece",  new SimPrint());
-    NamedCommands.registerCommand("PrepareForIntake", new PrepSim());
+    NamedCommands.registerCommand("Shoot Piece", new AutoShootPiece());
+    NamedCommands.registerCommand("Intake Piece", new AutoIntakePiece());
 
     Preferences.initString(robotNameKey, robotName);
     robotName = Preferences.getString(robotNameKey, robotName);

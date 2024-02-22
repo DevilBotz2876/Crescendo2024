@@ -1,10 +1,14 @@
 package frc.robot.commands.drive;
+
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class PrepSim extends Command {
+public class AutoShootPiece extends Command {
+  int isFinished = 0;
+  int shotPieces = 0;
+
   @Override
-  public void execute () {
-    System.out.println("Prepare For Intake");
+  public void execute() {
+    System.out.println("Shot a piece.");
   }
 
   @Override
