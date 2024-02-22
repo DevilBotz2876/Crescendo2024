@@ -21,7 +21,6 @@ import frc.robot.commands.assist.PrepareForScore;
 import frc.robot.commands.assist.ScorePiece;
 import frc.robot.commands.climber.ClimberToPosition;
 import frc.robot.commands.drive.DriveCommand;
-import frc.robot.commands.intake.IntakeBaseCommand;
 import frc.robot.commands.shooter.TestShooterAngle;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
@@ -145,11 +144,11 @@ public class RobotContainer {
 
     controller.b().onTrue(new PrepareForScore(RobotConfig.arm, RobotConfig.shooter));
 
-    RobotConfig.intake.setDefaultCommand(
-        new IntakeBaseCommand(
-            RobotConfig.intake,
-            () -> controller.rightBumper().getAsBoolean(),
-            () -> controller.leftBumper().getAsBoolean()));
+    //    RobotConfig.intake.setDefaultCommand(
+    //        new IntakeBaseCommand(
+    //            RobotConfig.intake,
+    //            () -> controller.rightBumper().getAsBoolean(),
+    //            () -> controller.leftBumper().getAsBoolean()));
 
     RobotConfig.drive.setDefaultCommand(
         new DriveCommand(
