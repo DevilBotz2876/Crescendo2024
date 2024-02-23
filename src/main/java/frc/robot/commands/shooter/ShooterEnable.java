@@ -24,7 +24,7 @@ public class ShooterEnable extends Command {
   @Override
   public void execute() {
     // Checks the volt Entry for the volt and sets the voltage of motors
-    shooter.runVelocity(assistGUI.getEntry("Shooter Velocity").getDouble(3000));
+    shooter.runVelocity(assistGUI.getEntry("Shooter: Velocity").getDouble(3000));
   }
 
   @Override

@@ -45,6 +45,7 @@ public class RobotConfig {
     public static double shooterAngleInDegrees = 45;
 
     public static double defaultSpeedInVolts = 6.0;
+    public static double ampScoreShooterAngleInDegrees = 80;
   }
 
   public static class ShooterConstants {
@@ -67,6 +68,7 @@ public class RobotConfig {
 
     public static double velocityInRPMs = 3000;
     public static double defaultSpeedInVolts = 6.0;
+    public static double ampScoreVelocityInRPMs = 1000;
   }
 
   public static class IntakeConstants {

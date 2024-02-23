@@ -10,23 +10,43 @@ import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.shooter.Shooter;
+import java.util.function.BooleanSupplier;
 
 public class PrepareForScore extends ParallelCommandGroup {
-  // TODO:  read arm angle and shooter velocity from GUI
+  // TODO:  read arm angle and Shooter: Velocity from GUI
   NetworkTable assistGUI = NetworkTableInstance.getDefault().getTable("Shuffleboard/Assist");
+  BooleanSupplier targetIsAmp;
 
   // Moves arm to ideal angle for shooting
   // Turns on shooter to ideal speed for scoring
   public PrepareForScore(Arm arm, Shooter shooter) {
+    this(arm, shooter, () -> false);
+  }
+
+  public PrepareForScore(Arm arm, Shooter shooter, BooleanSupplier targetIsAmp) {
+    this.targetIsAmp = targetIsAmp;
+
     addCommands(
         new ArmToPosition(
             (ArmSubsystem) arm,
             () ->
-                assistGUI.getEntry("Shooter Angle").getDouble(ArmConstants.shooterAngleInDegrees)));
+                this.targetIsAmp.getAsBoolean()
+                    ? assistGUI
+                        .getEntry("Shooter: Angle (Amp)")
+                        .getDouble(ArmConstants.ampScoreShooterAngleInDegrees)
+                    : assistGUI
+                        .getEntry("Shooter: Angle")
+                        .getDouble(ArmConstants.shooterAngleInDegrees)));
     addCommands(
         new SetShooterVelocity(
             shooter,
             () ->
-                assistGUI.getEntry("Shooter Velocity").getDouble(ShooterConstants.velocityInRPMs)));
+                this.targetIsAmp.getAsBoolean()
+                    ? assistGUI
+                        .getEntry("Shooter: Velocity (Amp)")
+                        .getDouble(ShooterConstants.ampScoreVelocityInRPMs)
+                    : assistGUI
+                        .getEntry("Shooter: Velocity")
+                        .getDouble(ShooterConstants.velocityInRPMs)));
   }
 }
