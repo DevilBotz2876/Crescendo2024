@@ -39,6 +39,7 @@ public class RobotContainer {
   private static final String robotNameKey = "Robot Name";
   private static GenericEntry ampModeEntry = null;
   private static boolean ampMode = false;
+  private static GenericEntry fieldOrientedEntry = null;
 
   public RobotContainer() {
     String robotName = "UNKNOWN";
@@ -172,12 +173,16 @@ public class RobotContainer {
             () -> MathUtil.applyDeadband(-controller.getRightX(), 0.05)));
 
     controller
-        .start()
+        .x()
         .onTrue(
             new InstantCommand(
-                () ->
-                    RobotConfig.drive.setFieldOrientedDrive(
-                        !RobotConfig.drive.isFieldOrientedDrive()),
+                () -> {
+                  RobotConfig.drive.setFieldOrientedDrive(
+                      !RobotConfig.drive.isFieldOrientedDrive());
+                  if (fieldOrientedEntry != null) {
+                    fieldOrientedEntry.setBoolean(RobotConfig.drive.isFieldOrientedDrive());
+                  }
+                },
                 RobotConfig.drive));
 
     controller
@@ -458,5 +463,13 @@ public class RobotContainer {
             new TestShooterAngle(RobotConfig.shooter, RobotConfig.intake, RobotConfig.arm))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
+
+    fieldOrientedEntry =
+        assistTab
+            .add("Field Oriented Drive", RobotConfig.drive.isFieldOrientedDrive())
+            .withWidget(BuiltInWidgets.kBooleanBox)
+            .withPosition(colIndex, rowIndex++)
+            .withSize(2, 1)
+            .getEntry();
   }
 }
