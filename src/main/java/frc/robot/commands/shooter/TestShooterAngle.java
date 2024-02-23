@@ -25,9 +25,9 @@ public class TestShooterAngle extends Command {
     this.shooter = shooter;
     this.intake = intake;
     this.arm = arm;
-    this.ShooterVelocity = assistGUI.getEntry("Shooter Velocity");
+    this.ShooterVelocity = assistGUI.getEntry("Shooter: Velocity");
     this.IntakeVoltage = assistGUI.getEntry("Intake: Feed Volts");
-    this.ArmAngle = assistGUI.getEntry("Shooter Angle");
+    this.ArmAngle = assistGUI.getEntry("Shooter: Angle");
     addRequirements((SubsystemBase) shooter);
     addRequirements((SubsystemBase) intake);
     addRequirements((SubsystemBase) arm);
