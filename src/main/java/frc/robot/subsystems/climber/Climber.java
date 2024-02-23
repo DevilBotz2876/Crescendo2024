@@ -15,5 +15,5 @@ public interface Climber {
 
   public void resetPosition();
 
-  public default void enableLimits(boolean enable) {}
+  public default void autoZeroMode(boolean enable) {}
 }

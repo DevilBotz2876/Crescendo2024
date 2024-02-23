@@ -16,7 +16,8 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
   @AutoLogOutput private boolean bExtendRight = false;
   @AutoLogOutput private boolean leftAtLimit = false;
   @AutoLogOutput private boolean rightAtLimit = false;
-  @AutoLogOutput private boolean enableLimits = true;
+  @AutoLogOutput private boolean autoZeroModeLeft = false;
+  @AutoLogOutput private boolean autoZeroModeRight = false;
 
   public ClimberSubsystem(ClimberIO left, ClimberIO right) {
     this.left = left;
@@ -75,19 +76,52 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
   }
 
   private boolean leftAtLimits() {
-    leftAtLimit =
-        bExtendLeft
-            ? (inputsLeft.positionRadians >= ClimberConstants.maxPositionInRadians)
-            : (inputsLeft.positionRadians <= ClimberConstants.minPositionInRadians);
-    return enableLimits ? leftAtLimit : false;
+    if (autoZeroModeLeft) {
+      if (bExtendLeft) {
+        /* If we are in autozero mode, don't let the climber move up */
+        return true;
+      } else {
+        if ((inputsLeft.current > ClimberConstants.autoZeroMaxCurrent)
+            && (Math.abs(inputsLeft.appliedVolts - leftVoltage)
+                > ClimberConstants.autoZeroMaxVoltageDelta)) {
+          left.resetPosition();
+          autoZeroModeLeft = false;
+          return true;
+        } else {
+          return false;
+        }
+      }
+    } else {
+      return bExtendLeft
+          ? (inputsLeft.positionRadians >= ClimberConstants.maxPositionInRadians)
+          : (inputsLeft.positionRadians <= ClimberConstants.minPositionInRadians);
+    }
   }
 
   private boolean rightAtLimits() {
-    rightAtLimit =
-        bExtendRight
-            ? (inputsRight.positionRadians >= ClimberConstants.maxPositionInRadians)
-            : (inputsRight.positionRadians <= ClimberConstants.minPositionInRadians);
-    return enableLimits ? rightAtLimit : false;
+    if (autoZeroModeRight) {
+      if (bExtendRight) {
+        /* If we are in autozero mode, don't let the climber move up */
+        return true;
+      } else {
+        if ((inputsRight.current > ClimberConstants.autoZeroMaxCurrent) // Current is high
+            && (Math.abs(
+                    inputsRight.appliedVolts
+                        - rightVoltage) // There's a large enough difference between applied volts
+                // and the requested voltage
+                > ClimberConstants.autoZeroMaxVoltageDelta)) {
+          right.resetPosition();
+          autoZeroModeRight = false;
+          return true;
+        } else {
+          return false;
+        }
+      }
+    } else {
+      return bExtendRight
+          ? (inputsRight.positionRadians >= ClimberConstants.maxPositionInRadians)
+          : (inputsRight.positionRadians <= ClimberConstants.minPositionInRadians);
+    }
   }
 
   public void resetPosition() {
@@ -95,7 +129,8 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
     right.resetPosition();
   }
 
-  public void enableLimits(boolean enable) {
-    enableLimits = enable;
+  public void autoZeroMode(boolean enable) {
+    autoZeroModeLeft = enable;
+    autoZeroModeRight = enable;
   }
 }

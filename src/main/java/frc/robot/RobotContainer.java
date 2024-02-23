@@ -14,12 +14,13 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.assist.PrepareForIntake;
 import frc.robot.commands.assist.PrepareForScore;
 import frc.robot.commands.assist.ScorePiece;
-import frc.robot.commands.climber.ClimberToPosition;
+import frc.robot.commands.climber.ClimberCommand;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.shooter.TestShooterAngle;
 import frc.robot.config.RobotConfig;
@@ -233,13 +234,38 @@ public class RobotContainer {
             new SequentialCommandGroup(
                 new InstantCommand(() -> RobotConfig.climber.runVoltage(0), RobotConfig.climber),
                 new InstantCommand(
-                    () -> RobotConfig.climber.enableLimits(true), RobotConfig.climber)))
+                    () -> RobotConfig.climber.autoZeroMode(false), RobotConfig.climber)))
         .withPosition(colIndex + 0, rowIndex);
     commandTestTab
         .add(
             "Climber: Zero",
             new InstantCommand(() -> RobotConfig.climber.resetPosition(), RobotConfig.climber))
         .withPosition(colIndex + 1, rowIndex);
+
+    rowIndex++;
+    commandTestTab
+        .add(
+            "Climber: Auto Zero",
+            new SequentialCommandGroup(
+                new InstantCommand(
+                    () -> RobotConfig.climber.runVoltage(ClimberConstants.autoZeroVoltage),
+                    RobotConfig.climber),
+                new WaitCommand(ClimberConstants.autoZeroExtendTimeInSeconds),
+                new InstantCommand(
+                    () -> {
+                      RobotConfig.climber.autoZeroMode(true);
+                      RobotConfig.climber.runVoltage(-ClimberConstants.autoZeroVoltage);
+                    },
+                    RobotConfig.climber),
+                new WaitCommand(ClimberConstants.autoZeroMaxRetractTimeInSeconds),
+                new InstantCommand(
+                    () -> {
+                      RobotConfig.climber.autoZeroMode(false);
+                      RobotConfig.climber.runVoltage(0);
+                    },
+                    RobotConfig.climber)))
+        .withPosition(colIndex, rowIndex)
+        .withSize(2, 1);
 
     rowIndex++;
     commandTestTab
@@ -272,7 +298,7 @@ public class RobotContainer {
             "Climber: L Down",
             new SequentialCommandGroup(
                 new InstantCommand(
-                    () -> RobotConfig.climber.enableLimits(false), RobotConfig.climber),
+                    () -> RobotConfig.climber.autoZeroMode(true), RobotConfig.climber),
                 new InstantCommand(
                     () ->
                         RobotConfig.climber.runVoltageLeft(
@@ -286,7 +312,7 @@ public class RobotContainer {
             "Climber: R Down",
             new SequentialCommandGroup(
                 new InstantCommand(
-                    () -> RobotConfig.climber.enableLimits(false), RobotConfig.climber),
+                    () -> RobotConfig.climber.autoZeroMode(true), RobotConfig.climber),
                 new InstantCommand(
                     () ->
                         RobotConfig.climber.runVoltageRight(
@@ -298,10 +324,10 @@ public class RobotContainer {
 
     rowIndex++;
     commandTestTab
-        .add("Climber: Extend", new ClimberToPosition(RobotConfig.climber, true))
+        .add("Climber: Extend", new ClimberCommand(RobotConfig.climber, true))
         .withPosition(colIndex, rowIndex++);
     commandTestTab
-        .add("Climber: Retract", new ClimberToPosition(RobotConfig.climber, false))
+        .add("Climber: Retract", new ClimberCommand(RobotConfig.climber, false))
         .withPosition(colIndex, rowIndex++);
 
     colIndex += 2;
