@@ -123,4 +123,9 @@ public class DriveSwerveYAGSL extends DriveBase {
     return SwerveDriveTest.generateSysIdCommand(
         SwerveDriveTest.setAngleSysIdRoutine(new Config(), this, swerveDrive), 3.0, 5.0, 3.0);
   }
+
+  @Override
+  public Pose2d getPose() {
+    return swerveDrive.getPose();
+  }
 }

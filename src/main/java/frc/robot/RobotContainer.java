@@ -30,7 +30,6 @@ import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.config.RobotConfigInferno;
 import frc.robot.config.RobotConfigPhoenix;
 import frc.robot.config.RobotConfigSherman;
-import frc.robot.config.RobotConfigStub;
 import java.util.Map;
 
 public class RobotContainer {
@@ -58,9 +57,10 @@ public class RobotContainer {
       case "UNKNOWN":
       default:
         /* If running simulation, put the robot config you want here */
-        // robotConfig = new RobotConfigInferno();
+        robotConfig = new RobotConfigInferno();
+        // robotConfig = new RobotConfigPhoenix();
         // robotConfig = new RobotConfigSherman();
-        robotConfig = new RobotConfigStub();
+        // robotConfig = new RobotConfigStub();
     }
 
     // SmartDashboard.putData("Subsystems/Arm", RobotConfig.arm);

@@ -12,6 +12,7 @@ import frc.robot.subsystems.intake.IntakeIOStub;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterIOStub;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.subsystems.vision.VisionSubsystem;
 
 /* Put all constants here with reasonable defaults */
 public class RobotConfig {
@@ -21,6 +22,7 @@ public class RobotConfig {
   public static ArmSubsystem arm;
   public static SendableChooser<Command> autoChooser;
   public static ClimberSubsystem climber;
+  public static VisionSubsystem vision;
 
   public static class DriveConstants {
     public static double maxVelocityMetersPerSec = 4.5;
@@ -131,6 +133,10 @@ public class RobotConfig {
 
     if (stubClimber) {
       climber = new ClimberSubsystem(new ClimberIOStub(), new ClimberIOStub());
+    }
+
+    {
+      vision = new VisionSubsystem(() -> RobotConfig.drive.getPose());
     }
   }
 }
