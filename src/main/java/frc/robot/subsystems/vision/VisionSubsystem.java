@@ -3,7 +3,6 @@ package frc.robot.subsystems.vision;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -50,10 +49,13 @@ public class VisionSubsystem extends SubsystemBase {
   private final Supplier<Pose2d> poseSupplier;
 
   @AutoLogOutput PhotonPipelineResult result;
-  @AutoLogOutput int targetId;
-  @AutoLogOutput Pose3d targetPose;
+  @AutoLogOutput int targetsVisible;
+  @AutoLogOutput int speakerId;
   @AutoLogOutput double speakerDistance;
   @AutoLogOutput double speakerYaw;
+  @AutoLogOutput int ampId;
+  @AutoLogOutput double ampDistance;
+  @AutoLogOutput double ampYaw;
   @AutoLogOutput Pose2d estimatedPose;
   @AutoLogOutput double estimatedPoseTimestamp;
 
@@ -85,6 +87,7 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     result = camera.getLatestResult();
+    targetsVisible = result.targets.size();
 
     Optional<EstimatedRobotPose> currentEstimatedRobotPose = poseEstimator.update();
     if (currentEstimatedRobotPose.isPresent()) {
@@ -94,14 +97,17 @@ public class VisionSubsystem extends SubsystemBase {
 
     if (DriverStation.getAlliance().isPresent()
         && (DriverStation.getAlliance().get() == DriverStation.Alliance.Red)) {
-      targetId = 4; // Red Speaker Center
+      speakerId = 4; // Red Speaker Center
+      ampId = 5; // Red Amp
     } else {
-      targetId = 7; // Blue Speaker Center
+      speakerId = 7; // Blue Speaker Center
+      ampId = 6; // Blue Amp
     }
 
-    speakerDistance = getDistanceToAprilTag(targetId);
-    speakerYaw = getDistanceToAprilTag(targetId);
-    targetPose = getPose3dToAprilTag(targetId);
+    speakerDistance = getDistanceToAprilTag(speakerId);
+    speakerYaw = getYawToAprilTag(speakerId);
+    ampDistance = getDistanceToAprilTag(ampId);
+    ampYaw = getYawToAprilTag(ampId);
   }
 
   private PhotonTrackedTarget findAprilTag(int id) {
@@ -135,15 +141,16 @@ public class VisionSubsystem extends SubsystemBase {
 
     return -1;
   }
-
-  public Pose3d getPose3dToAprilTag(int id) {
-    PhotonTrackedTarget target = findAprilTag(id);
-    if (target != null) {
-      return PhotonUtils.estimateFieldToRobotAprilTag(
-          target.getBestCameraToTarget(),
-          fieldLayout.getTagPose(target.getFiducialId()).get(),
-          robotToCamera);
-    }
-    return null;
-  }
+  /*
+   public Pose3d getPose3dToAprilTag(int id) {
+     PhotonTrackedTarget target = findAprilTag(id);
+     if (target != null) {
+       return PhotonUtils.estimateFieldToRobotAprilTag(
+           target.getBestCameraToTarget(),
+           fieldLayout.getTagPose(target.getFiducialId()).get(),
+           robotToCamera);
+     }
+     return null;
+   }
+  */
 }
