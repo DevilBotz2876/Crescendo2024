@@ -45,6 +45,16 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
     return -1;
   }
 
+  @Override
+  public double getYawToAprilTag(int aprilTagId) {
+    PhotonTrackedTarget target = findAprilTag(aprilTagId);
+    if (target != null) {
+      return target.getYaw();
+    }
+
+    return -1;
+  }
+
   /*
   public Pose3d getPose3dToAprilTag(int aprilTagId) {
       PhotonTrackedTarget target = findAprilTag(aprilTagId);
