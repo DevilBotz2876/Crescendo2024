@@ -48,16 +48,16 @@ public class VisionSubsystem extends SubsystemBase {
   private final VisionSystemSim visionSim;
   private final Supplier<Pose2d> poseSupplier;
 
-  @AutoLogOutput PhotonPipelineResult result;
+  PhotonPipelineResult result;
   @AutoLogOutput int targetsVisible;
-  @AutoLogOutput int speakerId;
+  int speakerId;
   @AutoLogOutput double speakerDistance;
   @AutoLogOutput double speakerYaw;
-  @AutoLogOutput int ampId;
+  int ampId;
   @AutoLogOutput double ampDistance;
   @AutoLogOutput double ampYaw;
   @AutoLogOutput Pose2d estimatedPose;
-  @AutoLogOutput double estimatedPoseTimestamp;
+  double estimatedPoseTimestamp;
 
   public VisionSubsystem(Supplier<Pose2d> poseSupplier) {
     camera = new PhotonCamera("photonvision");
