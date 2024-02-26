@@ -51,15 +51,19 @@ public interface Vision {
     }
   }
 
+  public default boolean setPrimaryCamera(String name) {
+    return true;
+  }
+
   /**
-   * Returns the yaw in degrees to the best target
+   * Returns the yaw in degrees to the best target (relative to the primary camera)
    *
    * @return yaw to the best target (in degrees)
    */
   public Optional<Double> getYawToBestTarget();
 
   /**
-   * Returns the distance to the specified april tag in meters
+   * Returns the distance to the specified april tag in meters (relative to the primary camera)
    *
    * @param id AprilTag ID
    * @return distance to the specified april tag (in meters).
@@ -67,7 +71,8 @@ public interface Vision {
   public Optional<Double> getDistanceToAprilTag(int id);
 
   /**
-   * Returns the yaw in degrees to th specified april tag in meters
+   * Returns the yaw in degrees to the specified april tag in meters (relative to the primary
+   * camera)
    *
    * @param id AprilTag ID
    * @return yaw to the specified april tag (in degrees).
@@ -83,5 +88,4 @@ public interface Vision {
   public List<VisionPose> getEstimatedPoses();
 
   public default void enableSimulation(Supplier<Pose2d> poseSupplier, boolean enableWireFrame) {}
-  ;
 }

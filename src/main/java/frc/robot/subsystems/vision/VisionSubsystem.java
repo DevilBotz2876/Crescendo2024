@@ -273,4 +273,18 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
   public List<VisionPose> getEstimatedPoses() {
     return estimatedPoses;
   }
+
+  @Override
+  public boolean setPrimaryCamera(String name) {
+    boolean foundCamera = false;
+
+    for (VisionCameraImpl camera : cameras) {
+      if (camera.getName().equals(name)) {
+        primaryCamera = camera;
+        foundCamera = true;
+        break;
+      }
+    }
+    return foundCamera;
+  }
 }
