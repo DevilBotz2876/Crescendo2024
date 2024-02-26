@@ -9,6 +9,8 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -56,8 +58,8 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
   int ampId;
   @AutoLogOutput double ampDistance;
   @AutoLogOutput double ampYaw;
-  @AutoLogOutput Pose2d estimatedPose;
-  double estimatedPoseTimestamp;
+  List<VisionPose> estimatedPose = new ArrayList<VisionPose>();
+  @AutoLogOutput String estimatedPoses;
 
   public VisionSubsystem(Supplier<Pose2d> poseSupplier) {
     camera = new PhotonCamera("photonvision");
@@ -78,10 +80,13 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
     visionSim.addAprilTags(this.fieldLayout);
     visionSim.addCamera(cameraSim, robotToCamera);
     this.poseSupplier = poseSupplier;
+
+    estimatedPose.add(new VisionPose());
   }
 
   @Override
   public void periodic() {
+    int cameraIndex = 0;
     if (visionSim != null) {
       visionSim.update(poseSupplier.get());
     }
@@ -91,9 +96,12 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
 
     Optional<EstimatedRobotPose> currentEstimatedRobotPose = poseEstimator.update();
     if (currentEstimatedRobotPose.isPresent()) {
-      estimatedPose = currentEstimatedRobotPose.get().estimatedPose.toPose2d();
-      estimatedPoseTimestamp = currentEstimatedRobotPose.get().timestampSeconds;
+      estimatedPose.get(cameraIndex).robotPose =
+          currentEstimatedRobotPose.get().estimatedPose.toPose2d();
+      estimatedPose.get(cameraIndex).timestamp = currentEstimatedRobotPose.get().timestampSeconds;
+      estimatedPose.get(cameraIndex).cameraName = camera.getName();
     }
+    estimatedPoses = estimatedPose.toString();
 
     if (DriverStation.getAlliance().isPresent()
         && (DriverStation.getAlliance().get() == DriverStation.Alliance.Red)) {
@@ -167,16 +175,9 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
 
     return Optional.empty();
   }
-  /*
-   public Pose3d getPose3dToAprilTag(int id) {
-     PhotonTrackedTarget target = findAprilTag(id);
-     if (target != null) {
-       return PhotonUtils.estimateFieldToRobotAprilTag(
-           target.getBestCameraToTarget(),
-           fieldLayout.getTagPose(target.getFiducialId()).get(),
-           robotToCamera);
-     }
-     return null;
-   }
-  */
+
+  @Override
+  public List<VisionPose> getEstimatedPose() {
+    return estimatedPose;
+  }
 }
