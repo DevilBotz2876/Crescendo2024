@@ -10,15 +10,15 @@ public class VisionCamera {
    *
    * Translation(x,y,z) - location of the camera relative to the center of the robot (in meters)
    *    x +/- is forward/back from center
-   *    y +/- is right/left from center.
+   *    y +/- is left/right from center.
    *    z is relative to the ground (and should be positive)
-   *  E.g. Translation(0.5,0,0.5) is 1/2 meter forward of center and 1/2 meter above center
+   *  E.g. Translation(0.0, -0.5, 0.5) is 1/2 meter right of center and 1/2 meter above the ground
    *
    * Rotation(roll, pitch, yaw) - orientation of the camera view (in radians)
    *    roll +/- is CCW/CW around x-axis (should generally be 0)
-   *    pitch +/- is up/down around y-axis (should generally be >= 0)
+   *    pitch +/- is down/up around y-axis (should generally be <= 0)
    *    yaw +/- is left/right around the z-axis
-   *  E.g. Rotation(0,0,0) is facing straight forward
+   *  E.g. Rotation(0, Units.degreesToRadians(-20), Units.degreesToRadians(-90)) is pitched up by 20 degrees, and facing to the right
    */
   Transform3d robotToCamera;
 
