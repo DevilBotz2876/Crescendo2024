@@ -87,7 +87,7 @@ public class RobotConfigInferno extends RobotConfig {
     vision = new VisionSubsystem(cameras, AprilTagFields.k2024Crescendo.loadAprilTagLayoutField());
 
     if (Robot.isSimulation()) {
-      vision.enableSimulation(() -> RobotConfig.drive.getPose(), false);
+      vision.enableSimulation(() -> RobotConfig.drive.getPose(), true);
     }
   }
 }
