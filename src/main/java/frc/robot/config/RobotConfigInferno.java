@@ -1,6 +1,12 @@
 package frc.robot.config;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
+import frc.robot.Robot;
 import frc.robot.subsystems.arm.ArmIOSparkMax;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.climber.ClimberIOSparkMax;
@@ -10,11 +16,14 @@ import frc.robot.subsystems.intake.IntakeIOTalonSRX;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.subsystems.vision.VisionCamera;
+import frc.robot.subsystems.vision.VisionSubsystem;
+import java.util.ArrayList;
 
 /* Override Inferno specific constants here */
 public class RobotConfigInferno extends RobotConfig {
   public RobotConfigInferno() {
-    super(false, false, false, false, false, false);
+    super(false, false, false, false, false, false, false);
 
     // Inferno has a Swerve drive train
     // TODO: set DriveConstants.maxVelocityMetersPerSec
@@ -65,5 +74,20 @@ public class RobotConfigInferno extends RobotConfig {
     ClimberConstants.maxPositionInRadians = .4;
     // 16 inchea extension, 5/8 radius from the center of the spoke
     // formula is 16/ 2 * pi * 5/8 to get 4.07 that rounds 4 (SIG FIGS )
+
+    ArrayList<VisionCamera> cameras = new ArrayList<VisionCamera>();
+    /* TODO: Measure and set camera name/location */
+    cameras.add(
+        new VisionCamera(
+            "shooter",
+            new Transform3d(
+                new Translation3d(0.221, 0, .164),
+                new Rotation3d(0, Units.degreesToRadians(-20), 0))));
+
+    vision = new VisionSubsystem(cameras, AprilTagFields.k2024Crescendo.loadAprilTagLayoutField());
+
+    if (Robot.isSimulation()) {
+      vision.enableSimulation(() -> RobotConfig.drive.getPose(), false);
+    }
   }
 }
