@@ -3,6 +3,7 @@ package frc.robot.config;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.auto.AutoScoreConstants;
 import frc.robot.subsystems.arm.ArmIOStub;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.climber.ClimberIOStub;
@@ -80,6 +81,19 @@ public class RobotConfig {
     public static double minPositionInRadians = 0.0;
     public static double maxPositionInRadians = 4.0;
     public static double defaultSpeedInVolts = 2.0;
+  }
+
+  public static class AutoConstants {
+    /* TODO: Fill in the values for scoring here */
+    public static AutoScoreConstants scoreFromSpeakerAmpSide =
+        new AutoScoreConstants(0.0, 0.0, 0.0);
+    public static AutoScoreConstants scoreFromNoteAmpSide = new AutoScoreConstants(0.0, 0.0, 0.0);
+    public static AutoScoreConstants scoreFromSpeakerCenter = new AutoScoreConstants(0.0, 0.0, 0.0);
+    public static AutoScoreConstants scoreFromNoteCenter = new AutoScoreConstants(0.0, 0.0, 0.0);
+    public static AutoScoreConstants scoreFromSpeakerSourceSide =
+        new AutoScoreConstants(0.0, 0.0, 0.0);
+    public static AutoScoreConstants scoreFromNoteSourceSide =
+        new AutoScoreConstants(0.0, 0.0, 0.0);
   }
 
   public RobotConfig() {

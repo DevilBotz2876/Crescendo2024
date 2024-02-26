@@ -27,13 +27,13 @@ import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.shooter.TestShooterAngle;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
+import frc.robot.config.RobotConfig.AutoConstants;
 import frc.robot.config.RobotConfig.ClimberConstants;
 import frc.robot.config.RobotConfig.IntakeConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.config.RobotConfigInferno;
 import frc.robot.config.RobotConfigPhoenix;
 import frc.robot.config.RobotConfigSherman;
-import frc.robot.config.RobotConfigStub;
 import java.util.Map;
 
 public class RobotContainer {
@@ -44,9 +44,6 @@ public class RobotContainer {
   public RobotContainer() {
     String robotName = "UNKNOWN";
     controller = new CommandXboxController(0);
-
-    NamedCommands.registerCommand("Shoot Piece", new AutoShootPiece());
-    NamedCommands.registerCommand("Intake Piece", new AutoIntakePiece());
 
     Preferences.initString(robotNameKey, robotName);
     robotName = Preferences.getString(robotNameKey, robotName);
@@ -64,9 +61,10 @@ public class RobotContainer {
       case "UNKNOWN":
       default:
         /* If running simulation, put the robot config you want here */
-        // robotConfig = new RobotConfigInferno();
+        robotConfig = new RobotConfigPhoenix();
         // robotConfig = new RobotConfigSherman();
-        robotConfig = new RobotConfigStub();
+        // robotConfig = new RobotConfigInferno();
+        // robotConfig = new RobotConfigStub();
     }
 
     // SmartDashboard.putData("Subsystems/Arm", RobotConfig.arm);
@@ -82,6 +80,74 @@ public class RobotContainer {
     assistToShuffleboard();
     commandsToShuffleboard();
     sysIdToShuffleboard();
+    configureNamedCommands();
+  }
+
+  private void configureNamedCommands() {
+    NamedCommands.registerCommand(
+        "Shoot Piece from Speaker Amp Side",
+        new AutoShootPiece(
+            RobotConfig.drive,
+            RobotConfig.arm,
+            RobotConfig.shooter,
+            RobotConfig.intake,
+            AutoConstants.scoreFromSpeakerAmpSide.robotYawInDegrees,
+            AutoConstants.scoreFromSpeakerAmpSide.armAngleInDegrees,
+            AutoConstants.scoreFromSpeakerAmpSide.shooterVelocityInRPMs));
+    NamedCommands.registerCommand(
+        "Shoot Piece from Note Amp Side",
+        new AutoShootPiece(
+            RobotConfig.drive,
+            RobotConfig.arm,
+            RobotConfig.shooter,
+            RobotConfig.intake,
+            AutoConstants.scoreFromNoteAmpSide.robotYawInDegrees,
+            AutoConstants.scoreFromNoteAmpSide.armAngleInDegrees,
+            AutoConstants.scoreFromNoteAmpSide.shooterVelocityInRPMs));
+
+    NamedCommands.registerCommand(
+        "Shoot Piece from Speaker Center",
+        new AutoShootPiece(
+            RobotConfig.drive,
+            RobotConfig.arm,
+            RobotConfig.shooter,
+            RobotConfig.intake,
+            AutoConstants.scoreFromSpeakerCenter.robotYawInDegrees,
+            AutoConstants.scoreFromSpeakerCenter.armAngleInDegrees,
+            AutoConstants.scoreFromSpeakerCenter.shooterVelocityInRPMs));
+    NamedCommands.registerCommand(
+        "Shoot Piece from Note Amp Side",
+        new AutoShootPiece(
+            RobotConfig.drive,
+            RobotConfig.arm,
+            RobotConfig.shooter,
+            RobotConfig.intake,
+            AutoConstants.scoreFromNoteCenter.robotYawInDegrees,
+            AutoConstants.scoreFromNoteCenter.armAngleInDegrees,
+            AutoConstants.scoreFromNoteCenter.shooterVelocityInRPMs));
+
+    NamedCommands.registerCommand(
+        "Shoot Piece from Speaker Source Side",
+        new AutoShootPiece(
+            RobotConfig.drive,
+            RobotConfig.arm,
+            RobotConfig.shooter,
+            RobotConfig.intake,
+            AutoConstants.scoreFromSpeakerSourceSide.robotYawInDegrees,
+            AutoConstants.scoreFromSpeakerSourceSide.armAngleInDegrees,
+            AutoConstants.scoreFromSpeakerSourceSide.shooterVelocityInRPMs));
+    NamedCommands.registerCommand(
+        "Shoot Piece from Note Source Side",
+        new AutoShootPiece(
+            RobotConfig.drive,
+            RobotConfig.arm,
+            RobotConfig.shooter,
+            RobotConfig.intake,
+            AutoConstants.scoreFromNoteSourceSide.robotYawInDegrees,
+            AutoConstants.scoreFromNoteSourceSide.armAngleInDegrees,
+            AutoConstants.scoreFromNoteSourceSide.shooterVelocityInRPMs));
+
+    NamedCommands.registerCommand("Intake Piece", new AutoIntakePiece());
   }
 
   private void sysIdToShuffleboard() {

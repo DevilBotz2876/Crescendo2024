@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 0.65,
-      "y": 6.65
-    },
-    "rotation": 60.0
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -14,7 +8,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Piece"
+            "name": "Shoot Piece from Speaker Amp Side"
           }
         },
         {
@@ -32,7 +26,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Piece"
+            "name": "Shoot Piece from Note Amp Side"
           }
         },
         {
@@ -56,7 +50,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Piece"
+            "name": "Shoot Piece from Note Amp Side"
           }
         }
       ]
