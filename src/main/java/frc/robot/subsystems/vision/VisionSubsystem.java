@@ -146,7 +146,7 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
               -robotToCamera.getRotation().getY(),
               Units.degreesToRadians(target.getPitch())));
     }
-    return null;
+    return Optional.empty();
   }
 
   @Override
@@ -154,7 +154,7 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
     if (result.hasTargets()) {
       return Optional.of(result.getBestTarget().getYaw());
     }
-    return null;
+    return Optional.empty();
   }
 
   @Override
@@ -165,7 +165,7 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
       return Optional.of(target.getYaw());
     }
 
-    return null;
+    return Optional.empty();
   }
   /*
    public Pose3d getPose3dToAprilTag(int id) {
