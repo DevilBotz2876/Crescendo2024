@@ -1,8 +1,14 @@
 package frc.robot.config;
 
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Robot;
 import frc.robot.subsystems.arm.ArmIOStub;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.climber.ClimberIOStub;
@@ -12,7 +18,9 @@ import frc.robot.subsystems.intake.IntakeIOStub;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterIOStub;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.subsystems.vision.VisionCamera;
 import frc.robot.subsystems.vision.VisionSubsystem;
+import java.util.ArrayList;
 
 /* Put all constants here with reasonable defaults */
 public class RobotConfig {
@@ -107,6 +115,17 @@ public class RobotConfig {
       boolean stubArm,
       boolean stubAuto,
       boolean stubClimber) {
+    this(stubDrive, stubShooter, stubIntake, stubArm, stubAuto, stubClimber, true);
+  }
+
+  public RobotConfig(
+      boolean stubDrive,
+      boolean stubShooter,
+      boolean stubIntake,
+      boolean stubArm,
+      boolean stubAuto,
+      boolean stubClimber,
+      boolean stubVision) {
     if (stubDrive) {
       drive = new DriveBase();
     }
@@ -135,8 +154,34 @@ public class RobotConfig {
       climber = new ClimberSubsystem(new ClimberIOStub(), new ClimberIOStub());
     }
 
-    {
-      vision = new VisionSubsystem(() -> RobotConfig.drive.getPose());
+    if (stubVision) {
+      ArrayList<VisionCamera> cameras = new ArrayList<VisionCamera>();
+      cameras.add(
+          new VisionCamera(
+              "shooter",
+              new Transform3d(
+                  new Translation3d(0.221, 0, .164),
+                  new Rotation3d(0, Units.degreesToRadians(-20), 0))));
+      cameras.add(
+          new VisionCamera(
+              "left",
+              new Transform3d(
+                  new Translation3d(0, 0.221, .164),
+                  new Rotation3d(0, Units.degreesToRadians(-20), Units.degreesToRadians(90)))));
+
+      cameras.add(
+          new VisionCamera(
+              "right",
+              new Transform3d(
+                  new Translation3d(0, -0.221, .164),
+                  new Rotation3d(0, Units.degreesToRadians(-20), Units.degreesToRadians(-90)))));
+
+      vision =
+          new VisionSubsystem(cameras, AprilTagFields.k2024Crescendo.loadAprilTagLayoutField());
+
+      if (Robot.isSimulation()) {
+        vision.enableSimulation(() -> RobotConfig.drive.getPose(), false);
+      }
     }
   }
 }

@@ -1,11 +1,8 @@
 package frc.robot.subsystems.vision;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -25,7 +22,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class VisionSubsystem extends SubsystemBase implements Vision {
-  public class TargetInfo {
+  private class TargetInfo {
     double timestamp;
     String name;
     int id;
@@ -47,88 +44,131 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
     }
   }
 
-  private final PhotonCamera camera;
+  private class VisionCameraImpl {
+    private static int numCameras = 0;
+    private final PhotonCamera camera;
+    private final Transform3d robotToCamera;
+    private final PhotonPoseEstimator poseEstimator;
+    private final int index;
+    private PhotonCameraSim simCamera;
+    private PhotonPipelineResult result;
+    private Optional<EstimatedRobotPose> estimatedRobotPose;
 
-  /*
-   * Location of the camera view relative to the robot (in meters)
-   *
-   * Translation(x,y,z) - location of the camera relative to the center of the robot (in meters)
-   *    x +/- is forward/back from center
-   *    y +/- is right/left from center.
-   *    z is relative to the ground (and should be positive)
-   *  E.g. Translation(0.5,0,0.5) is 1/2 meter forward of center and 1/2 meter above center
-   *
-   * Rotation(roll, pitch, yaw) - orientation of the camera view (in radians)
-   *    roll +/- is CCW/CW around x-axis (should generally be 0)
-   *    pitch +/- is up/down around y-axis (should generally be >= 0)
-   *    yaw +/- is left/right around the z-axis
-   *  E.g. Rotation(0,0,0) is facing straight forward
-   */
-  private final Transform3d robotToCamera;
+    private VisionCameraImpl(VisionCamera camera, AprilTagFieldLayout fieldLayout) {
+      this.camera = new PhotonCamera(camera.name);
+      this.robotToCamera = camera.robotToCamera;
+      this.poseEstimator =
+          new PhotonPoseEstimator(
+              fieldLayout,
+              PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+              this.camera,
+              this.robotToCamera);
+      this.index = numCameras++;
+    }
+
+    private void update() {
+      result = camera.getLatestResult();
+      estimatedRobotPose = poseEstimator.update();
+    }
+
+    private double getLatestTimestamp() {
+      return result.getTimestampSeconds();
+    }
+
+    private boolean hasTargets() {
+      return result.hasTargets();
+    }
+
+    private List<PhotonTrackedTarget> getTargets() {
+      return result.targets;
+    }
+
+    private PhotonTrackedTarget getBestTarget() {
+      return result.getBestTarget();
+    }
+
+    private Optional<EstimatedRobotPose> getEstimatedRobotPose() {
+      return estimatedRobotPose;
+    }
+
+    private int getIndex() {
+      return index;
+    }
+
+    private String getName() {
+      return camera.getName();
+    }
+
+    private Transform3d getRobotToCamera() {
+      return robotToCamera;
+    }
+  }
+
+  private final List<VisionCameraImpl> cameras = new ArrayList<VisionCameraImpl>();
+  private VisionCameraImpl primaryCamera;
   private final AprilTagFieldLayout fieldLayout;
-  private final PhotonPoseEstimator poseEstimator;
 
-  private final PhotonCameraSim cameraSim;
-  private final VisionSystemSim visionSim;
-  private final Supplier<Pose2d> poseSupplier;
+  private List<VisionPose> estimatedPoses = new ArrayList<VisionPose>();
+  private DriverStation.Alliance alliance;
 
-  PhotonPipelineResult result;
+  /* Debug Info */
+  private TargetInfo targetSpeaker = new TargetInfo();
+  private TargetInfo targetAmp = new TargetInfo();
   @AutoLogOutput int targetsVisible;
-  TargetInfo targetSpeaker = new TargetInfo();
   @AutoLogOutput String targetSpeakerDebug;
-
-  TargetInfo targetAmp = new TargetInfo();
   @AutoLogOutput String targetAmpDebug;
-
-  List<VisionPose> estimatedPose = new ArrayList<VisionPose>();
   @AutoLogOutput String estimatedPoseDebug;
-
-  DriverStation.Alliance alliance;
-
   boolean targetInfoChangedSpeaker = true;
   boolean targetInfoChangedAmp = true;
 
-  public VisionSubsystem(Supplier<Pose2d> poseSupplier) {
-    camera = new PhotonCamera("photonvision");
-    robotToCamera =
-        new Transform3d(
-            new Translation3d(0.221, 0, .164), new Rotation3d(0, Units.degreesToRadians(-20), 0));
-    fieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
-    poseEstimator =
-        new PhotonPoseEstimator(
-            this.fieldLayout,
-            PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-            this.camera,
-            this.robotToCamera);
+  /* Simulation Support*/
+  private boolean simEnabled = false;
+  private VisionSystemSim simVision;
+  private Supplier<Pose2d> simPoseSupplier;
 
-    cameraSim = new PhotonCameraSim(camera);
-    cameraSim.enableDrawWireframe(true); // Could be Processor intensive!
-    visionSim = new VisionSystemSim("main");
-    visionSim.addAprilTags(this.fieldLayout);
-    visionSim.addCamera(cameraSim, robotToCamera);
-    this.poseSupplier = poseSupplier;
+  public VisionSubsystem(List<VisionCamera> cameras, AprilTagFieldLayout fieldLayout) {
+    for (VisionCamera camera : cameras) {
+      this.cameras.add(new VisionCameraImpl(camera, fieldLayout));
+      estimatedPoses.add(new VisionPose());
+    }
+    this.fieldLayout = fieldLayout;
+    primaryCamera = this.cameras.get(0);
+  }
 
-    estimatedPose.add(new VisionPose());
+  @Override
+  public void enableSimulation(Supplier<Pose2d> poseSupplier, boolean enableWireFrame) {
+    simVision = new VisionSystemSim("main");
+    simVision.addAprilTags(this.fieldLayout);
+
+    for (VisionCameraImpl camera : cameras) {
+      camera.simCamera = new PhotonCameraSim(camera.camera);
+      simVision.addCamera(camera.simCamera, camera.robotToCamera);
+      camera.simCamera.enableDrawWireframe(enableWireFrame);
+    }
+
+    this.simPoseSupplier = poseSupplier;
+    simEnabled = true;
   }
 
   @Override
   public void periodic() {
-    int cameraIndex = 0;
-    if (visionSim != null) {
-      visionSim.update(poseSupplier.get());
+    if (simEnabled) {
+      simVision.update(simPoseSupplier.get());
     }
 
-    result = camera.getLatestResult();
-    targetsVisible = result.targets.size();
+    for (VisionCameraImpl camera : cameras) {
+      camera.update();
 
-    Optional<EstimatedRobotPose> currentEstimatedRobotPose = poseEstimator.update();
-    if (currentEstimatedRobotPose.isPresent()) {
-      estimatedPose.get(cameraIndex).robotPose =
-          currentEstimatedRobotPose.get().estimatedPose.toPose2d();
-      estimatedPose.get(cameraIndex).timestamp = currentEstimatedRobotPose.get().timestampSeconds;
-      estimatedPose.get(cameraIndex).cameraName = camera.getName();
+      Optional<EstimatedRobotPose> currentEstimatedRobotPose = camera.getEstimatedRobotPose();
+      if (currentEstimatedRobotPose.isPresent()) {
+        estimatedPoses.get(camera.getIndex()).robotPose =
+            currentEstimatedRobotPose.get().estimatedPose.toPose2d();
+        estimatedPoses.get(camera.getIndex()).timestamp =
+            currentEstimatedRobotPose.get().timestampSeconds;
+        estimatedPoses.get(camera.getIndex()).cameraName = camera.getName();
+      }
     }
-    estimatedPoseDebug = estimatedPose.toString();
+    estimatedPoseDebug = estimatedPoses.toString();
 
     if (DriverStation.getAlliance().isPresent()
         && (DriverStation.getAlliance().get() != alliance)) {
@@ -164,7 +204,7 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
       targetInfoChangedSpeaker = true;
     }
     if (targetInfoChangedSpeaker) {
-      targetSpeaker.timestamp = result.getTimestampSeconds();
+      targetSpeaker.timestamp = primaryCamera.getLatestTimestamp();
       targetSpeakerDebug = targetSpeaker.toString();
       targetInfoChangedSpeaker = false;
     }
@@ -180,14 +220,14 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
       targetInfoChangedAmp = true;
     }
     if (targetInfoChangedAmp) {
-      targetAmp.timestamp = result.getTimestampSeconds();
+      targetAmp.timestamp = primaryCamera.getLatestTimestamp();
       targetAmpDebug = targetAmp.toString();
       targetInfoChangedAmp = false;
     }
   }
 
   private PhotonTrackedTarget findAprilTag(int id) {
-    for (PhotonTrackedTarget target : result.targets) {
+    for (PhotonTrackedTarget target : primaryCamera.getTargets()) {
       if (target.getFiducialId() == id) {
         return target;
       }
@@ -202,9 +242,9 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
     if (target != null) {
       return Optional.of(
           PhotonUtils.calculateDistanceToTargetMeters(
-              robotToCamera.getZ(),
+              primaryCamera.getRobotToCamera().getZ(),
               fieldLayout.getTagPose(target.getFiducialId()).get().getZ(),
-              -robotToCamera.getRotation().getY(),
+              -primaryCamera.getRobotToCamera().getRotation().getY(),
               Units.degreesToRadians(target.getPitch())));
     }
     return Optional.empty();
@@ -212,8 +252,8 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
 
   @Override
   public Optional<Double> getYawToBestTarget() {
-    if (result.hasTargets()) {
-      return Optional.of(result.getBestTarget().getYaw());
+    if (primaryCamera.hasTargets()) {
+      return Optional.of(primaryCamera.getBestTarget().getYaw());
     }
     return Optional.empty();
   }
@@ -230,7 +270,7 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
   }
 
   @Override
-  public List<VisionPose> getEstimatedPose() {
-    return estimatedPose;
+  public List<VisionPose> getEstimatedPoses() {
+    return estimatedPoses;
   }
 }
