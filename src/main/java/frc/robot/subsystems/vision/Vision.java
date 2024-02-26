@@ -1,6 +1,7 @@
 package frc.robot.subsystems.vision;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +35,18 @@ public interface Vision {
 
     @Override
     public String toString() {
-      return "timestamp:" + timestamp + " cameraName:" + cameraName + " pose2d:" + robotPose;
+      DecimalFormat doubleFormat = new DecimalFormat("0.00");
+      return "timestamp:"
+          + doubleFormat.format(timestamp)
+          + " cameraName:"
+          + cameraName
+          + " pose2d:(x:"
+          + doubleFormat.format(robotPose.getX())
+          + " y: "
+          + doubleFormat.format(robotPose.getY())
+          + " yaw: "
+          + doubleFormat.format(robotPose.getRotation().getDegrees())
+          + ")";
     }
   }
 
