@@ -25,6 +25,28 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class VisionSubsystem extends SubsystemBase implements Vision {
+  public class TargetInfo {
+    double timestamp;
+    String name;
+    int id;
+    double yaw;
+    double distance;
+
+    @Override
+    public String toString() {
+      return "timestamp:"
+          + VisionPose.doubleFormat.format(timestamp)
+          + " targetName:"
+          + name
+          + " id: "
+          + id
+          + " yaw:"
+          + VisionPose.doubleFormat.format(yaw)
+          + " distance: "
+          + VisionPose.doubleFormat.format(distance);
+    }
+  }
+
   private final PhotonCamera camera;
 
   /*
@@ -52,14 +74,19 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
 
   PhotonPipelineResult result;
   @AutoLogOutput int targetsVisible;
-  int speakerId;
-  @AutoLogOutput double speakerDistance;
-  @AutoLogOutput double speakerYaw;
-  int ampId;
-  @AutoLogOutput double ampDistance;
-  @AutoLogOutput double ampYaw;
+  TargetInfo targetSpeaker = new TargetInfo();
+  @AutoLogOutput String targetSpeakerDebug;
+
+  TargetInfo targetAmp = new TargetInfo();
+  @AutoLogOutput String targetAmpDebug;
+
   List<VisionPose> estimatedPose = new ArrayList<VisionPose>();
-  @AutoLogOutput String estimatedPoses;
+  @AutoLogOutput String estimatedPoseDebug;
+
+  DriverStation.Alliance alliance;
+
+  boolean targetInfoChangedSpeaker = true;
+  boolean targetInfoChangedAmp = true;
 
   public VisionSubsystem(Supplier<Pose2d> poseSupplier) {
     camera = new PhotonCamera("photonvision");
@@ -101,35 +128,61 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
       estimatedPose.get(cameraIndex).timestamp = currentEstimatedRobotPose.get().timestampSeconds;
       estimatedPose.get(cameraIndex).cameraName = camera.getName();
     }
-    estimatedPoses = estimatedPose.toString();
+    estimatedPoseDebug = estimatedPose.toString();
 
     if (DriverStation.getAlliance().isPresent()
-        && (DriverStation.getAlliance().get() == DriverStation.Alliance.Red)) {
-      speakerId = 4; // Red Speaker Center
-      ampId = 5; // Red Amp
-    } else {
-      speakerId = 7; // Blue Speaker Center
-      ampId = 6; // Blue Amp
+        && (DriverStation.getAlliance().get() != alliance)) {
+      alliance = DriverStation.getAlliance().get();
+      targetInfoChangedSpeaker = true;
+      targetInfoChangedAmp = true;
+
+      if (alliance == DriverStation.Alliance.Red) {
+        targetSpeaker.name = "Speaker Center (Red)";
+        targetSpeaker.id = 4; // Red Speaker Center
+
+        targetAmp.name = "Amp (Red)";
+        targetAmp.id = 5; // Red Amp
+      } else {
+        targetSpeaker.name = "Speaker Center (Blue)";
+        targetSpeaker.id = 7; // Blue Speaker Center
+
+        targetAmp.name = "Amp (Blue)";
+        targetAmp.id = 6; // Blue Amp
+      }
     }
 
     Optional<Double> distance;
     Optional<Double> yaw;
-    distance = getDistanceToAprilTag(speakerId);
-    yaw = getYawToAprilTag(speakerId);
+    distance = getDistanceToAprilTag(targetSpeaker.id);
+    yaw = getYawToAprilTag(targetSpeaker.id);
     if (distance.isPresent()) {
-      speakerDistance = distance.get();
+      targetSpeaker.distance = distance.get();
+      targetInfoChangedSpeaker = true;
     }
     if (yaw.isPresent()) {
-      speakerYaw = yaw.get();
+      targetSpeaker.yaw = yaw.get();
+      targetInfoChangedSpeaker = true;
+    }
+    if (targetInfoChangedSpeaker) {
+      targetSpeaker.timestamp = result.getTimestampSeconds();
+      targetSpeakerDebug = targetSpeaker.toString();
+      targetInfoChangedSpeaker = false;
     }
 
-    distance = getDistanceToAprilTag(ampId);
-    yaw = getYawToAprilTag(ampId);
+    distance = getDistanceToAprilTag(targetAmp.id);
+    yaw = getYawToAprilTag(targetAmp.id);
     if (distance.isPresent()) {
-      ampDistance = distance.get();
+      targetAmp.distance = distance.get();
+      targetInfoChangedAmp = true;
     }
     if (yaw.isPresent()) {
-      ampYaw = yaw.get();
+      targetAmp.yaw = yaw.get();
+      targetInfoChangedAmp = true;
+    }
+    if (targetInfoChangedAmp) {
+      targetAmp.timestamp = result.getTimestampSeconds();
+      targetAmpDebug = targetAmp.toString();
+      targetInfoChangedAmp = false;
     }
   }
 

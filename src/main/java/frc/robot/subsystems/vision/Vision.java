@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface Vision {
   public class VisionPose {
+    public static DecimalFormat doubleFormat = new DecimalFormat("0.00");
     public String cameraName;
     public Pose2d robotPose;
     public double timestamp;
@@ -35,17 +36,16 @@ public interface Vision {
 
     @Override
     public String toString() {
-      DecimalFormat doubleFormat = new DecimalFormat("0.00");
       return "timestamp:"
-          + doubleFormat.format(timestamp)
+          + VisionPose.doubleFormat.format(timestamp)
           + " cameraName:"
           + cameraName
           + " pose2d:(x:"
-          + doubleFormat.format(robotPose.getX())
+          + VisionPose.doubleFormat.format(robotPose.getX())
           + " y: "
-          + doubleFormat.format(robotPose.getY())
+          + VisionPose.doubleFormat.format(robotPose.getY())
           + " yaw: "
-          + doubleFormat.format(robotPose.getRotation().getDegrees())
+          + VisionPose.doubleFormat.format(robotPose.getRotation().getDegrees())
           + ")";
     }
   }
