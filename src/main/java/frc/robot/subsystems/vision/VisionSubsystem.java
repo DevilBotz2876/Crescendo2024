@@ -22,7 +22,7 @@ import org.photonvision.simulation.VisionSystemSim;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-public class VisionSubsystem extends SubsystemBase {
+public class VisionSubsystem extends SubsystemBase implements Vision {
   private final PhotonCamera camera;
 
   /*
@@ -104,10 +104,25 @@ public class VisionSubsystem extends SubsystemBase {
       ampId = 6; // Blue Amp
     }
 
-    speakerDistance = getDistanceToAprilTag(speakerId);
-    speakerYaw = getYawToAprilTag(speakerId);
-    ampDistance = getDistanceToAprilTag(ampId);
-    ampYaw = getYawToAprilTag(ampId);
+    Optional<Double> distance;
+    Optional<Double> yaw;
+    distance = getDistanceToAprilTag(speakerId);
+    yaw = getYawToAprilTag(speakerId);
+    if (distance.isPresent()) {
+      speakerDistance = distance.get();
+    }
+    if (yaw.isPresent()) {
+      speakerYaw = yaw.get();
+    }
+
+    distance = getDistanceToAprilTag(ampId);
+    yaw = getYawToAprilTag(ampId);
+    if (distance.isPresent()) {
+      ampDistance = distance.get();
+    }
+    if (yaw.isPresent()) {
+      ampYaw = yaw.get();
+    }
   }
 
   private PhotonTrackedTarget findAprilTag(int id) {
@@ -119,27 +134,38 @@ public class VisionSubsystem extends SubsystemBase {
     return null;
   }
 
-  double getDistanceToAprilTag(int id) {
+  @Override
+  public Optional<Double> getDistanceToAprilTag(int id) {
     PhotonTrackedTarget target = findAprilTag(id);
 
     if (target != null) {
-      return PhotonUtils.calculateDistanceToTargetMeters(
-          robotToCamera.getZ(),
-          fieldLayout.getTagPose(target.getFiducialId()).get().getZ(),
-          -robotToCamera.getRotation().getY(),
-          Units.degreesToRadians(target.getPitch()));
+      return Optional.of(
+          PhotonUtils.calculateDistanceToTargetMeters(
+              robotToCamera.getZ(),
+              fieldLayout.getTagPose(target.getFiducialId()).get().getZ(),
+              -robotToCamera.getRotation().getY(),
+              Units.degreesToRadians(target.getPitch())));
     }
-    return -1;
+    return null;
   }
 
-  public double getYawToAprilTag(int id) {
+  @Override
+  public Optional<Double> getYawToBestTarget() {
+    if (result.hasTargets()) {
+      return Optional.of(result.getBestTarget().getYaw());
+    }
+    return null;
+  }
+
+  @Override
+  public Optional<Double> getYawToAprilTag(int id) {
     PhotonTrackedTarget target = findAprilTag(id);
 
     if (target != null) {
-      return target.getYaw();
+      return Optional.of(target.getYaw());
     }
 
-    return -1;
+    return null;
   }
   /*
    public Pose3d getPose3dToAprilTag(int id) {
