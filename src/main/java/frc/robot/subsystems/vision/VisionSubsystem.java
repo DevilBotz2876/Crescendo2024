@@ -270,7 +270,7 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
   }
 
   @Override
-  public List<VisionPose> getEstimatedPoses() {
+  public List<VisionPose> getEstimatedRobotPoses() {
     return estimatedPoses;
   }
 

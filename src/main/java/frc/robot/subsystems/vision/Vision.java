@@ -80,12 +80,12 @@ public interface Vision {
   public Optional<Double> getYawToAprilTag(int id);
 
   /**
-   * Returns a list of vision-based estimated poses
+   * Returns a list of vision-based estimated robot poses
    *
    * @return list of estimated poses. list length may be zero if updated pose estimation data is not
    *     available.
    */
-  public List<VisionPose> getEstimatedPoses();
+  public List<VisionPose> getEstimatedRobotPoses();
 
   public default void enableSimulation(Supplier<Pose2d> poseSupplier, boolean enableWireFrame) {}
 }
