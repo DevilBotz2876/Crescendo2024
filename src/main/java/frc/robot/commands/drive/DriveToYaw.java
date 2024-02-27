@@ -17,8 +17,8 @@ public class DriveToYaw extends Command {
     this.drive = drive;
     this.yawDegrees = yawDegrees;
 
-    turnPID.setTolerance(2);
-
+    turnPID.setTolerance(0.5);
+    turnPID.enableContinuousInput(0, 360);
     addRequirements((Subsystem) drive);
   }
 

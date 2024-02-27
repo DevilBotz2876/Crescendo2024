@@ -87,7 +87,7 @@ public class RobotConfig {
     /* TODO: Fill in the values for scoring here */
     public static AutoScoreConstants scoreFromSpeakerAmpSide =
         new AutoScoreConstants(0.0, 45, 3000);
-    public static AutoScoreConstants scoreFromNoteAmpSide = new AutoScoreConstants(45, 45, 3000);
+    public static AutoScoreConstants scoreFromNoteAmpSide = new AutoScoreConstants(40, 45, 3000);
     public static AutoScoreConstants scoreFromSpeakerCenter = new AutoScoreConstants(0.0, 0.0, 0.0);
     public static AutoScoreConstants scoreFromNoteCenter = new AutoScoreConstants(0.0, 0.0, 0.0);
     public static AutoScoreConstants scoreFromSpeakerSourceSide =

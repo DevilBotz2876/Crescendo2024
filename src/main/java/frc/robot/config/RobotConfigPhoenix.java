@@ -2,6 +2,7 @@ package frc.robot.config;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.assist.PrepareForIntake;
@@ -20,6 +21,15 @@ public class RobotConfigPhoenix extends RobotConfig {
 
     configureNamedCommands();
     autoChooser = AutoBuilder.buildAutoChooser("Sit Still");
+  }
+
+  private double translateForAlliance(double angle) {
+    var alliance = DriverStation.getAlliance();
+
+    if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+      angle += 90;
+    }
+    return angle;
   }
 
   private void configureNamedCommands() {
@@ -44,6 +54,7 @@ public class RobotConfigPhoenix extends RobotConfig {
                 () -> AutoConstants.scoreFromSpeakerAmpSide.armAngleInDegrees,
                 () -> AutoConstants.scoreFromSpeakerAmpSide.shooterVelocityInRPMs),
             new PrintCommand("  END: Shoot Piece from Speaker Amp Side")));
+
     NamedCommands.registerCommand(
         "Shoot Piece from Note Amp Side",
         new SequentialCommandGroup(
@@ -53,7 +64,7 @@ public class RobotConfigPhoenix extends RobotConfig {
                 RobotConfig.arm,
                 RobotConfig.shooter,
                 RobotConfig.intake,
-                () -> AutoConstants.scoreFromNoteAmpSide.robotYawInDegrees,
+                () -> translateForAlliance(AutoConstants.scoreFromNoteAmpSide.robotYawInDegrees),
                 () -> AutoConstants.scoreFromNoteAmpSide.armAngleInDegrees,
                 () -> AutoConstants.scoreFromNoteAmpSide.shooterVelocityInRPMs),
             new PrintCommand("  END: Shoot Piece from Speaker Amp Side")));
@@ -69,7 +80,7 @@ public class RobotConfigPhoenix extends RobotConfig {
             () -> AutoConstants.scoreFromSpeakerCenter.armAngleInDegrees,
             () -> AutoConstants.scoreFromSpeakerCenter.shooterVelocityInRPMs));
     NamedCommands.registerCommand(
-        "Shoot Piece from Note Amp Side",
+        "Shoot Piece from Note Center Side",
         new AutoShootPiece(
             RobotConfig.drive,
             RobotConfig.arm,

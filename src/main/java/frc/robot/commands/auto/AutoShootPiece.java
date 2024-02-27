@@ -32,11 +32,11 @@ public class AutoShootPiece extends SequentialCommandGroup {
     super(
         new PrintCommand(
             "START: AutoShootPiece yaw: "
-                + robotYawInDegrees
+                + robotYawInDegrees.getAsDouble()
                 + " angle: "
-                + armAngleInDegrees
+                + armAngleInDegrees.getAsDouble()
                 + " velocity: "
-                + shooterVelocityInRPMs),
+                + shooterVelocityInRPMs.getAsDouble()),
         new ParallelCommandGroup(
             new DriveToYaw(drive, robotYawInDegrees),
             new ArmToPosition(arm, armAngleInDegrees),

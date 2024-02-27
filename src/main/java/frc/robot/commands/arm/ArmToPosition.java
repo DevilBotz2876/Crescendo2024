@@ -25,7 +25,7 @@ public class ArmToPosition extends Command {
 
   @Override
   public void initialize() {
-    timeMS = 0;
+    timeMS = 0.0;
     System.out.println(
         "START: " + this.getClass().getSimpleName() + " angle: " + positionDegrees.getAsDouble());
   }
@@ -40,7 +40,7 @@ public class ArmToPosition extends Command {
     if (Math.abs(arm.getAngle() - positionDegrees.getAsDouble())
         <= ArmConstants.pidAngleErrorInDegrees) {
       timeMS += 20.0;
-      if (timeMS >= 1000) {
+      if (timeMS >= 100) {
         SmartDashboard.putBoolean("Arm/ArmToPosition/isFinished", true);
         return true;
       }

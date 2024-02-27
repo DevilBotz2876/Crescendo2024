@@ -126,6 +126,7 @@ public class DriveSwerveYAGSL extends DriveBase {
 
   @Override
   public double getAngle() {
-    return swerveDrive.getYaw().getDegrees();
+
+    return swerveDrive.getPose().getRotation().getDegrees();
   }
 }
