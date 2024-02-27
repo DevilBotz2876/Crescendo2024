@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Preferences;
@@ -36,6 +37,9 @@ public class RobotContainer {
   public final CommandXboxController controller;
   public final RobotConfig robotConfig;
   private static final String robotNameKey = "Robot Name";
+  private static GenericEntry ampModeEntry = null;
+  private static boolean ampMode = false;
+  private static GenericEntry fieldOrientedEntry = null;
 
   public RobotContainer() {
     String robotName = "UNKNOWN";
@@ -142,7 +146,18 @@ public class RobotContainer {
 
     controller.a().onTrue(new PrepareForIntake(RobotConfig.arm, RobotConfig.intake));
 
-    controller.b().onTrue(new PrepareForScore(RobotConfig.arm, RobotConfig.shooter));
+    controller.b().onTrue(new PrepareForScore(RobotConfig.arm, RobotConfig.shooter, () -> ampMode));
+
+    controller
+        .y()
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  ampMode = !ampMode;
+                  if (ampModeEntry != null) {
+                    ampModeEntry.setBoolean(ampMode);
+                  }
+                }));
 
     //    RobotConfig.intake.setDefaultCommand(
     //        new IntakeBaseCommand(
@@ -158,12 +173,16 @@ public class RobotContainer {
             () -> MathUtil.applyDeadband(-controller.getRightX(), 0.05)));
 
     controller
-        .start()
+        .x()
         .onTrue(
             new InstantCommand(
-                () ->
-                    RobotConfig.drive.setFieldOrientedDrive(
-                        !RobotConfig.drive.isFieldOrientedDrive()),
+                () -> {
+                  RobotConfig.drive.setFieldOrientedDrive(
+                      !RobotConfig.drive.isFieldOrientedDrive());
+                  if (fieldOrientedEntry != null) {
+                    fieldOrientedEntry.setBoolean(RobotConfig.drive.isFieldOrientedDrive());
+                  }
+                },
                 RobotConfig.drive));
 
     controller
@@ -383,22 +402,45 @@ public class RobotContainer {
     colIndex += 2;
     rowIndex = 0;
     assistTab
-        .add("Assist: Prepare For Score", new PrepareForScore(RobotConfig.arm, RobotConfig.shooter))
+        .add(
+            "Assist: Prepare For Score",
+            new PrepareForScore(RobotConfig.arm, RobotConfig.shooter, () -> ampMode))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
     assistTab
-        .add("Shooter Velocity", ShooterConstants.velocityInRPMs)
+        .add("Shooter: Velocity", ShooterConstants.velocityInRPMs)
         .withWidget(BuiltInWidgets.kNumberSlider)
         .withProperties(Map.of("min", 0, "max", 6000))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
     assistTab
-        .add("Shooter Angle", 45)
+        .add("Shooter: Angle", ArmConstants.shooterAngleInDegrees)
         .withWidget(BuiltInWidgets.kNumberSlider)
         .withProperties(
             Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
+    assistTab
+        .add("Shooter: Velocity (Amp)", ShooterConstants.ampScoreVelocityInRPMs)
+        .withWidget(BuiltInWidgets.kNumberSlider)
+        .withProperties(Map.of("min", 0, "max", 6000))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+    assistTab
+        .add("Shooter: Angle (Amp)", ArmConstants.ampScoreShooterAngleInDegrees)
+        .withWidget(BuiltInWidgets.kNumberSlider)
+        .withProperties(
+            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+
+    ampModeEntry =
+        assistTab
+            .add("Amp Mode", ampMode)
+            .withWidget(BuiltInWidgets.kBooleanBox)
+            .withPosition(colIndex, rowIndex++)
+            .withSize(2, 1)
+            .getEntry();
 
     colIndex += 2;
     rowIndex = 0;
@@ -421,5 +463,13 @@ public class RobotContainer {
             new TestShooterAngle(RobotConfig.shooter, RobotConfig.intake, RobotConfig.arm))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
+
+    fieldOrientedEntry =
+        assistTab
+            .add("Field Oriented Drive", RobotConfig.drive.isFieldOrientedDrive())
+            .withWidget(BuiltInWidgets.kBooleanBox)
+            .withPosition(colIndex, rowIndex++)
+            .withSize(2, 1)
+            .getEntry();
   }
 }
