@@ -19,8 +19,12 @@ public class IntakeSubsystem extends SubsystemBase implements Intake {
 
   // Create a Mechanism2d display of an Intake
   private final Mechanism2d mech2d = new Mechanism2d(60, 60);
-  private final MechanismRoot2d intakePivot2d = mech2d.getRoot("IntakePivot", 30, 30);
+  private final MechanismRoot2d intakePivot2d = mech2d.getRoot("IntakePivot", 45, 30);
   private List<MechanismLigament2d> intake2d = new ArrayList<MechanismLigament2d>();
+  private final MechanismRoot2d notePivot2d = mech2d.getRoot("NotePivot", 15, 30);
+  private List<MechanismLigament2d> note2d = new ArrayList<MechanismLigament2d>();
+  private boolean noteVisibility = false;
+
   private int currentSimAngle = 0;
 
   public IntakeSubsystem(IntakeIO IO) {
@@ -40,6 +44,10 @@ public class IntakeSubsystem extends SubsystemBase implements Intake {
     intake2d.add(
         intakePivot2d.append(
             new MechanismLigament2d("WheelD", 10, 270, 6, new Color8Bit(Color.kRed))));
+
+    note2d.add(
+        notePivot2d.append(
+            new MechanismLigament2d("NoteA", 0, 0, 0, new Color8Bit(Color.kOrange))));
 
     SmartDashboard.putData("Intake Simulation", mech2d);
   }
@@ -67,6 +75,20 @@ public class IntakeSubsystem extends SubsystemBase implements Intake {
       for (MechanismLigament2d intake : intake2d) {
         intake.setAngle(angleOffset + currentSimAngle);
         angleOffset += 90;
+      }
+    }
+
+    if (inputs.limitSwitchShooter != noteVisibility) {
+      noteVisibility = inputs.limitSwitchShooter;
+
+      for (MechanismLigament2d note : note2d) {
+        if (noteVisibility) {
+          note.setLength(10);
+          note.setLineWeight(10);
+        } else {
+          note.setLength(0);
+          note.setLineWeight(0);
+        }
       }
     }
   }
