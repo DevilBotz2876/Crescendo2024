@@ -26,10 +26,10 @@ public class RobotConfigPhoenix extends RobotConfig {
     /* TODO: Measure and set camera name/location */
     cameras.add(
         new VisionCamera(
-            "shooter",
+            "photonvision",
             new Transform3d(
-                new Translation3d(0.221, 0, .164),
-                new Rotation3d(0, Units.degreesToRadians(-20), 0))));
+                new Translation3d(0, 0.3048, 0.2667),
+                new Rotation3d(0, Units.degreesToRadians(-30), 0))));
 
     vision = new VisionSubsystem(cameras, AprilTagFields.k2024Crescendo.loadAprilTagLayoutField());
 
