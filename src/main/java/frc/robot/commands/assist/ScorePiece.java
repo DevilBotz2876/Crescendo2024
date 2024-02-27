@@ -29,6 +29,7 @@ public class ScorePiece extends Command {
 
   @Override
   public void initialize() {
+    System.out.println("START: " + this.getClass().getSimpleName());
     intake.runVoltage(
         assistGUI.getEntry("Intake: Feed Volts").getDouble(IntakeConstants.feedSpeedInVolts));
   }
@@ -42,5 +43,6 @@ public class ScorePiece extends Command {
   public void end(boolean interrupted) {
     intake.runVoltage(0);
     shooter.runVelocity(0);
+    System.out.println("  END: " + this.getClass().getSimpleName());
   }
 }

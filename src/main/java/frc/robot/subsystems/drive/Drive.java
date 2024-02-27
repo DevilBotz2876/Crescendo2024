@@ -54,4 +54,8 @@ public interface Drive {
   public default Command sysIdAngleMotorCommand() {
     return null;
   }
+
+  public default double getAngle() {
+    return 0;
+  }
 }

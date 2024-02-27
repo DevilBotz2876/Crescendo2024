@@ -24,7 +24,11 @@ public class ArmToPosition extends Command {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    timeMS = 0;
+    System.out.println(
+        "START: " + this.getClass().getSimpleName() + " angle: " + positionDegrees.getAsDouble());
+  }
 
   @Override
   public void execute() {
@@ -33,11 +37,10 @@ public class ArmToPosition extends Command {
 
   @Override
   public boolean isFinished() {
-
-    if (arm.getAngle() > positionDegrees.getAsDouble() - ArmConstants.pidAngleErrorInDegrees
-        && arm.getAngle() < positionDegrees.getAsDouble() + ArmConstants.pidAngleErrorInDegrees) {
+    if (Math.abs(arm.getAngle() - positionDegrees.getAsDouble())
+        <= ArmConstants.pidAngleErrorInDegrees) {
       timeMS += 20.0;
-      if (timeMS == 1000) {
+      if (timeMS >= 1000) {
         SmartDashboard.putBoolean("Arm/ArmToPosition/isFinished", true);
         return true;
       }
@@ -51,5 +54,6 @@ public class ArmToPosition extends Command {
   @Override
   public void end(boolean interrupted) {
     // arm.runVoltage(0);
+    System.out.println("  END: " + this.getClass().getSimpleName());
   }
 }

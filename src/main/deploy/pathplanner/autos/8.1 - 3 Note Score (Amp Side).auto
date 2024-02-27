@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 0.65,
+      "y": 6.65
+    },
+    "rotation": 60.0
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -12,15 +18,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Intake Piece"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Amp Note"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Piece"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp Note"
+                }
+              }
+            ]
           }
         },
         {
@@ -30,15 +43,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Intake Piece"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Amp Side Note Center"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Piece"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp Side Note Center"
+                }
+              }
+            ]
           }
         },
         {

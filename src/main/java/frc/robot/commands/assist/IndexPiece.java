@@ -19,6 +19,11 @@ public class IndexPiece extends Command {
   }
 
   @Override
+  public void initialize() {
+    System.out.println("START: " + this.getClass().getSimpleName());
+  }
+
+  @Override
   public void execute() {
     if (intake.isPieceDetected(true)) {
       intake.runVoltage(
@@ -32,6 +37,7 @@ public class IndexPiece extends Command {
   @Override
   public void end(boolean interrupted) {
     intake.runVoltage(0);
+    System.out.println("  END: " + this.getClass().getSimpleName());
   }
 
   @Override

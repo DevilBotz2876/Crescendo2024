@@ -21,6 +21,9 @@ public class SetShooterVelocity extends Command {
 
   @Override
   public void initialize() {
+    timeMS = 0.0;
+    System.out.println(
+        "START: " + this.getClass().getSimpleName() + " velocity: " + velocityRPM.getAsDouble());
     shooter.runVelocity(velocityRPM.getAsDouble());
   }
 
@@ -44,5 +47,10 @@ public class SetShooterVelocity extends Command {
     }
     SmartDashboard.putBoolean("Shooter/SetShooterVelocity/isFinished", false);
     return false;
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    System.out.println("  END: " + this.getClass().getSimpleName());
   }
 }
