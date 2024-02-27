@@ -110,14 +110,13 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
 
   private List<VisionPose> estimatedPoses = new ArrayList<VisionPose>();
   private DriverStation.Alliance alliance;
+  @AutoLogOutput private Pose2d primaryEstimatedPose;
 
   /* Debug Info */
   private TargetInfo targetSpeaker = new TargetInfo();
   private TargetInfo targetAmp = new TargetInfo();
   @AutoLogOutput int targetsVisible;
-  @AutoLogOutput String targetSpeakerDebug;
-  @AutoLogOutput String targetAmpDebug;
-  @AutoLogOutput String estimatedPoseDebug;
+  @AutoLogOutput double targetSpeakerDistance;
   boolean targetInfoChangedSpeaker = true;
   boolean targetInfoChangedAmp = true;
 
@@ -158,6 +157,9 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
 
     for (VisionCameraImpl camera : cameras) {
       camera.update();
+      if (camera == primaryCamera) {
+        targetsVisible = camera.result.getTargets().size();
+      }
 
       Optional<EstimatedRobotPose> currentEstimatedRobotPose = camera.getEstimatedRobotPose();
       if (currentEstimatedRobotPose.isPresent()) {
@@ -166,9 +168,12 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
         estimatedPoses.get(camera.getIndex()).timestamp =
             currentEstimatedRobotPose.get().timestampSeconds;
         estimatedPoses.get(camera.getIndex()).cameraName = camera.getName();
+
+        if (camera == primaryCamera) {
+          primaryEstimatedPose = estimatedPoses.get(camera.getIndex()).robotPose;
+        }
       }
     }
-    estimatedPoseDebug = estimatedPoses.toString();
 
     if (DriverStation.getAlliance().isPresent()
         && (DriverStation.getAlliance().get() != alliance)) {
@@ -205,24 +210,8 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
     }
     if (targetInfoChangedSpeaker) {
       targetSpeaker.timestamp = primaryCamera.getLatestTimestamp();
-      targetSpeakerDebug = targetSpeaker.toString();
+      targetSpeakerDistance = targetSpeaker.distance;
       targetInfoChangedSpeaker = false;
-    }
-
-    distance = getDistanceToAprilTag(targetAmp.id);
-    yaw = getYawToAprilTag(targetAmp.id);
-    if (distance.isPresent()) {
-      targetAmp.distance = distance.get();
-      targetInfoChangedAmp = true;
-    }
-    if (yaw.isPresent()) {
-      targetAmp.yaw = yaw.get();
-      targetInfoChangedAmp = true;
-    }
-    if (targetInfoChangedAmp) {
-      targetAmp.timestamp = primaryCamera.getLatestTimestamp();
-      targetAmpDebug = targetAmp.toString();
-      targetInfoChangedAmp = false;
     }
   }
 
