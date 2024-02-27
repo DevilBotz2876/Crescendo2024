@@ -23,12 +23,11 @@ public class RobotConfigPhoenix extends RobotConfig {
     autoChooser = AutoBuilder.buildAutoChooser("Mobility Auto");
 
     ArrayList<VisionCamera> cameras = new ArrayList<VisionCamera>();
-    /* TODO: Measure and set camera name/location */
     cameras.add(
         new VisionCamera(
             "photonvision",
             new Transform3d(
-                new Translation3d(0, 0.3048, 0.2667),
+                new Translation3d(0, 0.3048, 0.22),
                 new Rotation3d(0, Units.degreesToRadians(-30), 0))));
 
     vision = new VisionSubsystem(cameras, AprilTagFields.k2024Crescendo.loadAprilTagLayoutField());
