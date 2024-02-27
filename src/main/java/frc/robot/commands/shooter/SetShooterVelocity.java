@@ -1,8 +1,10 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.subsystems.shooter.Shooter;
 import java.util.function.DoubleSupplier;
@@ -10,6 +12,7 @@ import java.util.function.DoubleSupplier;
 public class SetShooterVelocity extends Command {
   Shooter shooter;
   DoubleSupplier velocityRPM;
+  double timeMS;
 
   public SetShooterVelocity(Shooter shooter, DoubleSupplier velocityRPM) {
     this.shooter = shooter;
@@ -21,6 +24,7 @@ public class SetShooterVelocity extends Command {
   public void initialize() {
     System.out.println(
         "START: " + this.getClass().getSimpleName() + " velocity: " + velocityRPM.getAsDouble());
+    timeMS = 0.0;
     shooter.runVelocity(velocityRPM.getAsDouble());
   }
 
@@ -34,7 +38,14 @@ public class SetShooterVelocity extends Command {
             Units.radiansPerSecondToRotationsPerMinute(shooter.getCurrentSpeed())
                 - velocityRPM.getAsDouble())
         <= ShooterConstants.pidVelocityErrorInRPMS) {
+      timeMS += 20.0;
+      if (timeMS >= ShooterConstants.pidSettlingTimeInMilliseconds) {
       return true;
+      }
+    }
+    else
+    {
+      timeMS = 0.0;
     }
 
     return false;

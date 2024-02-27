@@ -41,6 +41,7 @@ public class RobotConfig {
     public static double ffKa = 0.0;
 
     public static double pidAngleErrorInDegrees = 2.0;
+    public static double pidSettlingTimeInMilliseconds = 0.1;
     public static double maxAngleInDegrees = 90.0;
     public static double minAngleInDegrees = 0.0;
     public static double intakeAngleInDegrees = 1;
@@ -60,6 +61,7 @@ public class RobotConfig {
 
     /* PID */
     public static double pidVelocityErrorInRPMS = 20;
+    public static double pidSettlingTimeInMilliseconds = 0.1;
     public static double pidKp = 0.043566;
     public static double pidKi = 0.0;
     public static double pidKd = 0.0;
