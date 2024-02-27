@@ -39,34 +39,38 @@ public class RobotConfig {
     public static double ffKa = 0.0;
 
     public static double pidAngleErrorInDegrees = 2.0;
+    public static double pidSettlingTimeInMilliseconds = 0.1;
     public static double maxAngleInDegrees = 90.0;
     public static double minAngleInDegrees = 0.0;
     public static double intakeAngleInDegrees = 1;
     public static double shooterAngleInDegrees = 45;
 
     public static double defaultSpeedInVolts = 6.0;
+    public static double ampScoreShooterAngleInDegrees = 80;
   }
 
   public static class ShooterConstants {
     /* Feedforward */
-    public static double ffKs = 0.1;
-    public static double ffKv = 0.0;
-    public static double ffKa = 0.0;
-    public static double ffKsBottom = 0.1;
-    public static double ffKvBottom = 0.0;
-    public static double ffKaBottom = 0.0;
+    public static double ffKs = 0.088754;
+    public static double ffKv = 0.029757;
+    public static double ffKa = 0.01281;
+    public static double ffKsBottom = 0.11831;
+    public static double ffKvBottom = 0.029802;
+    public static double ffKaBottom = 0.019246;
 
     /* PID */
     public static double pidVelocityErrorInRPMS = 20;
-    public static double pidKp = 0.1;
+    public static double pidSettlingTimeInMilliseconds = 0.1;
+    public static double pidKp = 0.043566;
     public static double pidKi = 0.0;
     public static double pidKd = 0.0;
-    public static double pidKpBottom = 0.1;
+    public static double pidKpBottom = 0.04467;
     public static double pidKiBottom = 0.0;
     public static double pidKdBottom = 0.0;
 
     public static double velocityInRPMs = 3000;
     public static double defaultSpeedInVolts = 6.0;
+    public static double ampScoreVelocityInRPMs = 1000;
   }
 
   public static class IntakeConstants {

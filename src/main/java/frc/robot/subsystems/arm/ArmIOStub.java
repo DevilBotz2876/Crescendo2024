@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.simulation.DutyCycleEncoderSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.robot.config.RobotConfig.ArmConstants;
@@ -32,10 +33,10 @@ public class ArmIOStub implements ArmIO {
   // Standard classes for controlling our arm
   private final PIDController pid = new PIDController(armKp, 0, armKd);
   private final DutyCycleEncoder absEncoder = new DutyCycleEncoder(0);
-  //  private final DutyCycleEncoderSim absEncoderSim = new DutyCycleEncoderSim(absEncoder);
+  private final DutyCycleEncoderSim absEncoderSim = new DutyCycleEncoderSim(absEncoder);
   private final Encoder relEncoder = new Encoder(3, 4);
   private final EncoderSim relEncoderSim = new EncoderSim(relEncoder);
-  private final Spark motor = new Spark(0);
+  private final Spark motor = new Spark(1);
   private boolean softwarePidEnabled = false;
 
   // Simulation classes help us simulate what's going on, including gravity.
@@ -68,7 +69,7 @@ public class ArmIOStub implements ArmIO {
 
     arm.setInput(inputs.appliedVolts);
     arm.update(0.020);
-    //    absEncoderSim.setDistance(Units.radiansToDegrees(arm.getAngleRads()));
+    absEncoderSim.setDistance(Units.radiansToDegrees(arm.getAngleRads()));
 
     if (softwarePidEnabled) {
       motor.setVoltage(
