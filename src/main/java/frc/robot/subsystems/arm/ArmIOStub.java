@@ -59,15 +59,12 @@ public class ArmIOStub implements ArmIO {
     absEncoder.setPositionOffset(armAbsoluteOffset);
     absEncoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
     absEncoder.setDistancePerRotation(360.0);
- 
-    if (Robot.isSimulation())
-    {
-     absEncoderSim = new DutyCycleEncoderSim(absEncoder);
-    }   
-    else
-    {
+
+    if (Robot.isSimulation()) {
+      absEncoderSim = new DutyCycleEncoderSim(absEncoder);
+    } else {
       absEncoderSim = null;
-    } 
+    }
   }
 
   /** Updates the set of loggable inputs. */
@@ -79,8 +76,7 @@ public class ArmIOStub implements ArmIO {
 
     arm.setInput(inputs.appliedVolts);
     arm.update(0.020);
-    if (absEncoderSim != null)
-    {
+    if (absEncoderSim != null) {
       absEncoderSim.setDistance(Units.radiansToDegrees(arm.getAngleRads()));
     }
 

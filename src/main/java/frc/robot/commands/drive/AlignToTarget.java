@@ -6,8 +6,11 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.config.RobotConfig.DriveConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
 import java.util.Optional;
@@ -17,18 +20,29 @@ public class AlignToTarget extends Command {
   Vision vision;
   PIDController turnPID;
   double setpoint;
+  NetworkTable assistGUI = NetworkTableInstance.getDefault().getTable("Shuffleboard/Assist");
+  boolean selectableTarget = false;
 
   /** Creates a new AlignToTarget. */
-  public AlignToTarget(Drive drive, Vision vision) {
+  public AlignToTarget(Drive drive, Vision vision, boolean selectableTarget) {
     this.drive = drive;
     this.vision = vision;
+    this.selectableTarget = selectableTarget;
 
     // Wild guess at P constant.
-    turnPID = new PIDController(.1, 0, 0);
+    turnPID =
+        new PIDController(
+            DriveConstants.anglePidKp, DriveConstants.anglePidKi, DriveConstants.anglePidKd);
     turnPID.setSetpoint(0);
-    turnPID.setTolerance(2);
+    turnPID.setTolerance(DriveConstants.pidAngleErrorInDegrees);
 
     setpoint = 0;
+
+    addRequirements((Subsystem) drive);
+  }
+
+  public AlignToTarget(Drive drive, Vision vision) {
+    this(drive, vision, false);
 
     addRequirements((Subsystem) drive);
   }
@@ -36,7 +50,13 @@ public class AlignToTarget extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Optional<Double> yawToTarget = vision.getYawToBestTarget();
+    Optional<Double> yawToTarget;
+    if (selectableTarget) {
+      yawToTarget =
+          vision.getYawToAprilTag((int) assistGUI.getEntry("Vision: Target ID").getInteger(7));
+    } else {
+      yawToTarget = vision.getYawToBestTarget();
+    }
     if (yawToTarget.isPresent()) {
       // Get the current heading of robot and how much we are offset from center of april tag.
       // The difference is how much we need to turn the robot to line up to center.

@@ -21,6 +21,7 @@ import frc.robot.commands.assist.PrepareForIntake;
 import frc.robot.commands.assist.PrepareForScore;
 import frc.robot.commands.assist.ScorePiece;
 import frc.robot.commands.climber.ClimberToPosition;
+import frc.robot.commands.drive.AlignToTarget;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.shooter.TestShooterAngle;
 import frc.robot.config.RobotConfig;
@@ -461,6 +462,20 @@ public class RobotContainer {
         .add(
             "Test: Shooter Angle",
             new TestShooterAngle(RobotConfig.shooter, RobotConfig.intake, RobotConfig.arm))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+
+    assistTab
+        .add(
+            "Vision: Align To Target",
+            new AlignToTarget(RobotConfig.drive, RobotConfig.vision, true))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+
+    assistTab
+        .add("Vision: Target ID", IntakeConstants.feedSpeedInVolts)
+        .withWidget(BuiltInWidgets.kTextView)
+        .withProperties(Map.of("min", 1, "max", 16))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
 
