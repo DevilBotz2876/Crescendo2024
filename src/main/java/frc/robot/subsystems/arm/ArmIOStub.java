@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.simulation.DutyCycleEncoderSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import frc.robot.Robot;
 import frc.robot.config.RobotConfig.ArmConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
 
@@ -32,8 +33,8 @@ public class ArmIOStub implements ArmIO {
 
   // Standard classes for controlling our arm
   private final PIDController pid = new PIDController(armKp, 0, armKd);
-  private final DutyCycleEncoder absEncoder = new DutyCycleEncoder(0);
-  private final DutyCycleEncoderSim absEncoderSim = new DutyCycleEncoderSim(absEncoder);
+  private final DutyCycleEncoder absEncoder = new DutyCycleEncoder(2);
+  private final DutyCycleEncoderSim absEncoderSim;
   private final Encoder relEncoder = new Encoder(3, 4);
   private final EncoderSim relEncoderSim = new EncoderSim(relEncoder);
   private final Spark motor = new Spark(1);
@@ -58,6 +59,12 @@ public class ArmIOStub implements ArmIO {
     absEncoder.setPositionOffset(armAbsoluteOffset);
     absEncoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
     absEncoder.setDistancePerRotation(360.0);
+
+    if (Robot.isSimulation()) {
+      absEncoderSim = new DutyCycleEncoderSim(absEncoder);
+    } else {
+      absEncoderSim = null;
+    }
   }
 
   /** Updates the set of loggable inputs. */
@@ -69,7 +76,9 @@ public class ArmIOStub implements ArmIO {
 
     arm.setInput(inputs.appliedVolts);
     arm.update(0.020);
-    absEncoderSim.setDistance(Units.radiansToDegrees(arm.getAngleRads()));
+    if (absEncoderSim != null) {
+      absEncoderSim.setDistance(Units.radiansToDegrees(arm.getAngleRads()));
+    }
 
     if (softwarePidEnabled) {
       motor.setVoltage(
