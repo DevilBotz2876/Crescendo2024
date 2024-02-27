@@ -27,7 +27,7 @@ public class ArmToPosition extends Command {
   public void initialize() {
     System.out.println(
         "START: " + this.getClass().getSimpleName() + " angle: " + positionDegrees.getAsDouble());
-    timeMS = 0.0;        
+    timeMS = 0.0;
   }
 
   @Override

@@ -3,7 +3,6 @@ package frc.robot.commands.shooter;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.subsystems.shooter.Shooter;
 import java.util.function.DoubleSupplier;
@@ -41,9 +40,7 @@ public class SetShooterVelocity extends Command {
       if (timeMS >= ShooterConstants.pidSettlingTimeInMilliseconds) {
         return true;
       }
-    }
-    else
-    {
+    } else {
       timeMS = 0.0;
     }
 
