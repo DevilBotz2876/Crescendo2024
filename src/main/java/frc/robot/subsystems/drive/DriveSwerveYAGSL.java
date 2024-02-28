@@ -15,6 +15,7 @@ import java.io.File;
 import org.littletonrobotics.junction.AutoLogOutput;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
+import swervelib.parser.PIDFConfig;
 import swervelib.parser.SwerveParser;
 
 public class DriveSwerveYAGSL extends DriveBase {
@@ -30,9 +31,13 @@ public class DriveSwerveYAGSL extends DriveBase {
       swerveDrive =
           new SwerveParser(swerveJsonDirectory)
               .createSwerveDrive(DriveConstants.maxVelocityMetersPerSec);
+      swerveDrive.setCosineCompensator(false);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
+
+    PIDFConfig drivePIDF = swerveDrive.getModules()[0].getDrivePIDF();
+    PIDFConfig anglePIDF = swerveDrive.getModules()[0].getAnglePIDF();
 
     AutoBuilder.configureHolonomic(
         swerveDrive::getPose, // Robot pose supplier
@@ -44,8 +49,8 @@ public class DriveSwerveYAGSL extends DriveBase {
         // ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in
             // your Constants class
-            new PIDConstants(0.0020645, 0.0, 0.0), // Translation PID constants
-            new PIDConstants(0.01, 0.0, 0.00), // Rotation PID constants
+            new PIDConstants(drivePIDF.p, drivePIDF.i, drivePIDF.d), // Translation PID constants
+            new PIDConstants(anglePIDF.p, anglePIDF.i, anglePIDF.d), // Rotation PID constants
             swerveDrive.getMaximumVelocity(), // Max module speed, in m/s
             swerveDrive.swerveDriveConfiguration
                 .getDriveBaseRadiusMeters(), // Drive base radius in meters. Distance from robot
