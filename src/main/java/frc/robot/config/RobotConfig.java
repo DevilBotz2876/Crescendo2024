@@ -86,8 +86,11 @@ public class RobotConfig {
     public static double autoZeroVoltage = 2.0;
     public static double autoZeroMaxCurrent = 16;
     public static double autoZeroMaxVoltageDelta = 0.2;
-    public static double autoZeroExtendTimeInSeconds = 2.0;
+    public static double autoZeroExtendTimeInSeconds = 0.5;
     public static double autoZeroMaxRetractTimeInSeconds = 5.0;
+    public static double autoZeroOffset =
+        -0.5; // When auto-zeroing, to reduce stress on the mechanism, this is the amount we want to
+    // retract the climber after auto-zeroing
   }
 
   public RobotConfig() {

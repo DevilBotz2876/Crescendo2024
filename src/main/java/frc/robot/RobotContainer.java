@@ -253,7 +253,9 @@ public class RobotContainer {
             new SequentialCommandGroup(
                 new InstantCommand(() -> RobotConfig.climber.runVoltage(0), RobotConfig.climber),
                 new InstantCommand(
-                    () -> RobotConfig.climber.autoZeroMode(false), RobotConfig.climber)))
+                    () -> RobotConfig.climber.autoZeroMode(false), RobotConfig.climber),
+                new InstantCommand(
+                    () -> RobotConfig.climber.enableLimits(true), RobotConfig.climber)))
         .withPosition(colIndex + 0, rowIndex);
     commandTestTab
         .add(
@@ -314,10 +316,9 @@ public class RobotContainer {
     rowIndex++;
     commandTestTab
         .add(
-            "Climber: L Down",
+            "Climber: L Down (No Limit!)",
             new SequentialCommandGroup(
-                new InstantCommand(
-                    () -> RobotConfig.climber.autoZeroMode(true), RobotConfig.climber),
+                new InstantCommand(() -> RobotConfig.climber.enableLimits(false)),
                 new InstantCommand(
                     () ->
                         RobotConfig.climber.runVoltageLeft(
@@ -328,10 +329,9 @@ public class RobotContainer {
         .withPosition(colIndex + 0, rowIndex);
     commandTestTab
         .add(
-            "Climber: R Down",
+            "Climber: R Down (No Limit!)",
             new SequentialCommandGroup(
-                new InstantCommand(
-                    () -> RobotConfig.climber.autoZeroMode(true), RobotConfig.climber),
+                new InstantCommand(() -> RobotConfig.climber.enableLimits(false)),
                 new InstantCommand(
                     () ->
                         RobotConfig.climber.runVoltageRight(

@@ -1,5 +1,7 @@
 package frc.robot.subsystems.climber;
 
+import frc.robot.config.RobotConfig.ClimberConstants;
+
 public class ClimberIOStub implements ClimberIO {
   private double voltage = 0.0;
   private double position = 0.0;
@@ -15,10 +17,25 @@ public class ClimberIOStub implements ClimberIO {
       inputs.velocityRadiansPerSecond = 0;
     }
 
-    position += inputs.velocityRadiansPerSecond / 50;
+    inputs.appliedVolts = voltage;
+
+    if (voltage != 0) {
+      if ((position >= -0.5) || (voltage > 0)) {
+        // We aren't passed the absolute min limits for a negative voltage or we are trying to move
+        // up
+        position += inputs.velocityRadiansPerSecond / 50;
+        inputs.current = ClimberConstants.autoZeroMaxCurrent / 2;
+      } else if (voltage < 0) {
+        // We are passed the absolute min limit and we are still trying to move down, so don't move
+        // the climber, clamp the voltage and spike the current instead
+        inputs.current = ClimberConstants.autoZeroMaxCurrent + 1;
+        inputs.appliedVolts = voltage / 4;
+      }
+    } else {
+      inputs.current = 0;
+    }
 
     inputs.positionRadians = position;
-    inputs.appliedVolts = voltage;
   }
 
   @Override
@@ -27,7 +44,7 @@ public class ClimberIOStub implements ClimberIO {
   }
 
   @Override
-  public void resetPosition() {
-    position = 0.0;
+  public void setPosition(double posiiton) {
+    this.position = posiiton;
   }
 }
