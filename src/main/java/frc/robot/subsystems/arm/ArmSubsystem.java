@@ -37,13 +37,18 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
   // Create a Mechanism2d display of an Arm with a fixed ArmTower and moving Arm.
   private final Mechanism2d mech2d = new Mechanism2d(60, 60);
-  private final MechanismRoot2d armPivot2d = mech2d.getRoot("ArmPivot", 30, 30);
+  private final MechanismRoot2d armPivot2d = mech2d.getRoot("ArmPivot", 10, 30);
   private final MechanismLigament2d armTower2d =
-      armPivot2d.append(new MechanismLigament2d("ArmTower", 30, -90));
+      armPivot2d.append(new MechanismLigament2d("ArmTower", 20, -90));
+  private final double armAngle2dOffset = -45;
   private final MechanismLigament2d arm2d =
       armPivot2d.append(
           new MechanismLigament2d(
-              "Arm", 30, inputs.absolutePositionDegree, 6, new Color8Bit(Color.kYellow)));
+              "Arm",
+              40,
+              inputs.absolutePositionDegree + armAngle2dOffset,
+              6,
+              new Color8Bit(Color.kYellow)));
 
   private static final LoggedTunableNumber armKp = new LoggedTunableNumber("Arm/kP");
   private static final LoggedTunableNumber armKd = new LoggedTunableNumber("Arm/kD");
@@ -209,7 +214,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
       io.setVoltage(0);
     }
 
-    arm2d.setAngle(inputs.absolutePositionDegree);
+    arm2d.setAngle(inputs.absolutePositionDegree + armAngle2dOffset);
   }
 
   private boolean isLimitHigh() {
