@@ -34,7 +34,8 @@ public interface ArmIO {
   }
 
   /** Set PID constants */
-  public default void setFeedback(double kP, double kI, double kD) {}
+  public default void setFeedback(
+      double kP, double kI, double kD, double minOuput, double maxOutput) {}
 
   /** Set brake mode on motors */
   public default void setBrakeMode(boolean brake) {}

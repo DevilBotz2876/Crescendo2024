@@ -37,10 +37,16 @@ public class RobotConfig {
     public static double pidKp = 0.1;
     public static double pidKi = 0.0;
     public static double pidKd = 0.0;
+    public static double pidMaxOutput = 0.4;
+    public static double pidMinOutput = -0.4;
+
     public static double ffKs = 0.0;
     public static double ffKg = 0.1;
     public static double ffKv = 0.0;
     public static double ffKa = 0.0;
+
+    public static double maxVelocity = 3.0;
+    public static double maxAcceleration = 6.0;
 
     public static double pidAngleErrorInDegrees = 2.0;
     public static double pidSettlingTimeInMilliseconds = 0.1;
