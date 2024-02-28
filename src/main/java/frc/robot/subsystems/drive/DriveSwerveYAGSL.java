@@ -17,6 +17,7 @@ import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
 import swervelib.parser.PIDFConfig;
 import swervelib.parser.SwerveParser;
+import swervelib.telemetry.SwerveDriveTelemetry;
 
 public class DriveSwerveYAGSL extends DriveBase {
   private final File swerveJsonDirectory;
@@ -31,7 +32,7 @@ public class DriveSwerveYAGSL extends DriveBase {
       swerveDrive =
           new SwerveParser(swerveJsonDirectory)
               .createSwerveDrive(DriveConstants.maxVelocityMetersPerSec);
-      swerveDrive.setCosineCompensator(false);
+      swerveDrive.setCosineCompensator(!SwerveDriveTelemetry.isSimulation);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
