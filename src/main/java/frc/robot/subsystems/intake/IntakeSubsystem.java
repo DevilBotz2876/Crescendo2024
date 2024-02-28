@@ -66,9 +66,9 @@ public class IntakeSubsystem extends SubsystemBase implements Intake {
 
     if (targetVoltage != 0) {
       if (targetVoltage < 0) {
-        currentSimAngle += 30;
+        currentSimAngle += (targetVoltage / 12) * 30;
       } else if (targetVoltage > 0) {
-        currentSimAngle -= 30;
+        currentSimAngle -= (targetVoltage / 12) * 30;
       }
 
       int angleOffset = 0;

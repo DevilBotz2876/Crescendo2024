@@ -163,9 +163,9 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
 
     if (velocityRPM != 0) {
       if (velocityRPM < 0) {
-        currentSimAngle += 45;
+        currentSimAngle += (velocityRPM / 6000) * 45;
       } else if (velocityRPM > 0) {
-        currentSimAngle -= 45;
+        currentSimAngle -= (velocityRPM / 6000) * 45;
       }
 
       int angleOffset = 0;

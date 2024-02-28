@@ -6,7 +6,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.assist.PrepareForIntake;
-import frc.robot.commands.auto.AutoShootPiece;
+import frc.robot.commands.auto.AutoPrepareForScore;
+import frc.robot.commands.auto.AutoScore;
 import frc.robot.subsystems.drive.DriveSwerveYAGSL;
 
 /* Override Phoenix specific constants here */
@@ -45,11 +46,11 @@ public class RobotConfigPhoenix extends RobotConfig {
         "Shoot Piece from Speaker Amp Side",
         new SequentialCommandGroup(
             new PrintCommand("START: Shoot Piece from Speaker Amp Side"),
-            new AutoShootPiece(
+            new AutoScore(
                 RobotConfig.drive,
                 RobotConfig.arm,
-                RobotConfig.shooter,
                 RobotConfig.intake,
+                RobotConfig.shooter,
                 () -> RobotConfig.drive.getAngle(),
                 () -> AutoConstants.scoreFromSpeakerAmpSide.armAngleInDegrees,
                 () -> AutoConstants.scoreFromSpeakerAmpSide.shooterVelocityInRPMs),
@@ -59,56 +60,25 @@ public class RobotConfigPhoenix extends RobotConfig {
         "Shoot Piece from Note Amp Side",
         new SequentialCommandGroup(
             new PrintCommand("START: Shoot Piece from Speaker Amp Side"),
-            new AutoShootPiece(
+            new AutoScore(
                 RobotConfig.drive,
                 RobotConfig.arm,
-                RobotConfig.shooter,
                 RobotConfig.intake,
+                RobotConfig.shooter,
                 () -> translateForAlliance(AutoConstants.scoreFromNoteAmpSide.robotYawInDegrees),
                 () -> AutoConstants.scoreFromNoteAmpSide.armAngleInDegrees,
                 () -> AutoConstants.scoreFromNoteAmpSide.shooterVelocityInRPMs),
             new PrintCommand("  END: Shoot Piece from Speaker Amp Side")));
 
     NamedCommands.registerCommand(
-        "Shoot Piece from Speaker Center",
-        new AutoShootPiece(
-            RobotConfig.drive,
-            RobotConfig.arm,
-            RobotConfig.shooter,
-            RobotConfig.intake,
-            () -> RobotConfig.drive.getAngle(),
-            () -> AutoConstants.scoreFromSpeakerCenter.armAngleInDegrees,
-            () -> AutoConstants.scoreFromSpeakerCenter.shooterVelocityInRPMs));
-    NamedCommands.registerCommand(
-        "Shoot Piece from Note Center Side",
-        new AutoShootPiece(
-            RobotConfig.drive,
-            RobotConfig.arm,
-            RobotConfig.shooter,
-            RobotConfig.intake,
-            () -> AutoConstants.scoreFromNoteCenter.robotYawInDegrees,
-            () -> AutoConstants.scoreFromNoteCenter.armAngleInDegrees,
-            () -> AutoConstants.scoreFromNoteCenter.shooterVelocityInRPMs));
-
-    NamedCommands.registerCommand(
-        "Shoot Piece from Speaker Source Side",
-        new AutoShootPiece(
-            RobotConfig.drive,
-            RobotConfig.arm,
-            RobotConfig.shooter,
-            RobotConfig.intake,
-            () -> RobotConfig.drive.getAngle(),
-            () -> AutoConstants.scoreFromSpeakerSourceSide.armAngleInDegrees,
-            () -> AutoConstants.scoreFromSpeakerSourceSide.shooterVelocityInRPMs));
-    NamedCommands.registerCommand(
-        "Shoot Piece from Note Source Side",
-        new AutoShootPiece(
-            RobotConfig.drive,
-            RobotConfig.arm,
-            RobotConfig.shooter,
-            RobotConfig.intake,
-            () -> AutoConstants.scoreFromNoteSourceSide.robotYawInDegrees,
-            () -> AutoConstants.scoreFromNoteSourceSide.armAngleInDegrees,
-            () -> AutoConstants.scoreFromNoteSourceSide.shooterVelocityInRPMs));
+        "Prepare to Score from Amp Note",
+        new SequentialCommandGroup(
+            new PrintCommand("START: Prepare to Score from Amp Note"),
+            new AutoPrepareForScore(
+                RobotConfig.arm,
+                RobotConfig.shooter,
+                () -> AutoConstants.scoreFromNoteAmpSide.armAngleInDegrees,
+                () -> AutoConstants.scoreFromNoteAmpSide.shooterVelocityInRPMs),
+            new PrintCommand("  END: Prepare to Score from Amp Note")));
   }
 }

@@ -62,9 +62,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Amp Note"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prepare to Score from Amp Note"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp Note"
+                }
+              }
+            ]
           }
         },
         {
