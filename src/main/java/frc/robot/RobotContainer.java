@@ -501,16 +501,20 @@ public class RobotContainer {
         .withSize(2, 1);
 
     assistTab
-        .add(
-            "Vision: Align To Target",
-            new AlignToTarget(RobotConfig.drive, RobotConfig.vision, true))
-        .withPosition(colIndex, rowIndex++)
-        .withSize(2, 1);
-
-    assistTab
         .add("Vision: Target ID", IntakeConstants.feedSpeedInVolts)
         .withWidget(BuiltInWidgets.kTextView)
         .withProperties(Map.of("min", 1, "max", 16))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+    NetworkTable assistGUI = NetworkTableInstance.getDefault().getTable("Shuffleboard/Assist");
+
+    assistTab
+        .add(
+            "Vision: Align To Target",
+            new AlignToTarget(
+                RobotConfig.drive,
+                RobotConfig.vision,
+                () -> (int) assistGUI.getEntry("Vision: Target ID").getInteger(7)))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
 

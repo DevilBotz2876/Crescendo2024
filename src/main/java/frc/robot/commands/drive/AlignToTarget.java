@@ -6,28 +6,26 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.config.RobotConfig.DriveConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
 import java.util.Optional;
+import java.util.function.IntSupplier;
 
 public class AlignToTarget extends Command {
   Drive drive;
   Vision vision;
   PIDController turnPID;
   double setpoint;
-  NetworkTable assistGUI = NetworkTableInstance.getDefault().getTable("Shuffleboard/Assist");
-  boolean selectableTarget = false;
+  IntSupplier targetId;
 
   /** Creates a new AlignToTarget. */
-  public AlignToTarget(Drive drive, Vision vision, boolean selectableTarget) {
+  public AlignToTarget(Drive drive, Vision vision, IntSupplier targetId) {
     this.drive = drive;
     this.vision = vision;
-    this.selectableTarget = selectableTarget;
+    this.targetId = targetId;
 
     // Wild guess at P constant.
     turnPID =
@@ -42,7 +40,7 @@ public class AlignToTarget extends Command {
   }
 
   public AlignToTarget(Drive drive, Vision vision) {
-    this(drive, vision, false);
+    this(drive, vision, null);
 
     addRequirements((Subsystem) drive);
   }
@@ -51,9 +49,8 @@ public class AlignToTarget extends Command {
   @Override
   public void initialize() {
     Optional<Double> yawToTarget;
-    if (selectableTarget) {
-      yawToTarget =
-          vision.getYawToAprilTag((int) assistGUI.getEntry("Vision: Target ID").getInteger(7));
+    if (targetId != null) {
+      yawToTarget = vision.getYawToAprilTag(targetId.getAsInt());
     } else {
       yawToTarget = vision.getYawToBestTarget();
     }
