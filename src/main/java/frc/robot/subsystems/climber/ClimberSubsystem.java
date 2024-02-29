@@ -8,72 +8,120 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.config.RobotConfig.ClimberConstants;
+import java.util.ArrayList;
+import java.util.List;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class ClimberSubsystem extends SubsystemBase implements Climber {
-  private final ClimberIO left;
-  private final ClimberIO right;
-  private final ClimberIOInputsAutoLogged inputsLeft = new ClimberIOInputsAutoLogged();
-  private final ClimberIOInputsAutoLogged inputsRight = new ClimberIOInputsAutoLogged();
-  @AutoLogOutput private double leftVoltage = 0.0;
-  @AutoLogOutput private double rightVoltage = 0.0;
-  @AutoLogOutput private boolean bExtendLeft = false;
-  @AutoLogOutput private boolean bExtendRight = false;
-  @AutoLogOutput private boolean leftAtLimit = false;
-  @AutoLogOutput private boolean rightAtLimit = false;
-  @AutoLogOutput private boolean autoZeroModeLeft = false;
-  @AutoLogOutput private boolean autoZeroModeRight = false;
-  @AutoLogOutput private boolean enableLimits = true;
+  private class ClimberInstance {
+    private final ClimberIO io;
+    private final ClimberIOInputsAutoLogged inputs;
+    @AutoLogOutput private final String name;
+    private double voltage = 0.0;
+    @AutoLogOutput private boolean atLimit = false;
+    private boolean extend = false;
+    private boolean autoZeroMode = false;
+    private boolean enableLimits = true;
+
+    private final MechanismLigament2d climber2d;
+
+    ClimberInstance(ClimberIO io, String name, MechanismRoot2d root2d) {
+      this.io = io;
+      this.name = name;
+      inputs = new ClimberIOInputsAutoLogged();
+
+      climber2d =
+          root2d.append(new MechanismLigament2d(name, 10, 90, 6, new Color8Bit(Color.kSilver)));
+    }
+
+    void periodic() {
+      // Updates the inputs
+      io.updateInputs(inputs);
+      Logger.processInputs(name, inputs);
+
+      if (atLimits()) {
+        io.setVoltage(0);
+      } else {
+        io.setVoltage(voltage);
+      }
+
+      if (voltage != 0) {
+        climber2d.setLength(
+            10 + 30 * (inputs.positionRadians / ClimberConstants.maxPositionInRadians));
+      }
+    }
+
+    public void runVoltage(double volts) {
+      if (volts > 0) {
+        extend = true;
+      } else {
+        extend = false;
+      }
+      voltage = volts;
+    }
+
+    private boolean atLimits() {
+      if (enableLimits == false) return false;
+
+      if (autoZeroMode) {
+        if (extend) {
+          /* If we are in autozero mode, don't let the climber move up */
+          return true;
+        } else {
+          if ((inputs.current > ClimberConstants.autoZeroMaxCurrent)
+              && (Math.abs(inputs.velocityRadiansPerSecond)
+                  < ClimberConstants.autoZeroMinVelocity)) {
+            io.setPosition(ClimberConstants.autoZeroOffset);
+            runVoltage(0);
+            autoZeroMode = false;
+            return true;
+          } else {
+            return false;
+          }
+        }
+      } else {
+        return extend
+            ? (inputs.positionRadians >= ClimberConstants.maxPositionInRadians)
+            : (inputs.positionRadians <= ClimberConstants.minPositionInRadians);
+      }
+    }
+
+    public void resetPosition() {
+      io.setPosition(0);
+    }
+
+    public void autoZeroMode(boolean enable) {
+      autoZeroMode = enable;
+    }
+
+    public void enableLimits(boolean enable) {
+      enableLimits = enable;
+    }
+  }
+
+  private final ClimberInstance left, right;
+  private final List<ClimberInstance> climbers = new ArrayList<ClimberInstance>();
 
   // Create a Mechanism2d display of a Climber
   private final Mechanism2d mech2d = new Mechanism2d(60, 60);
-  private final MechanismRoot2d leftClimberPivot2d = mech2d.getRoot("LeftClimberPivot", 10, 10);
-  private final MechanismRoot2d rightClimberPivot2d = mech2d.getRoot("RightClimberPivot", 50, 10);
-  private final MechanismLigament2d leftClimber2d =
-      leftClimberPivot2d.append(
-          new MechanismLigament2d("LeftClimber", 10, 90, 6, new Color8Bit(Color.kSilver)));
-  private final MechanismLigament2d rightClimber2d =
-      rightClimberPivot2d.append(
-          new MechanismLigament2d("RightClimber", 10, 90, 6, new Color8Bit(Color.kSilver)));
 
   public ClimberSubsystem(ClimberIO left, ClimberIO right) {
-    this.left = left;
-    this.right = right;
+    this.left =
+        new ClimberInstance(left, "Climber Left", mech2d.getRoot("Left Climber Pivot", 10, 10));
+    climbers.add(this.left);
+
+    this.right =
+        new ClimberInstance(right, "Climber Right", mech2d.getRoot("Right ClimberPivot", 50, 10));
+    climbers.add(this.right);
 
     SmartDashboard.putData("Climber Simulation", mech2d);
   }
 
   @Override
   public void periodic() {
-    // Updates the inputs
-    left.updateInputs(inputsLeft);
-    right.updateInputs(inputsRight);
-    Logger.processInputs("Climber Left", inputsLeft);
-    Logger.processInputs("Climber Right", inputsRight);
-
-    if (leftAtLimits()) {
-      left.setVoltage(0);
-    } else {
-      left.setVoltage(leftVoltage);
-    }
-
-    if (rightAtLimits()) {
-      right.setVoltage(0);
-    } else {
-      right.setVoltage(rightVoltage);
-    }
-
-    //    if (leftVoltage != 0)
-    {
-      leftClimber2d.setLength(
-          10 + 30 * (inputsLeft.positionRadians / ClimberConstants.maxPositionInRadians));
-    }
-
-    //    if (rightVoltage != 0)
-    {
-      rightClimber2d.setLength(
-          10 + 30 * (inputsRight.positionRadians / ClimberConstants.maxPositionInRadians));
+    for (ClimberInstance climber : climbers) {
+      climber.periodic();
     }
   }
 
@@ -95,90 +143,32 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
 
   @Override
   public void runVoltageLeft(double volts) {
-    if (volts > 0) {
-      bExtendLeft = true;
-    } else {
-      bExtendLeft = false;
-    }
-    leftVoltage = volts;
+    left.runVoltage(volts);
   }
 
   @Override
   public void runVoltageRight(double volts) {
-    if (volts > 0) {
-      bExtendRight = true;
-    } else {
-      bExtendRight = false;
-    }
-    rightVoltage = volts;
-  }
-
-  private boolean leftAtLimits() {
-    if (enableLimits == false) return false;
-
-    if (autoZeroModeLeft) {
-      if (bExtendLeft) {
-        /* If we are in autozero mode, don't let the climber move up */
-        return true;
-      } else {
-        if ((inputsLeft.current > ClimberConstants.autoZeroMaxCurrent)
-            && (Math.abs(inputsLeft.velocityRadiansPerSecond)
-                < ClimberConstants.autoZeroMinVelocity)) {
-          left.setPosition(ClimberConstants.autoZeroOffset);
-          runVoltageLeft(0);
-          autoZeroModeLeft = false;
-          return true;
-        } else {
-          return false;
-        }
-      }
-    } else {
-      return bExtendLeft
-          ? (inputsLeft.positionRadians >= ClimberConstants.maxPositionInRadians)
-          : (inputsLeft.positionRadians <= ClimberConstants.minPositionInRadians);
-    }
-  }
-
-  private boolean rightAtLimits() {
-    if (enableLimits == false) return false;
-
-    if (autoZeroModeRight) {
-      if (bExtendRight) {
-        /* If we are in autozero mode, don't let the climber move up */
-        return true;
-      } else {
-        if ((inputsRight.current > ClimberConstants.autoZeroMaxCurrent) // Current is high
-            && (Math.abs(inputsRight.velocityRadiansPerSecond)
-                < ClimberConstants.autoZeroMinVelocity)) {
-          runVoltageRight(0);
-          right.setPosition(ClimberConstants.autoZeroOffset);
-          autoZeroModeRight = false;
-          return true;
-        } else {
-          return false;
-        }
-      }
-    } else {
-      return bExtendRight
-          ? (inputsRight.positionRadians >= ClimberConstants.maxPositionInRadians)
-          : (inputsRight.positionRadians <= ClimberConstants.minPositionInRadians);
-    }
+    right.runVoltage(volts);
   }
 
   @Override
   public void resetPosition() {
-    left.setPosition(0);
-    right.setPosition(0);
+    for (ClimberInstance climber : climbers) {
+      climber.resetPosition();
+    }
   }
 
   @Override
   public void autoZeroMode(boolean enable) {
-    autoZeroModeLeft = enable;
-    autoZeroModeRight = enable;
+    for (ClimberInstance climber : climbers) {
+      climber.autoZeroMode(enable);
+    }
   }
 
   @Override
   public void enableLimits(boolean enable) {
-    enableLimits = enable;
+    for (ClimberInstance climber : climbers) {
+      climber.enableLimits(enable);
+    }
   }
 }
