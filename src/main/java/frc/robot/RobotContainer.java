@@ -269,11 +269,15 @@ public class RobotContainer {
             "Climber: Auto Zero",
             new SequentialCommandGroup(
                 new InstantCommand(
-                    () -> RobotConfig.climber.runVoltage(ClimberConstants.autoZeroVoltage),
+                    () -> {
+                      RobotConfig.climber.enableLimits(false);
+                      RobotConfig.climber.runVoltage(ClimberConstants.autoZeroVoltage);
+                    },
                     RobotConfig.climber),
                 new WaitCommand(ClimberConstants.autoZeroExtendTimeInSeconds),
                 new InstantCommand(
                     () -> {
+                      RobotConfig.climber.enableLimits(true);
                       RobotConfig.climber.autoZeroMode(true);
                       RobotConfig.climber.runVoltage(-ClimberConstants.autoZeroVoltage);
                     },
@@ -291,25 +295,30 @@ public class RobotContainer {
     rowIndex++;
     commandTestTab
         .add(
-            "Climber: L Up",
+            "Climber: L Up (No Limit!)",
             new InstantCommand(
-                () ->
-                    RobotConfig.climber.runVoltageLeft(
-                        commandGUI
-                            .getEntry("Climber: Volts")
-                            .getDouble(ClimberConstants.defaultSpeedInVolts)),
+                () -> {
+                  RobotConfig.climber.enableLimits(false);
+                  RobotConfig.climber.runVoltageLeft(
+                      commandGUI
+                          .getEntry("Climber: Volts")
+                          .getDouble(ClimberConstants.defaultSpeedInVolts));
+                },
                 RobotConfig.climber))
         .withPosition(colIndex + 0, rowIndex);
 
     commandTestTab
         .add(
-            "Climber: R Up",
+            "Climber: R Up (No Limit!)",
             new InstantCommand(
-                () ->
-                    RobotConfig.climber.runVoltageRight(
-                        commandGUI
-                            .getEntry("Climber: Volts")
-                            .getDouble(ClimberConstants.defaultSpeedInVolts)),
+                () -> {
+                  RobotConfig.climber.enableLimits(false);
+
+                  RobotConfig.climber.runVoltageRight(
+                      commandGUI
+                          .getEntry("Climber: Volts")
+                          .getDouble(ClimberConstants.defaultSpeedInVolts));
+                },
                 RobotConfig.climber))
         .withPosition(colIndex + 1, rowIndex);
 

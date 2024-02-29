@@ -30,6 +30,7 @@ public class ClimberIOStub implements ClimberIO {
         // the climber, clamp the voltage and spike the current instead
         inputs.current = ClimberConstants.autoZeroMaxCurrent + 1;
         inputs.appliedVolts = voltage / 4;
+        inputs.velocityRadiansPerSecond = 0;
       }
     } else {
       inputs.current = 0;

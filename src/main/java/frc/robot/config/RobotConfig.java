@@ -85,7 +85,7 @@ public class RobotConfig {
     public static double defaultSpeedInVolts = 2.0;
     public static double autoZeroVoltage = 2.0;
     public static double autoZeroMaxCurrent = 16;
-    public static double autoZeroMaxVoltageDelta = 0.2;
+    public static double autoZeroMinVelocity = 0.2;
     public static double autoZeroExtendTimeInSeconds = 0.5;
     public static double autoZeroMaxRetractTimeInSeconds = 5.0;
     public static double autoZeroOffset =

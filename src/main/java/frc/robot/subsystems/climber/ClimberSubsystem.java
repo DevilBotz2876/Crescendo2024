@@ -122,9 +122,10 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
         return true;
       } else {
         if ((inputsLeft.current > ClimberConstants.autoZeroMaxCurrent)
-            && (Math.abs(inputsLeft.appliedVolts - leftVoltage)
-                > ClimberConstants.autoZeroMaxVoltageDelta)) {
+            && (Math.abs(inputsLeft.velocityRadiansPerSecond)
+                < ClimberConstants.autoZeroMinVelocity)) {
           left.setPosition(ClimberConstants.autoZeroOffset);
+          runVoltageLeft(0);
           autoZeroModeLeft = false;
           return true;
         } else {
@@ -147,11 +148,9 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
         return true;
       } else {
         if ((inputsRight.current > ClimberConstants.autoZeroMaxCurrent) // Current is high
-            && (Math.abs(
-                    inputsRight.appliedVolts
-                        - rightVoltage) // There's a large enough difference between applied volts
-                // and the requested voltage
-                > ClimberConstants.autoZeroMaxVoltageDelta)) {
+            && (Math.abs(inputsRight.velocityRadiansPerSecond)
+                < ClimberConstants.autoZeroMinVelocity)) {
+          runVoltageRight(0);
           right.setPosition(ClimberConstants.autoZeroOffset);
           autoZeroModeRight = false;
           return true;
