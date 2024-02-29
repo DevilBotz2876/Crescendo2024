@@ -68,8 +68,8 @@ public class RobotConfigPhoenix extends RobotConfig {
                 () -> RobotConfig.drive.getAngle(),
                 () -> AutoConstants.scoreFromSpeakerCenterSide.armAngleInDegrees,
                 () -> AutoConstants.scoreFromSpeakerCenterSide.shooterVelocityInRPMs),
-            new PrintCommand("  END: Shoot Piece from Speaker Center Side")));        
-    
+            new PrintCommand("  END: Shoot Piece from Speaker Center Side")));
+
     NamedCommands.registerCommand(
         "Shoot Piece from Speaker Source Side",
         new SequentialCommandGroup(
@@ -82,7 +82,7 @@ public class RobotConfigPhoenix extends RobotConfig {
                 () -> RobotConfig.drive.getAngle(),
                 () -> AutoConstants.scoreFromSpeakerSourceSide.armAngleInDegrees,
                 () -> AutoConstants.scoreFromSpeakerSourceSide.shooterVelocityInRPMs),
-            new PrintCommand("  END: Shoot Piece from Speaker Source Side")));        
+            new PrintCommand("  END: Shoot Piece from Speaker Source Side")));
 
     NamedCommands.registerCommand(
         "Shoot Piece from Note Amp Side",
@@ -111,7 +111,7 @@ public class RobotConfigPhoenix extends RobotConfig {
                 () -> AutoConstants.scoreFromNoteCenterSide.armAngleInDegrees,
                 () -> AutoConstants.scoreFromNoteCenterSide.shooterVelocityInRPMs),
             new PrintCommand("  END: Shoot Piece from Speaker Center Side")));
-            
+
     NamedCommands.registerCommand(
         "Shoot Piece from Note Source Side",
         new SequentialCommandGroup(
@@ -136,7 +136,7 @@ public class RobotConfigPhoenix extends RobotConfig {
                 () -> AutoConstants.scoreFromNoteAmpSide.armAngleInDegrees,
                 () -> AutoConstants.scoreFromNoteAmpSide.shooterVelocityInRPMs),
             new PrintCommand("  END: Prepare to Score from Amp Note")));
-    
+
     NamedCommands.registerCommand(
         "Prepare to Score from Source Note",
         new SequentialCommandGroup(
