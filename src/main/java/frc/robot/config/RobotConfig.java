@@ -85,6 +85,14 @@ public class RobotConfig {
     public static double minPositionInRadians = 0.0;
     public static double maxPositionInRadians = 4.0;
     public static double defaultSpeedInVolts = 2.0;
+    public static double autoZeroVoltage = 2.0;
+    public static double autoZeroMaxCurrent = 16;
+    public static double autoZeroMinVelocity = 0.2;
+    public static double autoZeroExtendTimeInSeconds = 0.5;
+    public static double autoZeroMaxRetractTimeInSeconds = 5.0;
+    public static double autoZeroOffset =
+        -0.5; // When auto-zeroing, to reduce stress on the mechanism, this is the amount we want to
+    // retract the climber after auto-zeroing
   }
 
   public static class AutoConstants {

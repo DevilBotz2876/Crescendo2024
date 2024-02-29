@@ -36,19 +36,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   @AutoLogOutput private double setPoint;
 
   // Create a Mechanism2d display of an Arm with a fixed ArmTower and moving Arm.
-  private final Mechanism2d mech2d = new Mechanism2d(60, 60);
-  private final MechanismRoot2d armPivot2d = mech2d.getRoot("ArmPivot", 10, 30);
-  private final MechanismLigament2d armTower2d =
-      armPivot2d.append(new MechanismLigament2d("ArmTower", 20, -90));
   private final double armAngle2dOffset = -45;
-  private final MechanismLigament2d arm2d =
-      armPivot2d.append(
-          new MechanismLigament2d(
-              "Arm",
-              40,
-              inputs.absolutePositionDegree + armAngle2dOffset,
-              6,
-              new Color8Bit(Color.kYellow)));
+  private final MechanismLigament2d arm2d;
 
   private static final LoggedTunableNumber armKp = new LoggedTunableNumber("Arm/kP");
   private static final LoggedTunableNumber armKd = new LoggedTunableNumber("Arm/kD");
@@ -110,6 +99,18 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
                 null,
                 (state) -> Logger.recordOutput("Arm/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism((voltage) -> runVoltage(voltage.in(Volts)), null, this));
+
+    Mechanism2d mech2d = new Mechanism2d(60, 60);
+    MechanismRoot2d armPivot2d = mech2d.getRoot("Arm Pivot", 10, 30);
+    armPivot2d.append(new MechanismLigament2d("Arm Tower", 20, -90));
+    arm2d =
+        armPivot2d.append(
+            new MechanismLigament2d(
+                "Arm",
+                40,
+                inputs.absolutePositionDegree + armAngle2dOffset,
+                6,
+                new Color8Bit(Color.kYellow)));
 
     SmartDashboard.putData("Arm Simulation", mech2d);
 
