@@ -26,7 +26,7 @@ public class RobotConfigInferno extends RobotConfig {
     IntakeConstants.indexSpeedInVolts = 6.0;
     IntakeConstants.feedSpeedInVolts = 6.0;
 
-    intake = new IntakeSubsystem(new IntakeIOTalonSRX(3));
+    intake = new IntakeSubsystem(new IntakeIOTalonSRX(3, true));
 
     // Inferno has a single SparkMax based shooter
 

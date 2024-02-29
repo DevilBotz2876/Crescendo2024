@@ -13,10 +13,14 @@ public class IntakeIOTalonSRX implements IntakeIO {
   DigitalInput limitSwitchIntake = new DigitalInput(1);
   DigitalInput limitSwitchShooter = new DigitalInput(2);
 
-  public IntakeIOTalonSRX(int id) {
+  public IntakeIOTalonSRX(int id, boolean inverted) {
     leader = new TalonSRX(id);
     // leader motor is not inverted, and set follower motor to follow the leader
-    leader.setInverted(false);
+    leader.setInverted(inverted);
+  }
+
+  public IntakeIOTalonSRX(int id) {
+    this(id, false);
   }
 
   @Override
