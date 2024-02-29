@@ -81,9 +81,15 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
           }
         }
       } else {
-        return extend
-            ? (inputs.positionRadians >= ClimberConstants.maxPositionInRadians)
-            : (inputs.positionRadians <= ClimberConstants.minPositionInRadians);
+        boolean atLimit =
+            extend
+                ? (inputs.positionRadians >= ClimberConstants.maxPositionInRadians)
+                : (inputs.positionRadians <= ClimberConstants.minPositionInRadians);
+        ;
+        if (atLimit) {
+          runVoltage(0);
+        }
+        return atLimit;
       }
     }
 
