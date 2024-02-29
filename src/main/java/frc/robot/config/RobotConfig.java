@@ -92,12 +92,12 @@ public class RobotConfig {
     public static AutoScoreConstants scoreFromSpeakerAmpSide =
         new AutoScoreConstants(0.0, 45, 3000);
     public static AutoScoreConstants scoreFromNoteAmpSide = new AutoScoreConstants(40, 45, 3000);
-    public static AutoScoreConstants scoreFromSpeakerCenter = new AutoScoreConstants(0.0, 0.0, 0.0);
-    public static AutoScoreConstants scoreFromNoteCenter = new AutoScoreConstants(0.0, 0.0, 0.0);
+    public static AutoScoreConstants scoreFromSpeakerCenterSide = new AutoScoreConstants(0.0, 45, 3000);
+    public static AutoScoreConstants scoreFromNoteCenterSide = new AutoScoreConstants(0.0, 40, 3000);
     public static AutoScoreConstants scoreFromSpeakerSourceSide =
-        new AutoScoreConstants(0.0, 0.0, 0.0);
+        new AutoScoreConstants(0.0, 45, 3000);
     public static AutoScoreConstants scoreFromNoteSourceSide =
-        new AutoScoreConstants(0.0, 0.0, 0.0);
+        new AutoScoreConstants(320.0, 30.0, 3000);
   }
 
   public RobotConfig() {
