@@ -189,6 +189,19 @@ public class RobotContainer {
     controller
         .back()
         .onTrue(new InstantCommand(() -> RobotConfig.drive.resetOdometry(), RobotConfig.drive));
+
+    controller
+        .start()
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  if (RobotConfig.climber.isExtending()) {
+                    RobotConfig.climber.retract();
+                  } else {
+                    RobotConfig.climber.extend();
+                  }
+                },
+                RobotConfig.climber));
   }
 
   public Command getAutonomousCommand() {
