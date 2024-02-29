@@ -31,8 +31,8 @@ public class RobotConfigPhoenix extends RobotConfig {
         new VisionCamera(
             "photonvision",
             new Transform3d(
-                new Translation3d(0, 0.3048, 0.22),
-                new Rotation3d(0, Units.degreesToRadians(-30), 0))));
+                new Translation3d(-0.3048, 0, 0.22),
+                new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(180)))));
 
     vision = new VisionSubsystem(cameras, AprilTagFields.k2024Crescendo.loadAprilTagLayoutField());
 

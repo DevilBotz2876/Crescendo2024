@@ -175,10 +175,10 @@ public class RobotConfig {
       ArrayList<VisionCamera> cameras = new ArrayList<VisionCamera>();
       cameras.add(
           new VisionCamera(
-              "shooter",
+              "photonvision",
               new Transform3d(
-                  new Translation3d(0.221, 0, .164),
-                  new Rotation3d(0, Units.degreesToRadians(-20), 0))));
+                  new Translation3d(-0.221, 0, .164),
+                  new Rotation3d(0, Units.degreesToRadians(-20), Units.degreesToRadians(180)))));
       cameras.add(
           new VisionCamera(
               "left",

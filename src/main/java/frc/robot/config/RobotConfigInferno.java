@@ -88,10 +88,10 @@ public class RobotConfigInferno extends RobotConfig {
     /* TODO: Measure and set camera name/location */
     cameras.add(
         new VisionCamera(
-            "shooter",
+            "photonvision",
             new Transform3d(
-                new Translation3d(0.221, 0, .164),
-                new Rotation3d(0, Units.degreesToRadians(-20), 0))));
+                new Translation3d(-0.3048, 0, 0.22),
+                new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(180)))));
 
     vision = new VisionSubsystem(cameras, AprilTagFields.k2024Crescendo.loadAprilTagLayoutField());
 
