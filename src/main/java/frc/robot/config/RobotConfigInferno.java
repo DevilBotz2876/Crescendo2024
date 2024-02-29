@@ -63,7 +63,7 @@ public class RobotConfigInferno extends RobotConfig {
 
     ClimberConstants.minPositionInRadians = 0.01;
     ClimberConstants.maxPositionInRadians = 0.47;
-    ClimberConstants.defaultSpeedInVolts = 2.0;
+    ClimberConstants.defaultSpeedInVolts = 12.0;
     ClimberConstants.autoZeroVoltage = 2.0;
     ClimberConstants.autoZeroMaxCurrent = 16;
     ClimberConstants.autoZeroMinVelocity = 1.0;
