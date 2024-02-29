@@ -42,7 +42,7 @@ public class DriveSwerveYAGSL extends DriveBase {
               new SlewRateLimiter(DriveConstants.slewRateLimiterY),
               new SlewRateLimiter(DriveConstants.slewRateLimiterAngle));
 
-      swerveDrive.setMotorIdleMode(true);              
+      swerveDrive.setMotorIdleMode(true);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
