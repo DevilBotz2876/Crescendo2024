@@ -40,6 +40,10 @@ public class RobotConfig {
     public static double anglePidKi = 0.0;
     public static double anglePidKd = 0.0;
     public static double pidAngleErrorInDegrees = 2.0;
+
+    public static double slewRateLimiterX = 3;
+    public static double slewRateLimiterY = 3;
+    public static double slewRateLimiterAngle = 3;
   }
 
   public static class ArmConstants {
