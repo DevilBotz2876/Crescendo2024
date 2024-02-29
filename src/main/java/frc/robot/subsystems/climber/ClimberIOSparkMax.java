@@ -1,5 +1,6 @@
 package frc.robot.subsystems.climber;
 
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -26,6 +27,7 @@ public class ClimberIOSparkMax implements ClimberIO {
 
     motor.enableVoltageCompensation(12.0);
     motor.setSmartCurrentLimit(30);
+    motor.setIdleMode(IdleMode.kBrake);
 
     motor.burnFlash();
   }

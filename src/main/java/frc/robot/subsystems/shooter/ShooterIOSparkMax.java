@@ -1,5 +1,6 @@
 package frc.robot.subsystems.shooter;
 
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -33,6 +34,7 @@ public class ShooterIOSparkMax implements ShooterIO {
 
     flywheel.enableVoltageCompensation(12.0);
     flywheel.setSmartCurrentLimit(30);
+    flywheel.setIdleMode(IdleMode.kCoast);
 
     flywheel.burnFlash();
 
