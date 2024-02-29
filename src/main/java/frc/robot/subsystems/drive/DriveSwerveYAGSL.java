@@ -4,6 +4,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -33,6 +34,13 @@ public class DriveSwerveYAGSL extends DriveBase {
           new SwerveParser(swerveJsonDirectory)
               .createSwerveDrive(DriveConstants.maxVelocityMetersPerSec);
       swerveDrive.setCosineCompensator(!SwerveDriveTelemetry.isSimulation);
+
+      swerveDrive
+          .getSwerveController()
+          .addSlewRateLimiters(
+              new SlewRateLimiter(DriveConstants.slewRateLimiterX),
+              new SlewRateLimiter(DriveConstants.slewRateLimiterY),
+              new SlewRateLimiter(DriveConstants.slewRateLimiterAngle));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
