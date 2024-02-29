@@ -102,6 +102,7 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
 
   private final ClimberInstance left, right;
   private final List<ClimberInstance> climbers = new ArrayList<ClimberInstance>();
+  private boolean extend = false;
 
   public ClimberSubsystem(ClimberIO left, ClimberIO right) {
     // Create 2D simulated display of a Climber
@@ -126,13 +127,22 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
   }
 
   /** Extends climber arms min limit */
+  @Override
   public void extend() {
+    extend = true;
     runVoltage(ClimberConstants.defaultSpeedInVolts);
   }
 
   /** Retracts climber to min limit */
+  @Override
   public void retract() {
+    extend = false;
     runVoltage(-ClimberConstants.defaultSpeedInVolts);
+  }
+
+  @Override
+  public boolean isExtending() {
+    return extend;
   }
 
   @Override
