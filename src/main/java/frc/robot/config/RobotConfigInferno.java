@@ -70,10 +70,19 @@ public class RobotConfigInferno extends RobotConfig {
 
     arm = new ArmSubsystem(new ArmIOSparkMax(4, true));
 
+    ClimberConstants.minPositionInRadians = 0.01;
+    ClimberConstants.maxPositionInRadians = 0.47;
+    ClimberConstants.defaultSpeedInVolts = 2.0;
+    ClimberConstants.autoZeroVoltage = 2.0;
+    ClimberConstants.autoZeroMaxCurrent = 16;
+    ClimberConstants.autoZeroMinVelocity = 1.0;
+    ClimberConstants.autoZeroExtendTimeInSeconds = 0.5;
+    ClimberConstants.autoZeroMaxRetractTimeInSeconds =
+        10.0 + ClimberConstants.autoZeroExtendTimeInSeconds;
+    ClimberConstants.autoZeroOffset =
+        -0.5; // When auto-zeroing, to reduce stress on the mechanism, this is the amount we want to
+    // retract the climber after auto-zeroing
     climber = new ClimberSubsystem(new ClimberIOSparkMax(7, false), new ClimberIOSparkMax(6, true));
-    ClimberConstants.maxPositionInRadians = .4;
-    // 16 inchea extension, 5/8 radius from the center of the spoke
-    // formula is 16/ 2 * pi * 5/8 to get 4.07 that rounds 4 (SIG FIGS )
 
     ArrayList<VisionCamera> cameras = new ArrayList<VisionCamera>();
     /* TODO: Measure and set camera name/location */
