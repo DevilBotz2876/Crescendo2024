@@ -1,6 +1,7 @@
 package frc.robot.subsystems.intake;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
@@ -17,6 +18,7 @@ public class IntakeIOTalonSRX implements IntakeIO {
     leader = new TalonSRX(id);
     // leader motor is not inverted, and set follower motor to follow the leader
     leader.setInverted(inverted);
+    leader.setNeutralMode(NeutralMode.Brake);
   }
 
   public IntakeIOTalonSRX(int id) {
