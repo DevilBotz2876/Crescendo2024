@@ -137,8 +137,8 @@ public class RobotContainer {
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
 
-    // sysIdTestTab.add("Drive: Drive Motors", RobotConfig.drive.sysIdDriveMotorCommand());
-    // sysIdTestTab.add("Drive: Angle Motors", RobotConfig.drive.sysIdAngleMotorCommand());
+    sysIdTestTab.add("Drive: Drive Motors", RobotConfig.drive.sysIdDriveMotorCommand());
+    sysIdTestTab.add("Drive: Angle Motors", RobotConfig.drive.sysIdAngleMotorCommand());
   }
 
   private void configureBindings() {
