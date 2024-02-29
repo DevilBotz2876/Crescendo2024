@@ -33,6 +33,8 @@ import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.config.RobotConfigInferno;
 import frc.robot.config.RobotConfigPhoenix;
 import frc.robot.config.RobotConfigSherman;
+import frc.robot.util.RobotState;
+import frc.robot.util.RobotState.TargetMode;
 import java.util.Map;
 
 public class RobotContainer {
@@ -40,7 +42,6 @@ public class RobotContainer {
   public final RobotConfig robotConfig;
   private static final String robotNameKey = "Robot Name";
   private static GenericEntry ampModeEntry = null;
-  private static boolean ampMode = false;
   private static GenericEntry fieldOrientedEntry = null;
 
   public RobotContainer() {
@@ -148,16 +149,24 @@ public class RobotContainer {
 
     controller.a().onTrue(new PrepareForIntake(RobotConfig.arm, RobotConfig.intake));
 
-    controller.b().onTrue(new PrepareForScore(RobotConfig.arm, RobotConfig.shooter, () -> ampMode));
+    controller
+        .b()
+        .onTrue(
+            new PrepareForScore(
+                RobotConfig.arm, RobotConfig.shooter, () -> RobotState.isAmpMode()));
 
     controller
         .y()
         .onTrue(
             new InstantCommand(
                 () -> {
-                  ampMode = !ampMode;
+                  if (RobotState.isAmpMode()) {
+                    RobotState.setTargetMode(TargetMode.SPEAKER);
+                  } else {
+                    RobotState.setTargetMode(TargetMode.AMP);
+                  }
                   if (ampModeEntry != null) {
-                    ampModeEntry.setBoolean(ampMode);
+                    ampModeEntry.setBoolean(RobotState.isAmpMode());
                   }
                 }));
 
@@ -440,7 +449,7 @@ public class RobotContainer {
     assistTab
         .add(
             "Assist: Prepare For Score",
-            new PrepareForScore(RobotConfig.arm, RobotConfig.shooter, () -> ampMode))
+            new PrepareForScore(RobotConfig.arm, RobotConfig.shooter, () -> RobotState.isAmpMode()))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
     assistTab
@@ -472,7 +481,7 @@ public class RobotContainer {
 
     ampModeEntry =
         assistTab
-            .add("Amp Mode", ampMode)
+            .add("Amp Mode", RobotState.isAmpMode())
             .withWidget(BuiltInWidgets.kBooleanBox)
             .withPosition(colIndex, rowIndex++)
             .withSize(2, 1)
@@ -514,7 +523,11 @@ public class RobotContainer {
             new AlignToTarget(
                 RobotConfig.drive,
                 RobotConfig.vision,
-                () -> (int) assistGUI.getEntry("Vision: Target ID").getInteger(7)))
+                () ->
+                    (int)
+                        assistGUI
+                            .getEntry("Vision: Target ID")
+                            .getInteger(RobotState.getActiveTargetId())))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
 

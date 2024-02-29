@@ -4,8 +4,8 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.util.RobotState;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,28 +22,6 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class VisionSubsystem extends SubsystemBase implements Vision {
-  private class TargetInfo {
-    double timestamp;
-    String name;
-    int id;
-    double yaw;
-    double distance;
-
-    @Override
-    public String toString() {
-      return "timestamp:"
-          + VisionPose.doubleFormat.format(timestamp)
-          + " targetName:"
-          + name
-          + " id: "
-          + id
-          + " yaw:"
-          + VisionPose.doubleFormat.format(yaw)
-          + " distance: "
-          + VisionPose.doubleFormat.format(distance);
-    }
-  }
-
   private class VisionCameraImpl {
     private static int numCameras = 0;
     private final PhotonCamera camera;
@@ -109,16 +87,17 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
   private final AprilTagFieldLayout fieldLayout;
 
   private List<VisionPose> estimatedPoses = new ArrayList<VisionPose>();
-  private DriverStation.Alliance alliance;
-  @AutoLogOutput private Pose2d primaryEstimatedPose;
 
   /* Debug Info */
-  private TargetInfo targetSpeaker = new TargetInfo();
-  private TargetInfo targetAmp = new TargetInfo();
-  @AutoLogOutput int targetsVisible;
-  @AutoLogOutput double targetSpeakerDistance;
-  boolean targetInfoChangedSpeaker = true;
-  boolean targetInfoChangedAmp = true;
+  @AutoLogOutput private int debugTargetsVisible;
+  @AutoLogOutput private int debugCurrentTargetId = RobotState.getActiveTargetId();
+
+  @AutoLogOutput
+  private String debugCurrentTargetName = RobotState.getTargetName(debugCurrentTargetId);
+
+  @AutoLogOutput private double debugTargetDistance = 0;
+  @AutoLogOutput private double debugTargetYaw = 0;
+  @AutoLogOutput private Pose2d debugEstimatedPose;
 
   /* Simulation Support*/
   private boolean simEnabled = false;
@@ -158,7 +137,7 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
     for (VisionCameraImpl camera : cameras) {
       camera.update();
       if (camera == primaryCamera) {
-        targetsVisible = camera.result.getTargets().size();
+        debugTargetsVisible = camera.result.getTargets().size();
       }
 
       Optional<EstimatedRobotPose> currentEstimatedRobotPose = camera.getEstimatedRobotPose();
@@ -170,48 +149,26 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
         estimatedPoses.get(camera.getIndex()).cameraName = camera.getName();
 
         if (camera == primaryCamera) {
-          primaryEstimatedPose = estimatedPoses.get(camera.getIndex()).robotPose;
+          debugEstimatedPose = estimatedPoses.get(camera.getIndex()).robotPose;
         }
-      }
-    }
-
-    if (DriverStation.getAlliance().isPresent()
-        && (DriverStation.getAlliance().get() != alliance)) {
-      alliance = DriverStation.getAlliance().get();
-      targetInfoChangedSpeaker = true;
-      targetInfoChangedAmp = true;
-
-      if (alliance == DriverStation.Alliance.Red) {
-        targetSpeaker.name = "Speaker Center (Red)";
-        targetSpeaker.id = 4; // Red Speaker Center
-
-        targetAmp.name = "Amp (Red)";
-        targetAmp.id = 5; // Red Amp
-      } else {
-        targetSpeaker.name = "Speaker Center (Blue)";
-        targetSpeaker.id = 7; // Blue Speaker Center
-
-        targetAmp.name = "Amp (Blue)";
-        targetAmp.id = 6; // Blue Amp
       }
     }
 
     Optional<Double> distance;
     Optional<Double> yaw;
-    distance = getDistanceToAprilTag(targetSpeaker.id);
-    yaw = getYawToAprilTag(targetSpeaker.id);
+    if (debugCurrentTargetId != RobotState.getActiveTargetId()) {
+      debugCurrentTargetId = RobotState.getActiveTargetId();
+      debugTargetDistance = 0;
+      debugTargetYaw = 0;
+      debugCurrentTargetName = RobotState.getTargetName(debugCurrentTargetId);
+    }
+    distance = getDistanceToAprilTag(debugCurrentTargetId);
+    yaw = getYawToAprilTag(debugCurrentTargetId);
     if (distance.isPresent()) {
-      targetSpeaker.distance = distance.get();
-      targetInfoChangedSpeaker = true;
+      debugTargetDistance = distance.get();
     }
     if (yaw.isPresent()) {
-      targetSpeaker.yaw = yaw.get();
-      targetInfoChangedSpeaker = true;
-    }
-    if (targetInfoChangedSpeaker) {
-      targetSpeaker.timestamp = primaryCamera.getLatestTimestamp();
-      targetSpeakerDistance = targetSpeaker.distance;
-      targetInfoChangedSpeaker = false;
+      debugTargetYaw = yaw.get();
     }
   }
 
