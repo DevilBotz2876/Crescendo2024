@@ -128,7 +128,6 @@ public class DriveCommand extends Command {
     if (this.autoRot.get().isPresent()) {
       double currentAngle = drive.getAngle();
       newRot = turnPID.calculate(currentAngle, currentAngle - this.autoRot.get().get());
-      System.out.println("Auto Rotate");
     }
 
     ChassisSpeeds speeds =

@@ -62,7 +62,6 @@ public class AlignToTarget extends Command {
       // TODO: check sign/math is right
       setpoint = drive.getAngle() - yawToTarget.get();
     } else {
-      System.out.println("AlignToTarget No target found");
       setpoint = drive.getAngle();
     }
   }
