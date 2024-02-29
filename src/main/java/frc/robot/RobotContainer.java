@@ -184,7 +184,7 @@ public class RobotContainer {
             () -> MathUtil.applyDeadband(-controller.getRightX(), 0.05)));
 
     controller
-        .leftTrigger()
+        .rightBumper()
         .whileTrue(
             new DriveCommand(
                 RobotConfig.drive,
