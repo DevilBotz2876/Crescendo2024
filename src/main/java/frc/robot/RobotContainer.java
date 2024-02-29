@@ -184,6 +184,16 @@ public class RobotContainer {
             () -> MathUtil.applyDeadband(-controller.getRightX(), 0.05)));
 
     controller
+        .leftTrigger()
+        .whileTrue(
+            new DriveCommand(
+                RobotConfig.drive,
+                () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.05),
+                () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.05),
+                () -> MathUtil.applyDeadband(-controller.getRightX(), 0.05),
+                () -> RobotConfig.vision.getYawToAprilTag(RobotState.getActiveTargetId())));
+
+    controller
         .x()
         .onTrue(
             new InstantCommand(

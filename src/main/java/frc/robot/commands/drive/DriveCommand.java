@@ -1,5 +1,6 @@
 package frc.robot.commands.drive;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -7,53 +8,81 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.config.RobotConfig.DriveConstants;
 import frc.robot.subsystems.drive.DriveBase;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
 
 public class DriveCommand extends Command {
   DriveBase drive;
   DoubleSupplier speedX;
   DoubleSupplier speedY;
   DoubleSupplier rot;
+  Supplier<Optional<Double>> autoRot;
   ShuffleboardTab tab;
   GenericEntry driveSpeedEntry;
-  private final SendableChooser<String> driveSpeedChooser = new SendableChooser<>();
+  private static SendableChooser<String> driveSpeedChooser = null;
   double xSpeed;
   double ySpeed;
   double newRot;
   double speedLimiter;
   double turnLimiter;
+  PIDController turnPID;
 
-  GenericEntry speedLimiterEntry;
-  GenericEntry turnLimiterEntry;
+  static GenericEntry speedLimiterEntry = null;
+  static GenericEntry turnLimiterEntry = null;
 
   public DriveCommand(
-      DriveBase drive, DoubleSupplier speedX, DoubleSupplier speedY, DoubleSupplier rot) {
+      DriveBase drive,
+      DoubleSupplier speedX,
+      DoubleSupplier speedY,
+      DoubleSupplier rot,
+      Supplier<Optional<Double>> autoRot) {
     this.drive = drive;
     this.speedX = speedX;
     this.speedY = speedY;
     this.rot = rot;
+    this.autoRot = autoRot;
+
+    // Wild guess at P constant.
+    turnPID =
+        new PIDController(
+            DriveConstants.anglePidKp, DriveConstants.anglePidKi, DriveConstants.anglePidKd);
+    turnPID.enableContinuousInput(0, 360);
 
     tab = Shuffleboard.getTab("Drive");
-    speedLimiterEntry =
-        tab.add("Drive Speed Limit", 100)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0, "max", 100))
-            .getEntry();
+    if (speedLimiterEntry == null) {
+      speedLimiterEntry =
+          tab.add("Drive Speed Limit", 100)
+              .withWidget(BuiltInWidgets.kNumberSlider)
+              .withProperties(Map.of("min", 0, "max", 100))
+              .getEntry();
+    }
 
-    turnLimiterEntry =
-        tab.add("Drive Turn Limit", 100)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0, "max", 100))
-            .getEntry();
+    if (turnLimiterEntry == null) {
+      turnLimiterEntry =
+          tab.add("Drive Turn Limit", 100)
+              .withWidget(BuiltInWidgets.kNumberSlider)
+              .withProperties(Map.of("min", 0, "max", 100))
+              .getEntry();
+    }
 
-    driveSpeedChooser.addOption("Linear Mode", "Linear Mode");
-    driveSpeedChooser.setDefaultOption("Squared Mode", "Squared Mode");
-    driveSpeedChooser.addOption("Cubed Mode", "Cubed Mode");
-    tab.add("Drive Response Curve", driveSpeedChooser);
+    if (driveSpeedChooser == null) {
+      driveSpeedChooser = new SendableChooser<>();
+      driveSpeedChooser.addOption("Linear Mode", "Linear Mode");
+      driveSpeedChooser.setDefaultOption("Squared Mode", "Squared Mode");
+      driveSpeedChooser.addOption("Cubed Mode", "Cubed Mode");
+      tab.add("Drive Response Curve", driveSpeedChooser);
+    }
 
     addRequirements(drive);
+  }
+
+  public DriveCommand(
+      DriveBase drive, DoubleSupplier speedX, DoubleSupplier speedY, DoubleSupplier rot) {
+    this(drive, speedX, speedY, rot, () -> Optional.empty());
   }
 
   @Override
@@ -62,6 +91,7 @@ public class DriveCommand extends Command {
     xSpeed = speedX.getAsDouble();
     ySpeed = speedY.getAsDouble();
     newRot = rot.getAsDouble();
+
     speedLimiter = speedLimiterEntry.getDouble(100);
     turnLimiter = turnLimiterEntry.getDouble(100);
 
@@ -94,6 +124,13 @@ public class DriveCommand extends Command {
         newRot = Math.pow(newRot, 3);
         break;
     }
+
+    if (this.autoRot.get().isPresent()) {
+      double currentAngle = drive.getAngle();
+      newRot = turnPID.calculate(currentAngle, currentAngle - this.autoRot.get().get());
+      System.out.println("Auto Rotate");
+    }
+
     ChassisSpeeds speeds =
         new ChassisSpeeds(
             xSpeed * (speedLimiter / 100) * drive.getMaxLinearSpeed(),

@@ -33,6 +33,7 @@ public class AlignToTarget extends Command {
             DriveConstants.anglePidKp, DriveConstants.anglePidKi, DriveConstants.anglePidKd);
     turnPID.setSetpoint(0);
     turnPID.setTolerance(DriveConstants.pidAngleErrorInDegrees);
+    turnPID.enableContinuousInput(0, 360);
 
     setpoint = 0;
 
