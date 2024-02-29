@@ -17,11 +17,8 @@ public class IntakeSubsystem extends SubsystemBase implements Intake {
   private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
   @AutoLogOutput private double targetVoltage;
 
-  // Create a Mechanism2d display of an Intake
-  private final Mechanism2d mech2d = new Mechanism2d(60, 60);
-  private final MechanismRoot2d intakePivot2d = mech2d.getRoot("IntakePivot", 45, 30);
+  // Mechanism2d display of an Intake
   private List<MechanismLigament2d> intake2d = new ArrayList<MechanismLigament2d>();
-  private final MechanismRoot2d notePivot2d = mech2d.getRoot("NotePivot", 15, 30);
   private List<MechanismLigament2d> note2d = new ArrayList<MechanismLigament2d>();
   private boolean noteVisibility = false;
 
@@ -32,22 +29,26 @@ public class IntakeSubsystem extends SubsystemBase implements Intake {
 
     targetVoltage = 0;
 
+    // Create 2D simulated display of an Intake/Note
+    Mechanism2d mech2d = new Mechanism2d(60, 60);
+    MechanismRoot2d intakePivot2d = mech2d.getRoot("Intake Pivot", 45, 30);
+    MechanismRoot2d notePivot2d = mech2d.getRoot("Note Pivot", 15, 30);
+
     intake2d.add(
         intakePivot2d.append(
-            new MechanismLigament2d("WheelA", 10, 0, 6, new Color8Bit(Color.kGray))));
+            new MechanismLigament2d("Wheel Spoke A", 10, 0, 6, new Color8Bit(Color.kGray))));
     intake2d.add(
         intakePivot2d.append(
-            new MechanismLigament2d("WheelB", 10, 90, 6, new Color8Bit(Color.kRed))));
+            new MechanismLigament2d("Wheel Spoke B", 10, 90, 6, new Color8Bit(Color.kRed))));
     intake2d.add(
         intakePivot2d.append(
-            new MechanismLigament2d("WheelC", 10, 180, 6, new Color8Bit(Color.kGray))));
+            new MechanismLigament2d("Wheel Spoke C", 10, 180, 6, new Color8Bit(Color.kGray))));
     intake2d.add(
         intakePivot2d.append(
-            new MechanismLigament2d("WheelD", 10, 270, 6, new Color8Bit(Color.kRed))));
+            new MechanismLigament2d("Wheel Spoke D", 10, 270, 6, new Color8Bit(Color.kRed))));
 
     note2d.add(
-        notePivot2d.append(
-            new MechanismLigament2d("NoteA", 0, 0, 0, new Color8Bit(Color.kOrange))));
+        notePivot2d.append(new MechanismLigament2d("Note", 0, 0, 0, new Color8Bit(Color.kOrange))));
 
     SmartDashboard.putData("Intake Simulation", mech2d);
   }

@@ -36,9 +36,7 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
   boolean useSoftwarePid = false;
   boolean softwarePidEnabled = false;
 
-  // Create a Mechanism2d display of an Intake
-  private final Mechanism2d mech2d = new Mechanism2d(60, 60);
-  private final MechanismRoot2d intakePivot2d = mech2d.getRoot("ShooterPivot", 30, 30);
+  // Mechanism2d display of a Shooter
   private List<MechanismLigament2d> shooter2d = new ArrayList<MechanismLigament2d>();
   private int currentSimAngle = 0;
 
@@ -80,18 +78,22 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
                 (state) -> Logger.recordOutput("Shooter/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism((voltage) -> runVoltage(voltage.in(Volts)), null, this));
 
+    // Create 2D simulated display of a Shooter
+    Mechanism2d mech2d = new Mechanism2d(60, 60);
+    MechanismRoot2d intakePivot2d = mech2d.getRoot("Shooter Pivot", 30, 30);
+
     shooter2d.add(
         intakePivot2d.append(
-            new MechanismLigament2d("WheelA", 15, 0, 12, new Color8Bit(Color.kGray))));
+            new MechanismLigament2d("Wheel Spoke A", 15, 0, 12, new Color8Bit(Color.kGray))));
     shooter2d.add(
         intakePivot2d.append(
-            new MechanismLigament2d("WheelB", 15, 90, 12, new Color8Bit(Color.kBlue))));
+            new MechanismLigament2d("Wheel Spoke B", 15, 90, 12, new Color8Bit(Color.kBlue))));
     shooter2d.add(
         intakePivot2d.append(
-            new MechanismLigament2d("WheelC", 15, 180, 12, new Color8Bit(Color.kGray))));
+            new MechanismLigament2d("Wheel Spoke C", 15, 180, 12, new Color8Bit(Color.kGray))));
     shooter2d.add(
         intakePivot2d.append(
-            new MechanismLigament2d("WheelD", 15, 270, 12, new Color8Bit(Color.kBlue))));
+            new MechanismLigament2d("Wheel Spoke D", 15, 270, 12, new Color8Bit(Color.kBlue))));
 
     SmartDashboard.putData("Shooter Simulation", mech2d);
   }
