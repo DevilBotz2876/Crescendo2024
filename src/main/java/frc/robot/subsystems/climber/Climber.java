@@ -18,4 +18,6 @@ public interface Climber {
   public default void autoZeroMode(boolean enable) {}
 
   public default void enableLimits(boolean enable) {}
+
+  public boolean isExtending();
 }
