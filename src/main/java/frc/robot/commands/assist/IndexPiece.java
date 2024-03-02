@@ -36,6 +36,7 @@ public class IndexPiece extends Command {
 
   @Override
   public boolean isFinished() {
-    return intake.isPieceDetected(true) && intake.isPieceDetected(false);
+    //return intake.isPieceDetected(true) && intake.isPieceDetected(false);
+    return intake.isPieceDetected(false);
   }
 }

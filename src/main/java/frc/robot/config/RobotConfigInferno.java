@@ -39,11 +39,12 @@ public class RobotConfigInferno extends RobotConfig {
     ShooterConstants.pidKi = 0.0;
     ShooterConstants.pidKd = 0.0;
     ShooterConstants.pidVelocityErrorInRPMS = 20;
-
+    
+    ShooterConstants.ampScoreVelocityInRPMs = 2000;
     ShooterConstants.velocityInRPMs = 3000;
     shooter = new ShooterSubsystem(new ShooterIOSparkMax(2));
 
-    ArmConstants.absolutePositionOffset = 0.35; // Determined empirically on 2024-02-22
+    ArmConstants.absolutePositionOffset = 0.362; // Determined empirically on 2024-02-22
 
     ArmConstants.pidKp = 0.1;
     ArmConstants.pidKi = 0.0;
@@ -55,9 +56,10 @@ public class RobotConfigInferno extends RobotConfig {
 
     ArmConstants.pidAngleErrorInDegrees = 6.0;
     ArmConstants.maxAngleInDegrees = 84.0;
-    ArmConstants.minAngleInDegrees = 0.0;
+    ArmConstants.minAngleInDegrees = -1.0;
     ArmConstants.intakeAngleInDegrees = 1;
     ArmConstants.shooterAngleInDegrees = 30;
+    ArmConstants.ampScoreShooterAngleInDegrees = 80;
 
     arm = new ArmSubsystem(new ArmIOSparkMax(4, true));
 

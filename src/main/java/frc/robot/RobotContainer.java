@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.Map;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
@@ -34,14 +36,14 @@ import frc.robot.config.RobotConfigInferno;
 import frc.robot.config.RobotConfigPhoenix;
 import frc.robot.config.RobotConfigSherman;
 import frc.robot.config.RobotConfigStub;
-import java.util.Map;
 
 public class RobotContainer {
   public final CommandXboxController controller;
   public final RobotConfig robotConfig;
   private static final String robotNameKey = "Robot Name";
   private static GenericEntry ampModeEntry = null;
-  private static boolean ampMode = false;
+  private static boolean ampMode = true;
+  private static boolean speakerMode = true;
   private static GenericEntry fieldOrientedEntry = null;
 
   public RobotContainer() {
@@ -148,22 +150,22 @@ public class RobotContainer {
 
   private void configureBindings() {
     // shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
-    controller.rightTrigger().onTrue(new ScorePiece(RobotConfig.intake, RobotConfig.shooter));
+    controller.rightTrigger().onTrue(new ScorePiece(RobotConfig.intake, RobotConfig.shooter).withTimeout(1));
 
     // Test Trapezoid Profile based arm movement
-    controller.y().onTrue(new ArmToPositionTP(75, RobotConfig.arm));
-    controller.x().onTrue(new ArmToPositionTP(45, RobotConfig.arm));
-    controller.a().onTrue(new ArmToPositionTP(10, RobotConfig.arm));
+    // controller.y().onTrue(new ArmToPositionTP(75, RobotConfig.arm));
+    // controller.x().onTrue(new ArmToPositionTP(45, RobotConfig.arm));
+    // controller.a().onTrue(new ArmToPositionTP(0, RobotConfig.arm));
 
-    // Test PID arm movement
+    // // Test PID arm movement
     // controller.y().onTrue(new ArmToPosition( RobotConfig.arm, () -> 75.0));
     // controller.x().onTrue(new ArmToPosition( RobotConfig.arm, () -> 45.0));
-    // controller.a().onTrue(new ArmToPosition( RobotConfig.arm, () -> 10.0));
+    // controller.a().onTrue(new ArmToPosition( RobotConfig.arm, () -> 0.0));
 
-    // controller.a().onTrue(new PrepareForIntake(RobotConfig.arm, RobotConfig.intake));
+    controller.a().onTrue(new PrepareForIntake(RobotConfig.arm, RobotConfig.intake));
 
-    // controller.b().onTrue(new PrepareForScore(RobotConfig.arm, RobotConfig.shooter, () ->
-    // ampMode));
+    controller.b().onTrue(new PrepareForScore(RobotConfig.arm, RobotConfig.shooter, () -> ampMode));
+    controller.y().onTrue(new PrepareForScore(RobotConfig.arm, RobotConfig.shooter, () -> speakerMode));
 
     // controller
     //     .y()
@@ -189,18 +191,18 @@ public class RobotContainer {
             () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.05),
             () -> MathUtil.applyDeadband(-controller.getRightX(), 0.05)));
 
-    // controller
-    //     .x()
-    //     .onTrue(
-    //         new InstantCommand(
-    //             () -> {
-    //               RobotConfig.drive.setFieldOrientedDrive(
-    //                   !RobotConfig.drive.isFieldOrientedDrive());
-    //               if (fieldOrientedEntry != null) {
-    //                 fieldOrientedEntry.setBoolean(RobotConfig.drive.isFieldOrientedDrive());
-    //               }
-    //             },
-    //             RobotConfig.drive));
+    controller
+        .x()
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  RobotConfig.drive.setFieldOrientedDrive(
+                      !RobotConfig.drive.isFieldOrientedDrive());
+                  if (fieldOrientedEntry != null) {
+                    fieldOrientedEntry.setBoolean(RobotConfig.drive.isFieldOrientedDrive());
+                  }
+                },
+                RobotConfig.drive));
 
     controller
         .back()

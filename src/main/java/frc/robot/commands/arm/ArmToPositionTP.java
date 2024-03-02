@@ -4,16 +4,17 @@
 
 package frc.robot.commands.arm;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.TrapezoidProfileCommand;
 import frc.robot.config.RobotConfig;
-import frc.robot.subsystems.arm.ArmSubsystem;
-import org.littletonrobotics.junction.Logger;
+import frc.robot.subsystems.arm.Arm;
 
 public class ArmToPositionTP extends TrapezoidProfileCommand {
 
   /** Creates a new ArmToPositionTP. */
-  public ArmToPositionTP(double position, ArmSubsystem arm) {
+  public ArmToPositionTP(double position, Arm arm) {
 
     super(
         // The motion profile to be executed

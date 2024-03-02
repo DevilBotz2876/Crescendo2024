@@ -4,6 +4,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.arm.ArmToPosition;
+import frc.robot.commands.arm.ArmToPositionTP;
 import frc.robot.commands.shooter.SetShooterVelocity;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
@@ -25,18 +26,26 @@ public class PrepareForScore extends ParallelCommandGroup {
 
   public PrepareForScore(Arm arm, Shooter shooter, BooleanSupplier targetIsAmp) {
     this.targetIsAmp = targetIsAmp;
+    double pos;
+    if (this.targetIsAmp.getAsBoolean()) {
+        pos = ArmConstants.ampScoreShooterAngleInDegrees;
+    } else {
+        pos = ArmConstants.shooterAngleInDegrees;
+    }
+
 
     addCommands(
-        new ArmToPosition(
-            (ArmSubsystem) arm,
-            () ->
-                this.targetIsAmp.getAsBoolean()
-                    ? assistGUI
-                        .getEntry("Shooter: Angle (Amp)")
-                        .getDouble(ArmConstants.ampScoreShooterAngleInDegrees)
-                    : assistGUI
-                        .getEntry("Shooter: Angle")
-                        .getDouble(ArmConstants.shooterAngleInDegrees)));
+        // new ArmToPosition(
+        //     (ArmSubsystem) arm,
+        //     () ->
+        //         this.targetIsAmp.getAsBoolean()
+        //             ? assistGUI
+        //                 .getEntry("Shooter: Angle (Amp)")
+        //                 .getDouble(ArmConstants.ampScoreShooterAngleInDegrees)
+        //             : assistGUI
+        //                 .getEntry("Shooter: Angle")
+        //                 .getDouble(ArmConstants.shooterAngleInDegrees)));
+        new ArmToPositionTP(pos, arm));
     addCommands(
         new SetShooterVelocity(
             shooter,
