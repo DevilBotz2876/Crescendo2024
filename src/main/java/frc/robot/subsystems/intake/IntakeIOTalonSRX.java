@@ -37,8 +37,8 @@ public class IntakeIOTalonSRX implements IntakeIO {
     inputs.appliedVolts = leader.getMotorOutputVoltage();
     inputs.limitSwitchIntake = !limitSwitchIntake.get();
     inputs.limitSwitchShooter = !limitSwitchShooter.get();
-    inputs.revColorSensorShooter = isPieceDetectedShooter();
     inputs.current = leader.getStatorCurrent();
+    inputs.revColorSensorShooter = isPieceDetectedShooter();
   }
 
   private Boolean isPieceDetectedShooter() {
@@ -50,7 +50,7 @@ public class IntakeIOTalonSRX implements IntakeIO {
 
     NetworkTableEntry proxShooterEntry = ntInstance.getEntry("/proximity1");
 
-    double proxShooter = proxShooterEntry.getDouble(-214);
+    double proxShooter = proxShooterEntry.getDouble(0);
 
     boolean isPieceDetected = proxShooter > 80.0;
 
