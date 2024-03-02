@@ -9,6 +9,7 @@ public interface IntakeIO {
     public double appliedVolts = 0.0;
     public boolean limitSwitchIntake = false;
     public boolean limitSwitchShooter = false;
+    public boolean revColorSensorShooter = false;
     public double current;
   }
 
