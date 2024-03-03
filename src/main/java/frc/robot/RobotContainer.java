@@ -43,7 +43,6 @@ public class RobotContainer {
   private static final String robotNameKey = "Robot Name";
   private static GenericEntry ampModeEntry = null;
   private static boolean ampMode = true;
-  private static boolean speakerMode = true;
   private static GenericEntry fieldOrientedEntry = null;
 
   public RobotContainer() {
@@ -161,7 +160,7 @@ public class RobotContainer {
         .leftTrigger()
         .onTrue(
             new ArmToPositionTP(
-                RobotConfig.ArmConstants.stowIntakeAngleInDegrees, RobotConfig.arm));
+                () -> RobotConfig.ArmConstants.stowIntakeAngleInDegrees, RobotConfig.arm));
 
     // Try to spit piece out of intake in case it gets stuck
     controller

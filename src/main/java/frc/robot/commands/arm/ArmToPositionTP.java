@@ -8,12 +8,13 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.TrapezoidProfileCommand;
 import frc.robot.config.RobotConfig;
 import frc.robot.subsystems.arm.Arm;
+import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.Logger;
 
 public class ArmToPositionTP extends TrapezoidProfileCommand {
 
   /** Creates a new ArmToPositionTP. */
-  public ArmToPositionTP(double position, Arm arm) {
+  public ArmToPositionTP(DoubleSupplier positionDegrees, Arm arm) {
 
     super(
         // The motion profile to be executed
@@ -31,7 +32,7 @@ public class ArmToPositionTP extends TrapezoidProfileCommand {
           // Logger.recordOutput("Arm/TP/curVel", state.velocity);
         },
         // Goal state, we want to get to requested position and hold arm there, so velocity is zero.
-        () -> new TrapezoidProfile.State(position, 0),
+        () -> new TrapezoidProfile.State(positionDegrees.getAsDouble(), 0),
         // Current state
         () -> new TrapezoidProfile.State(arm.getState().position, arm.getState().velocity),
         arm);

@@ -58,6 +58,7 @@ public class RobotConfig {
     public static double maxAngleInDegrees = 90.0;
     public static double minAngleInDegrees = 0.0;
     public static double intakeAngleInDegrees = 1;
+    public static double ejectAngleInDegrees = 15;
     public static double ampScoreAngleInDegrees = 80;
     public static double subwooferScoreAngleInDegrees = 20;
     public static double stowIntakeAngleInDegrees = 45;

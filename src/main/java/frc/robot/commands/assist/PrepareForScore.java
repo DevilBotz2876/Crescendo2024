@@ -42,7 +42,7 @@ public class PrepareForScore extends ParallelCommandGroup {
         //             : assistGUI
         //                 .getEntry("Shooter: Angle")
         //                 .getDouble(ArmConstants.shooterAngleInDegrees)));
-        new ArmToPositionTP(pos, arm));
+        new ArmToPositionTP(() -> pos, arm));
     addCommands(
         new SetShooterVelocity(
             shooter,
