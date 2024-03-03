@@ -240,12 +240,14 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     io.updateInputs(inputs);
     Logger.processInputs("Arm", inputs);
 
-    if (relEncoderInit) {
-      io.resetRelativeEncoder(
-          0); // TODO: We need to figure out the mapping for the absolute encoder to relative
-      // encoder
-      relEncoderInit = false;
-    }
+    // The relative encoder is initialized in the hw specific code/file.
+    //
+    // if (relEncoderInit) {
+    //   io.resetRelativeEncoder(
+    //       0); // TODO: We need to figure out the mapping for the absolute encoder to relative
+    //   // encoder
+    //   relEncoderInit = false;
+    // }
 
     if (isLimitHigh()) {
       // TODO: turn off voltage or stop pid

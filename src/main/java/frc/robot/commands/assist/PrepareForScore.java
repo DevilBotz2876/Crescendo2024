@@ -3,13 +3,11 @@ package frc.robot.commands.assist;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.commands.arm.ArmToPositionTP;
 import frc.robot.commands.shooter.SetShooterVelocity;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.subsystems.arm.Arm;
-import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.shooter.Shooter;
 import java.util.function.BooleanSupplier;
 
@@ -28,11 +26,10 @@ public class PrepareForScore extends ParallelCommandGroup {
     this.targetIsAmp = targetIsAmp;
     double pos;
     if (this.targetIsAmp.getAsBoolean()) {
-        pos = ArmConstants.ampScoreShooterAngleInDegrees;
+      pos = ArmConstants.ampScoreShooterAngleInDegrees;
     } else {
-        pos = ArmConstants.shooterAngleInDegrees;
+      pos = ArmConstants.subwooferScoreAngleInDegrees;
     }
-
 
     addCommands(
         // new ArmToPosition(

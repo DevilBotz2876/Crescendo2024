@@ -52,7 +52,7 @@ public class IntakeIOTalonSRX implements IntakeIO {
 
     double proxShooter = proxShooterEntry.getDouble(0);
 
-    boolean isPieceDetected = proxShooter > 80.0;
+    boolean isPieceDetected = proxShooter > 140.0;
 
     return isPieceDetected;
   }

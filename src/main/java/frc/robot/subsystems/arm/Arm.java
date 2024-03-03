@@ -3,7 +3,7 @@ package frc.robot.subsystems.arm;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
-public interface Arm extends Subsystem{
+public interface Arm extends Subsystem {
   // gets the angle of the arm
   public default double getAngle() {
     return 0;

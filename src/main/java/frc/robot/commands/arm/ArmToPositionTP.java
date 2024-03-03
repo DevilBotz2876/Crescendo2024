@@ -4,12 +4,11 @@
 
 package frc.robot.commands.arm;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.TrapezoidProfileCommand;
 import frc.robot.config.RobotConfig;
 import frc.robot.subsystems.arm.Arm;
+import org.littletonrobotics.junction.Logger;
 
 public class ArmToPositionTP extends TrapezoidProfileCommand {
 

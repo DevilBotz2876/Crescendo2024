@@ -22,7 +22,8 @@ public class IndexPiece extends Command {
   public void execute() {
     // if (intake.isPieceDetected(true)) {
     //   intake.runVoltage(
-    //       assistGUI.getEntry("Intake: Index Volts").getDouble(IntakeConstants.defaultSpeedInVolts));
+    //       assistGUI.getEntry("Intake: Index
+    // Volts").getDouble(IntakeConstants.defaultSpeedInVolts));
     // } else {
     //   intake.runVoltage(
     //       commandGUI.getEntry("Intake: Volts").getDouble(IntakeConstants.indexSpeedInVolts));

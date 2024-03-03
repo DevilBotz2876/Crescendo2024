@@ -34,9 +34,9 @@ public class ShooterIOSparkMax implements ShooterIO {
 
     flywheel.enableVoltageCompensation(12.0);
     flywheel.setSmartCurrentLimit(30);
-    flywheel.setIdleMode(IdleMode.kCoast);
 
-    flywheel.burnFlash();
+    // Set motor to brake mode so shooter stops ime
+    flywheel.setIdleMode(IdleMode.kBrake);
 
     // TODO: these values are samples picked from REV example PID code.  Need to tune PID and choose
     // real values.
@@ -68,8 +68,8 @@ public class ShooterIOSparkMax implements ShooterIO {
     SmartDashboard.putNumber("Shooter/top/Max Output", tkMaxOutput);
     SmartDashboard.putNumber("Shooter/top/Min Output", tkMinOutput);
 
-    // TODO: probably remove this since shooter will have one motor, not two independent motors
-    //
+    // Last thing we do is save all settings to flash on sparkmax
+    flywheel.burnFlash();
   }
 
   @Override

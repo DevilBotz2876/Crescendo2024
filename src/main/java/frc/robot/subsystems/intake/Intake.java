@@ -10,5 +10,4 @@ public interface Intake {
   public default boolean isPieceShooterDetected() {
     return false;
   }
-
 }

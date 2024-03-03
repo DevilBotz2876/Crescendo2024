@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.util.Map;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
@@ -21,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.arm.ArmToPositionTP;
+import frc.robot.commands.assist.EjectPiece;
 import frc.robot.commands.assist.PrepareForIntake;
 import frc.robot.commands.assist.PrepareForScore;
 import frc.robot.commands.assist.ScorePiece;
@@ -36,6 +35,7 @@ import frc.robot.config.RobotConfigInferno;
 import frc.robot.config.RobotConfigPhoenix;
 import frc.robot.config.RobotConfigSherman;
 import frc.robot.config.RobotConfigStub;
+import java.util.Map;
 
 public class RobotContainer {
   public final CommandXboxController controller;
@@ -150,7 +150,29 @@ public class RobotContainer {
 
   private void configureBindings() {
     // shooter.setDefaultCommand(new InstantCommand(() -> shooter.disable(), shooter));
-    controller.rightTrigger().onTrue(new ScorePiece(RobotConfig.intake, RobotConfig.shooter).withTimeout(1));
+
+    // Activate shooter to score piece in speaker or amp
+    controller
+        .rightTrigger()
+        .onTrue(new ScorePiece(RobotConfig.intake, RobotConfig.shooter).withTimeout(1));
+
+    // Move arm to some "safe" angle to protect intake while driving.
+    controller
+        .leftTrigger()
+        .onTrue(
+            new ArmToPositionTP(
+                RobotConfig.ArmConstants.stowIntakeAngleInDegrees, RobotConfig.arm));
+
+    // Try to spit piece out of intake in case it gets stuck
+    controller
+        .leftBumper()
+        .onTrue(new EjectPiece(RobotConfig.intake, RobotConfig.arm).withTimeout(1));
+
+    controller.a().onTrue(new PrepareForIntake(RobotConfig.arm, RobotConfig.intake));
+    controller.b().onTrue(new PrepareForScore(RobotConfig.arm, RobotConfig.shooter, () -> ampMode));
+    controller
+        .y()
+        .onTrue(new PrepareForScore(RobotConfig.arm, RobotConfig.shooter, () -> !ampMode));
 
     // Test Trapezoid Profile based arm movement
     // controller.y().onTrue(new ArmToPositionTP(75, RobotConfig.arm));
@@ -161,11 +183,6 @@ public class RobotContainer {
     // controller.y().onTrue(new ArmToPosition( RobotConfig.arm, () -> 75.0));
     // controller.x().onTrue(new ArmToPosition( RobotConfig.arm, () -> 45.0));
     // controller.a().onTrue(new ArmToPosition( RobotConfig.arm, () -> 0.0));
-
-    controller.a().onTrue(new PrepareForIntake(RobotConfig.arm, RobotConfig.intake));
-
-    controller.b().onTrue(new PrepareForScore(RobotConfig.arm, RobotConfig.shooter, () -> ampMode));
-    controller.y().onTrue(new PrepareForScore(RobotConfig.arm, RobotConfig.shooter, () -> speakerMode));
 
     // controller
     //     .y()
@@ -480,7 +497,7 @@ public class RobotContainer {
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
     assistTab
-        .add("Shooter: Angle", ArmConstants.shooterAngleInDegrees)
+        .add("Shooter: Angle", ArmConstants.subwooferScoreAngleInDegrees)
         .withWidget(BuiltInWidgets.kNumberSlider)
         .withProperties(
             Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))

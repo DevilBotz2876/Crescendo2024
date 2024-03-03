@@ -38,11 +38,12 @@ public class ArmIOSparkMax implements ArmIO {
     absoluteEncoder = new DutyCycleEncoder(0);
 
     // This will need to be set from a constant once we have the arm assembled and can measure the
-    // offset.  Once the arm is done this value won't change.
+    // offset.  Once the arm is done this value won't change.  It can change if arm chain slips so
+    // check it after any mechanican work is done.  Also the decimal places matter.  Don't round or
+    // leave off numbers.
     //
     System.out.println("ArmIOSparkMax(): Absolute Position Offset: " + absoluteEncoder.get());
-    absoluteEncoder.setPositionOffset(ArmConstants.absolutePositionOffset); // This is place holder
-
+    absoluteEncoder.setPositionOffset(ArmConstants.absolutePositionOffset);
     absoluteEncoder.setDutyCycleRange(1.0 / 1024.0, 1023.0 / 1024.0);
 
     // I don't think 2PI is correct.. try 360?
@@ -54,10 +55,15 @@ public class ArmIOSparkMax implements ArmIO {
     // motor.enableVoltageCompensation(12.0);
     motor.setSmartCurrentLimit(40);
 
-    relEncoder.setPosition(0);
-
-    // TODO: these values are samples picked from REV example PID code.  Need to tune PID and choose
-    // real values.
+    // Initialize the relative encoder position based on absolute encoder position.  The abs and rel
+    // encoder do not scale/align 1-1. At zero they are both zero.  When rel encoder is 80, abs
+    // encoder is not. Perhaps we just say that if abs encoder is at 80, set rel to X, or abs
+    // encoder is at 0, set rel to 0.  Everything else is invalid and requires arm to rehome itself.
+    //
+    // relEncoder.setPosition(0);
+    relEncoder.setPosition(
+        Units.radiansToDegrees(
+            absoluteEncoder.getDistance() * ArmConstants.absoluteEncoderInversion));
 
     lkP = RobotConfig.ArmConstants.pidKp;
     lkI = RobotConfig.ArmConstants.pidKi;
@@ -90,7 +96,8 @@ public class ArmIOSparkMax implements ArmIO {
   /** Updates the set of loggable inputs. */
   @Override
   public void updateInputs(ArmIOInputs inputs) {
-    inputs.absolutePositionRad = -absoluteEncoder.getDistance();
+    inputs.absolutePositionRad =
+        absoluteEncoder.getDistance() * ArmConstants.absoluteEncoderInversion;
     inputs.absolutePositionDegree = Units.radiansToDegrees(inputs.absolutePositionRad);
     inputs.absolutePositionRaw = absoluteEncoder.getAbsolutePosition();
 
