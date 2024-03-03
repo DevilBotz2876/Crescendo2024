@@ -163,9 +163,7 @@ public class RobotContainer {
                 () -> RobotConfig.ArmConstants.stowIntakeAngleInDegrees, RobotConfig.arm));
 
     // Try to spit piece out of intake in case it gets stuck
-    controller
-        .leftBumper()
-        .onTrue(new EjectPiece(RobotConfig.intake, RobotConfig.arm).withTimeout(1));
+    controller.leftBumper().onTrue(new EjectPiece(RobotConfig.intake, RobotConfig.arm));
 
     controller.a().onTrue(new PrepareForIntake(RobotConfig.arm, RobotConfig.intake));
     controller.b().onTrue(new PrepareForScore(RobotConfig.arm, RobotConfig.shooter, () -> ampMode));

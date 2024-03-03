@@ -35,7 +35,7 @@ public class ShooterIOSparkMax implements ShooterIO {
     flywheel.enableVoltageCompensation(12.0);
     flywheel.setSmartCurrentLimit(30);
 
-    // Set motor to brake mode so shooter stops ime
+    // Set motor to brake mode so shooter stops spinning immediately
     flywheel.setIdleMode(IdleMode.kBrake);
 
     // TODO: these values are samples picked from REV example PID code.  Need to tune PID and choose
