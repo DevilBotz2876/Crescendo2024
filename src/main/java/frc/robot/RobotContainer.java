@@ -42,7 +42,7 @@ public class RobotContainer {
   public final RobotConfig robotConfig;
   private static final String robotNameKey = "Robot Name";
   private static GenericEntry ampModeEntry = null;
-  private static boolean ampMode = true;
+  private static boolean ampMode = false;
   private static GenericEntry fieldOrientedEntry = null;
 
   public RobotContainer() {

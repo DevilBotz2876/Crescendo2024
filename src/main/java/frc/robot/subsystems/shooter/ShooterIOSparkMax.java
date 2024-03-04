@@ -28,6 +28,8 @@ public class ShooterIOSparkMax implements ShooterIO {
 
   public ShooterIOSparkMax(int id) {
     flywheel = new CANSparkMax(id, MotorType.kBrushless);
+    flywheel.restoreFactoryDefaults();
+
     pid = flywheel.getPIDController();
     encoder = flywheel.getEncoder();
     flywheel.setInverted(false);
