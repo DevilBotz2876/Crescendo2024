@@ -3,6 +3,7 @@ package frc.robot.subsystems.arm;
 import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -28,21 +29,30 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   private ArmFeedforward feedforward;
   private final SysIdRoutine sysId;
   private final double positionDegreeMax = ArmConstants.maxAngleInDegrees;
-  ;
   private final double positionDegreeMin = ArmConstants.minAngleInDegrees;
-  ;
-
+  private TrapezoidProfile.State currentState = new TrapezoidProfile.State();
   @AutoLogOutput private double desiredVoltage;
   @AutoLogOutput private double setPoint;
 
   // Create a Mechanism2d display of an Arm with a fixed ArmTower and moving Arm.
   private final MechanismLigament2d arm2d;
 
-  private static final LoggedTunableNumber armKp = new LoggedTunableNumber("Arm/kP");
-  private static final LoggedTunableNumber armKd = new LoggedTunableNumber("Arm/kD");
-  private static final LoggedTunableNumber armKg = new LoggedTunableNumber("Arm/kG");
-  private static final LoggedTunableNumber armKv = new LoggedTunableNumber("Arm/kV");
-  private static final LoggedTunableNumber armKa = new LoggedTunableNumber("Arm/kA");
+  private static final LoggedTunableNumber armKp = new LoggedTunableNumber("Arm/pid/kP");
+  private static final LoggedTunableNumber armKd = new LoggedTunableNumber("Arm/pid/kD");
+
+  private static final LoggedTunableNumber armKg = new LoggedTunableNumber("Arm/pid/kG");
+  private static final LoggedTunableNumber armKv = new LoggedTunableNumber("Arm/pid/kV");
+  private static final LoggedTunableNumber armKa = new LoggedTunableNumber("Arm/pid/kA");
+
+  private static final LoggedTunableNumber armOutputMax =
+      new LoggedTunableNumber("Arm/pid/outputMax");
+  private static final LoggedTunableNumber armOutputMin =
+      new LoggedTunableNumber("Arm/pid/outputMin");
+
+  private static final LoggedTunableNumber armMaxVelocity =
+      new LoggedTunableNumber("Arm/constraints/maxVelocity");
+  private static final LoggedTunableNumber armMaxAccel =
+      new LoggedTunableNumber("Arm/constraints/minAccel");
 
   ShuffleboardTab armTab;
   GenericEntry armVoltsEntry;
@@ -62,6 +72,11 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     armKg.initDefault(ArmConstants.ffKg);
     armKv.initDefault(ArmConstants.ffKv);
     armKa.initDefault(ArmConstants.ffKa);
+    armOutputMax.initDefault(ArmConstants.pidMaxOutput);
+    armOutputMin.initDefault(ArmConstants.pidMinOutput);
+
+    armMaxVelocity.initDefault(ArmConstants.maxVelocity);
+    armMaxAccel.initDefault(ArmConstants.maxAcceleration);
 
     kG = armKg.get();
     kV = armKv.get();
@@ -112,16 +127,40 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     relEncoderInit = true;
   }
 
+  public TrapezoidProfile.Constraints getConstraints() {
+    double maxV = ArmConstants.maxVelocity;
+    double maxA = ArmConstants.maxAcceleration;
+    if (armMaxVelocity.hasChanged(hashCode())) {
+      maxV = armMaxVelocity.get();
+    }
+    if (armMaxAccel.hasChanged(hashCode())) {
+      maxA = armMaxAccel.get();
+    }
+    return new TrapezoidProfile.Constraints(maxV, maxA);
+  }
+
+  public void setState(TrapezoidProfile.State state) {
+    currentState = state;
+
+    Logger.recordOutput("Arm/state/position", state.position);
+    Logger.recordOutput("Arm/state/velocity", state.velocity);
+
+    setAngle(state.position);
+  }
+
+  public TrapezoidProfile.State getState() {
+    return currentState;
+  }
+
   @Override
   public double getAngle() {
-    /* TODO */
     return inputs.absolutePositionDegree;
-    // return 0;
   }
 
   // sets of the angle of the arm
   @Override
   public void setAngle(double degrees) {
+    Logger.recordOutput("Arm/setAngle/requestedAngleDegress", degrees);
     // Don't try to set position if absolute encoder is broken/missing.
     if (isAbsoluteEncoderConnected() == false) {
       return;
@@ -143,10 +182,15 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
       this.setPoint = degrees;
     }
 
+    // We instantiate a new object here each time because constants can change when being tuned.
     feedforward = new ArmFeedforward(0, kG, kV, kA);
+    double ff = feedforward.calculate(this.setPoint, 0);
+
+    Logger.recordOutput("Arm/setAngle/setpointDegrees", this.setPoint);
+    Logger.recordOutput("Arm/setAngle/ffVolts", ff);
 
     // Set the position reference with feedforward voltage
-    io.setPosition(this.setPoint, feedforward.calculate(this.setPoint, 0));
+    io.setPosition(this.setPoint, ff);
   }
 
   @Override
@@ -177,8 +221,11 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
   @Override
   public void periodic() {
-    if (armKp.hasChanged(hashCode()) || armKd.hasChanged(hashCode())) {
-      io.setFeedback(armKp.get(), 0.0, armKd.get());
+    if (armKp.hasChanged(hashCode())
+        || armKd.hasChanged(hashCode())
+        || armOutputMin.hasChanged(hashCode())
+        || armOutputMax.hasChanged(hashCode())) {
+      io.setFeedback(armKp.get(), 0.0, armKd.get(), armOutputMin.get(), armOutputMax.get());
     }
     if (armKg.hasChanged(hashCode())) {
       kG = armKg.get();
@@ -193,12 +240,14 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     io.updateInputs(inputs);
     Logger.processInputs("Arm", inputs);
 
-    if (relEncoderInit) {
-      io.resetRelativeEncoder(
-          0); // TODO: We need to figure out the mapping for the absolute encoder to relative
-      // encoder
-      relEncoderInit = false;
-    }
+    // The relative encoder is initialized in the hw specific code/file.
+    //
+    // if (relEncoderInit) {
+    //   io.resetRelativeEncoder(
+    //       0); // TODO: We need to figure out the mapping for the absolute encoder to relative
+    //   // encoder
+    //   relEncoderInit = false;
+    // }
 
     if (isLimitHigh()) {
       // TODO: turn off voltage or stop pid

@@ -102,10 +102,13 @@ public class ArmIOStub implements ArmIO {
   }
 
   @Override
-  public void setFeedback(double kP, double kI, double kD) {
+  public void setFeedback(double kP, double kI, double kD, double minOutput, double maxOutput) {
     pid.setP(kP);
     pid.setI(kI);
     pid.setD(kD);
+    // wpilib pid has no method to set output range. When you call calculate method to use output
+    // you can limit the range there.
+
   }
 
   @Override

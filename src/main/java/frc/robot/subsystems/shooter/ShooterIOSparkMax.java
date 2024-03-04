@@ -28,15 +28,17 @@ public class ShooterIOSparkMax implements ShooterIO {
 
   public ShooterIOSparkMax(int id) {
     flywheel = new CANSparkMax(id, MotorType.kBrushless);
+    flywheel.restoreFactoryDefaults();
+
     pid = flywheel.getPIDController();
     encoder = flywheel.getEncoder();
     flywheel.setInverted(false);
 
     flywheel.enableVoltageCompensation(12.0);
     flywheel.setSmartCurrentLimit(30);
-    flywheel.setIdleMode(IdleMode.kCoast);
 
-    flywheel.burnFlash();
+    // Set motor to brake mode so shooter stops spinning immediately
+    flywheel.setIdleMode(IdleMode.kBrake);
 
     // TODO: these values are samples picked from REV example PID code.  Need to tune PID and choose
     // real values.
@@ -68,8 +70,8 @@ public class ShooterIOSparkMax implements ShooterIO {
     SmartDashboard.putNumber("Shooter/top/Max Output", tkMaxOutput);
     SmartDashboard.putNumber("Shooter/top/Min Output", tkMinOutput);
 
-    // TODO: probably remove this since shooter will have one motor, not two independent motors
-    //
+    // Last thing we do is save all settings to flash on sparkmax
+    flywheel.burnFlash();
   }
 
   @Override

@@ -3,6 +3,8 @@ package frc.robot.subsystems.intake;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
 
@@ -36,6 +38,23 @@ public class IntakeIOTalonSRX implements IntakeIO {
     inputs.limitSwitchIntake = !limitSwitchIntake.get();
     inputs.limitSwitchShooter = !limitSwitchShooter.get();
     inputs.current = leader.getStatorCurrent();
+    inputs.revColorSensorShooter = isPieceDetectedShooter();
+  }
+
+  private Boolean isPieceDetectedShooter() {
+    // used to simulate random number in the proximity1
+    // NetworkTableInstance.getDefault().getEntry("/proximity1").setDouble(new
+    // Random().nextInt(50));
+
+    NetworkTableInstance ntInstance = NetworkTableInstance.getDefault();
+
+    NetworkTableEntry proxShooterEntry = ntInstance.getEntry("/proximity1");
+
+    double proxShooter = proxShooterEntry.getDouble(0);
+
+    boolean isPieceDetected = proxShooter > 140.0;
+
+    return isPieceDetected;
   }
 
   @Override

@@ -20,12 +20,17 @@ public class IndexPiece extends Command {
 
   @Override
   public void execute() {
-    if (intake.isPieceDetected(true)) {
+    // if (intake.isPieceDetected(true)) {
+    //   intake.runVoltage(
+    //       assistGUI.getEntry("Intake: Index
+    // Volts").getDouble(IntakeConstants.defaultSpeedInVolts));
+    // } else {
+    //   intake.runVoltage(
+    //       commandGUI.getEntry("Intake: Volts").getDouble(IntakeConstants.indexSpeedInVolts));
+    // }
+    if (!intake.isPieceShooterDetected()) {
       intake.runVoltage(
           assistGUI.getEntry("Intake: Index Volts").getDouble(IntakeConstants.defaultSpeedInVolts));
-    } else {
-      intake.runVoltage(
-          commandGUI.getEntry("Intake: Volts").getDouble(IntakeConstants.indexSpeedInVolts));
     }
   }
 
@@ -36,6 +41,7 @@ public class IndexPiece extends Command {
 
   @Override
   public boolean isFinished() {
-    return intake.isPieceDetected(true) && intake.isPieceDetected(false);
+    // return intake.isPieceDetected(true) && intake.isPieceDetected(false);
+    return intake.isPieceShooterDetected();
   }
 }

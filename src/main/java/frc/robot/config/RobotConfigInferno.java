@@ -32,7 +32,7 @@ public class RobotConfigInferno extends RobotConfig {
 
     // Inferno has a TalonSRX based intake
     IntakeConstants.defaultSpeedInVolts = 6.0;
-    IntakeConstants.indexSpeedInVolts = 6.0;
+    IntakeConstants.indexSpeedInVolts = 4.5;
     IntakeConstants.feedSpeedInVolts = 6.0;
 
     intake = new IntakeSubsystem(new IntakeIOTalonSRX(3, true));
@@ -49,10 +49,12 @@ public class RobotConfigInferno extends RobotConfig {
     ShooterConstants.pidKd = 0.0;
     ShooterConstants.pidVelocityErrorInRPMS = 20;
 
+    ShooterConstants.ampScoreVelocityInRPMs = 2000;
     ShooterConstants.velocityInRPMs = 3000;
     shooter = new ShooterSubsystem(new ShooterIOSparkMax(2));
 
-    ArmConstants.absolutePositionOffset = 0.35; // Determined empirically on 2024-02-22
+    ArmConstants.absolutePositionOffset = 0.362; // Determined empirically on 2024-02-22
+    ArmConstants.absoluteEncoderInversion = -1;
 
     ArmConstants.pidKp = 0.1;
     ArmConstants.pidKi = 0.0;
@@ -62,11 +64,17 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.ffKv = 6.18;
     ArmConstants.ffKa = 0.04;
 
+    ArmConstants.maxVelocity = 6.0;
+    ArmConstants.maxAcceleration = 8.0;
+
     ArmConstants.pidAngleErrorInDegrees = 6.0;
     ArmConstants.maxAngleInDegrees = 84.0;
-    ArmConstants.minAngleInDegrees = 0.0;
+
+    ArmConstants.minAngleInDegrees = -1.0;
     ArmConstants.intakeAngleInDegrees = 1;
-    ArmConstants.shooterAngleInDegrees = 30;
+    ArmConstants.subwooferScoreAngleInDegrees = 10;
+    ArmConstants.ampScoreShooterAngleInDegrees = 80;
+    ArmConstants.stowIntakeAngleInDegrees = 45;
 
     arm = new ArmSubsystem(new ArmIOSparkMax(4, true));
 
