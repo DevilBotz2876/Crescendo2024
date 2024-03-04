@@ -19,6 +19,7 @@ public class ClimberIOSparkMax implements ClimberIO {
 
   public ClimberIOSparkMax(int id, boolean inverted) {
     motor = new CANSparkMax(id, MotorType.kBrushless);
+    motor.restoreFactoryDefaults();
 
     encoder = motor.getEncoder();
     setPosition(0);

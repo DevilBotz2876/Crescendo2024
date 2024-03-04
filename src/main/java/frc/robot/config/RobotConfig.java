@@ -34,22 +34,36 @@ public class RobotConfig {
   }
 
   public static class ArmConstants {
+    // TODO: add a value to negate or not the abs encoder reading. On sherman values are pos, on
+    // inferno neg.
+
     public static double absolutePositionOffset = 0; /* 0-1 */
+    public static double absoluteEncoderInversion = 1; /* 1 for none, -1 to invert */
 
     public static double pidKp = 0.1;
     public static double pidKi = 0.0;
     public static double pidKd = 0.0;
+    public static double pidMaxOutput = 0.4;
+    public static double pidMinOutput = -0.4;
+
     public static double ffKs = 0.0;
     public static double ffKg = 0.1;
     public static double ffKv = 0.0;
     public static double ffKa = 0.0;
 
+    public static double maxVelocity = 3.0;
+    public static double maxAcceleration = 6.0;
+
     public static double pidAngleErrorInDegrees = 2.0;
     public static double pidSettlingTimeInMilliseconds = 0.1;
+
     public static double maxAngleInDegrees = 90.0;
     public static double minAngleInDegrees = 0.0;
     public static double intakeAngleInDegrees = 1;
-    public static double shooterAngleInDegrees = 45;
+    public static double ejectAngleInDegrees = 15;
+    public static double ampScoreAngleInDegrees = 80;
+    public static double subwooferScoreAngleInDegrees = 20;
+    public static double stowIntakeAngleInDegrees = 45;
 
     public static double defaultSpeedInVolts = 6.0;
     public static double ampScoreShooterAngleInDegrees = 80;

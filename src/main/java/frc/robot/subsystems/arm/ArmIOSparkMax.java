@@ -11,20 +11,15 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
 
 public class ArmIOSparkMax implements ArmIO {
-  // Leader
+
   private final CANSparkMax motor;
-  RelativeEncoder encoder;
-
-  // follower
-  // private final CANSparkMax right = new CANSparkMax(3, MotorType.kBrushless);
-
+  private final RelativeEncoder relEncoder;
   private final DutyCycleEncoder absoluteEncoder;
-
-  private SparkPIDController leftPid;
-
+  private final SparkPIDController armPid;
   public double lkP, lkI, lkD, lkIz, lkFF, lkMaxOutput, lkMinOutput, lmaxRPS;
 
   public ArmIOSparkMax(int id) {
@@ -34,16 +29,21 @@ public class ArmIOSparkMax implements ArmIO {
   public ArmIOSparkMax(int id, boolean inverted) {
     /* Instantiate 1x SparkMax motors and absolute encoder */
     motor = new CANSparkMax(id, MotorType.kBrushless);
-    encoder = motor.getEncoder();
-    leftPid = motor.getPIDController();
+
+    // first thing we do to spark device is reset it to known defaults.
+    motor.restoreFactoryDefaults();
+
+    relEncoder = motor.getEncoder();
+    armPid = motor.getPIDController();
     absoluteEncoder = new DutyCycleEncoder(0);
 
     // This will need to be set from a constant once we have the arm assembled and can measure the
-    // offset.  Once the arm is done this value won't change.
+    // offset.  Once the arm is done this value won't change.  It can change if arm chain slips so
+    // check it after any mechanican work is done.  Also the decimal places matter.  Don't round or
+    // leave off numbers.
     //
-    System.out.println("Absolute Position Offset: " + absoluteEncoder.get());
-    absoluteEncoder.setPositionOffset(ArmConstants.absolutePositionOffset); // This is place holder
-
+    System.out.println("ArmIOSparkMax(): Absolute Position Offset: " + absoluteEncoder.get());
+    absoluteEncoder.setPositionOffset(ArmConstants.absolutePositionOffset);
     absoluteEncoder.setDutyCycleRange(1.0 / 1024.0, 1023.0 / 1024.0);
 
     // I don't think 2PI is correct.. try 360?
@@ -51,47 +51,53 @@ public class ArmIOSparkMax implements ArmIO {
     // encoder.setDistancePerRotation(360.0);
 
     motor.setInverted(inverted);
-    // right.follow(left, false);
 
-    // left.enableVoltageCompensation(12.0);
+    // motor.enableVoltageCompensation(12.0);
     motor.setSmartCurrentLimit(40);
 
-    motor.burnFlash();
+    // Initialize the relative encoder position based on absolute encoder position.  The abs and rel
+    // encoder do not scale/align 1-1. At zero they are both zero.  When rel encoder is 80, abs
+    // encoder is not. Perhaps we just say that if abs encoder is at 80, set rel to X, or abs
+    // encoder is at 0, set rel to 0.  Everything else is invalid and requires arm to rehome itself.
+    //
+    // relEncoder.setPosition(0);
+    relEncoder.setPosition(
+        Units.radiansToDegrees(
+            absoluteEncoder.getDistance() * ArmConstants.absoluteEncoderInversion));
 
-    encoder.setPosition(0);
-
-    // TODO: these values are samples picked from REV example PID code.  Need to tune PID and choose
-    // real values.
-
-    lkP = 0.1;
-    lkI = 0;
-    lkD = 0;
+    lkP = RobotConfig.ArmConstants.pidKp;
+    lkI = RobotConfig.ArmConstants.pidKi;
+    lkD = RobotConfig.ArmConstants.pidKd;
     lkIz = 0;
     lkFF = 0;
-    lkMaxOutput = .5;
-    lkMinOutput = -.5;
+    lkMaxOutput = RobotConfig.ArmConstants.pidMaxOutput;
+    lkMinOutput = RobotConfig.ArmConstants.pidMinOutput;
     lmaxRPS = 300;
 
-    leftPid.setP(lkP);
-    leftPid.setI(lkI);
-    leftPid.setD(lkD);
-    leftPid.setIZone(lkIz);
-    // leftPid.setFF(lkFF);
-    leftPid.setOutputRange(lkMinOutput, lkMaxOutput);
+    armPid.setP(lkP);
+    armPid.setI(lkI);
+    armPid.setD(lkD);
+    armPid.setIZone(lkIz);
+    armPid.setFF(lkFF);
+    armPid.setOutputRange(lkMinOutput, lkMaxOutput);
 
-    SmartDashboard.putNumber("Arm/left/P Gain", lkP);
-    SmartDashboard.putNumber("Arm/left/I Gain", lkI);
-    SmartDashboard.putNumber("Arm/left/D Gain", lkD);
-    SmartDashboard.putNumber("Arm/left/I Zone", lkIz);
-    SmartDashboard.putNumber("Arm/left/Feed Forward", lkFF);
-    SmartDashboard.putNumber("Arm/left/Max Output", lkMaxOutput);
-    SmartDashboard.putNumber("Arm/left/Min Output", lkMinOutput);
+    // SmartDashboard.putNumber("Arm/pid/P Gain", lkP);
+    // SmartDashboard.putNumber("Arm/pid/I Gain", lkI);
+    // SmartDashboard.putNumber("Arm/pid/D Gain", lkD);
+    // SmartDashboard.putNumber("Arm/pid/I Zone", lkIz);
+    // SmartDashboard.putNumber("Arm/pid/Feed Forward", lkFF);
+    // SmartDashboard.putNumber("Arm/pid/Max Output", lkMaxOutput);
+    // SmartDashboard.putNumber("Arm/pid/Min Output", lkMinOutput);
+
+    // Last thing we do is burn config to spark flash
+    motor.burnFlash();
   }
 
   /** Updates the set of loggable inputs. */
   @Override
   public void updateInputs(ArmIOInputs inputs) {
-    inputs.absolutePositionRad = absoluteEncoder.getDistance();
+    inputs.absolutePositionRad =
+        absoluteEncoder.getDistance() * ArmConstants.absoluteEncoderInversion;
     inputs.absolutePositionDegree = Units.radiansToDegrees(inputs.absolutePositionRad);
     inputs.absolutePositionRaw = absoluteEncoder.getAbsolutePosition();
 
@@ -101,43 +107,44 @@ public class ArmIOSparkMax implements ArmIO {
 
     inputs.current = motor.getOutputCurrent();
 
-    inputs.relativePositionRotations = encoder.getPosition();
+    inputs.relativePositionRotations = relEncoder.getPosition();
+
     // Code below allows PID to be tuned using SmartDashboard.  And outputs extra data to
     // SmartDashboard.
     if (Constants.debugMode) {
-      double lp = SmartDashboard.getNumber("Arm/left/P Gain", 0);
-      double li = SmartDashboard.getNumber("Arm/left/I Gain", 0);
-      double ld = SmartDashboard.getNumber("Arm/left/D Gain", 0);
-      double liz = SmartDashboard.getNumber("Arm/left/I Zone", 0);
-      double lff = SmartDashboard.getNumber("Arm/left/Feed Forward", 0);
-      double lmax = SmartDashboard.getNumber("Arm/left/Max Output", 0);
-      double lmin = SmartDashboard.getNumber("Arm/left/Min Output", 0);
+      //   double lp = SmartDashboard.getNumber("Arm/pid/P Gain", 0);
+      //   double li = SmartDashboard.getNumber("Arm/pid/I Gain", 0);
+      //   double ld = SmartDashboard.getNumber("Arm/pid/D Gain", 0);
+      //   double liz = SmartDashboard.getNumber("Arm/pid/I Zone", 0);
+      //   double lff = SmartDashboard.getNumber("Arm/pid/Feed Forward", 0);
+      //   double lmax = SmartDashboard.getNumber("Arm/pid/Max Output", 0);
+      //   double lmin = SmartDashboard.getNumber("Arm/pid/Min Output", 0);
 
-      if ((lp != lkP)) {
-        leftPid.setP(lp);
-        lkP = lp;
-      }
-      if ((li != lkI)) {
-        leftPid.setI(li);
-        lkI = li;
-      }
-      if ((ld != lkD)) {
-        leftPid.setD(ld);
-        lkD = ld;
-      }
-      if ((liz != lkIz)) {
-        leftPid.setIZone(liz);
-        lkIz = liz;
-      }
-      if ((lff != lkFF)) {
-        leftPid.setFF(lff);
-        lkFF = lff;
-      }
-      if ((lmax != lkMaxOutput) || (lmin != lkMinOutput)) {
-        leftPid.setOutputRange(lmin, lmax);
-        lkMinOutput = lmin;
-        lkMaxOutput = lmax;
-      }
+      //   if ((lp != lkP)) {
+      //     armPid.setP(lp);
+      //     lkP = lp;
+      //   }
+      //   if ((li != lkI)) {
+      //     armPid.setI(li);
+      //     lkI = li;
+      //   }
+      //   if ((ld != lkD)) {
+      //     armPid.setD(ld);
+      //     lkD = ld;
+      //   }
+      //   if ((liz != lkIz)) {
+      //     armPid.setIZone(liz);
+      //     lkIz = liz;
+      //   }
+      //   if ((lff != lkFF)) {
+      //     armPid.setFF(lff);
+      //     lkFF = lff;
+      //   }
+      //   if ((lmax != lkMaxOutput) || (lmin != lkMinOutput)) {
+      //     armPid.setOutputRange(lmin, lmax);
+      //     lkMinOutput = lmin;
+      //     lkMaxOutput = lmax;
+      //   }
 
       SmartDashboard.putBoolean("Arm/absEncoder/connected", absoluteEncoder.isConnected());
 
@@ -162,7 +169,7 @@ public class ArmIOSparkMax implements ArmIO {
       // This should show what the relative encoder is reading.  When you use the sparkmax position
       // PID it expects a setpoint in rotations.  Not clear if that means degrees or what unit is
       // used.
-      SmartDashboard.putNumber("Arm/relEncoder/getPosition", encoder.getPosition());
+      SmartDashboard.putNumber("Arm/relEncoder/getPosition", relEncoder.getPosition());
     }
   }
 
@@ -172,7 +179,7 @@ public class ArmIOSparkMax implements ArmIO {
       SmartDashboard.putNumber("Arm/setPosition/degrees", degrees);
       SmartDashboard.putNumber("Arm/setPosition/ffVolts", ffVolts);
     }
-    leftPid.setReference(
+    armPid.setReference(
         degrees, CANSparkMax.ControlType.kPosition, 0, ffVolts, ArbFFUnits.kVoltage);
   }
 
@@ -183,10 +190,11 @@ public class ArmIOSparkMax implements ArmIO {
   }
 
   @Override
-  public void setFeedback(double kP, double kI, double kD) {
-    leftPid.setP(kP);
-    leftPid.setI(kI);
-    leftPid.setD(kD);
+  public void setFeedback(double kP, double kI, double kD, double minOutput, double maxOutput) {
+    armPid.setP(kP);
+    armPid.setI(kI);
+    armPid.setD(kD);
+    armPid.setOutputRange(minOutput, maxOutput);
   }
 
   @Override
@@ -196,7 +204,7 @@ public class ArmIOSparkMax implements ArmIO {
 
   @Override
   public void resetRelativeEncoder(double position) {
-    encoder.setPosition(position);
+    relEncoder.setPosition(position);
   }
 
   @Override

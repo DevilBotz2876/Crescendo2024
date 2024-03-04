@@ -16,7 +16,9 @@ public class IntakeIOSparkMax implements IntakeIO {
 
   public IntakeIOSparkMax() {
     // leader motor is not inverted, and set follower motor to follow the leader
+    leader.restoreFactoryDefaults();
     leader.setInverted(false);
+    leader.burnFlash();
   }
 
   @Override
