@@ -72,11 +72,16 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
+<dt>All Superinterfaces:</dt>
+<dd><code>edu.wpi.first.wpilibj2.command.Subsystem</code></dd>
+</dl>
+<dl class="notes">
 <dt>All Known Implementing Classes:</dt>
 <dd><code><a href="ArmSubsystem.html" title="class in frc.robot.subsystems.arm">ArmSubsystem</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">Arm</span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">Arm</span><span class="extends-implements">
+extends edu.wpi.first.wpilibj2.command.Subsystem</span></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -94,15 +99,27 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default double</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#getAngle()" class="member-name-link">getAngle</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#getConstraints()" class="member-name-link">getConstraints</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default edu.wpi.first.math.trajectory.TrapezoidProfile.State</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#getState()" class="member-name-link">getState</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#isAbsoluteEncoderConnected()" class="member-name-link">isAbsoluteEncoderConnected</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#setAngle(double)" class="member-name-link">setAngle</a><wbr>(double&nbsp;degrees)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#setState(edu.wpi.first.math.trajectory.TrapezoidProfile.State)" class="member-name-link">setState</a><wbr>(edu.wpi.first.math.trajectory.TrapezoidProfile.State&nbsp;state)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
 </div>
 </div>
 </div>
+<div class="inherited-list">
+<h3 id="methods-inherited-from-class-edu.wpi.first.wpilibj2.command.Subsystem">Methods inherited from interface&nbsp;edu.wpi.first.wpilibj2.command.Subsystem</h3>
+<code>defer, getCurrentCommand, getDefaultCommand, getName, periodic, register, removeDefaultCommand, run, runEnd, runOnce, setDefaultCommand, simulationPeriodic, startEnd</code></div>
 </section>
 </li>
 </ul>
@@ -130,6 +147,24 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="isAbsoluteEncoderConnected()">
 <h3>isAbsoluteEncoderConnected</h3>
 <div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isAbsoluteEncoderConnected</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setState(edu.wpi.first.math.trajectory.TrapezoidProfile.State)">
+<h3>setState</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setState</span><wbr><span class="parameters">(edu.wpi.first.math.trajectory.TrapezoidProfile.State&nbsp;state)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getState()">
+<h3>getState</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">edu.wpi.first.math.trajectory.TrapezoidProfile.State</span>&nbsp;<span class="element-name">getState</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getConstraints()">
+<h3>getConstraints</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints</span>&nbsp;<span class="element-name">getConstraints</span>()</div>
 </section>
 </li>
 </ul>

@@ -90,7 +90,13 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static double</code></div>
-<div class="col-second even-row-color"><code><a href="#absolutePositionOffset" class="member-name-link">absolutePositionOffset</a></code></div>
+<div class="col-second even-row-color"><code><a href="#absoluteEncoderInversion" class="member-name-link">absoluteEncoderInversion</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static double</code></div>
+<div class="col-second odd-row-color"><code><a href="#absolutePositionOffset" class="member-name-link">absolutePositionOffset</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static double</code></div>
+<div class="col-second even-row-color"><code><a href="#ampScoreAngleInDegrees" class="member-name-link">ampScoreAngleInDegrees</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static double</code></div>
 <div class="col-second odd-row-color"><code><a href="#ampScoreShooterAngleInDegrees" class="member-name-link">ampScoreShooterAngleInDegrees</a></code></div>
@@ -99,43 +105,61 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="#defaultSpeedInVolts" class="member-name-link">defaultSpeedInVolts</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static double</code></div>
-<div class="col-second odd-row-color"><code><a href="#ffKa" class="member-name-link">ffKa</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#ejectAngleInDegrees" class="member-name-link">ejectAngleInDegrees</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static double</code></div>
-<div class="col-second even-row-color"><code><a href="#ffKg" class="member-name-link">ffKg</a></code></div>
+<div class="col-second even-row-color"><code><a href="#ffKa" class="member-name-link">ffKa</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static double</code></div>
-<div class="col-second odd-row-color"><code><a href="#ffKs" class="member-name-link">ffKs</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#ffKg" class="member-name-link">ffKg</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static double</code></div>
-<div class="col-second even-row-color"><code><a href="#ffKv" class="member-name-link">ffKv</a></code></div>
+<div class="col-second even-row-color"><code><a href="#ffKs" class="member-name-link">ffKs</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static double</code></div>
-<div class="col-second odd-row-color"><code><a href="#intakeAngleInDegrees" class="member-name-link">intakeAngleInDegrees</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#ffKv" class="member-name-link">ffKv</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static double</code></div>
+<div class="col-second even-row-color"><code><a href="#intakeAngleInDegrees" class="member-name-link">intakeAngleInDegrees</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static double</code></div>
+<div class="col-second odd-row-color"><code><a href="#maxAcceleration" class="member-name-link">maxAcceleration</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static double</code></div>
 <div class="col-second even-row-color"><code><a href="#maxAngleInDegrees" class="member-name-link">maxAngleInDegrees</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static double</code></div>
-<div class="col-second odd-row-color"><code><a href="#minAngleInDegrees" class="member-name-link">minAngleInDegrees</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#maxVelocity" class="member-name-link">maxVelocity</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static double</code></div>
-<div class="col-second even-row-color"><code><a href="#pidAngleErrorInDegrees" class="member-name-link">pidAngleErrorInDegrees</a></code></div>
+<div class="col-second even-row-color"><code><a href="#minAngleInDegrees" class="member-name-link">minAngleInDegrees</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static double</code></div>
-<div class="col-second odd-row-color"><code><a href="#pidKd" class="member-name-link">pidKd</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#pidAngleErrorInDegrees" class="member-name-link">pidAngleErrorInDegrees</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static double</code></div>
-<div class="col-second even-row-color"><code><a href="#pidKi" class="member-name-link">pidKi</a></code></div>
+<div class="col-second even-row-color"><code><a href="#pidKd" class="member-name-link">pidKd</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static double</code></div>
-<div class="col-second odd-row-color"><code><a href="#pidKp" class="member-name-link">pidKp</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#pidKi" class="member-name-link">pidKi</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static double</code></div>
-<div class="col-second even-row-color"><code><a href="#pidSettlingTimeInMilliseconds" class="member-name-link">pidSettlingTimeInMilliseconds</a></code></div>
+<div class="col-second even-row-color"><code><a href="#pidKp" class="member-name-link">pidKp</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static double</code></div>
-<div class="col-second odd-row-color"><code><a href="#shooterAngleInDegrees" class="member-name-link">shooterAngleInDegrees</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#pidMaxOutput" class="member-name-link">pidMaxOutput</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static double</code></div>
+<div class="col-second even-row-color"><code><a href="#pidMinOutput" class="member-name-link">pidMinOutput</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static double</code></div>
+<div class="col-second odd-row-color"><code><a href="#pidSettlingTimeInMilliseconds" class="member-name-link">pidSettlingTimeInMilliseconds</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static double</code></div>
+<div class="col-second even-row-color"><code><a href="#stowIntakeAngleInDegrees" class="member-name-link">stowIntakeAngleInDegrees</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static double</code></div>
+<div class="col-second odd-row-color"><code><a href="#subwooferScoreAngleInDegrees" class="member-name-link">subwooferScoreAngleInDegrees</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
@@ -178,6 +202,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="absoluteEncoderInversion">
+<h3>absoluteEncoderInversion</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">absoluteEncoderInversion</span></div>
+</section>
+</li>
+<li>
 <section class="detail" id="pidKp">
 <h3>pidKp</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">pidKp</span></div>
@@ -193,6 +223,18 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="pidKd">
 <h3>pidKd</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">pidKd</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="pidMaxOutput">
+<h3>pidMaxOutput</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">pidMaxOutput</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="pidMinOutput">
+<h3>pidMinOutput</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">pidMinOutput</span></div>
 </section>
 </li>
 <li>
@@ -217,6 +259,18 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="ffKa">
 <h3>ffKa</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">ffKa</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="maxVelocity">
+<h3>maxVelocity</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">maxVelocity</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="maxAcceleration">
+<h3>maxAcceleration</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">maxAcceleration</span></div>
 </section>
 </li>
 <li>
@@ -250,9 +304,27 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="shooterAngleInDegrees">
-<h3>shooterAngleInDegrees</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">shooterAngleInDegrees</span></div>
+<section class="detail" id="ejectAngleInDegrees">
+<h3>ejectAngleInDegrees</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">ejectAngleInDegrees</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="ampScoreAngleInDegrees">
+<h3>ampScoreAngleInDegrees</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">ampScoreAngleInDegrees</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="subwooferScoreAngleInDegrees">
+<h3>subwooferScoreAngleInDegrees</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">subwooferScoreAngleInDegrees</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="stowIntakeAngleInDegrees">
+<h3>stowIntakeAngleInDegrees</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">stowIntakeAngleInDegrees</span></div>
 </section>
 </li>
 <li>

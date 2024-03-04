@@ -114,6 +114,12 @@ implements <a href="Arm.html" title="interface in frc.robot.subsystems.arm">Arm<
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getAngle()" class="member-name-link">getAngle</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getConstraints()" class="member-name-link">getConstraints</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>edu.wpi.first.math.trajectory.TrapezoidProfile.State</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getState()" class="member-name-link">getState</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isAbsoluteEncoderConnected()" class="member-name-link">isAbsoluteEncoderConnected</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -126,19 +132,22 @@ implements <a href="Arm.html" title="interface in frc.robot.subsystems.arm">Arm<
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setAngle(double)" class="member-name-link">setAngle</a><wbr>(double&nbsp;degrees)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>edu.wpi.first.wpilibj2.command.Command</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sysIdDynamic(edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction)" class="member-name-link">sysIdDynamic</a><wbr>(edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction&nbsp;direction)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setState(edu.wpi.first.math.trajectory.TrapezoidProfile.State)" class="member-name-link">setState</a><wbr>(edu.wpi.first.math.trajectory.TrapezoidProfile.State&nbsp;state)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>edu.wpi.first.wpilibj2.command.Command</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sysIdDynamic(edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction)" class="member-name-link">sysIdDynamic</a><wbr>(edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction&nbsp;direction)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a command to run a dynamic test in the specified direction.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>edu.wpi.first.wpilibj2.command.Command</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sysIdQuasistatic(edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction)" class="member-name-link">sysIdQuasistatic</a><wbr>(edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction&nbsp;direction)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>edu.wpi.first.wpilibj2.command.Command</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sysIdQuasistatic(edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction)" class="member-name-link">sysIdQuasistatic</a><wbr>(edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction&nbsp;direction)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a command to run a quasistatic test in the specified direction.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected double</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#voltageSafety(double)" class="member-name-link">voltageSafety</a><wbr>(double&nbsp;voltage)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected double</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#voltageSafety(double)" class="member-name-link">voltageSafety</a><wbr>(double&nbsp;voltage)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -150,7 +159,7 @@ implements <a href="Arm.html" title="interface in frc.robot.subsystems.arm">Arm<
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-edu.wpi.first.wpilibj2.command.Subsystem">Methods inherited from interface&nbsp;edu.wpi.first.wpilibj2.command.Subsystem</h3>
-<code>defer, getCurrentCommand, getDefaultCommand, register, removeDefaultCommand, run, runEnd, runOnce, setDefaultCommand, simulationPeriodic, startEnd</code></div>
+<code>defer, getCurrentCommand, getDefaultCommand, getName, register, removeDefaultCommand, run, runEnd, runOnce, setDefaultCommand, simulationPeriodic, startEnd</code></div>
 </section>
 </li>
 </ul>
@@ -176,6 +185,36 @@ implements <a href="Arm.html" title="interface in frc.robot.subsystems.arm">Arm<
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="getConstraints()">
+<h3>getConstraints</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints</span>&nbsp;<span class="element-name">getConstraints</span>()</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="Arm.html#getConstraints()">getConstraints</a></code>&nbsp;in interface&nbsp;<code><a href="Arm.html" title="interface in frc.robot.subsystems.arm">Arm</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="setState(edu.wpi.first.math.trajectory.TrapezoidProfile.State)">
+<h3>setState</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setState</span><wbr><span class="parameters">(edu.wpi.first.math.trajectory.TrapezoidProfile.State&nbsp;state)</span></div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="Arm.html#setState(edu.wpi.first.math.trajectory.TrapezoidProfile.State)">setState</a></code>&nbsp;in interface&nbsp;<code><a href="Arm.html" title="interface in frc.robot.subsystems.arm">Arm</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getState()">
+<h3>getState</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">edu.wpi.first.math.trajectory.TrapezoidProfile.State</span>&nbsp;<span class="element-name">getState</span>()</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="Arm.html#getState()">getState</a></code>&nbsp;in interface&nbsp;<code><a href="Arm.html" title="interface in frc.robot.subsystems.arm">Arm</a></code></dd>
+</dl>
+</section>
+</li>
 <li>
 <section class="detail" id="getAngle()">
 <h3>getAngle</h3>
