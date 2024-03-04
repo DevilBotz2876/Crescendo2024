@@ -37,7 +37,7 @@ public class TestShooterAngle extends Command {
   public void execute() {
     shooter.runVelocity(ShooterVelocity.getDouble(ShooterConstants.velocityInRPMs));
     intake.runVoltage(IntakeVoltage.getDouble(IntakeConstants.feedSpeedInVolts));
-    arm.setAngle(ArmAngle.getDouble(ArmConstants.shooterAngleInDegrees));
+    arm.setAngle(ArmAngle.getDouble(ArmConstants.subwooferScoreAngleInDegrees));
   }
 
   public void end(boolean interrupted) {
