@@ -35,6 +35,31 @@
               }
             ]
           }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prepare to Score from Outside Source Side"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Outside Score Source Side"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Piece from Outside Source Side"
+          }
         }
       ]
     }

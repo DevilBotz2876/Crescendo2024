@@ -126,6 +126,8 @@ public class RobotConfig {
         new AutoScoreConstants(0.0, 45, 3000);
     public static AutoScoreConstants scoreFromNoteSourceSide =
         new AutoScoreConstants(320.0, 30.0, 3000);
+    public static AutoScoreConstants scoreFromOutsideSourceSide =
+        new AutoScoreConstants(300.0, 15, 3000);
   }
 
   public RobotConfig() {
