@@ -11,7 +11,7 @@ public class DriveToYaw extends Command {
   Drive drive;
   DoubleSupplier yawDegrees;
   double targetYaw;
-  PIDController turnPID = new PIDController(0.01, 0, 0);
+  PIDController turnPID = new PIDController(0.1, 0, 0);
 
   public DriveToYaw(Drive drive, DoubleSupplier yawDegrees) {
     this.drive = drive;
