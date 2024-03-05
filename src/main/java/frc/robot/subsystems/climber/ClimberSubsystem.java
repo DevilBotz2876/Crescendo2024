@@ -110,10 +110,10 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
   private final List<ClimberInstance> climbers = new ArrayList<ClimberInstance>();
   private boolean extend = false;
 
-  // Create a Mechanism2d display of a Climber
-  private final Mechanism2d mech2d = new Mechanism2d(60, 60);
-
   public ClimberSubsystem(ClimberIO left, ClimberIO right) {
+    // Create 2D simulated display of a Climber
+    Mechanism2d mech2d = new Mechanism2d(60, 60);
+
     this.left =
         new ClimberInstance(left, "Climber Left", mech2d.getRoot("Left Climber Pivot", 10, 10));
     climbers.add(this.left);
