@@ -4,14 +4,8 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
-import edu.wpi.first.wpilibj.simulation.DutyCycleEncoderSim;
-import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
-import frc.robot.Robot;
 import frc.robot.config.RobotConfig.ArmConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
 
@@ -21,7 +15,6 @@ public class ArmIOStub implements ArmIO {
   private double armKd = 0;
   @AutoLogOutput private double targetDegrees = 0;
   @AutoLogOutput private double feedForwardVolts = 0;
-  private double armAbsoluteOffset = 0.0;
   private double armGearingReduction = 317;
   private double armLengthInMeters = .5;
   private double minAngleInDegrees = ArmConstants.minAngleInDegrees;
@@ -30,14 +23,10 @@ public class ArmIOStub implements ArmIO {
 
   // The arm gearbox represents a gearbox containing two Vex 775pro motors.
   private final DCMotor motorPlant = DCMotor.getNEO(1);
+  private double currentVoltage = 0.0;
 
   // Standard classes for controlling our arm
   private final PIDController pid = new PIDController(armKp, 0, armKd);
-  private final DutyCycleEncoder absEncoder = new DutyCycleEncoder(2);
-  private final DutyCycleEncoderSim absEncoderSim;
-  private final Encoder relEncoder = new Encoder(3, 4);
-  private final EncoderSim relEncoderSim = new EncoderSim(relEncoder);
-  private final Spark motor = new Spark(1);
   private boolean softwarePidEnabled = false;
 
   // Simulation classes help us simulate what's going on, including gravity.
@@ -55,44 +44,28 @@ public class ArmIOStub implements ArmIO {
           Units.degreesToRadians(minAngleInDegrees),
           VecBuilder.fill(0));
 
-  public ArmIOStub() {
-    absEncoder.setPositionOffset(armAbsoluteOffset);
-    absEncoder.setDutyCycleRange(1.0 / 1025.0, 1024.0 / 1025.0);
-    absEncoder.setDistancePerRotation(360.0);
-
-    if (Robot.isSimulation()) {
-      absEncoderSim = new DutyCycleEncoderSim(absEncoder);
-    } else {
-      absEncoderSim = null;
-    }
-  }
-
   /** Updates the set of loggable inputs. */
   @Override
   public void updateInputs(ArmIOInputs inputs) {
-    inputs.absolutePositionDegree = absEncoder.getDistance();
-    inputs.absolutePositionDegree = targetDegrees;
-    inputs.absolutePositionRad = Units.degreesToRadians(absEncoder.getDistance());
-    inputs.appliedVolts = motor.get() * RobotController.getBatteryVoltage();
-
-    arm.setInput(inputs.appliedVolts);
-    arm.update(0.020);
-    if (absEncoderSim != null) {
-      absEncoderSim.setDistance(Units.radiansToDegrees(arm.getAngleRads()));
-    }
+    inputs.absolutePositionDegree = Units.radiansToDegrees(arm.getAngleRads());
+    inputs.absolutePositionRad = arm.getAngleRads();
+    inputs.appliedVolts = currentVoltage;
 
     if (softwarePidEnabled) {
-      motor.setVoltage(
+      currentVoltage =
           feedForwardVolts
-              + pid.calculate(absEncoder.getDistance(), targetDegrees)
-                  * RobotController.getBatteryVoltage());
+              + pid.calculate(inputs.absolutePositionDegree, targetDegrees)
+                  * RobotController.getBatteryVoltage();
     }
+
+    arm.setInput(currentVoltage);
+    arm.update(0.020);
   }
 
   /** Run the arm motor at the specified voltage. */
   @Override
   public void setVoltage(double volts) {
-    motor.setVoltage(volts);
+    currentVoltage = volts;
   }
 
   @Override
@@ -109,11 +82,5 @@ public class ArmIOStub implements ArmIO {
     pid.setD(kD);
     // wpilib pid has no method to set output range. When you call calculate method to use output
     // you can limit the range there.
-
-  }
-
-  @Override
-  public void resetRelativeEncoder(double position) {
-    relEncoderSim.setDistance(position);
   }
 }

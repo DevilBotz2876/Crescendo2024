@@ -80,20 +80,20 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
 
     // Create 2D simulated display of a Shooter
     Mechanism2d mech2d = new Mechanism2d(60, 60);
-    MechanismRoot2d intakePivot2d = mech2d.getRoot("Shooter Pivot", 30, 30);
+    MechanismRoot2d intakePivot2d = mech2d.getRoot("Shooter Pivot", 10, 50);
 
     shooter2d.add(
         intakePivot2d.append(
-            new MechanismLigament2d("Wheel Spoke A", 15, 0, 12, new Color8Bit(Color.kGray))));
+            new MechanismLigament2d("Wheel Spoke A", 5, 0, 12, new Color8Bit(Color.kGray))));
     shooter2d.add(
         intakePivot2d.append(
-            new MechanismLigament2d("Wheel Spoke B", 15, 90, 12, new Color8Bit(Color.kBlue))));
+            new MechanismLigament2d("Wheel Spoke B", 5, 90, 12, new Color8Bit(Color.kBlue))));
     shooter2d.add(
         intakePivot2d.append(
-            new MechanismLigament2d("Wheel Spoke C", 15, 180, 12, new Color8Bit(Color.kGray))));
+            new MechanismLigament2d("Wheel Spoke C", 5, 180, 12, new Color8Bit(Color.kGray))));
     shooter2d.add(
         intakePivot2d.append(
-            new MechanismLigament2d("Wheel Spoke D", 15, 270, 12, new Color8Bit(Color.kBlue))));
+            new MechanismLigament2d("Wheel Spoke D", 5, 270, 12, new Color8Bit(Color.kBlue))));
 
     SmartDashboard.putData("Shooter Simulation", mech2d);
   }

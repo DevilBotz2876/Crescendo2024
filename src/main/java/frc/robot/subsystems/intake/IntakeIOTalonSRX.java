@@ -45,7 +45,9 @@ public class IntakeIOTalonSRX implements IntakeIO {
     // NetworkTableInstance.getDefault().getEntry("/proximity1").setDouble(new
     // Random().nextInt(50));
 
-    /*  return !limitSwitchShooter.get(); */
+    /*
+    return !limitSwitchShooter.get();
+    */
     NetworkTableInstance ntInstance = NetworkTableInstance.getDefault();
 
     NetworkTableEntry proxShooterEntry = ntInstance.getEntry("/proximity1");
