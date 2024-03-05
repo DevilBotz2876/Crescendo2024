@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -38,6 +39,7 @@ import frc.robot.config.RobotConfigSherman;
 import frc.robot.util.RobotState;
 import frc.robot.util.RobotState.TargetMode;
 import java.util.Map;
+import java.util.Optional;
 
 public class RobotContainer {
   public final CommandXboxController controller;
@@ -227,12 +229,27 @@ public class RobotContainer {
     controller
         .rightBumper()
         .whileTrue(
-            new DriveCommand(
-                RobotConfig.drive,
-                () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.05),
-                () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.05),
-                () -> MathUtil.applyDeadband(-controller.getRightX(), 0.05),
-                () -> RobotConfig.vision.getYawToAprilTag(RobotState.getActiveTargetId())));
+            new ParallelCommandGroup(
+                new DriveCommand(
+                    RobotConfig.drive,
+                    () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.05),
+                    () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.05),
+                    () -> MathUtil.applyDeadband(-controller.getRightX(), 0.05),
+                    () -> RobotConfig.vision.getYawToAprilTag(RobotState.getActiveTargetId())),
+                new InstantCommand(
+                        () -> {
+                          Optional<Double> distanceToTarget =
+                              RobotConfig.vision.getDistanceToAprilTag(
+                                  RobotState.getActiveTargetId());
+                          if (distanceToTarget.isPresent()) {
+                            Optional<Double> armAngle =
+                                robotConfig.getArmAngleFromDistance(distanceToTarget.get());
+                            if (armAngle.isPresent()) {
+                              RobotConfig.arm.setAngle((armAngle.get()));
+                            }
+                          }
+                        })
+                    .repeatedly()));
 
     controller
         .x()

@@ -21,6 +21,7 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.vision.VisionCamera;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import java.util.ArrayList;
+import java.util.Optional;
 
 /* Put all constants here with reasonable defaults */
 public class RobotConfig {
@@ -124,6 +125,11 @@ public class RobotConfig {
     public static double autoZeroOffset =
         -0.5; // When auto-zeroing, to reduce stress on the mechanism, this is the amount we want to
     // retract the climber after auto-zeroing
+  }
+
+  public Optional<Double> getArmAngleFromDistance(double distanceInMeters) {
+    if (distanceInMeters > 3.0) return Optional.empty();
+    return Optional.of(45 * distanceInMeters / 3.0);
   }
 
   public RobotConfig() {

@@ -19,6 +19,7 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.vision.VisionCamera;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import java.util.ArrayList;
+import java.util.Optional;
 
 /* Override Inferno specific constants here */
 public class RobotConfigInferno extends RobotConfig {
@@ -106,5 +107,12 @@ public class RobotConfigInferno extends RobotConfig {
     if (Robot.isSimulation()) {
       vision.enableSimulation(() -> RobotConfig.drive.getPose(), true);
     }
+  }
+
+  @Override
+  public Optional<Double> getArmAngleFromDistance(double distanceInMeters) {
+    /* TODO: Insert mapping of distance to arm angle for scoring in speaker */
+    System.out.println("TODO: Inferno getArmAngleFromDistance(" + distanceInMeters + ")");
+    return Optional.of(ArmConstants.subwooferScoreAngleInDegrees);
   }
 }
