@@ -71,6 +71,7 @@ public class ArmIOStub implements ArmIO {
   @Override
   public void updateInputs(ArmIOInputs inputs) {
     inputs.absolutePositionDegree = absEncoder.getDistance();
+    inputs.absolutePositionDegree = targetDegrees;
     inputs.absolutePositionRad = Units.degreesToRadians(absEncoder.getDistance());
     inputs.appliedVolts = motor.get() * RobotController.getBatteryVoltage();
 
