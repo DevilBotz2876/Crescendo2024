@@ -37,6 +37,6 @@ public class IntakeSubsystem extends SubsystemBase implements Intake {
   }
 
   public boolean isPieceShooterDetected() {
-    return inputs.revColorSensorShooter;
+    return inputs.limitSwitchShooter;
   }
 }
