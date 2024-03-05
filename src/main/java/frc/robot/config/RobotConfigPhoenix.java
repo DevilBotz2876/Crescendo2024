@@ -135,7 +135,9 @@ public class RobotConfigPhoenix extends RobotConfig {
                 RobotConfig.arm,
                 RobotConfig.intake,
                 RobotConfig.shooter,
-                () -> translateForAlliance(AutoConstants.scoreFromOutsideSourceSide.robotYawInDegrees),
+                () ->
+                    translateForAlliance(
+                        AutoConstants.scoreFromOutsideSourceSide.robotYawInDegrees),
                 () -> AutoConstants.scoreFromOutsideSourceSide.armAngleInDegrees,
                 () -> AutoConstants.scoreFromOutsideSourceSide.shooterVelocityInRPMs),
             new PrintCommand("  END: Shoot Piece from Ouside Source Side")));
