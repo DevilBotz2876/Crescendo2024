@@ -3,6 +3,7 @@ package frc.robot.commands.auto;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.commands.shooter.SetShooterVelocity;
 import frc.robot.subsystems.arm.Arm;
@@ -18,16 +19,22 @@ public class AutoPrepareForScore extends SequentialCommandGroup {
       Shooter shooter,
       DoubleSupplier armAngleInDegrees,
       DoubleSupplier shooterVelocityInRPMs) {
-    super(
-        new PrintCommand(
-            "START: AutoPrepareToScore"
-                + " angle: "
-                + armAngleInDegrees.getAsDouble()
-                + " velocity: "
-                + shooterVelocityInRPMs.getAsDouble()),
+    if (Constants.debugCommands) {
+      addCommands(
+          new PrintCommand(
+              "START: AutoPrepareToScore"
+                  + " angle: "
+                  + armAngleInDegrees.getAsDouble()
+                  + " velocity: "
+                  + shooterVelocityInRPMs.getAsDouble()));
+    }
+    addCommands(
         new ParallelCommandGroup(
             new ArmToPosition(arm, armAngleInDegrees),
-            new SetShooterVelocity(shooter, shooterVelocityInRPMs)),
-        new PrintCommand("  END: AutoPrepareToScore"));
+            new SetShooterVelocity(shooter, shooterVelocityInRPMs)));
+
+    if (Constants.debugCommands) {
+      addCommands(new PrintCommand("  END: AutoPrepareToScore"));
+    }
   }
 }

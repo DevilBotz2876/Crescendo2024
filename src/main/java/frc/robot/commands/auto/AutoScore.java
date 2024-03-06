@@ -3,6 +3,7 @@ package frc.robot.commands.auto;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.commands.assist.ScorePiece;
 import frc.robot.commands.drive.DriveToYaw;
@@ -29,19 +30,26 @@ public class AutoScore extends SequentialCommandGroup {
       DoubleSupplier robotYawInDegrees,
       DoubleSupplier armAngleInDegrees,
       DoubleSupplier shooterVelocityInRPMs) {
-    super(
-        new PrintCommand(
-            "START: AutoScore yaw: "
-                + robotYawInDegrees.getAsDouble()
-                + " angle: "
-                + armAngleInDegrees.getAsDouble()
-                + " velocity: "
-                + shooterVelocityInRPMs.getAsDouble()),
+
+    if (Constants.debugCommands) {
+      addCommands(
+          new PrintCommand(
+              "START: AutoScore yaw: "
+                  + robotYawInDegrees.getAsDouble()
+                  + " angle: "
+                  + armAngleInDegrees.getAsDouble()
+                  + " velocity: "
+                  + shooterVelocityInRPMs.getAsDouble()));
+    }
+    addCommands(
         new ParallelCommandGroup(
             new DriveToYaw(drive, robotYawInDegrees),
             new ArmToPosition(arm, armAngleInDegrees),
-            new SetShooterVelocity(shooter, shooterVelocityInRPMs)),
-        new ScorePiece(intake, shooter),
-        new PrintCommand("  END: AutoScore"));
+            new SetShooterVelocity(shooter, shooterVelocityInRPMs)));
+    addCommands(new ScorePiece(intake, shooter));
+
+    if (Constants.debugCommands) {
+      addCommands(new PrintCommand("  END: AutoScore"));
+    }
   }
 }
