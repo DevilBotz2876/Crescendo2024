@@ -19,7 +19,6 @@ public class PitControls {
   public static void setupControls() {
     int colIndex = 0;
     int rowIndex = 0;
-    // SmartDashboard.putData(new ArmToPosition(arm));
     ShuffleboardTab commandTestTab = Shuffleboard.getTab("Pit");
 
     commandTestTab.add("Intake: Command", RobotConfig.intake).withPosition(colIndex, rowIndex++);
