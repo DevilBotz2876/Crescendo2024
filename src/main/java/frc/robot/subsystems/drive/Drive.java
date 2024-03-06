@@ -63,4 +63,7 @@ public interface Drive {
   public default double getAngle() {
     return 0;
   }
+
+  public default void lockPose() {}
+  ;
 }

@@ -26,7 +26,7 @@ public class PrepareForScore extends ParallelCommandGroup {
     this.targetIsAmp = targetIsAmp;
     double pos;
     if (this.targetIsAmp.getAsBoolean()) {
-      pos = ArmConstants.ampScoreShooterAngleInDegrees;
+      pos = ArmConstants.ampScoreAngleInDegrees;
     } else {
       pos = ArmConstants.subwooferScoreAngleInDegrees;
     }
@@ -38,7 +38,7 @@ public class PrepareForScore extends ParallelCommandGroup {
         //         this.targetIsAmp.getAsBoolean()
         //             ? assistGUI
         //                 .getEntry("Shooter: Angle (Amp)")
-        //                 .getDouble(ArmConstants.ampScoreShooterAngleInDegrees)
+        //                 .getDouble(ArmConstants.ampScoreAngleInDegrees)
         //             : assistGUI
         //                 .getEntry("Shooter: Angle")
         //                 .getDouble(ArmConstants.shooterAngleInDegrees)));

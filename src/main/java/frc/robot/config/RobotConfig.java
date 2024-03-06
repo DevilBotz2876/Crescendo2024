@@ -81,7 +81,6 @@ public class RobotConfig {
     public static double stowIntakeAngleInDegrees = 45;
 
     public static double defaultSpeedInVolts = 6.0;
-    public static double ampScoreShooterAngleInDegrees = 80;
   }
 
   public static class ShooterConstants {

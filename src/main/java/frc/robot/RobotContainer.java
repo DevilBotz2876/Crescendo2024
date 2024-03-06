@@ -555,7 +555,7 @@ public class RobotContainer {
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
     assistTab
-        .add("Shooter: Angle (Amp)", ArmConstants.ampScoreShooterAngleInDegrees)
+        .add("Shooter: Angle (Amp)", ArmConstants.ampScoreAngleInDegrees)
         .withWidget(BuiltInWidgets.kNumberSlider)
         .withProperties(
             Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))

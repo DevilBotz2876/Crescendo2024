@@ -149,4 +149,9 @@ public class DriveSwerveYAGSL extends DriveBase {
   public double getAngle() {
     return swerveDrive.getYaw().getDegrees();
   }
+
+  @Override
+  public void lockPose() {
+    swerveDrive.lockPose();
+  }
 }
