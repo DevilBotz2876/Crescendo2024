@@ -9,15 +9,26 @@ import frc.robot.subsystems.intake.Intake;
 import java.util.function.DoubleSupplier;
 
 public class PrepareForIntake extends SequentialCommandGroup {
-  public PrepareForIntake(Arm arm, Intake intake, DoubleSupplier intakeAngle) {
-    addCommands(
-        new ParallelCommandGroup(new ArmToPositionTP(intakeAngle, arm)), new IndexPiece(intake));
+  public PrepareForIntake(
+      Arm arm,
+      Intake intake,
+      DoubleSupplier intakeAngle,
+      DoubleSupplier intakeVoltage,
+      DoubleSupplier intakeFeedVoltage) {
+    if (intakeVoltage == null) {
+      addCommands(
+          new ParallelCommandGroup(new ArmToPositionTP(intakeAngle, arm)), new IndexPiece(intake));
+    } else {
+      addCommands(
+          new ParallelCommandGroup(new ArmToPositionTP(intakeAngle, arm)),
+          new IndexPiece(intake, intakeVoltage, intakeFeedVoltage));
+    }
     addCommands(new ProtectArm(arm));
   }
 
   // Sets the Arm to the ideal angle for intake
   // Turns the intake motor on
   public PrepareForIntake(Arm arm, Intake intake) {
-    this(arm, intake, () -> ArmConstants.intakeAngleInDegrees);
+    this(arm, intake, () -> ArmConstants.intakeAngleInDegrees, null, null);
   }
 }

@@ -1,7 +1,6 @@
 package frc.robot.controls;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -22,14 +21,15 @@ public class PitControls {
     int rowIndex = 0;
     // SmartDashboard.putData(new ArmToPosition(arm));
     ShuffleboardTab commandTestTab = Shuffleboard.getTab("Pit");
-    NetworkTable commandGUI = NetworkTableInstance.getDefault().getTable("Shuffleboard/Pit");
 
     commandTestTab.add("Intake: Command", RobotConfig.intake).withPosition(colIndex, rowIndex++);
-    commandTestTab
-        .add("Intake: Volts", IntakeConstants.defaultSpeedInVolts)
-        .withWidget(BuiltInWidgets.kNumberSlider)
-        .withProperties(Map.of("min", 0, "max", 12))
-        .withPosition(colIndex, rowIndex++);
+    GenericEntry intakeVolts =
+        commandTestTab
+            .add("Intake: Volts", IntakeConstants.defaultSpeedInVolts)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 12))
+            .withPosition(colIndex, rowIndex++)
+            .getEntry();
     commandTestTab
         .add(
             "Intake: Stop",
@@ -41,9 +41,7 @@ public class PitControls {
             new InstantCommand(
                 () ->
                     RobotConfig.intake.runVoltage(
-                        commandGUI
-                            .getEntry("Intake: Volts")
-                            .getDouble(IntakeConstants.defaultSpeedInVolts)),
+                        intakeVolts.getDouble(IntakeConstants.defaultSpeedInVolts)),
                 RobotConfig.intake))
         .withPosition(colIndex, rowIndex++);
     commandTestTab
@@ -52,9 +50,7 @@ public class PitControls {
             new InstantCommand(
                 () ->
                     RobotConfig.intake.runVoltage(
-                        -commandGUI
-                            .getEntry("Intake: Volts")
-                            .getDouble(IntakeConstants.defaultSpeedInVolts)),
+                        -intakeVolts.getDouble(IntakeConstants.defaultSpeedInVolts)),
                 RobotConfig.intake))
         .withPosition(colIndex, rowIndex++);
 
@@ -64,11 +60,13 @@ public class PitControls {
     commandTestTab.add("Climber: Command", RobotConfig.climber).withPosition(colIndex, rowIndex++);
 
     // Create volt entry under Shooter tab as a number sider with min = -1 and max = 1
-    commandTestTab
-        .add("Climber: Volts", ClimberConstants.defaultSpeedInVolts)
-        .withWidget(BuiltInWidgets.kNumberSlider)
-        .withProperties(Map.of("min", 0, "max", 12))
-        .withPosition(colIndex, rowIndex++);
+    GenericEntry climberVolts =
+        commandTestTab
+            .add("Climber: Volts", ClimberConstants.defaultSpeedInVolts)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 12))
+            .withPosition(colIndex, rowIndex++)
+            .getEntry();
     commandTestTab
         .add(
             "Climber: Stop",
@@ -122,9 +120,7 @@ public class PitControls {
                 () -> {
                   RobotConfig.climber.enableLimits(false);
                   RobotConfig.climber.runVoltageLeft(
-                      commandGUI
-                          .getEntry("Climber: Volts")
-                          .getDouble(ClimberConstants.defaultSpeedInVolts));
+                      climberVolts.getDouble(ClimberConstants.defaultSpeedInVolts));
                 },
                 RobotConfig.climber))
         .withPosition(colIndex + 0, rowIndex);
@@ -137,9 +133,7 @@ public class PitControls {
                   RobotConfig.climber.enableLimits(false);
 
                   RobotConfig.climber.runVoltageRight(
-                      commandGUI
-                          .getEntry("Climber: Volts")
-                          .getDouble(ClimberConstants.defaultSpeedInVolts));
+                      climberVolts.getDouble(ClimberConstants.defaultSpeedInVolts));
                 },
                 RobotConfig.climber))
         .withPosition(colIndex + 1, rowIndex);
@@ -153,9 +147,7 @@ public class PitControls {
                 new InstantCommand(
                     () ->
                         RobotConfig.climber.runVoltageLeft(
-                            -commandGUI
-                                .getEntry("Climber: Volts")
-                                .getDouble(ClimberConstants.defaultSpeedInVolts)),
+                            -climberVolts.getDouble(ClimberConstants.defaultSpeedInVolts)),
                     RobotConfig.climber)))
         .withPosition(colIndex + 0, rowIndex);
     commandTestTab
@@ -166,9 +158,7 @@ public class PitControls {
                 new InstantCommand(
                     () ->
                         RobotConfig.climber.runVoltageRight(
-                            -commandGUI
-                                .getEntry("Climber: Volts")
-                                .getDouble(ClimberConstants.defaultSpeedInVolts)),
+                            -climberVolts.getDouble(ClimberConstants.defaultSpeedInVolts)),
                     RobotConfig.climber)))
         .withPosition(colIndex + 1, rowIndex);
 
@@ -184,11 +174,13 @@ public class PitControls {
     rowIndex = 0;
     commandTestTab.add("Shooter: Command", RobotConfig.shooter).withPosition(colIndex, rowIndex++);
     // Create volt entry under Shooter tab as a number sider with min = -1 and max = 1
-    commandTestTab
-        .add("Shooter: Volts", ShooterConstants.defaultSpeedInVolts)
-        .withWidget(BuiltInWidgets.kNumberSlider)
-        .withProperties(Map.of("min", -12, "max", 12))
-        .withPosition(colIndex, rowIndex++);
+    GenericEntry shooterVolts =
+        commandTestTab
+            .add("Shooter: Volts", ShooterConstants.defaultSpeedInVolts)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", -12, "max", 12))
+            .withPosition(colIndex, rowIndex++)
+            .getEntry();
     commandTestTab
         .add(
             "Shooter: Stop",
@@ -200,9 +192,7 @@ public class PitControls {
             new InstantCommand(
                 () ->
                     RobotConfig.shooter.runVoltage(
-                        commandGUI
-                            .getEntry("Shooter: Volts")
-                            .getDouble(ShooterConstants.defaultSpeedInVolts)),
+                        shooterVolts.getDouble(ShooterConstants.defaultSpeedInVolts)),
                 RobotConfig.shooter))
         .withPosition(colIndex, rowIndex++);
 
@@ -210,11 +200,13 @@ public class PitControls {
     rowIndex = 0;
     commandTestTab.add("Arm: Command", RobotConfig.arm).withPosition(colIndex, rowIndex++);
     // Create volt entry under Shooter tab as a number sider with min = -1 and max = 1
-    commandTestTab
-        .add("Arm: Volts", ArmConstants.defaultSpeedInVolts)
-        .withWidget(BuiltInWidgets.kNumberSlider)
-        .withProperties(Map.of("min", -12, "max", 12))
-        .withPosition(colIndex, rowIndex++);
+    GenericEntry armVolts =
+        commandTestTab
+            .add("Arm: Volts", ArmConstants.defaultSpeedInVolts)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", -12, "max", 12))
+            .withPosition(colIndex, rowIndex++)
+            .getEntry();
     commandTestTab
         .add("Arm: Stop", new InstantCommand(() -> RobotConfig.arm.runVoltage(0), RobotConfig.arm))
         .withPosition(colIndex, rowIndex++);
@@ -224,9 +216,7 @@ public class PitControls {
             new InstantCommand(
                 () ->
                     RobotConfig.arm.runVoltage(
-                        commandGUI
-                            .getEntry("Arm: Volts")
-                            .getDouble(ArmConstants.defaultSpeedInVolts)),
+                        armVolts.getDouble(ArmConstants.defaultSpeedInVolts)),
                 RobotConfig.arm))
         .withPosition(colIndex, rowIndex++);
   }

@@ -1,11 +1,9 @@
 package frc.robot.controls;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.commands.assist.PrepareForIntake;
 import frc.robot.commands.assist.PrepareForScore;
 import frc.robot.commands.assist.ScorePiece;
@@ -22,128 +20,186 @@ public class DebugControls {
   public static void setupGUI() {
     int colIndex = 0;
     int rowIndex = 0;
-    ShuffleboardTab assistTab = Shuffleboard.getTab("Debug");
+    ShuffleboardTab debugTab = Shuffleboard.getTab("Debug");
 
-    assistTab
+    GenericEntry intakeAngleEntry =
+        debugTab
+            .add("Intake: Angle", ArmConstants.intakeAngleInDegrees)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(
+                Map.of(
+                    "min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
+            .withPosition(colIndex, rowIndex++)
+            .withSize(2, 1)
+            .getEntry();
+
+    GenericEntry intakeVoltageEntry =
+        debugTab
+            .add("Intake: Volts", IntakeConstants.defaultSpeedInVolts)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 12))
+            .withPosition(colIndex, rowIndex++)
+            .withSize(2, 1)
+            .getEntry();
+
+    GenericEntry intakeIndexVoltageEntry =
+        debugTab
+            .add("Intake: Index Volts", IntakeConstants.indexSpeedInVolts)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 12))
+            .withPosition(colIndex, rowIndex++)
+            .withSize(2, 1)
+            .getEntry();
+
+    debugTab
         .add(
-            "Assist: Prepare For Intake", new PrepareForIntake(RobotConfig.arm, RobotConfig.intake))
-        .withPosition(colIndex, rowIndex++)
-        .withSize(2, 1);
-    assistTab
-        .add("Intake: Angle", ArmConstants.minAngleInDegrees)
-        .withWidget(BuiltInWidgets.kNumberSlider)
-        .withProperties(
-            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
-        .withPosition(colIndex, rowIndex++)
-        .withSize(2, 1);
-
-    assistTab
-        .add("Intake: Index Volts", IntakeConstants.indexSpeedInVolts)
-        .withWidget(BuiltInWidgets.kNumberSlider)
-        .withProperties(Map.of("min", 0, "max", 12))
+            "Assist: Prepare For Intake",
+            new PrepareForIntake(
+                RobotConfig.arm,
+                RobotConfig.intake,
+                () -> intakeAngleEntry.getDouble(ArmConstants.intakeAngleInDegrees),
+                () -> intakeVoltageEntry.getDouble(IntakeConstants.defaultSpeedInVolts),
+                () -> intakeIndexVoltageEntry.getDouble(IntakeConstants.indexSpeedInVolts)))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
 
     colIndex += 2;
     rowIndex = 0;
-    assistTab
-        .add(
-            "Assist: Prepare For Score",
-            new PrepareForScore(RobotConfig.arm, RobotConfig.shooter, () -> RobotState.isAmpMode()))
-        .withPosition(colIndex, rowIndex++)
-        .withSize(2, 1);
-    assistTab
-        .add("Shooter: Velocity", ShooterConstants.velocityInRPMs)
-        .withWidget(BuiltInWidgets.kNumberSlider)
-        .withProperties(Map.of("min", 0, "max", 6000))
-        .withPosition(colIndex, rowIndex++)
-        .withSize(2, 1);
-    assistTab
-        .add("Shooter: Angle", ArmConstants.subwooferScoreAngleInDegrees)
-        .withWidget(BuiltInWidgets.kNumberSlider)
-        .withProperties(
-            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
-        .withPosition(colIndex, rowIndex++)
-        .withSize(2, 1);
-    assistTab
-        .add("Shooter: Velocity (Amp)", ShooterConstants.ampScoreVelocityInRPMs)
-        .withWidget(BuiltInWidgets.kNumberSlider)
-        .withProperties(Map.of("min", 0, "max", 6000))
-        .withPosition(colIndex, rowIndex++)
-        .withSize(2, 1);
-    assistTab
-        .add("Shooter: Angle (Amp)", ArmConstants.ampScoreAngleInDegrees)
-        .withWidget(BuiltInWidgets.kNumberSlider)
-        .withProperties(
-            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
-        .withPosition(colIndex, rowIndex++)
-        .withSize(2, 1);
+    GenericEntry shooterVelocityEntry =
+        debugTab
+            .add("Shooter: Velocity", ShooterConstants.velocityInRPMs)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 6000))
+            .withPosition(colIndex, rowIndex++)
+            .withSize(2, 1)
+            .getEntry();
+    GenericEntry armAngleEntry =
+        debugTab
+            .add("Shooter: Angle", ArmConstants.subwooferScoreAngleInDegrees)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(
+                Map.of(
+                    "min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
+            .withPosition(colIndex, rowIndex++)
+            .withSize(2, 1)
+            .getEntry();
+    GenericEntry shooterVelocityAmpEntry =
+        debugTab
+            .add("Shooter: Velocity (Amp)", ShooterConstants.ampScoreVelocityInRPMs)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 6000))
+            .withPosition(colIndex, rowIndex++)
+            .withSize(2, 1)
+            .getEntry();
+    GenericEntry armAngleAmpEntry =
+        debugTab
+            .add("Shooter: Angle (Amp)", ArmConstants.ampScoreAngleInDegrees)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(
+                Map.of(
+                    "min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
+            .withPosition(colIndex, rowIndex++)
+            .withSize(2, 1)
+            .getEntry();
 
-    assistTab
+    debugTab
         .add("Amp Mode", RobotState.isAmpMode())
         .withWidget(BuiltInWidgets.kBooleanBox)
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1)
         .getEntry();
 
-    colIndex += 2;
-    rowIndex = 0;
-    assistTab
-        .add("Assist: Shoot Piece", new ScorePiece(RobotConfig.intake, RobotConfig.shooter))
-        .withPosition(colIndex, rowIndex++)
-        .withSize(2, 1);
-    assistTab
-        .add("Intake: Feed Volts", IntakeConstants.feedSpeedInVolts)
-        .withWidget(BuiltInWidgets.kNumberSlider)
-        .withProperties(Map.of("min", 0, "max", 12))
+    debugTab
+        .add(
+            "Assist: Prepare For Score",
+            new PrepareForScore(
+                RobotConfig.arm,
+                RobotConfig.shooter,
+                () -> {
+                  if (RobotState.isAmpMode())
+                    return armAngleAmpEntry.getDouble(ArmConstants.ampScoreAngleInDegrees);
+                  else return armAngleEntry.getDouble(ArmConstants.subwooferScoreAngleInDegrees);
+                },
+                () -> {
+                  if (RobotState.isAmpMode())
+                    return shooterVelocityAmpEntry.getDouble(
+                        ShooterConstants.ampScoreVelocityInRPMs);
+                  else return shooterVelocityEntry.getDouble(ShooterConstants.velocityInRPMs);
+                }))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
 
     colIndex += 2;
     rowIndex = 0;
-    assistTab
+    GenericEntry intakeFeedVoltageEntry =
+        debugTab
+            .add("Intake: Feed Volts", IntakeConstants.feedSpeedInVolts)
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 12))
+            .withPosition(colIndex, rowIndex++)
+            .withSize(2, 1)
+            .getEntry();
+
+    debugTab
+        .add(
+            "Assist: Shoot Piece",
+            new ScorePiece(
+                RobotConfig.intake,
+                RobotConfig.shooter,
+                () -> intakeFeedVoltageEntry.getDouble(IntakeConstants.feedSpeedInVolts)))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+
+    colIndex += 2;
+    rowIndex = 0;
+
+    debugTab
         .add(
             "Test: Shooter Angle",
-            new TestShooterAngle(RobotConfig.shooter, RobotConfig.intake, RobotConfig.arm))
+            new TestShooterAngle(
+                RobotConfig.shooter,
+                RobotConfig.intake,
+                RobotConfig.arm,
+                () -> shooterVelocityEntry.getDouble(ShooterConstants.velocityInRPMs),
+                () -> intakeFeedVoltageEntry.getDouble(IntakeConstants.feedSpeedInVolts),
+                () -> armAngleEntry.getDouble(ArmConstants.subwooferScoreAngleInDegrees)))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
 
-    assistTab
-        .add("Vision: Target ID", IntakeConstants.feedSpeedInVolts)
-        .withWidget(BuiltInWidgets.kTextView)
-        .withProperties(Map.of("min", 1, "max", 16))
-        .withPosition(colIndex, rowIndex++)
-        .withSize(2, 1);
-    NetworkTable assistGUI = NetworkTableInstance.getDefault().getTable("Shuffleboard/Debug");
+    GenericEntry visionTargetId =
+        debugTab
+            .add("Vision: Target ID", RobotState.getActiveTargetId())
+            .withWidget(BuiltInWidgets.kTextView)
+            .withProperties(Map.of("min", 1, "max", 16))
+            .withPosition(colIndex, rowIndex++)
+            .withSize(2, 1)
+            .getEntry();
 
-    assistTab
+    debugTab
         .add(
             "Vision: Align To Target",
             new AlignToTarget(
                 RobotConfig.drive,
                 RobotConfig.vision,
-                () ->
-                    (int)
-                        assistGUI
-                            .getEntry("Vision: Target ID")
-                            .getInteger(RobotState.getActiveTargetId())))
+                () -> (int) visionTargetId.getInteger(RobotState.getActiveTargetId())))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
 
-    assistTab
+    debugTab
         .add("Field Oriented Drive", RobotConfig.drive.isFieldOrientedDrive())
         .withWidget(BuiltInWidgets.kBooleanBox)
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1)
         .getEntry();
 
-    assistTab
+    /*
+    debugTab
         .add("Drive Speed Limit", 100)
         .withWidget(BuiltInWidgets.kNumberSlider)
         .withProperties(Map.of("min", 0, "max", 100))
         .getEntry();
 
-    assistTab
+    debugTab
         .add("Drive Turn Limit", 100)
         .withWidget(BuiltInWidgets.kNumberSlider)
         .withProperties(Map.of("min", 0, "max", 100))
@@ -153,6 +209,43 @@ public class DebugControls {
     driveSpeedChooser.addOption("Linear Mode", "Linear Mode");
     driveSpeedChooser.setDefaultOption("Squared Mode", "Squared Mode");
     driveSpeedChooser.addOption("Cubed Mode", "Cubed Mode");
-    assistTab.add("Drive Response Curve", driveSpeedChooser);
+    debugTab.add("Drive Response Curve", driveSpeedChooser);
+     */
+
+    /*
+
+    ShuffleboardTab armTab;
+    GenericEntry armVoltsEntry;
+    GenericEntry armDegreesEntry;
+    GenericEntry highLimitEntry;
+    GenericEntry lowLimitEntry;
+
+
+      // create arm tab on ShuffleBoard
+      armTab = Shuffleboard.getTab("Arm");
+      // Create volt entry under arm tab as a number sider with min = -4 and max = 4
+      armVoltsEntry =
+          armTab
+              .add("Volts", 0)
+              .withWidget(BuiltInWidgets.kNumberSlider)
+              .withProperties(Map.of("min", -4, "max", 4))
+              .getEntry();
+
+      highLimitEntry =
+          armTab.add("HighLimit", false).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+
+      lowLimitEntry = armTab.add("LowLimit", false).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+
+      armTab
+          .add("Degrees Setpoint", 0.0)
+          .withWidget(BuiltInWidgets.kNumberSlider)
+          .withProperties(
+              Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
+          .getEntry();
+
+        highLimitEntry.setBoolean(true);
+        lowLimitEntry.setBoolean(true);
+
+       */
   }
 }

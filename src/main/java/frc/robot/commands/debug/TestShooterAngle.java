@@ -1,43 +1,45 @@
 package frc.robot.commands.debug;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.config.RobotConfig.ArmConstants;
-import frc.robot.config.RobotConfig.IntakeConstants;
-import frc.robot.config.RobotConfig.ShooterConstants;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
+import java.util.function.DoubleSupplier;
 
 public class TestShooterAngle extends Command {
   Shooter shooter;
   Arm arm;
   Intake intake;
-  NetworkTableEntry ShooterVelocity;
-  NetworkTableEntry IntakeVoltage;
-  NetworkTableEntry ArmAngle;
-  NetworkTable assistGUI = NetworkTableInstance.getDefault().getTable("Shuffleboard/Debug");
 
-  public TestShooterAngle(Shooter shooter, Intake intake, Arm arm) {
+  DoubleSupplier shooterVelocity;
+  DoubleSupplier intakeVoltage;
+  DoubleSupplier armAngle;
+
+  public TestShooterAngle(
+      Shooter shooter,
+      Intake intake,
+      Arm arm,
+      DoubleSupplier shooterVelocity,
+      DoubleSupplier intakeVoltage,
+      DoubleSupplier armAngle) {
     this.shooter = shooter;
     this.intake = intake;
     this.arm = arm;
-    this.ShooterVelocity = assistGUI.getEntry("Shooter: Velocity");
-    this.IntakeVoltage = assistGUI.getEntry("Intake: Feed Volts");
-    this.ArmAngle = assistGUI.getEntry("Shooter: Angle");
-    addRequirements((SubsystemBase) shooter);
-    addRequirements((SubsystemBase) intake);
-    addRequirements((SubsystemBase) arm);
+    this.shooterVelocity = shooterVelocity;
+    this.intakeVoltage = intakeVoltage;
+    this.armAngle = armAngle;
+
+    addRequirements((Subsystem) shooter);
+    addRequirements((Subsystem) intake);
+    addRequirements((Subsystem) arm);
   }
 
   @Override
   public void execute() {
-    shooter.runVelocity(ShooterVelocity.getDouble(ShooterConstants.velocityInRPMs));
-    intake.runVoltage(IntakeVoltage.getDouble(IntakeConstants.feedSpeedInVolts));
-    arm.setAngle(ArmAngle.getDouble(ArmConstants.subwooferScoreAngleInDegrees));
+    shooter.runVelocity(shooterVelocity.getAsDouble());
+    intake.runVoltage(intakeVoltage.getAsDouble());
+    arm.setAngle(armAngle.getAsDouble());
   }
 
   public void end(boolean interrupted) {
