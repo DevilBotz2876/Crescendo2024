@@ -1,6 +1,5 @@
 package frc.robot.config;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -24,12 +23,11 @@ import java.util.Optional;
 /* Override Inferno specific constants here */
 public class RobotConfigInferno extends RobotConfig {
   public RobotConfigInferno() {
-    super(false, false, false, false, false, false, false);
+    super(false, false, false, false, true, false, false);
 
     // Inferno has a Swerve drive train
     // TODO: set DriveConstants.maxVelocityMetersPerSec
     drive = new DriveSwerveYAGSL("yagsl/inferno");
-    autoChooser = AutoBuilder.buildAutoChooser("Sit Still");
 
     // Inferno has a TalonSRX based intake
     IntakeConstants.defaultSpeedInVolts = 6.0;
