@@ -18,7 +18,7 @@ public class DriveToYaw extends Command {
     this.yawDegrees = yawDegrees;
 
     turnPID.setTolerance(0.5);
-    turnPID.enableContinuousInput(0, 360);
+    turnPID.enableContinuousInput(-180, 180);
     addRequirements((Subsystem) drive);
   }
 
@@ -27,7 +27,13 @@ public class DriveToYaw extends Command {
     targetYaw = this.yawDegrees.getAsDouble();
     turnPID.reset();
     turnPID.setSetpoint(targetYaw);
-    System.out.println("START: " + this.getClass().getSimpleName() + " yaw: " + targetYaw);
+    System.out.println(
+        "START: "
+            + this.getClass().getSimpleName()
+            + " yaw: "
+            + targetYaw
+            + " currentYaw: "
+            + drive.getAngle());
   }
 
   @Override
