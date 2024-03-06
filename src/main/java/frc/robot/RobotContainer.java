@@ -11,7 +11,6 @@ import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfigInferno;
 import frc.robot.config.RobotConfigPhoenix;
 import frc.robot.config.RobotConfigSherman;
-import java.util.Map;
 import frc.robot.controls.DebugControls;
 import frc.robot.controls.DriverControls;
 import frc.robot.controls.PitControls;

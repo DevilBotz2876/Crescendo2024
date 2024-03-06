@@ -1,9 +1,7 @@
 package frc.robot.commands.assist;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.arm.ArmToPositionTP;
 import frc.robot.config.RobotConfig.ArmConstants;
@@ -18,7 +16,7 @@ public class PrepareForIntake extends SequentialCommandGroup {
       DoubleSupplier intakeAngle,
       DoubleSupplier intakeVoltage,
       DoubleSupplier intakeFeedVoltage) {
-    addCommands(new PrintCommand("START: " + this.getClass().getSimpleName()));        
+    addCommands(new PrintCommand("START: " + this.getClass().getSimpleName()));
     if (intakeVoltage == null) {
       addCommands(
           new ParallelCommandGroup(new ArmToPositionTP(intakeAngle, arm)), new IndexPiece(intake));
