@@ -1,11 +1,13 @@
 package frc.robot.config;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Robot;
+import frc.robot.commands.auto.AutoNamedCommands;
 import frc.robot.subsystems.arm.ArmIOSparkMax;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.climber.ClimberIOSparkMax;
@@ -28,6 +30,9 @@ public class RobotConfigInferno extends RobotConfig {
     // Inferno has a Swerve drive train
     // TODO: set DriveConstants.maxVelocityMetersPerSec
     drive = new DriveSwerveYAGSL("yagsl/inferno");
+
+    AutoNamedCommands.configure();
+    autoChooser = AutoBuilder.buildAutoChooser("Sit Still");
 
     // Inferno has a TalonSRX based intake
     IntakeConstants.defaultSpeedInVolts = 6.0;
