@@ -57,7 +57,7 @@ public class Robot extends LoggedRobot {
     } else {*/
     if (isReal()) {
       // Running on real robot
-      // Logger.addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick
+      Logger.addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick
       Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
     } else {
       // Running in simulation
