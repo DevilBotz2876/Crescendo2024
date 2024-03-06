@@ -38,7 +38,6 @@ public class RobotConfig {
   public static class DriveConstants {
     public static double maxVelocityMetersPerSec = 4.5;
     public static double maxAngularVelocityRadiansSec = 2 * Math.PI;
-    public static double baseRadius = 0.4;
 
     public static double anglePidKp = 0.05;
     public static double anglePidKi = 0.0;
