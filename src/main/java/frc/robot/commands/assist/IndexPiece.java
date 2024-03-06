@@ -11,6 +11,8 @@ public class IndexPiece extends Command {
   Intake intake;
   DoubleSupplier intakeVoltage = null;
   DoubleSupplier indexVoltage = null;
+  double targetIntakeVoltage;
+  double targetIndexVoltage;
 
   public IndexPiece(Intake intake, DoubleSupplier intakeVoltage, DoubleSupplier indexVoltage) {
     this.intake = intake;
@@ -29,16 +31,23 @@ public class IndexPiece extends Command {
     if (Constants.debugCommands) {
       System.out.println("START: " + this.getClass().getSimpleName());
     }
+    if (intakeVoltage != null) {
+      targetIntakeVoltage = intakeVoltage.getAsDouble();
+    } else {
+      targetIntakeVoltage = IntakeConstants.defaultSpeedInVolts;
+    }
+
+    if (indexVoltage != null) {
+      targetIndexVoltage = indexVoltage.getAsDouble();
+    } else {
+      targetIndexVoltage = IntakeConstants.indexSpeedInVolts;
+    }
   }
 
   @Override
   public void execute() {
     if (!intake.isPieceShooterDetected()) {
-      double voltage = IntakeConstants.defaultSpeedInVolts;
-      if (intakeVoltage != null) {
-        voltage = intakeVoltage.getAsDouble();
-      }
-      intake.runVoltage(voltage);
+      intake.runVoltage(targetIntakeVoltage);
     }
   }
 

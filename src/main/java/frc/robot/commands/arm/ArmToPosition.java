@@ -10,6 +10,7 @@ import java.util.function.DoubleSupplier;
 public class ArmToPosition extends Command {
   Arm arm;
   DoubleSupplier positionDegrees;
+  double targetPositionDegrees;
   double timeMS;
 
   public ArmToPosition(Arm arm, DoubleSupplier positionDegrees) {
@@ -21,22 +22,23 @@ public class ArmToPosition extends Command {
 
   @Override
   public void initialize() {
+    targetPositionDegrees = positionDegrees.getAsDouble();
+    timeMS = 0.0;
+
     if (Constants.debugCommands) {
       System.out.println(
-          "START: " + this.getClass().getSimpleName() + " angle: " + positionDegrees.getAsDouble());
+          "START: " + this.getClass().getSimpleName() + " angle: " + targetPositionDegrees);
     }
-    timeMS = 0.0;
   }
 
   @Override
   public void execute() {
-    arm.setAngle(positionDegrees.getAsDouble());
+    arm.setAngle(targetPositionDegrees);
   }
 
   @Override
   public boolean isFinished() {
-    if (Math.abs(arm.getAngle() - positionDegrees.getAsDouble())
-        <= ArmConstants.pidAngleErrorInDegrees) {
+    if (Math.abs(arm.getAngle() - targetPositionDegrees) <= ArmConstants.pidAngleErrorInDegrees) {
       timeMS += 20.0;
       if (timeMS >= ArmConstants.pidSettlingTimeInMilliseconds) {
         return true;

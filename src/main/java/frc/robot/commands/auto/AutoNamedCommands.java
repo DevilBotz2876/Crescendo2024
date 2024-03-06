@@ -3,6 +3,7 @@ package frc.robot.commands.auto;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.commands.assist.PrepareForIntake;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ShooterConstants;
@@ -52,7 +53,7 @@ public class AutoNamedCommands {
             RobotConfig.intake,
             RobotConfig.shooter,
             () -> RobotConfig.drive.getAngle(),
-            () -> AutoConstants.scoreFromSpeakerCenterSide.armAngleInDegrees,
+            () -> getAngleToTarget(AutoConstants.scoreFromSpeakerCenterSide.armAngleInDegrees),
             () -> AutoConstants.scoreFromSpeakerCenterSide.shooterVelocityInRPMs));
 
     NamedCommands.registerCommand(
@@ -63,7 +64,7 @@ public class AutoNamedCommands {
             RobotConfig.intake,
             RobotConfig.shooter,
             () -> RobotConfig.drive.getAngle(),
-            () -> AutoConstants.scoreFromSpeakerSourceSide.armAngleInDegrees,
+            () -> getAngleToTarget(AutoConstants.scoreFromSpeakerSourceSide.armAngleInDegrees),
             () -> AutoConstants.scoreFromSpeakerSourceSide.shooterVelocityInRPMs));
 
     NamedCommands.registerCommand(
@@ -74,7 +75,7 @@ public class AutoNamedCommands {
             RobotConfig.intake,
             RobotConfig.shooter,
             () -> getYawToTarget(AutoConstants.scoreFromNoteAmpSide.robotYawInDegrees),
-            () -> AutoConstants.scoreFromNoteAmpSide.armAngleInDegrees,
+            () -> getAngleToTarget(AutoConstants.scoreFromNoteAmpSide.armAngleInDegrees),
             () -> AutoConstants.scoreFromNoteAmpSide.shooterVelocityInRPMs));
 
     NamedCommands.registerCommand(
@@ -86,7 +87,7 @@ public class AutoNamedCommands {
                 RobotConfig.intake,
                 RobotConfig.shooter,
                 () -> getYawToTarget(AutoConstants.scoreFromNoteCenterSide.robotYawInDegrees),
-                () -> AutoConstants.scoreFromNoteCenterSide.armAngleInDegrees,
+                () -> getAngleToTarget(AutoConstants.scoreFromNoteCenterSide.armAngleInDegrees),
                 () -> AutoConstants.scoreFromNoteCenterSide.shooterVelocityInRPMs)));
 
     NamedCommands.registerCommand(
@@ -97,7 +98,7 @@ public class AutoNamedCommands {
             RobotConfig.intake,
             RobotConfig.shooter,
             () -> getYawToTarget(AutoConstants.scoreFromNoteSourceSide.robotYawInDegrees),
-            () -> AutoConstants.scoreFromNoteSourceSide.armAngleInDegrees,
+            () -> getAngleToTarget(AutoConstants.scoreFromNoteSourceSide.armAngleInDegrees),
             () -> AutoConstants.scoreFromNoteSourceSide.shooterVelocityInRPMs));
 
     NamedCommands.registerCommand(
@@ -142,11 +143,37 @@ public class AutoNamedCommands {
 
     if (getYawToAprilTag.isPresent()) {
       double visionYaw = RobotConfig.drive.getAngle() - getYawToAprilTag.get();
-      // System.out.println("Using Vision Yaw " + visionYaw + " fixedYaw: " + defaultYawToTarget);
+      if (Constants.debugCommands) {
+        System.out.println("Using Vision Yaw " + visionYaw + " fixedYaw: " + defaultYawToTarget);
+      }
       return visionYaw;
-    } else {
-      return translateForAlliance(defaultYawToTarget);
     }
+
+    return translateForAlliance(defaultYawToTarget);
+  }
+
+  private static double getAngleToTarget(double defaultAngleToTarget) {
+    Optional<Double> getDistanceToAprilTag =
+        RobotConfig.vision.getDistanceToAprilTag(RobotState.getActiveTargetId());
+
+    if (getDistanceToAprilTag.isPresent()) {
+      double distance = getDistanceToAprilTag.get();
+      Optional<Double> armAngle = RobotConfig.instance.getArmAngleFromDistance(distance);
+      if (armAngle.isPresent()) {
+        double visionAngle = armAngle.get();
+        if (Constants.debugCommands) {
+          System.out.println(
+              "Using Vision Angle "
+                  + visionAngle
+                  + " distance: "
+                  + distance
+                  + " fixedAngle: "
+                  + defaultAngleToTarget);
+        }
+        return armAngle.get();
+      }
+    }
+    return defaultAngleToTarget;
   }
 
   private static double translateForAlliance(double angle) {

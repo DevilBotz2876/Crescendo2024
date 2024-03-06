@@ -11,6 +11,7 @@ import java.util.function.DoubleSupplier;
 public class SetShooterVelocity extends Command {
   Shooter shooter;
   DoubleSupplier velocityRPM;
+  double targetVelocityRPM;
   double timeMS;
 
   public SetShooterVelocity(Shooter shooter, DoubleSupplier velocityRPM) {
@@ -26,18 +27,15 @@ public class SetShooterVelocity extends Command {
           "START: " + this.getClass().getSimpleName() + " velocity: " + velocityRPM.getAsDouble());
     }
     timeMS = 0.0;
-    shooter.runVelocity(velocityRPM.getAsDouble());
+    targetVelocityRPM = velocityRPM.getAsDouble();
+    shooter.runVelocity(targetVelocityRPM);
   }
 
   @Override
-  public void execute() {}
-
-  @Override
   public boolean isFinished() {
-
     if (Math.abs(
             Units.radiansPerSecondToRotationsPerMinute(shooter.getCurrentSpeed())
-                - velocityRPM.getAsDouble())
+                - targetVelocityRPM)
         <= ShooterConstants.pidVelocityErrorInRPMS) {
       timeMS += 20.0;
       if (timeMS >= ShooterConstants.pidSettlingTimeInMilliseconds) {
