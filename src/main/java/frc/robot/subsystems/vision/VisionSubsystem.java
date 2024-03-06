@@ -42,6 +42,7 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
               this.camera,
               this.robotToCamera);
       this.index = numCameras++;
+      update();
     }
 
     private void update() {

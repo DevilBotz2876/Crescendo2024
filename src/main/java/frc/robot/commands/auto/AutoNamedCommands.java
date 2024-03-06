@@ -5,23 +5,27 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.assist.PrepareForIntake;
 import frc.robot.config.RobotConfig;
+import frc.robot.config.RobotConfig.ShooterConstants;
+import frc.robot.util.RobotState;
+import java.util.Optional;
 
 public class AutoNamedCommands {
   public static class AutoConstants {
     /* TODO: Fill in the values for scoring here */
     public static AutoScoreConstants scoreFromSpeakerAmpSide =
-        new AutoScoreConstants(0.0, 45, 3000);
-    public static AutoScoreConstants scoreFromNoteAmpSide = new AutoScoreConstants(40, 45, 3000);
+        new AutoScoreConstants(0.0, 45, ShooterConstants.velocityInRPMs);
+    public static AutoScoreConstants scoreFromNoteAmpSide =
+        new AutoScoreConstants(40, 45, ShooterConstants.velocityInRPMs);
     public static AutoScoreConstants scoreFromSpeakerCenterSide =
-        new AutoScoreConstants(0.0, 45, 3000);
+        new AutoScoreConstants(0.0, 45, ShooterConstants.velocityInRPMs);
     public static AutoScoreConstants scoreFromNoteCenterSide =
-        new AutoScoreConstants(0.0, 40, 3000);
+        new AutoScoreConstants(0.0, 40, ShooterConstants.velocityInRPMs);
     public static AutoScoreConstants scoreFromSpeakerSourceSide =
-        new AutoScoreConstants(0.0, 45, 3000);
+        new AutoScoreConstants(0.0, 45, ShooterConstants.velocityInRPMs);
     public static AutoScoreConstants scoreFromNoteSourceSide =
-        new AutoScoreConstants(320.0, 30.0, 3000);
+        new AutoScoreConstants(320.0, 30.0, ShooterConstants.velocityInRPMs);
     public static AutoScoreConstants scoreFromOutsideSourceSide =
-        new AutoScoreConstants(300.0, 15, 3000);
+        new AutoScoreConstants(300.0, 15, ShooterConstants.velocityInRPMs);
   }
 
   public static void configure() {
@@ -69,7 +73,7 @@ public class AutoNamedCommands {
             RobotConfig.arm,
             RobotConfig.intake,
             RobotConfig.shooter,
-            () -> translateForAlliance(AutoConstants.scoreFromNoteAmpSide.robotYawInDegrees),
+            () -> getYawToTarget(AutoConstants.scoreFromNoteAmpSide.robotYawInDegrees),
             () -> AutoConstants.scoreFromNoteAmpSide.armAngleInDegrees,
             () -> AutoConstants.scoreFromNoteAmpSide.shooterVelocityInRPMs));
 
@@ -81,7 +85,7 @@ public class AutoNamedCommands {
                 RobotConfig.arm,
                 RobotConfig.intake,
                 RobotConfig.shooter,
-                () -> translateForAlliance(AutoConstants.scoreFromNoteCenterSide.robotYawInDegrees),
+                () -> getYawToTarget(AutoConstants.scoreFromNoteCenterSide.robotYawInDegrees),
                 () -> AutoConstants.scoreFromNoteCenterSide.armAngleInDegrees,
                 () -> AutoConstants.scoreFromNoteCenterSide.shooterVelocityInRPMs)));
 
@@ -92,7 +96,7 @@ public class AutoNamedCommands {
             RobotConfig.arm,
             RobotConfig.intake,
             RobotConfig.shooter,
-            () -> translateForAlliance(AutoConstants.scoreFromNoteSourceSide.robotYawInDegrees),
+            () -> getYawToTarget(AutoConstants.scoreFromNoteSourceSide.robotYawInDegrees),
             () -> AutoConstants.scoreFromNoteSourceSide.armAngleInDegrees,
             () -> AutoConstants.scoreFromNoteSourceSide.shooterVelocityInRPMs));
 
@@ -103,7 +107,7 @@ public class AutoNamedCommands {
             RobotConfig.arm,
             RobotConfig.intake,
             RobotConfig.shooter,
-            () -> translateForAlliance(AutoConstants.scoreFromOutsideSourceSide.robotYawInDegrees),
+            () -> getYawToTarget(AutoConstants.scoreFromOutsideSourceSide.robotYawInDegrees),
             () -> AutoConstants.scoreFromOutsideSourceSide.armAngleInDegrees,
             () -> AutoConstants.scoreFromOutsideSourceSide.shooterVelocityInRPMs));
 
@@ -130,6 +134,19 @@ public class AutoNamedCommands {
             RobotConfig.shooter,
             () -> AutoConstants.scoreFromOutsideSourceSide.armAngleInDegrees,
             () -> AutoConstants.scoreFromOutsideSourceSide.shooterVelocityInRPMs));
+  }
+
+  private static double getYawToTarget(double defaultYawToTarget) {
+    Optional<Double> getYawToAprilTag =
+        RobotConfig.vision.getYawToAprilTag(RobotState.getActiveTargetId());
+
+    if (getYawToAprilTag.isPresent()) {
+      double visionYaw = RobotConfig.drive.getAngle() - getYawToAprilTag.get();
+      // System.out.println("Using Vision Yaw " + visionYaw + " fixedYaw: " + defaultYawToTarget);
+      return visionYaw;
+    } else {
+      return translateForAlliance(defaultYawToTarget);
+    }
   }
 
   private static double translateForAlliance(double angle) {

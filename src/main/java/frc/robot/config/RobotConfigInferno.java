@@ -31,9 +31,6 @@ public class RobotConfigInferno extends RobotConfig {
     // TODO: set DriveConstants.maxVelocityMetersPerSec
     drive = new DriveSwerveYAGSL("yagsl/inferno");
 
-    AutoNamedCommands.configure();
-    autoChooser = AutoBuilder.buildAutoChooser("Sit Still");
-
     // Inferno has a TalonSRX based intake
     IntakeConstants.defaultSpeedInVolts = 6.0;
     IntakeConstants.indexSpeedInVolts = 4.5;
@@ -54,7 +51,7 @@ public class RobotConfigInferno extends RobotConfig {
     ShooterConstants.pidVelocityErrorInRPMS = 20;
 
     ShooterConstants.ampScoreVelocityInRPMs = 2000;
-    ShooterConstants.velocityInRPMs = 3000;
+    ShooterConstants.velocityInRPMs = 4500;
     shooter = new ShooterSubsystem(new ShooterIOSparkMax(2));
 
     ArmConstants.absolutePositionOffset = 0.362; // Determined empirically on 2024-02-22
@@ -110,6 +107,9 @@ public class RobotConfigInferno extends RobotConfig {
     if (Robot.isSimulation()) {
       vision.enableSimulation(() -> RobotConfig.drive.getPose(), false);
     }
+
+    AutoNamedCommands.configure();
+    autoChooser = AutoBuilder.buildAutoChooser("Sit Still");
   }
 
   @Override

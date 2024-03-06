@@ -25,9 +25,6 @@ public class RobotConfigPhoenix extends RobotConfig {
     DriveConstants.pidAngleErrorInDegrees = 0.5;
     drive = new DriveSwerveYAGSL("yagsl/phoenix");
 
-    AutoNamedCommands.configure();
-    autoChooser = AutoBuilder.buildAutoChooser("Sit Still");
-
     ArrayList<VisionCamera> cameras = new ArrayList<VisionCamera>();
     cameras.add(
         new VisionCamera(
@@ -41,5 +38,8 @@ public class RobotConfigPhoenix extends RobotConfig {
     if (Robot.isSimulation()) {
       vision.enableSimulation(() -> RobotConfig.drive.getPose(), false);
     }
+
+    AutoNamedCommands.configure();
+    autoChooser = AutoBuilder.buildAutoChooser("Sit Still");
   }
 }
