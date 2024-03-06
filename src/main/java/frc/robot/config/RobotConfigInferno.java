@@ -1,6 +1,12 @@
 package frc.robot.config;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
+import frc.robot.Robot;
 import frc.robot.subsystems.arm.ArmIOSparkMax;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.climber.ClimberIOSparkMax;
@@ -10,11 +16,15 @@ import frc.robot.subsystems.intake.IntakeIOTalonSRX;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
+import frc.robot.subsystems.vision.VisionCamera;
+import frc.robot.subsystems.vision.VisionSubsystem;
+import java.util.ArrayList;
+import java.util.Optional;
 
 /* Override Inferno specific constants here */
 public class RobotConfigInferno extends RobotConfig {
   public RobotConfigInferno() {
-    super(false, false, false, false, false, false);
+    super(false, false, false, false, false, false, false);
 
     // Inferno has a Swerve drive train
     // TODO: set DriveConstants.maxVelocityMetersPerSec
@@ -64,7 +74,7 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.minAngleInDegrees = -1.0;
     ArmConstants.intakeAngleInDegrees = 1;
     ArmConstants.subwooferScoreAngleInDegrees = 10;
-    ArmConstants.ampScoreShooterAngleInDegrees = 80;
+    ArmConstants.ampScoreAngleInDegrees = 80;
     ArmConstants.stowIntakeAngleInDegrees = 45;
 
     arm = new ArmSubsystem(new ArmIOSparkMax(4, true));
@@ -82,5 +92,27 @@ public class RobotConfigInferno extends RobotConfig {
         -0.5; // When auto-zeroing, to reduce stress on the mechanism, this is the amount we want to
     // retract the climber after auto-zeroing
     climber = new ClimberSubsystem(new ClimberIOSparkMax(7, false), new ClimberIOSparkMax(6, true));
+
+    ArrayList<VisionCamera> cameras = new ArrayList<VisionCamera>();
+    /* TODO: Measure and set camera name/location */
+    cameras.add(
+        new VisionCamera(
+            "photonvision",
+            new Transform3d(
+                new Translation3d(-0.3048, 0, 0.22),
+                new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(180)))));
+
+    vision = new VisionSubsystem(cameras, AprilTagFields.k2024Crescendo.loadAprilTagLayoutField());
+
+    if (Robot.isSimulation()) {
+      vision.enableSimulation(() -> RobotConfig.drive.getPose(), false);
+    }
+  }
+
+  @Override
+  public Optional<Double> getArmAngleFromDistance(double distanceInMeters) {
+    /* TODO: Insert mapping of distance to arm angle for scoring in speaker */
+    System.out.println("TODO: Inferno getArmAngleFromDistance(" + distanceInMeters + ")");
+    return Optional.of(ArmConstants.subwooferScoreAngleInDegrees);
   }
 }

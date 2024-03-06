@@ -112,6 +112,7 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
     if (ioBottom != null) {
       ioBottom.setVoltage(voltage);
     }
+    this.velocityRPM = ShooterConstants.maxVelocityInRPMs * (volts / 12.0);
   }
 
   @Override
@@ -164,11 +165,7 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
     }
 
     if (velocityRPM != 0) {
-      if (velocityRPM < 0) {
-        currentSimAngle += (velocityRPM / 6000) * 45;
-      } else if (velocityRPM > 0) {
-        currentSimAngle -= (velocityRPM / 6000) * 45;
-      }
+      currentSimAngle -= (velocityRPM / ShooterConstants.maxVelocityInRPMs) * 45;
 
       int angleOffset = 0;
       for (MechanismLigament2d shooter : shooter2d) {
