@@ -28,7 +28,7 @@ public class RobotConfigPhoenix extends RobotConfig {
     ArrayList<VisionCamera> cameras = new ArrayList<VisionCamera>();
     cameras.add(
         new VisionCamera(
-            "photonvision",
+            "shooter",
             new Transform3d(
                 new Translation3d(-0.3048, 0, 0.22),
                 new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(180)))));

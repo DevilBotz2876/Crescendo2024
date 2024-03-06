@@ -62,7 +62,7 @@ public class DriverControls {
     colIndex += 2;
     rowIndex = 0;
     driverTab
-        .addCamera("Shooter Camera", "photonvision", "mjpg:http://localhost:1181/?action=stream")
+        .addCamera("Shooter Camera", "shooter", "mjpg:http://10.28.76.11:1181/?action=stream")
         .withProperties(Map.of("showControls", false))
         .withPosition(colIndex, rowIndex)
         .withSize(3, 3);
