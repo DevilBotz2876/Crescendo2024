@@ -25,7 +25,7 @@ import java.util.Optional;
 /* Override Inferno specific constants here */
 public class RobotConfigInferno extends RobotConfig {
   public RobotConfigInferno() {
-    super(false, false, false, false, true, false, false);
+    super(false, false, false, false, false, false, false);
 
     // Inferno has a Swerve drive train
     // TODO: set DriveConstants.maxVelocityMetersPerSec
