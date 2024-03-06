@@ -2,6 +2,7 @@ package frc.robot.util;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ShooterConstants;
 import java.util.Optional;
 
@@ -37,11 +38,11 @@ public class RobotState {
   }
 
   public static TargetMode getTargetMode() {
-    return RobotState.targetMode;
+    return targetMode;
   }
 
   public static boolean isAmpMode() {
-    return (RobotState.targetMode == TargetMode.AMP);
+    return (targetMode == TargetMode.AMP);
   }
 
   public static int getActiveTargetId() {
@@ -94,5 +95,29 @@ public class RobotState {
     } else {
       return ShooterConstants.velocityInRPMs;
     }
+  }
+
+  public enum DriveMode {
+    FIELD,
+    ROBOT
+  }
+
+  private static DriveMode driveMode = DriveMode.FIELD;
+
+  public static void setDriveMode(DriveMode driveMode) {
+    RobotState.driveMode = driveMode;
+
+    switch (driveMode) {
+      case FIELD:
+        RobotConfig.drive.setFieldOrientedDrive(true);
+        break;
+      case ROBOT:
+        RobotConfig.drive.setFieldOrientedDrive(false);
+        break;
+    }
+  }
+
+  public static boolean isFieldOriented() {
+    return (driveMode == DriveMode.FIELD);
   }
 }

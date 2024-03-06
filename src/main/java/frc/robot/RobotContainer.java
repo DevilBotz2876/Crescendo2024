@@ -51,9 +51,8 @@ public class RobotContainer {
 
   void configureBindings() {
     DriverControls.setupControls(controller);
-    DriverControls.setupGUI();
-    PitControls.setupGUI();
-    DebugControls.setupGUI();
+    PitControls.setupControls();
+    DebugControls.setupControls();
     //    SysIdControls.setupGUI();
   }
 

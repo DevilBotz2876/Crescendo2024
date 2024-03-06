@@ -16,7 +16,7 @@ import frc.robot.config.RobotConfig.ShooterConstants;
 import java.util.Map;
 
 public class PitControls {
-  public static void setupGUI() {
+  public static void setupControls() {
     int colIndex = 0;
     int rowIndex = 0;
     // SmartDashboard.putData(new ArmToPosition(arm));
@@ -29,12 +29,14 @@ public class PitControls {
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 12))
             .withPosition(colIndex, rowIndex++)
+            .withSize(2, 1)
             .getEntry();
     commandTestTab
         .add(
             "Intake: Stop",
             new InstantCommand(() -> RobotConfig.intake.runVoltage(0), RobotConfig.intake))
-        .withPosition(colIndex, rowIndex++);
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
     commandTestTab
         .add(
             "Intake: In",
@@ -43,7 +45,8 @@ public class PitControls {
                     RobotConfig.intake.runVoltage(
                         intakeVolts.getDouble(IntakeConstants.defaultSpeedInVolts)),
                 RobotConfig.intake))
-        .withPosition(colIndex, rowIndex++);
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
     commandTestTab
         .add(
             "Intake: Out",
@@ -52,7 +55,8 @@ public class PitControls {
                     RobotConfig.intake.runVoltage(
                         -intakeVolts.getDouble(IntakeConstants.defaultSpeedInVolts)),
                 RobotConfig.intake))
-        .withPosition(colIndex, rowIndex++);
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
 
     colIndex += 2;
     rowIndex = 0;
@@ -76,12 +80,15 @@ public class PitControls {
                     () -> RobotConfig.climber.autoZeroMode(false), RobotConfig.climber),
                 new InstantCommand(
                     () -> RobotConfig.climber.enableLimits(true), RobotConfig.climber)))
-        .withPosition(colIndex + 0, rowIndex);
-    commandTestTab
-        .add(
-            "Climber: Zero",
-            new InstantCommand(() -> RobotConfig.climber.resetPosition(), RobotConfig.climber))
-        .withPosition(colIndex + 1, rowIndex);
+        .withPosition(colIndex, rowIndex)
+        .withSize(2, 1);
+    /*
+            commandTestTab
+            .add(
+                "Climber: Zero",
+                new InstantCommand(() -> RobotConfig.climber.resetPosition(), RobotConfig.climber))
+            .withPosition(colIndex + 1, rowIndex);
+    */
 
     rowIndex++;
     commandTestTab
@@ -110,6 +117,16 @@ public class PitControls {
                     },
                     RobotConfig.climber)))
         .withPosition(colIndex, rowIndex)
+        .withSize(2, 1);
+
+    rowIndex++;
+    commandTestTab
+        .add("Climber: Extend", new ClimberCommand(RobotConfig.climber, true))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+    commandTestTab
+        .add("Climber: Retract", new ClimberCommand(RobotConfig.climber, false))
+        .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
 
     rowIndex++;
@@ -162,14 +179,6 @@ public class PitControls {
                     RobotConfig.climber)))
         .withPosition(colIndex + 1, rowIndex);
 
-    rowIndex++;
-    commandTestTab
-        .add("Climber: Extend", new ClimberCommand(RobotConfig.climber, true))
-        .withPosition(colIndex, rowIndex++);
-    commandTestTab
-        .add("Climber: Retract", new ClimberCommand(RobotConfig.climber, false))
-        .withPosition(colIndex, rowIndex++);
-
     colIndex += 2;
     rowIndex = 0;
     commandTestTab.add("Shooter: Command", RobotConfig.shooter).withPosition(colIndex, rowIndex++);
@@ -185,7 +194,8 @@ public class PitControls {
         .add(
             "Shooter: Stop",
             new InstantCommand(() -> RobotConfig.shooter.runVoltage(0), RobotConfig.shooter))
-        .withPosition(colIndex, rowIndex++);
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
     commandTestTab
         .add(
             "Shooter: On",
@@ -194,7 +204,8 @@ public class PitControls {
                     RobotConfig.shooter.runVoltage(
                         shooterVolts.getDouble(ShooterConstants.defaultSpeedInVolts)),
                 RobotConfig.shooter))
-        .withPosition(colIndex, rowIndex++);
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
 
     colIndex += 2;
     rowIndex = 0;
@@ -209,7 +220,8 @@ public class PitControls {
             .getEntry();
     commandTestTab
         .add("Arm: Stop", new InstantCommand(() -> RobotConfig.arm.runVoltage(0), RobotConfig.arm))
-        .withPosition(colIndex, rowIndex++);
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
     commandTestTab
         .add(
             "Arm: On",
@@ -218,6 +230,7 @@ public class PitControls {
                     RobotConfig.arm.runVoltage(
                         armVolts.getDouble(ArmConstants.defaultSpeedInVolts)),
                 RobotConfig.arm))
-        .withPosition(colIndex, rowIndex++);
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
   }
 }

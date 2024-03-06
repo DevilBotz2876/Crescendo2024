@@ -17,7 +17,7 @@ import frc.robot.util.RobotState;
 import java.util.Map;
 
 public class DebugControls {
-  public static void setupGUI() {
+  public static void setupControls() {
     int colIndex = 0;
     int rowIndex = 0;
     ShuffleboardTab debugTab = Shuffleboard.getTab("Debug");
@@ -103,13 +103,6 @@ public class DebugControls {
             .getEntry();
 
     debugTab
-        .add("Amp Mode", RobotState.isAmpMode())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(colIndex, rowIndex++)
-        .withSize(2, 1)
-        .getEntry();
-
-    debugTab
         .add(
             "Assist: Prepare For Score",
             new PrepareForScore(
@@ -184,13 +177,6 @@ public class DebugControls {
                 () -> (int) visionTargetId.getInteger(RobotState.getActiveTargetId())))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
-
-    debugTab
-        .add("Field Oriented Drive", RobotConfig.drive.isFieldOrientedDrive())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(colIndex, rowIndex++)
-        .withSize(2, 1)
-        .getEntry();
 
     /*
     debugTab

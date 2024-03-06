@@ -1,6 +1,7 @@
 package frc.robot.controls;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -18,11 +19,15 @@ import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.util.RobotState;
+import frc.robot.util.RobotState.DriveMode;
 import frc.robot.util.RobotState.TargetMode;
 import java.util.Map;
 import java.util.Optional;
 
 public class DriverControls {
+  private static GenericEntry ampModeEntry;
+  private static GenericEntry fieldOrientedModeEntry;
+
   public static void setupGUI() {
     int colIndex = 0;
     int rowIndex = 0;
@@ -32,8 +37,24 @@ public class DriverControls {
     driverTab
         .add("Autononmous", RobotConfig.autoChooser)
         .withWidget(BuiltInWidgets.kComboBoxChooser)
-        .withPosition(colIndex, rowIndex)
+        .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
+
+    ampModeEntry =
+        driverTab
+            .add("Amp Mode", RobotState.isAmpMode())
+            .withWidget(BuiltInWidgets.kBooleanBox)
+            .withPosition(colIndex, rowIndex++)
+            .withSize(2, 1)
+            .getEntry();
+
+    fieldOrientedModeEntry =
+        driverTab
+            .add("Field Oriented", RobotState.isFieldOriented())
+            .withWidget(BuiltInWidgets.kBooleanBox)
+            .withPosition(colIndex, rowIndex++)
+            .withSize(2, 1)
+            .getEntry();
 
     /* TODO: Intake Camera */
 
@@ -45,11 +66,13 @@ public class DriverControls {
         .withProperties(Map.of("showControls", false))
         .withPosition(colIndex, rowIndex)
         .withSize(3, 3);
+    rowIndex += 3;
 
     Shuffleboard.selectTab("Driver");
   }
 
   public static void setupControls(CommandXboxController mainController) {
+    setupGUI();
     /* Drive Controls */
     /* Controller 0:
      *     Left Stick Up/Down = *Field Oriented* Drive Away/Towards Driver Station
@@ -59,7 +82,8 @@ public class DriverControls {
      *         Auto Orient Off: Rotate CCW/CW
      *         Auto Orient On: Vision based rotation/arm angle
      */
-    RobotConfig.drive.setFieldOrientedDrive(true);
+    RobotState.setDriveMode(DriveMode.FIELD);
+    fieldOrientedModeEntry.setBoolean(RobotState.isFieldOriented());
 
     RobotConfig.drive.setDefaultCommand(
         new DriveCommand(
@@ -153,9 +177,21 @@ public class DriverControls {
     /*     A Button = Amp Mode
      *     B Button = Speaker Mode
      */
-    mainController.a().onTrue(new InstantCommand(() -> RobotState.setTargetMode(TargetMode.AMP)));
+    mainController
+        .a()
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  RobotState.setTargetMode(TargetMode.AMP);
+                  ampModeEntry.setBoolean(RobotState.isAmpMode());
+                }));
     mainController
         .b()
-        .onTrue(new InstantCommand(() -> RobotState.setTargetMode(TargetMode.SPEAKER)));
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  RobotState.setTargetMode(TargetMode.SPEAKER);
+                  ampModeEntry.setBoolean(RobotState.isAmpMode());
+                }));
   }
 }
