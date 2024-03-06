@@ -6,9 +6,25 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.assist.PrepareForIntake;
 import frc.robot.config.RobotConfig;
-import frc.robot.config.RobotConfig.AutoConstants;
 
 public class AutoNamedCommands {
+  public static class AutoConstants {
+    /* TODO: Fill in the values for scoring here */
+    public static AutoScoreConstants scoreFromSpeakerAmpSide =
+        new AutoScoreConstants(0.0, 45, 3000);
+    public static AutoScoreConstants scoreFromNoteAmpSide = new AutoScoreConstants(40, 45, 3000);
+    public static AutoScoreConstants scoreFromSpeakerCenterSide =
+        new AutoScoreConstants(0.0, 45, 3000);
+    public static AutoScoreConstants scoreFromNoteCenterSide =
+        new AutoScoreConstants(0.0, 40, 3000);
+    public static AutoScoreConstants scoreFromSpeakerSourceSide =
+        new AutoScoreConstants(0.0, 45, 3000);
+    public static AutoScoreConstants scoreFromNoteSourceSide =
+        new AutoScoreConstants(320.0, 30.0, 3000);
+    public static AutoScoreConstants scoreFromOutsideSourceSide =
+        new AutoScoreConstants(300.0, 15, 3000);
+  }
+
   public static void configure() {
 
     NamedCommands.registerCommand(

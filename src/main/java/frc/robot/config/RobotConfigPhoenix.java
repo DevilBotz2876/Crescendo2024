@@ -19,18 +19,14 @@ public class RobotConfigPhoenix extends RobotConfig {
     super(false, true, true, true, false, true, false);
 
     // Phoenix has a Swerve drive train
-    // TODO: set DriveConstants.maxVelocityMetersPerSec
-    drive = new DriveSwerveYAGSL("yagsl/phoenix");
-
-    AutoNamedCommands.configure();
-    autoChooser = AutoBuilder.buildAutoChooser("Sit Still");
-
     DriveConstants.anglePidKp = 0.02;
     DriveConstants.anglePidKi = 0.0;
     DriveConstants.anglePidKd = 0.0;
     DriveConstants.pidAngleErrorInDegrees = 0.5;
     drive = new DriveSwerveYAGSL("yagsl/phoenix");
-    autoChooser = AutoBuilder.buildAutoChooser("Mobility Auto");
+
+    AutoNamedCommands.configure();
+    autoChooser = AutoBuilder.buildAutoChooser("Sit Still");
 
     ArrayList<VisionCamera> cameras = new ArrayList<VisionCamera>();
     cameras.add(

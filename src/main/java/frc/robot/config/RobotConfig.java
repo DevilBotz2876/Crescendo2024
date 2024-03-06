@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Robot;
-import frc.robot.commands.auto.AutoScoreConstants;
 import frc.robot.subsystems.arm.ArmIOStub;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.climber.ClimberIOStub;
@@ -128,23 +127,6 @@ public class RobotConfig {
     public static double autoZeroOffset =
         -0.5; // When auto-zeroing, to reduce stress on the mechanism, this is the amount we want to
     // retract the climber after auto-zeroing
-  }
-
-  public static class AutoConstants {
-    /* TODO: Fill in the values for scoring here */
-    public static AutoScoreConstants scoreFromSpeakerAmpSide =
-        new AutoScoreConstants(0.0, 45, 3000);
-    public static AutoScoreConstants scoreFromNoteAmpSide = new AutoScoreConstants(40, 45, 3000);
-    public static AutoScoreConstants scoreFromSpeakerCenterSide =
-        new AutoScoreConstants(0.0, 45, 3000);
-    public static AutoScoreConstants scoreFromNoteCenterSide =
-        new AutoScoreConstants(0.0, 40, 3000);
-    public static AutoScoreConstants scoreFromSpeakerSourceSide =
-        new AutoScoreConstants(0.0, 45, 3000);
-    public static AutoScoreConstants scoreFromNoteSourceSide =
-        new AutoScoreConstants(320.0, 30.0, 3000);
-    public static AutoScoreConstants scoreFromOutsideSourceSide =
-        new AutoScoreConstants(300.0, 15, 3000);
   }
 
   public Optional<Double> getArmAngleFromDistance(double distanceInMeters) {
