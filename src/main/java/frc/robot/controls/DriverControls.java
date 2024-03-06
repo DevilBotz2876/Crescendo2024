@@ -92,6 +92,9 @@ public class DriverControls {
             () -> MathUtil.applyDeadband(-mainController.getLeftX(), 0.05),
             () -> MathUtil.applyDeadband(-mainController.getRightX(), 0.05)));
 
+    // TODO: Eventually remove!....this is for debug only
+    mainController.back().onTrue(new InstantCommand(() -> RobotConfig.drive.resetOdometry()));
+
     /* Climber Controls */
     /*     D-Pad Up = Climber Up
      *     D-Pad Down = Climber Down
