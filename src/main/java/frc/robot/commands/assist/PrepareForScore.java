@@ -1,7 +1,5 @@
 package frc.robot.commands.assist;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.arm.ArmToPositionTP;
 import frc.robot.commands.shooter.SetShooterVelocity;
@@ -12,8 +10,6 @@ import frc.robot.subsystems.shooter.Shooter;
 import java.util.function.BooleanSupplier;
 
 public class PrepareForScore extends ParallelCommandGroup {
-  // TODO:  read arm angle and Shooter: Velocity from GUI
-  NetworkTable assistGUI = NetworkTableInstance.getDefault().getTable("Shuffleboard/Assist");
   BooleanSupplier targetIsAmp;
 
   // Moves arm to ideal angle for shooting
@@ -25,34 +21,16 @@ public class PrepareForScore extends ParallelCommandGroup {
   public PrepareForScore(Arm arm, Shooter shooter, BooleanSupplier targetIsAmp) {
     this.targetIsAmp = targetIsAmp;
     double pos;
+    double velocity;
     if (this.targetIsAmp.getAsBoolean()) {
       pos = ArmConstants.ampScoreAngleInDegrees;
+      velocity = ShooterConstants.ampScoreVelocityInRPMs;
     } else {
       pos = ArmConstants.subwooferScoreAngleInDegrees;
+      velocity = ShooterConstants.velocityInRPMs;
     }
 
-    addCommands(
-        // new ArmToPosition(
-        //     (ArmSubsystem) arm,
-        //     () ->
-        //         this.targetIsAmp.getAsBoolean()
-        //             ? assistGUI
-        //                 .getEntry("Shooter: Angle (Amp)")
-        //                 .getDouble(ArmConstants.ampScoreAngleInDegrees)
-        //             : assistGUI
-        //                 .getEntry("Shooter: Angle")
-        //                 .getDouble(ArmConstants.shooterAngleInDegrees)));
-        new ArmToPositionTP(() -> pos, arm));
-    addCommands(
-        new SetShooterVelocity(
-            shooter,
-            () ->
-                this.targetIsAmp.getAsBoolean()
-                    ? assistGUI
-                        .getEntry("Shooter: Velocity (Amp)")
-                        .getDouble(ShooterConstants.ampScoreVelocityInRPMs)
-                    : assistGUI
-                        .getEntry("Shooter: Velocity")
-                        .getDouble(ShooterConstants.velocityInRPMs)));
+    addCommands(new ArmToPositionTP(() -> pos, arm));
+    addCommands(new SetShooterVelocity(shooter, () -> velocity));
   }
 }

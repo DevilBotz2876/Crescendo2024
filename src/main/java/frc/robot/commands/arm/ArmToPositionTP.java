@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.TrapezoidProfileCommand;
 import frc.robot.config.RobotConfig;
 import frc.robot.subsystems.arm.Arm;
 import java.util.function.DoubleSupplier;
-import org.littletonrobotics.junction.Logger;
 
 public class ArmToPositionTP extends TrapezoidProfileCommand {
 
@@ -40,7 +39,7 @@ public class ArmToPositionTP extends TrapezoidProfileCommand {
 
   public boolean isFinished() {
     boolean done = super.isFinished();
-    Logger.recordOutput("Arm/TP/isFinished", done);
+    //    Logger.recordOutput("Arm/TP/isFinished", done);
     return done;
   }
 }

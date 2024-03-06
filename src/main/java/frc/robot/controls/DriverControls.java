@@ -1,6 +1,9 @@
 package frc.robot.controls;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -13,12 +16,40 @@ import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.shooter.SetShooterVelocity;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
+import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.util.RobotState;
 import frc.robot.util.RobotState.TargetMode;
+import java.util.Map;
 import java.util.Optional;
 
 public class DriverControls {
-  public static void setupDriverControls(CommandXboxController mainController) {
+  public static void setupGUI() {
+    int colIndex = 0;
+    int rowIndex = 0;
+    ShuffleboardTab driverTab = Shuffleboard.getTab("Driver");
+
+    /* Autonomous Chooser */
+    driverTab
+        .add("Autononmous", RobotConfig.autoChooser)
+        .withWidget(BuiltInWidgets.kComboBoxChooser)
+        .withPosition(colIndex, rowIndex)
+        .withSize(2, 1);
+
+    /* TODO: Intake Camera */
+
+    /* Shooter Camera */
+    colIndex += 2;
+    rowIndex = 0;
+    driverTab
+        .addCamera("Shooter Camera", "photonvision", "mjpg:http://localhost:1181/?action=stream")
+        .withProperties(Map.of("showControls", false))
+        .withPosition(colIndex, rowIndex)
+        .withSize(3, 3);
+
+    Shuffleboard.selectTab("Driver");
+  }
+
+  public static void setupControls(CommandXboxController mainController) {
     /* Drive Controls */
     /* Controller 0:
      *     Left Stick Up/Down = *Field Oriented* Drive Away/Towards Driver Station
@@ -66,11 +97,10 @@ public class DriverControls {
                 new InstantCommand(
                     () -> RobotConfig.drive.lockPose(),
                     RobotConfig.drive), // lock drive wheels/pose
-                new SetShooterVelocity(
-                    RobotConfig.shooter,
-                    () ->
-                        RobotState
-                            .getShooterVelocity()), // set shooter velocity in case it's not already
+                new SetShooterVelocity(RobotConfig.shooter, () -> RobotState.getShooterVelocity())
+                    .withTimeout(
+                        ShooterConstants
+                            .pidTimeoutInSeconds), // set shooter velocity in case it's not already
                 // on
                 new ScorePiece(
                     RobotConfig.intake,
@@ -95,8 +125,8 @@ public class DriverControls {
                             RobotState
                                 .getActiveTargetId())), // adjust robot yaw to line up with vision
                 // target
-                new SetShooterVelocity(
-                    RobotConfig.shooter, () -> RobotState.getShooterVelocity()), // turn on shooter
+                new SetShooterVelocity(RobotConfig.shooter, () -> RobotState.getShooterVelocity())
+                    .withTimeout(ShooterConstants.pidTimeoutInSeconds), // turn on shooter
                 /* TODO: Use ArmToPositionTP instead of setting arm angle directly */
                 new InstantCommand(
                         () -> {

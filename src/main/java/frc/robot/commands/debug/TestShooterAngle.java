@@ -1,4 +1,4 @@
-package frc.robot.commands.shooter;
+package frc.robot.commands.debug;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -19,7 +19,7 @@ public class TestShooterAngle extends Command {
   NetworkTableEntry ShooterVelocity;
   NetworkTableEntry IntakeVoltage;
   NetworkTableEntry ArmAngle;
-  NetworkTable assistGUI = NetworkTableInstance.getDefault().getTable("Shuffleboard/Assist");
+  NetworkTable assistGUI = NetworkTableInstance.getDefault().getTable("Shuffleboard/Debug");
 
   public TestShooterAngle(Shooter shooter, Intake intake, Arm arm) {
     this.shooter = shooter;
