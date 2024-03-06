@@ -32,6 +32,7 @@ public class RobotConfig {
   public static SendableChooser<Command> autoChooser;
   public static ClimberSubsystem climber;
   public static VisionSubsystem vision;
+  public static RobotConfig instance;
 
   public static class DriveConstants {
     public static double maxVelocityMetersPerSec = 4.5;
@@ -167,6 +168,8 @@ public class RobotConfig {
       boolean stubAuto,
       boolean stubClimber,
       boolean stubVision) {
+    instance = this;
+
     if (stubDrive) {
       drive = new DriveBase();
     }

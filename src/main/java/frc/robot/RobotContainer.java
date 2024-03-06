@@ -36,6 +36,7 @@ import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.config.RobotConfigInferno;
 import frc.robot.config.RobotConfigPhoenix;
 import frc.robot.config.RobotConfigSherman;
+import frc.robot.controls.DriverControls;
 import frc.robot.util.RobotState;
 import frc.robot.util.RobotState.TargetMode;
 import java.util.Map;
@@ -83,7 +84,8 @@ public class RobotContainer {
         .add("Auto Chooser", RobotConfig.autoChooser)
         .withWidget(BuiltInWidgets.kComboBoxChooser);
 
-    configureBindings();
+    // configureBindings();
+    DriverControls.setupDriverControls(controller);
     assistToShuffleboard();
     commandsToShuffleboard();
     sysIdToShuffleboard();

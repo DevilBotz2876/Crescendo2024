@@ -2,6 +2,7 @@ package frc.robot.util;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.config.RobotConfig.ShooterConstants;
 import java.util.Optional;
 
 public class RobotState {
@@ -84,6 +85,14 @@ public class RobotState {
       return targetName[0];
     } else {
       return targetName[id];
+    }
+  }
+
+  public static double getShooterVelocity() {
+    if (isAmpMode()) {
+      return ShooterConstants.ampScoreVelocityInRPMs;
+    } else {
+      return ShooterConstants.velocityInRPMs;
     }
   }
 }
