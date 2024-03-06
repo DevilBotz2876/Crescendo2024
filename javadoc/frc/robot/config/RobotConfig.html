@@ -15,7 +15,11 @@
 <script type="text/javascript" src="../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var pathtoroot = "../../../";
+<script type="text/javascript">var evenRowColor = "even-row-color";
+var oddRowColor = "odd-row-color";
+var tableTab = "table-tab";
+var activeTableTab = "active-table-tab";
+var pathtoroot = "../../../";
 loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
@@ -48,7 +52,7 @@ loadScripts(document, 'script');</script>
 <li>Detail:&nbsp;</li>
 <li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method-detail">Method</a></li>
 </ul>
 </div>
 <div class="nav-list-search"><label for="search-input">SEARCH:</label>
@@ -128,11 +132,17 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code>static <a href="../subsystems/drive/DriveBase.html" title="class in frc.robot.subsystems.drive">DriveBase</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#drive" class="member-name-link">drive</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static <a href="../subsystems/intake/IntakeSubsystem.html" title="class in frc.robot.subsystems.intake">IntakeSubsystem</a></code></div>
-<div class="col-second even-row-color"><code><a href="#intake" class="member-name-link">intake</a></code></div>
+<div class="col-first even-row-color"><code>static <a href="RobotConfig.html" title="class in frc.robot.config">RobotConfig</a></code></div>
+<div class="col-second even-row-color"><code><a href="#instance" class="member-name-link">instance</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static <a href="../subsystems/shooter/ShooterSubsystem.html" title="class in frc.robot.subsystems.shooter">ShooterSubsystem</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#shooter" class="member-name-link">shooter</a></code></div>
+<div class="col-first odd-row-color"><code>static <a href="../subsystems/intake/IntakeSubsystem.html" title="class in frc.robot.subsystems.intake">IntakeSubsystem</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#intake" class="member-name-link">intake</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static <a href="../subsystems/shooter/ShooterSubsystem.html" title="class in frc.robot.subsystems.shooter">ShooterSubsystem</a></code></div>
+<div class="col-second even-row-color"><code><a href="#shooter" class="member-name-link">shooter</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static <a href="../subsystems/vision/VisionSubsystem.html" title="class in frc.robot.subsystems.vision">VisionSubsystem</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#vision" class="member-name-link">vision</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
@@ -164,6 +174,14 @@ loadScripts(document, 'script');</script>
  boolean&nbsp;stubAuto,
  boolean&nbsp;stubClimber)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(boolean,boolean,boolean,boolean,boolean,boolean,boolean)" class="member-name-link">RobotConfig</a><wbr>(boolean&nbsp;stubDrive,
+ boolean&nbsp;stubShooter,
+ boolean&nbsp;stubIntake,
+ boolean&nbsp;stubArm,
+ boolean&nbsp;stubAuto,
+ boolean&nbsp;stubClimber,
+ boolean&nbsp;stubVision)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -171,6 +189,19 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
+<div id="method-summary-table">
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div id="method-summary-table.tabpanel" role="tabpanel">
+<div class="summary-table three-column-summary" aria-labelledby="method-summary-table-tab0">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getArmAngleFromDistance(double)" class="member-name-link">getArmAngleFromDistance</a><wbr>(double&nbsp;distanceInMeters)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+</div>
+</div>
+</div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -221,6 +252,18 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../subsystems/climber/ClimberSubsystem.html" title="class in frc.robot.subsystems.climber">ClimberSubsystem</a></span>&nbsp;<span class="element-name">climber</span></div>
 </section>
 </li>
+<li>
+<section class="detail" id="vision">
+<h3>vision</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../subsystems/vision/VisionSubsystem.html" title="class in frc.robot.subsystems.vision">VisionSubsystem</a></span>&nbsp;<span class="element-name">vision</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="instance">
+<h3>instance</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RobotConfig.html" title="class in frc.robot.config">RobotConfig</a></span>&nbsp;<span class="element-name">instance</span></div>
+</section>
+</li>
 </ul>
 </section>
 </li>
@@ -262,6 +305,32 @@ loadScripts(document, 'script');</script>
  boolean&nbsp;stubArm,
  boolean&nbsp;stubAuto,
  boolean&nbsp;stubClimber)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(boolean,boolean,boolean,boolean,boolean,boolean,boolean)">
+<h3>RobotConfig</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RobotConfig</span><wbr><span class="parameters">(boolean&nbsp;stubDrive,
+ boolean&nbsp;stubShooter,
+ boolean&nbsp;stubIntake,
+ boolean&nbsp;stubArm,
+ boolean&nbsp;stubAuto,
+ boolean&nbsp;stubClimber,
+ boolean&nbsp;stubVision)</span></div>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<!-- ============ METHOD DETAIL ========== -->
+<li>
+<section class="method-details" id="method-detail">
+<h2>Method Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="getArmAngleFromDistance(double)">
+<h3>getArmAngleFromDistance</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</span>&nbsp;<span class="element-name">getArmAngleFromDistance</span><wbr><span class="parameters">(double&nbsp;distanceInMeters)</span></div>
 </section>
 </li>
 </ul>

@@ -54,15 +54,19 @@ loadScripts(document, 'script');</script>
 <li><a href="frc/robot/commands/arm/package-tree.html">frc.robot.commands.arm</a>, </li>
 <li><a href="frc/robot/commands/assist/package-tree.html">frc.robot.commands.assist</a>, </li>
 <li><a href="frc/robot/commands/climber/package-tree.html">frc.robot.commands.climber</a>, </li>
+<li><a href="frc/robot/commands/debug/package-tree.html">frc.robot.commands.debug</a>, </li>
 <li><a href="frc/robot/commands/drive/package-tree.html">frc.robot.commands.drive</a>, </li>
 <li><a href="frc/robot/commands/intake/package-tree.html">frc.robot.commands.intake</a>, </li>
 <li><a href="frc/robot/commands/shooter/package-tree.html">frc.robot.commands.shooter</a>, </li>
+<li><a href="frc/robot/commands/vision/package-tree.html">frc.robot.commands.vision</a>, </li>
 <li><a href="frc/robot/config/package-tree.html">frc.robot.config</a>, </li>
+<li><a href="frc/robot/controls/package-tree.html">frc.robot.controls</a>, </li>
 <li><a href="frc/robot/subsystems/arm/package-tree.html">frc.robot.subsystems.arm</a>, </li>
 <li><a href="frc/robot/subsystems/climber/package-tree.html">frc.robot.subsystems.climber</a>, </li>
 <li><a href="frc/robot/subsystems/drive/package-tree.html">frc.robot.subsystems.drive</a>, </li>
 <li><a href="frc/robot/subsystems/intake/package-tree.html">frc.robot.subsystems.intake</a>, </li>
 <li><a href="frc/robot/subsystems/shooter/package-tree.html">frc.robot.subsystems.shooter</a>, </li>
+<li><a href="frc/robot/subsystems/vision/package-tree.html">frc.robot.subsystems.vision</a>, </li>
 <li><a href="frc/robot/util/package-tree.html">frc.robot.util</a></li>
 </ul>
 </div>
@@ -80,17 +84,15 @@ loadScripts(document, 'script');</script>
 <li class="circle">frc.robot.subsystems.climber.<a href="frc/robot/subsystems/climber/ClimberIOStub.html" class="type-name-link" title="class in frc.robot.subsystems.climber">ClimberIOStub</a> (implements frc.robot.subsystems.climber.<a href="frc/robot/subsystems/climber/ClimberIO.html" title="interface in frc.robot.subsystems.climber">ClimberIO</a>)</li>
 <li class="circle">edu.wpi.first.wpilibj2.command.Command (implements edu.wpi.first.util.sendable.Sendable)
 <ul>
+<li class="circle">frc.robot.commands.vision.<a href="frc/robot/commands/vision/AlignToTarget.html" class="type-name-link" title="class in frc.robot.commands.vision">AlignToTarget</a></li>
 <li class="circle">frc.robot.commands.arm.<a href="frc/robot/commands/arm/ArmToPosition.html" class="type-name-link" title="class in frc.robot.commands.arm">ArmToPosition</a></li>
-<li class="circle">frc.robot.commands.arm.<a href="frc/robot/commands/arm/ArmToPositionDebug.html" class="type-name-link" title="class in frc.robot.commands.arm">ArmToPositionDebug</a></li>
 <li class="circle">frc.robot.commands.climber.<a href="frc/robot/commands/climber/ClimberCommand.html" class="type-name-link" title="class in frc.robot.commands.climber">ClimberCommand</a></li>
 <li class="circle">frc.robot.commands.climber.<a href="frc/robot/commands/climber/ClimberToPosition.html" class="type-name-link" title="class in frc.robot.commands.climber">ClimberToPosition</a></li>
 <li class="circle">frc.robot.commands.drive.<a href="frc/robot/commands/drive/DriveCommand.html" class="type-name-link" title="class in frc.robot.commands.drive">DriveCommand</a></li>
 <li class="circle">frc.robot.commands.assist.<a href="frc/robot/commands/assist/IndexPiece.html" class="type-name-link" title="class in frc.robot.commands.assist">IndexPiece</a></li>
-<li class="circle">frc.robot.commands.intake.<a href="frc/robot/commands/intake/IntakeBaseCommand.html" class="type-name-link" title="class in frc.robot.commands.intake">IntakeBaseCommand</a></li>
 <li class="circle">frc.robot.commands.intake.<a href="frc/robot/commands/intake/IntakeOut.html" class="type-name-link" title="class in frc.robot.commands.intake">IntakeOut</a></li>
 <li class="circle">edu.wpi.first.wpilibj2.command.ParallelCommandGroup
 <ul>
-<li class="circle">frc.robot.commands.assist.<a href="frc/robot/commands/assist/PrepareForIntake.html" class="type-name-link" title="class in frc.robot.commands.assist">PrepareForIntake</a></li>
 <li class="circle">frc.robot.commands.assist.<a href="frc/robot/commands/assist/PrepareForScore.html" class="type-name-link" title="class in frc.robot.commands.assist">PrepareForScore</a></li>
 </ul>
 </li>
@@ -98,25 +100,32 @@ loadScripts(document, 'script');</script>
 <li class="circle">edu.wpi.first.wpilibj2.command.SequentialCommandGroup
 <ul>
 <li class="circle">frc.robot.commands.assist.<a href="frc/robot/commands/assist/EjectPiece.html" class="type-name-link" title="class in frc.robot.commands.assist">EjectPiece</a></li>
+<li class="circle">frc.robot.commands.assist.<a href="frc/robot/commands/assist/PrepareForIntake.html" class="type-name-link" title="class in frc.robot.commands.assist">PrepareForIntake</a></li>
 </ul>
 </li>
 <li class="circle">frc.robot.commands.shooter.<a href="frc/robot/commands/shooter/SetShooterVelocity.html" class="type-name-link" title="class in frc.robot.commands.shooter">SetShooterVelocity</a></li>
-<li class="circle">frc.robot.commands.shooter.<a href="frc/robot/commands/shooter/ShooterEnable.html" class="type-name-link" title="class in frc.robot.commands.shooter">ShooterEnable</a></li>
-<li class="circle">frc.robot.commands.shooter.<a href="frc/robot/commands/shooter/TestShooterAngle.html" class="type-name-link" title="class in frc.robot.commands.shooter">TestShooterAngle</a></li>
+<li class="circle">frc.robot.commands.debug.<a href="frc/robot/commands/debug/TestShooterAngle.html" class="type-name-link" title="class in frc.robot.commands.debug">TestShooterAngle</a></li>
 <li class="circle">edu.wpi.first.wpilibj2.command.TrapezoidProfileCommand
 <ul>
-<li class="circle">frc.robot.commands.arm.<a href="frc/robot/commands/arm/ArmToPositionTP.html" class="type-name-link" title="class in frc.robot.commands.arm">ArmToPositionTP</a></li>
+<li class="circle">frc.robot.commands.arm.<a href="frc/robot/commands/arm/ArmToPositionTP.html" class="type-name-link" title="class in frc.robot.commands.arm">ArmToPositionTP</a>
+<ul>
+<li class="circle">frc.robot.commands.assist.<a href="frc/robot/commands/assist/ProtectArm.html" class="type-name-link" title="class in frc.robot.commands.assist">ProtectArm</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="circle">frc.robot.<a href="frc/robot/Constants.html" class="type-name-link" title="class in frc.robot">Constants</a></li>
+<li class="circle">frc.robot.controls.<a href="frc/robot/controls/DebugControls.html" class="type-name-link" title="class in frc.robot.controls">DebugControls</a></li>
+<li class="circle">frc.robot.controls.<a href="frc/robot/controls/DriverControls.html" class="type-name-link" title="class in frc.robot.controls">DriverControls</a></li>
 <li class="circle">frc.robot.subsystems.intake.<a href="frc/robot/subsystems/intake/IntakeIO.IntakeIOInputs.html" class="type-name-link" title="class in frc.robot.subsystems.intake">IntakeIO.IntakeIOInputs</a></li>
 <li class="circle">frc.robot.subsystems.intake.<a href="frc/robot/subsystems/intake/IntakeIOSparkMax.html" class="type-name-link" title="class in frc.robot.subsystems.intake">IntakeIOSparkMax</a> (implements frc.robot.subsystems.intake.<a href="frc/robot/subsystems/intake/IntakeIO.html" title="interface in frc.robot.subsystems.intake">IntakeIO</a>)</li>
 <li class="circle">frc.robot.subsystems.intake.<a href="frc/robot/subsystems/intake/IntakeIOStub.html" class="type-name-link" title="class in frc.robot.subsystems.intake">IntakeIOStub</a> (implements frc.robot.subsystems.intake.<a href="frc/robot/subsystems/intake/IntakeIO.html" title="interface in frc.robot.subsystems.intake">IntakeIO</a>)</li>
 <li class="circle">frc.robot.subsystems.intake.<a href="frc/robot/subsystems/intake/IntakeIOTalonSRX.html" class="type-name-link" title="class in frc.robot.subsystems.intake">IntakeIOTalonSRX</a> (implements frc.robot.subsystems.intake.<a href="frc/robot/subsystems/intake/IntakeIO.html" title="interface in frc.robot.subsystems.intake">IntakeIO</a>)</li>
 <li class="circle">frc.robot.util.<a href="frc/robot/util/LoggedTunableNumber.html" class="type-name-link" title="class in frc.robot.util">LoggedTunableNumber</a> (implements java.util.function.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/DoubleSupplier.html" title="class or interface in java.util.function" class="external-link">DoubleSupplier</a>)</li>
 <li class="circle">frc.robot.<a href="frc/robot/Main.html" class="type-name-link" title="class in frc.robot">Main</a></li>
+<li class="circle">frc.robot.controls.<a href="frc/robot/controls/PitControls.html" class="type-name-link" title="class in frc.robot.controls">PitControls</a></li>
 <li class="circle">edu.wpi.first.wpilibj.RobotBase (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a>)
 <ul>
 <li class="circle">edu.wpi.first.wpilibj.IterativeRobotBase
@@ -144,6 +153,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">frc.robot.config.<a href="frc/robot/config/RobotConfig.IntakeConstants.html" class="type-name-link" title="class in frc.robot.config">RobotConfig.IntakeConstants</a></li>
 <li class="circle">frc.robot.config.<a href="frc/robot/config/RobotConfig.ShooterConstants.html" class="type-name-link" title="class in frc.robot.config">RobotConfig.ShooterConstants</a></li>
 <li class="circle">frc.robot.<a href="frc/robot/RobotContainer.html" class="type-name-link" title="class in frc.robot">RobotContainer</a></li>
+<li class="circle">frc.robot.util.<a href="frc/robot/util/RobotState.html" class="type-name-link" title="class in frc.robot.util">RobotState</a></li>
 <li class="circle">frc.robot.subsystems.shooter.<a href="frc/robot/subsystems/shooter/ShooterIO.ShooterIOInputs.html" class="type-name-link" title="class in frc.robot.subsystems.shooter">ShooterIO.ShooterIOInputs</a></li>
 <li class="circle">frc.robot.subsystems.shooter.<a href="frc/robot/subsystems/shooter/ShooterIOSparkMax.html" class="type-name-link" title="class in frc.robot.subsystems.shooter">ShooterIOSparkMax</a> (implements frc.robot.subsystems.shooter.<a href="frc/robot/subsystems/shooter/ShooterIO.html" title="interface in frc.robot.subsystems.shooter">ShooterIO</a>)</li>
 <li class="circle">frc.robot.subsystems.shooter.<a href="frc/robot/subsystems/shooter/ShooterIOStub.html" class="type-name-link" title="class in frc.robot.subsystems.shooter">ShooterIOStub</a> (implements frc.robot.subsystems.shooter.<a href="frc/robot/subsystems/shooter/ShooterIO.html" title="interface in frc.robot.subsystems.shooter">ShooterIO</a>)</li>
@@ -159,8 +169,12 @@ loadScripts(document, 'script');</script>
 </li>
 <li class="circle">frc.robot.subsystems.intake.<a href="frc/robot/subsystems/intake/IntakeSubsystem.html" class="type-name-link" title="class in frc.robot.subsystems.intake">IntakeSubsystem</a> (implements frc.robot.subsystems.intake.<a href="frc/robot/subsystems/intake/Intake.html" title="interface in frc.robot.subsystems.intake">Intake</a>)</li>
 <li class="circle">frc.robot.subsystems.shooter.<a href="frc/robot/subsystems/shooter/ShooterSubsystem.html" class="type-name-link" title="class in frc.robot.subsystems.shooter">ShooterSubsystem</a> (implements frc.robot.subsystems.shooter.<a href="frc/robot/subsystems/shooter/Shooter.html" title="interface in frc.robot.subsystems.shooter">Shooter</a>)</li>
+<li class="circle">frc.robot.subsystems.vision.<a href="frc/robot/subsystems/vision/VisionSubsystem.html" class="type-name-link" title="class in frc.robot.subsystems.vision">VisionSubsystem</a> (implements frc.robot.subsystems.vision.<a href="frc/robot/subsystems/vision/Vision.html" title="interface in frc.robot.subsystems.vision">Vision</a>)</li>
 </ul>
 </li>
+<li class="circle">frc.robot.controls.<a href="frc/robot/controls/SysIdControls.html" class="type-name-link" title="class in frc.robot.controls">SysIdControls</a></li>
+<li class="circle">frc.robot.subsystems.vision.<a href="frc/robot/subsystems/vision/Vision.VisionPose.html" class="type-name-link" title="class in frc.robot.subsystems.vision">Vision.VisionPose</a></li>
+<li class="circle">frc.robot.subsystems.vision.<a href="frc/robot/subsystems/vision/VisionCamera.html" class="type-name-link" title="class in frc.robot.subsystems.vision">VisionCamera</a></li>
 </ul>
 </li>
 </ul>
@@ -181,6 +195,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">frc.robot.subsystems.arm.<a href="frc/robot/subsystems/arm/Arm.html" class="type-name-link" title="interface in frc.robot.subsystems.arm">Arm</a></li>
 </ul>
 </li>
+<li class="circle">frc.robot.subsystems.vision.<a href="frc/robot/subsystems/vision/Vision.html" class="type-name-link" title="interface in frc.robot.subsystems.vision">Vision</a></li>
 </ul>
 </section>
 <section class="hierarchy">
@@ -190,6 +205,8 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" class="type-name-link external-link" title="class or interface in java.lang">Enum</a>&lt;E&gt; (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;T&gt;, java.lang.constant.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/constant/Constable.html" title="class or interface in java.lang.constant" class="external-link">Constable</a>, java.io.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>)
 <ul>
+<li class="circle">frc.robot.util.<a href="frc/robot/util/RobotState.DriveMode.html" class="type-name-link" title="enum class in frc.robot.util">RobotState.DriveMode</a></li>
+<li class="circle">frc.robot.util.<a href="frc/robot/util/RobotState.TargetMode.html" class="type-name-link" title="enum class in frc.robot.util">RobotState.TargetMode</a></li>
 <li class="circle">frc.robot.subsystems.shooter.<a href="frc/robot/subsystems/shooter/ShooterIOStub.ShooterId.html" class="type-name-link" title="enum class in frc.robot.subsystems.shooter">ShooterIOStub.ShooterId</a></li>
 </ul>
 </li>
