@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants;
 import frc.robot.subsystems.drive.Drive;
 import java.util.function.DoubleSupplier;
 
@@ -27,13 +28,15 @@ public class DriveToYaw extends Command {
     targetYaw = this.yawDegrees.getAsDouble();
     turnPID.reset();
     turnPID.setSetpoint(targetYaw);
-    System.out.println(
-        "START: "
-            + this.getClass().getSimpleName()
-            + " yaw: "
-            + targetYaw
-            + " currentYaw: "
-            + drive.getAngle());
+    if (Constants.debugCommands) {
+      System.out.println(
+          "START: "
+              + this.getClass().getSimpleName()
+              + " yaw: "
+              + targetYaw
+              + " currentYaw: "
+              + drive.getAngle());
+    }
   }
 
   @Override
@@ -51,6 +54,8 @@ public class DriveToYaw extends Command {
   @Override
   public void end(boolean interrupted) {
     drive.runVelocity(new ChassisSpeeds());
-    System.out.println("  END: " + this.getClass().getSimpleName());
+    if (Constants.debugCommands) {
+      System.out.println("  END: " + this.getClass().getSimpleName());
+    }
   }
 }

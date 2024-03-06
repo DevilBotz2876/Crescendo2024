@@ -3,6 +3,7 @@ package frc.robot.commands.assist;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.commands.arm.ArmToPositionTP;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.subsystems.arm.Arm;
@@ -16,7 +17,9 @@ public class PrepareForIntake extends SequentialCommandGroup {
       DoubleSupplier intakeAngle,
       DoubleSupplier intakeVoltage,
       DoubleSupplier intakeFeedVoltage) {
-    addCommands(new PrintCommand("START: " + this.getClass().getSimpleName()));
+    if (Constants.debugCommands) {
+      addCommands(new PrintCommand("START: " + this.getClass().getSimpleName()));
+    }
     if (intakeVoltage == null) {
       addCommands(
           new ParallelCommandGroup(new ArmToPositionTP(intakeAngle, arm)), new IndexPiece(intake));
@@ -26,7 +29,9 @@ public class PrepareForIntake extends SequentialCommandGroup {
           new IndexPiece(intake, intakeVoltage, intakeFeedVoltage));
     }
     addCommands(new ProtectArm(arm));
-    addCommands(new PrintCommand("  END: " + this.getClass().getSimpleName()));
+    if (Constants.debugCommands) {
+      addCommands(new PrintCommand("  END: " + this.getClass().getSimpleName()));
+    }
   }
 
   // Sets the Arm to the ideal angle for intake

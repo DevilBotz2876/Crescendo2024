@@ -2,6 +2,7 @@ package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.subsystems.arm.Arm;
 import java.util.function.DoubleSupplier;
@@ -20,8 +21,10 @@ public class ArmToPosition extends Command {
 
   @Override
   public void initialize() {
-    System.out.println(
-        "START: " + this.getClass().getSimpleName() + " angle: " + positionDegrees.getAsDouble());
+    if (Constants.debugCommands) {
+      System.out.println(
+          "START: " + this.getClass().getSimpleName() + " angle: " + positionDegrees.getAsDouble());
+    }
     timeMS = 0.0;
   }
 
@@ -47,6 +50,8 @@ public class ArmToPosition extends Command {
   @Override
   public void end(boolean interrupted) {
     // arm.runVoltage(0);
-    System.out.println("  END: " + this.getClass().getSimpleName());
+    if (Constants.debugCommands) {
+      System.out.println("  END: " + this.getClass().getSimpleName());
+    }
   }
 }

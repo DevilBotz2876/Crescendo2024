@@ -2,6 +2,7 @@ package frc.robot.commands.assist;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.config.RobotConfig.IntakeConstants;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
@@ -31,7 +32,9 @@ public class ScorePiece extends Command {
 
   @Override
   public void initialize() {
-    System.out.println("START: " + this.getClass().getSimpleName());
+    if (Constants.debugCommands) {
+      System.out.println("START: " + this.getClass().getSimpleName());
+    }
     intake.runVoltage(intakeFeedVoltage.getAsDouble());
   }
 
@@ -44,6 +47,8 @@ public class ScorePiece extends Command {
   public void end(boolean interrupted) {
     intake.runVoltage(0);
     shooter.runVelocity(0);
-    System.out.println("  END: " + this.getClass().getSimpleName());
+    if (Constants.debugCommands) {
+      System.out.println("  END: " + this.getClass().getSimpleName());
+    }
   }
 }
