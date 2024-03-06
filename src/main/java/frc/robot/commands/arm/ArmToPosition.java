@@ -1,16 +1,11 @@
 package frc.robot.commands.arm;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.subsystems.arm.Arm;
 import java.util.function.DoubleSupplier;
 
-/**
- * This class uses a widget on Shuffleboard to control the arm setpoint. It is meant to be used for
- * debug/test/bring type work.
- */
 public class ArmToPosition extends Command {
   Arm arm;
   DoubleSupplier positionDegrees;
@@ -41,13 +36,11 @@ public class ArmToPosition extends Command {
         <= ArmConstants.pidAngleErrorInDegrees) {
       timeMS += 20.0;
       if (timeMS >= ArmConstants.pidSettlingTimeInMilliseconds) {
-        SmartDashboard.putBoolean("Arm/ArmToPosition/isFinished", true);
         return true;
       }
     } else {
       timeMS = 0.0;
     }
-    SmartDashboard.putBoolean("Arm/ArmToPosition/isFinished", false);
     return false;
   }
 

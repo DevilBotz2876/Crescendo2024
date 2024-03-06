@@ -1,5 +1,6 @@
 package frc.robot.subsystems.drive;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -55,7 +56,14 @@ public interface Drive {
     return null;
   }
 
+  public default Pose2d getPose() {
+    return new Pose2d();
+  }
+
   public default double getAngle() {
     return 0;
   }
+
+  public default void lockPose() {}
+  ;
 }

@@ -1,27 +1,29 @@
 package frc.robot.commands.assist;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.config.RobotConfig.IntakeConstants;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
+import java.util.function.DoubleSupplier;
 
 public class ScorePiece extends Command {
   Intake intake;
   Shooter shooter;
-
-  // TODO: read intake voltage and read piece sensor
-  NetworkTable assistGUI = NetworkTableInstance.getDefault().getTable("Shuffleboard/Assist");
+  DoubleSupplier intakeFeedVoltage;
 
   // Turn on intake (to feed piece into shooter)
   // Wait for piece to be shot out
   // Turn off intake
   // Turn off shooter
   public ScorePiece(Intake intake, Shooter shooter) {
+    this(intake, shooter, () -> IntakeConstants.feedSpeedInVolts);
+  }
+
+  public ScorePiece(Intake intake, Shooter shooter, DoubleSupplier intakeFeedVoltage) {
     this.intake = intake;
     this.shooter = shooter;
+    this.intakeFeedVoltage = intakeFeedVoltage;
 
     addRequirements((SubsystemBase) intake);
     addRequirements((SubsystemBase) shooter);
@@ -30,8 +32,7 @@ public class ScorePiece extends Command {
   @Override
   public void initialize() {
     System.out.println("START: " + this.getClass().getSimpleName());
-    intake.runVoltage(
-        assistGUI.getEntry("Intake: Feed Volts").getDouble(IntakeConstants.feedSpeedInVolts));
+    intake.runVoltage(intakeFeedVoltage.getAsDouble());
   }
 
   @Override

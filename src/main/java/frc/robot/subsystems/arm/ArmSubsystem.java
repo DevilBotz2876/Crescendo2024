@@ -4,10 +4,6 @@ import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -19,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.util.LoggedTunableNumber;
-import java.util.Map;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -55,12 +50,6 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   private static final LoggedTunableNumber armMaxAccel =
       new LoggedTunableNumber("Arm/constraints/minAccel");
 
-  ShuffleboardTab armTab;
-  GenericEntry armVoltsEntry;
-  GenericEntry armDegreesEntry;
-  GenericEntry highLimitEntry;
-  GenericEntry lowLimitEntry;
-
   private double kG, kV, kA;
 
   private boolean relEncoderInit;
@@ -82,28 +71,6 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     kG = armKg.get();
     kV = armKv.get();
     kA = armKa.get();
-
-    // create arm tab on ShuffleBoard
-    armTab = Shuffleboard.getTab("Arm");
-    // Create volt entry under arm tab as a number sider with min = -4 and max = 4
-    armVoltsEntry =
-        armTab
-            .add("Volts", 0)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", -4, "max", 4))
-            .getEntry();
-
-    highLimitEntry =
-        armTab.add("HighLimit", false).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
-
-    lowLimitEntry = armTab.add("LowLimit", false).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
-
-    armTab
-        .add("Degrees Setpoint", 0.0)
-        .withWidget(BuiltInWidgets.kNumberSlider)
-        .withProperties(
-            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
-        .getEntry();
 
     // Configure SysId based on the AdvantageKit example
     sysId =
@@ -273,10 +240,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
       return true;
     }
     if (inputs.absolutePositionDegree > positionDegreeMax) {
-      highLimitEntry.setBoolean(true);
       inputs.limitHigh = true;
     } else {
-      highLimitEntry.setBoolean(false);
       inputs.limitHigh = false;
     }
     return inputs.limitHigh;
@@ -289,9 +254,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     }
     if (inputs.absolutePositionDegree < positionDegreeMin) {
       inputs.limitLow = true;
-      lowLimitEntry.setBoolean(true);
+
     } else {
-      lowLimitEntry.setBoolean(false);
       inputs.limitLow = false;
     }
     return inputs.limitLow;

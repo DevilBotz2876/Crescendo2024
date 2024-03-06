@@ -1,21 +1,26 @@
 package frc.robot.commands.assist;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.config.RobotConfig.IntakeConstants;
 import frc.robot.subsystems.intake.Intake;
+import java.util.function.DoubleSupplier;
 
 public class IndexPiece extends Command {
   Intake intake;
-  NetworkTable assistGUI = NetworkTableInstance.getDefault().getTable("Shuffleboard/Assist");
-  NetworkTable commandGUI = NetworkTableInstance.getDefault().getTable("Shuffleboard/Command");
+  DoubleSupplier intakeVoltage = null;
+  DoubleSupplier indexVoltage = null;
 
-  public IndexPiece(Intake noteIntake) {
-    this.intake = noteIntake;
+  public IndexPiece(Intake intake, DoubleSupplier intakeVoltage, DoubleSupplier indexVoltage) {
+    this.intake = intake;
+    this.intakeVoltage = intakeVoltage;
+    this.indexVoltage = indexVoltage;
 
-    addRequirements((SubsystemBase) noteIntake);
+    addRequirements((Subsystem) intake);
+  }
+
+  public IndexPiece(Intake intake) {
+    this(intake, null, null);
   }
 
   @Override
@@ -25,17 +30,12 @@ public class IndexPiece extends Command {
 
   @Override
   public void execute() {
-    // if (intake.isPieceDetected(true)) {
-    //   intake.runVoltage(
-    //       assistGUI.getEntry("Intake: Index
-    // Volts").getDouble(IntakeConstants.defaultSpeedInVolts));
-    // } else {
-    //   intake.runVoltage(
-    //       commandGUI.getEntry("Intake: Volts").getDouble(IntakeConstants.indexSpeedInVolts));
-    // }
     if (!intake.isPieceShooterDetected()) {
-      intake.runVoltage(
-          assistGUI.getEntry("Intake: Index Volts").getDouble(IntakeConstants.defaultSpeedInVolts));
+      double voltage = IntakeConstants.defaultSpeedInVolts;
+      if (intakeVoltage != null) {
+        voltage = intakeVoltage.getAsDouble();
+      }
+      intake.runVoltage(voltage);
     }
   }
 
@@ -47,7 +47,6 @@ public class IndexPiece extends Command {
 
   @Override
   public boolean isFinished() {
-    // return intake.isPieceDetected(true) && intake.isPieceDetected(false);
     return intake.isPieceShooterDetected();
   }
 }
