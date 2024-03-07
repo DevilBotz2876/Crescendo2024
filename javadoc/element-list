@@ -1,6 +1,7 @@
 frc.robot
 frc.robot.commands.arm
 frc.robot.commands.assist
+frc.robot.commands.auto
 frc.robot.commands.climber
 frc.robot.commands.debug
 frc.robot.commands.drive
