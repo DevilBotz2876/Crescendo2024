@@ -40,7 +40,7 @@ public class ScorePiece extends Command {
 
   @Override
   public boolean isFinished() {
-    return !intake.isPieceShooterDetected();
+    return !intake.isPieceDetected();
   }
 
   @Override

@@ -75,8 +75,8 @@ public class IntakeSubsystem extends SubsystemBase implements Intake {
       }
     }
 
-    if (inputs.limitSwitchShooter != noteVisibility) {
-      noteVisibility = inputs.limitSwitchShooter;
+    if (inputs.limitSwitchIntake != noteVisibility) {
+      noteVisibility = inputs.limitSwitchIntake;
 
       for (MechanismLigament2d note : note2d) {
         if (noteVisibility) {
@@ -90,15 +90,7 @@ public class IntakeSubsystem extends SubsystemBase implements Intake {
     }
   }
 
-  public boolean isPieceDetected(boolean intakePieceDetection) {
-    if (intakePieceDetection == true) {
-      return inputs.limitSwitchIntake;
-    } else {
-      return inputs.limitSwitchShooter;
-    }
-  }
-
-  public boolean isPieceShooterDetected() {
-    return inputs.limitSwitchShooter;
+  public boolean isPieceDetected() {
+    return inputs.limitSwitchIntake;
   }
 }

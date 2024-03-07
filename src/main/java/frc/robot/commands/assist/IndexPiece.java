@@ -46,7 +46,7 @@ public class IndexPiece extends Command {
 
   @Override
   public void execute() {
-    if (!intake.isPieceShooterDetected()) {
+    if (!intake.isPieceDetected()) {
       intake.runVoltage(targetIntakeVoltage);
     }
   }
@@ -61,6 +61,6 @@ public class IndexPiece extends Command {
 
   @Override
   public boolean isFinished() {
-    return intake.isPieceShooterDetected();
+    return intake.isPieceDetected();
   }
 }
