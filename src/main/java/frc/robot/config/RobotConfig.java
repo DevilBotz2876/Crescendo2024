@@ -201,25 +201,27 @@ public class RobotConfig {
 
     if (stubVision) {
       ArrayList<VisionCamera> cameras = new ArrayList<VisionCamera>();
-      cameras.add(
-          new VisionCamera(
-              "photonvision",
-              new Transform3d(
-                  new Translation3d(-0.221, 0, .164),
-                  new Rotation3d(0, Units.degreesToRadians(-20), Units.degreesToRadians(180)))));
-      cameras.add(
-          new VisionCamera(
-              "left",
-              new Transform3d(
-                  new Translation3d(0, 0.221, .164),
-                  new Rotation3d(0, Units.degreesToRadians(-20), Units.degreesToRadians(90)))));
+      if (Robot.isSimulation()) {
+        cameras.add(
+            new VisionCamera(
+                "photonvision",
+                new Transform3d(
+                    new Translation3d(-0.221, 0, .164),
+                    new Rotation3d(0, Units.degreesToRadians(-20), Units.degreesToRadians(180)))));
+        cameras.add(
+            new VisionCamera(
+                "left",
+                new Transform3d(
+                    new Translation3d(0, 0.221, .164),
+                    new Rotation3d(0, Units.degreesToRadians(-20), Units.degreesToRadians(90)))));
 
-      cameras.add(
-          new VisionCamera(
-              "right",
-              new Transform3d(
-                  new Translation3d(0, -0.221, .164),
-                  new Rotation3d(0, Units.degreesToRadians(-20), Units.degreesToRadians(-90)))));
+        cameras.add(
+            new VisionCamera(
+                "right",
+                new Transform3d(
+                    new Translation3d(0, -0.221, .164),
+                    new Rotation3d(0, Units.degreesToRadians(-20), Units.degreesToRadians(-90)))));
+      }
 
       vision =
           new VisionSubsystem(cameras, AprilTagFields.k2024Crescendo.loadAprilTagLayoutField());

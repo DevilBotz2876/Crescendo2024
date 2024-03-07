@@ -84,7 +84,7 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
   }
 
   private final List<VisionCameraImpl> cameras = new ArrayList<VisionCameraImpl>();
-  private VisionCameraImpl primaryCamera;
+  private VisionCameraImpl primaryCamera = null;
   private final AprilTagFieldLayout fieldLayout;
 
   private List<VisionPose> estimatedPoses = new ArrayList<VisionPose>();
@@ -111,7 +111,9 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
       estimatedPoses.add(new VisionPose());
     }
     this.fieldLayout = fieldLayout;
-    primaryCamera = this.cameras.get(0);
+    if (0 != cameras.size()) {
+      primaryCamera = this.cameras.get(0);
+    }
   }
 
   @Override
@@ -174,9 +176,11 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
   }
 
   private PhotonTrackedTarget findAprilTag(int id) {
-    for (PhotonTrackedTarget target : primaryCamera.getTargets()) {
-      if (target.getFiducialId() == id) {
-        return target;
+    if (primaryCamera != null) {
+      for (PhotonTrackedTarget target : primaryCamera.getTargets()) {
+        if (target.getFiducialId() == id) {
+          return target;
+        }
       }
     }
     return null;
@@ -186,7 +190,7 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
   public Optional<Double> getDistanceToAprilTag(int id) {
     PhotonTrackedTarget target = findAprilTag(id);
 
-    if (target != null) {
+    if ((target != null) && (primaryCamera != null)) {
       return Optional.of(
           PhotonUtils.calculateDistanceToTargetMeters(
               primaryCamera.getRobotToCamera().getZ(),
@@ -199,7 +203,7 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
 
   @Override
   public Optional<Double> getYawToBestTarget() {
-    if (primaryCamera.hasTargets()) {
+    if ((primaryCamera != null) && (primaryCamera.hasTargets())) {
       return Optional.of(primaryCamera.getBestTarget().getYaw());
     }
     return Optional.empty();
