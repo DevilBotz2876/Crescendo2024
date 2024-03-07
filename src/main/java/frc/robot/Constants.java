@@ -12,4 +12,6 @@ public final class Constants {
 
   /** Use this to output Smartdashboard or other debug messages */
   public static final boolean debugMode = true;
+
+  public static final boolean debugCommands = false;
 }

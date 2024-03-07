@@ -3,34 +3,34 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.6813573321738228,
-        "y": 4.372370103911556
+        "x": 0.6747008781654079,
+        "y": 4.423652164484061
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1889684168987302,
-        "y": 3.6024250495299617
+        "x": 0.8046229033321095,
+        "y": 1.293041842755596
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Speaker-Podium Side"
     },
     {
       "anchor": {
-        "x": 2.2102901157741743,
-        "y": 4.092114932320438
+        "x": 7.724917751140366,
+        "y": 0.7693172207222235
       },
       "prevControl": {
-        "x": 1.7365217450277777,
-        "y": 4.108825968281242
+        "x": 6.724917751140366,
+        "y": 0.7693172207222235
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Center-Source Note"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.75,
       "rotationDegrees": 0,
       "rotateFast": false
     }
@@ -38,7 +38,7 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 4.3,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
@@ -51,7 +51,7 @@
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 119.74488129694218,
+    "rotation": -57.64999999999998,
     "velocity": 0
   },
   "useDefaultConstraints": false

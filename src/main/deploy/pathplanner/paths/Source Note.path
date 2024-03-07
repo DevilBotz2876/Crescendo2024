@@ -3,37 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.5186551772866305,
-        "y": 2.0
+        "x": 0.6747008781654079,
+        "y": 4.423652164484061
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6186551772866276,
-        "y": 2.0
+        "x": 0.7718401325969174,
+        "y": 3.939785971193552
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Speaker-Podium Side"
     },
     {
       "anchor": {
-        "x": 4.0,
-        "y": 2.0
+        "x": 2.34,
+        "y": 4.100132718106626
       },
       "prevControl": {
-        "x": 3.2,
-        "y": 2.0
+        "x": 1.5157213062781745,
+        "y": 4.109517305637301
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Source note"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 10.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -45,8 +51,8 @@
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -57.65255650055793,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

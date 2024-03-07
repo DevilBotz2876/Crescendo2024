@@ -3,35 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3189579655351042,
-        "y": 5.535530663936646
+        "x": 0.65,
+        "y": 6.65
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3775274827903354,
-        "y": 5.3203760758666565
+        "x": 1.0389087296526012,
+        "y": 7.038908729652602
       },
-      "isLocked": false,
-      "linkedName": null
+      "isLocked": true,
+      "linkedName": "Speaker - Amp Side"
     },
     {
       "anchor": {
-        "x": 2.217176148739919,
-        "y": 5.535530663936646
+        "x": 2.3185166370332744,
+        "y": 6.992561413694256
       },
       "prevControl": {
-        "x": 1.5419756844602757,
-        "y": 5.7047299030984835
+        "x": 1.2024047804804017,
+        "y": 6.977875731371192
       },
       "nextControl": null,
-      "isLocked": false,
-      "linkedName": null
+      "isLocked": true,
+      "linkedName": "Note - Amp Side"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.75,
-      "rotationDegrees": 0,
+      "waypointRelativePos": 0.4,
+      "rotationDegrees": 0.0,
       "rotateFast": false
     }
   ],
@@ -45,14 +45,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
-    "rotateFast": true
+    "rotation": -0.26921857710795155,
+    "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 179.1048262897889,
+    "rotation": 63.29021235029015,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

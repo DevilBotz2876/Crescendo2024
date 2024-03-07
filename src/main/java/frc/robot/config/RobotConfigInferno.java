@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Robot;
+import frc.robot.commands.auto.AutoNamedCommands;
 import frc.robot.subsystems.arm.ArmIOSparkMax;
 import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.climber.ClimberIOSparkMax;
@@ -29,7 +30,6 @@ public class RobotConfigInferno extends RobotConfig {
     // Inferno has a Swerve drive train
     // TODO: set DriveConstants.maxVelocityMetersPerSec
     drive = new DriveSwerveYAGSL("yagsl/inferno");
-    autoChooser = AutoBuilder.buildAutoChooser("Mobility Auto");
 
     // Inferno has a TalonSRX based intake
     IntakeConstants.defaultSpeedInVolts = 6.0;
@@ -51,7 +51,7 @@ public class RobotConfigInferno extends RobotConfig {
     ShooterConstants.pidVelocityErrorInRPMS = 20;
 
     ShooterConstants.ampScoreVelocityInRPMs = 2000;
-    ShooterConstants.velocityInRPMs = 3000;
+    ShooterConstants.velocityInRPMs = 4500;
     shooter = new ShooterSubsystem(new ShooterIOSparkMax(2));
 
     ArmConstants.absolutePositionOffset = 0.362; // Determined empirically on 2024-02-22
@@ -107,12 +107,16 @@ public class RobotConfigInferno extends RobotConfig {
     if (Robot.isSimulation()) {
       vision.enableSimulation(() -> RobotConfig.drive.getPose(), false);
     }
+
+    AutoNamedCommands.configure();
+    autoChooser = AutoBuilder.buildAutoChooser("Sit Still");
   }
 
   @Override
   public Optional<Double> getArmAngleFromDistance(double distanceInMeters) {
     /* TODO: Insert mapping of distance to arm angle for scoring in speaker */
     System.out.println("TODO: Inferno getArmAngleFromDistance(" + distanceInMeters + ")");
-    return Optional.of(ArmConstants.subwooferScoreAngleInDegrees);
+    if (distanceInMeters > 2.0) return Optional.empty();
+    return Optional.of(30 * distanceInMeters / 3.0);
   }
 }
