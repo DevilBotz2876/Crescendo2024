@@ -8,7 +8,6 @@ public interface IntakeIO {
     public double velocityRadPerSec = 0.0;
     public double appliedVolts = 0.0;
     public boolean limitSwitchIntake = false;
-    public boolean limitSwitchShooter = false;
     public double current;
   }
 
