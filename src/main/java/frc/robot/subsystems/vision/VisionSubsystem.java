@@ -202,9 +202,25 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
   }
 
   @Override
+  public Optional<Integer> getBestTargetId() {
+    if ((primaryCamera != null) && (primaryCamera.hasTargets())) {
+      return Optional.of(primaryCamera.getBestTarget().getFiducialId());
+    }
+    return Optional.empty();
+  }
+
+  @Override
   public Optional<Double> getYawToBestTarget() {
     if ((primaryCamera != null) && (primaryCamera.hasTargets())) {
       return Optional.of(primaryCamera.getBestTarget().getYaw());
+    }
+    return Optional.empty();
+  }
+
+  @Override
+  public Optional<Double> getDistanceToBestTarget() {
+    if ((primaryCamera != null) && (primaryCamera.hasTargets())) {
+      return getDistanceToAprilTag(primaryCamera.getBestTarget().getFiducialId());
     }
     return Optional.empty();
   }

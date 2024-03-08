@@ -21,6 +21,7 @@ import frc.robot.config.RobotConfig.ShooterConstants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class PitControls {
   private static int setupIntakeControls(ShuffleboardTab tab, int col, int row, int maxWidth) {
@@ -412,6 +413,57 @@ public class PitControls {
     return maxWidth;
   }
 
+  private static int setupVisionControls(ShuffleboardTab tab, int col, int row, int maxWidth) {
+    int layoutColIndex = 0;
+    int layoutRowIndex = 0;
+    int layoutMaxHeight = 2;
+    //    List<Command> commands = new ArrayList<Command>();
+    maxWidth = Math.min(1, maxWidth);
+
+    /* Vision Controls */
+    ShuffleboardLayout visionLayout =
+        tab.getLayout("Vision", BuiltInLayouts.kGrid)
+            //            .withProperties(Map.of("Label position", "HIDDEN"))
+            .withSize(maxWidth, layoutMaxHeight)
+            .withPosition(col, row);
+    row += layoutMaxHeight;
+
+    visionLayout
+        .addDouble(
+            "April Tag ID",
+            () -> {
+              Optional<Integer> aprilTagId = RobotConfig.vision.getBestTargetId();
+              if (aprilTagId.isPresent()) return aprilTagId.get();
+              else return -1;
+            })
+        .withWidget(BuiltInWidgets.kTextView)
+        .withPosition(layoutColIndex, layoutRowIndex++);
+
+    visionLayout
+        .addDouble(
+            "Yaw",
+            () -> {
+              Optional<Double> yaw = RobotConfig.vision.getYawToBestTarget();
+              if (yaw.isPresent()) return yaw.get();
+              else return 0;
+            })
+        .withWidget(BuiltInWidgets.kTextView)
+        .withPosition(layoutColIndex, layoutRowIndex++);
+
+    visionLayout
+        .addDouble(
+            "Distance",
+            () -> {
+              Optional<Double> distance = RobotConfig.vision.getDistanceToBestTarget();
+              if (distance.isPresent()) return distance.get();
+              else return -1;
+            })
+        .withWidget(BuiltInWidgets.kTextView)
+        .withPosition(layoutColIndex, layoutRowIndex++);
+
+    return maxWidth;
+  }
+
   public static void setupControls() {
     int maxWidth = 3;
     int colIndex = 0;
@@ -422,6 +474,7 @@ public class PitControls {
     colIndex += setupArmControls(pitTab, colIndex, rowIndex, maxWidth);
     colIndex += setupShooterControls(pitTab, colIndex, rowIndex, maxWidth);
     colIndex += setupClimberControls(pitTab, colIndex, rowIndex, maxWidth);
+    colIndex += setupVisionControls(pitTab, colIndex, rowIndex, maxWidth);
 
     colIndex = 0;
     rowIndex += 4;
