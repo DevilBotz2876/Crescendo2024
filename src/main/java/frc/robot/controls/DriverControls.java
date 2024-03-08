@@ -67,8 +67,6 @@ public class DriverControls {
         .withPosition(colIndex, rowIndex)
         .withSize(3, 3);
     rowIndex += 3;
-
-    Shuffleboard.selectTab("Driver");
   }
 
   public static void setupControls(CommandXboxController mainController) {

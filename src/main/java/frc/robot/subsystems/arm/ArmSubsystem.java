@@ -221,11 +221,11 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     //   relEncoderInit = false;
     // }
 
-    if (isLimitHigh()) {
+    if (isLimitHigh() && inputs.appliedVolts > 0) {
       // TODO: turn off voltage or stop pid
       io.setVoltage(0);
     }
-    if (isLimitLow()) {
+    if (isLimitLow() && inputs.appliedVolts < 0) {
       // TODO: turn off voltage or stop pid
       // io.resetRelativeEncoder(0.0);
       io.setVoltage(0);
@@ -239,7 +239,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-    if (inputs.absolutePositionDegree > positionDegreeMax) {
+    if (inputs.absolutePositionDegree >= positionDegreeMax) {
       inputs.limitHigh = true;
     } else {
       inputs.limitHigh = false;
@@ -252,7 +252,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-    if (inputs.absolutePositionDegree < positionDegreeMin) {
+    if (inputs.absolutePositionDegree <= positionDegreeMin) {
       inputs.limitLow = true;
 
     } else {
@@ -270,4 +270,16 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     }
     return false;
   }
+
+  @Override
+  public boolean isAtMaxLimit() {
+    return isLimitHigh();
+  }
+  ;
+
+  @Override
+  public boolean isAtMinLimit() {
+    return isLimitLow();
+  }
+  ;
 }

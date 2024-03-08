@@ -20,4 +20,28 @@ public interface Climber {
   public default void enableLimits(boolean enable) {}
 
   public boolean isExtending();
+
+  public default double getCurrentPositionLeft() {
+    return 0;
+  }
+
+  public default double getCurrentPositionRight() {
+    return 0;
+  }
+
+  public default boolean isAtMaxLimitLeft() {
+    return false;
+  }
+
+  public default boolean isAtMinLimitLeft() {
+    return false;
+  }
+
+  public default boolean isAtMaxLimitRight() {
+    return false;
+  }
+
+  public default boolean isAtMinLimitRight() {
+    return false;
+  }
 }

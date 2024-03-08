@@ -6,4 +6,8 @@ public interface Intake {
   }
 
   public default void runVoltage(double volts) {}
+
+  public default double getCurrentVoltage() {
+    return 0;
+  }
 }

@@ -28,4 +28,14 @@ public interface Arm extends Subsystem {
   public default TrapezoidProfile.Constraints getConstraints() {
     return new TrapezoidProfile.Constraints(1, 2);
   }
+
+  public default boolean isAtMaxLimit() {
+    return false;
+  }
+  ;
+
+  public default boolean isAtMinLimit() {
+    return false;
+  }
+  ;
 }
