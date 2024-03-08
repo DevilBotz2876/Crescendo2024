@@ -45,7 +45,7 @@ public class ClimberIOStub implements ClimberIO {
   }
 
   @Override
-  public void setPosition(double posiiton) {
-    this.position = posiiton;
+  public void setPosition(double position) {
+    this.position = position;
   }
 }

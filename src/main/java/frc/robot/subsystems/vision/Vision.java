@@ -55,6 +55,10 @@ public interface Vision {
     return true;
   }
 
+  public Optional<Integer> getBestTargetId();
+
+  public Optional<Double> getDistanceToBestTarget();
+
   /**
    * Returns the yaw in degrees to the best target (relative to the primary camera)
    *

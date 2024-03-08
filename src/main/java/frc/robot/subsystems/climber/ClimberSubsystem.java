@@ -61,6 +61,14 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
       voltage = volts;
     }
 
+    private boolean isAtMaxLimit() {
+      return (inputs.positionRadians >= ClimberConstants.maxPositionInRadians);
+    }
+
+    private boolean isAtMinLimit() {
+      return (inputs.positionRadians <= ClimberConstants.minPositionInRadians);
+    }
+
     private boolean atLimits() {
       if (enableLimits == false) return false;
 
@@ -72,8 +80,8 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
           if ((inputs.current > ClimberConstants.autoZeroMaxCurrent)
               && (Math.abs(inputs.velocityRadiansPerSecond)
                   < ClimberConstants.autoZeroMinVelocity)) {
-            io.setPosition(ClimberConstants.autoZeroOffset);
             runVoltage(0);
+            io.setPosition(ClimberConstants.autoZeroOffset);
             autoZeroMode = false;
             return true;
           } else {
@@ -81,10 +89,7 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
           }
         }
       } else {
-        boolean atLimit =
-            extend
-                ? (inputs.positionRadians >= ClimberConstants.maxPositionInRadians)
-                : (inputs.positionRadians <= ClimberConstants.minPositionInRadians);
+        boolean atLimit = extend ? isAtMaxLimit() : isAtMinLimit();
         ;
         if (atLimit) {
           runVoltage(0);
@@ -186,5 +191,35 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
     for (ClimberInstance climber : climbers) {
       climber.enableLimits(enable);
     }
+  }
+
+  @Override
+  public double getCurrentPositionLeft() {
+    return left.inputs.positionRadians;
+  }
+
+  @Override
+  public double getCurrentPositionRight() {
+    return right.inputs.positionRadians;
+  }
+
+  @Override
+  public boolean isAtMaxLimitLeft() {
+    return left.isAtMaxLimit();
+  }
+
+  @Override
+  public boolean isAtMinLimitLeft() {
+    return left.isAtMinLimit();
+  }
+
+  @Override
+  public boolean isAtMaxLimitRight() {
+    return right.isAtMaxLimit();
+  }
+
+  @Override
+  public boolean isAtMinLimitRight() {
+    return right.isAtMinLimit();
   }
 }

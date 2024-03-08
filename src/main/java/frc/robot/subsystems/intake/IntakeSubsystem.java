@@ -90,7 +90,13 @@ public class IntakeSubsystem extends SubsystemBase implements Intake {
     }
   }
 
+  @Override
   public boolean isPieceDetected() {
     return inputs.limitSwitchIntake;
+  }
+
+  @Override
+  public double getCurrentVoltage() {
+    return inputs.appliedVolts;
   }
 }
