@@ -1,6 +1,8 @@
 package frc.robot.controls;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -231,5 +233,28 @@ public class PitControls {
                 RobotConfig.arm))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
+
+    commandTestTab.addDouble("Battery (volts)", ()-> RobotController.getBatteryVoltage())
+    .withWidget(BuiltInWidgets.kVoltageView)
+    .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);      
+
+    commandTestTab.addDouble("Shooter Velocity (RPMs)", ()-> Units.radiansPerSecondToRotationsPerMinute(RobotConfig.shooter.getCurrentSpeed()))
+    .withWidget(BuiltInWidgets.kNumberBar)
+    .withPosition(colIndex, rowIndex++)
+    .withSize(2, 1);      
+
+    commandTestTab.addDouble("Arm Angle (degrees)", ()-> RobotConfig.arm.getAngle())
+    .withWidget(BuiltInWidgets.kNumberBar)
+    .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+
+    commandTestTab.addDouble("Yaw (degrees)", ()-> RobotConfig.drive.getAngle() % 180)
+    .withWidget(BuiltInWidgets.kDial)
+    .withProperties(Map.of("min", -180, "max", 180))
+    .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);      
+
+
   }
 }
