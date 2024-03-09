@@ -39,7 +39,8 @@ public class AutoNamedCommands {
     public static AutoScoreConstants scoreFromNoteAmpSide =
         new AutoScoreConstants(40, 8, ShooterConstants.velocityInRPMs);
     public static AutoScoreConstants scoreFromNoteCenterSide =
-        new AutoScoreConstants(0.0, 18, ShooterConstants.velocityInRPMs);
+        new AutoScoreConstants(
+            0.0, ArmConstants.noteScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
     public static AutoScoreConstants scoreFromNoteSourceSide =
         new AutoScoreConstants(320.0, 30.0, ShooterConstants.velocityInRPMs);
     public static AutoScoreConstants scoreFromOutsideSourceSide =

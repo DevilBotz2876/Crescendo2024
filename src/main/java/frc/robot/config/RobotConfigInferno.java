@@ -81,6 +81,7 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.ampScoreAngleInDegrees = 80;
     ArmConstants.subwooferScoreAngleInDegrees = 9.80;
     ArmConstants.subwooferScoreFromPodiumAngleInDegrees = 26.5;
+    ArmConstants.noteScoreAngleInDegrees = 22.56;
     ArmConstants.stowIntakeAngleInDegrees = 14.64;
 
     arm = new ArmSubsystem(new ArmIOSparkMax(4, true));
