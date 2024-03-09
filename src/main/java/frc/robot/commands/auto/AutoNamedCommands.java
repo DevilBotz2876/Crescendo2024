@@ -27,13 +27,13 @@ public class AutoNamedCommands {
   public static class AutoConstants {
     /* TODO: Fill in the values for scoring here */
     public static AutoScoreConstants scoreFromSpeakerAmpSide =
-        new AutoScoreConstants(0.0, 45, ShooterConstants.velocityInRPMs);
+        new AutoScoreConstants(0.0, 8, ShooterConstants.velocityInRPMs);
     public static AutoScoreConstants scoreFromNoteAmpSide =
-        new AutoScoreConstants(40, 45, ShooterConstants.velocityInRPMs);
+        new AutoScoreConstants(40, 8, ShooterConstants.velocityInRPMs);
     public static AutoScoreConstants scoreFromSpeakerCenterSide =
-        new AutoScoreConstants(0.0, 45, ShooterConstants.velocityInRPMs);
+        new AutoScoreConstants(0.0, 8, ShooterConstants.velocityInRPMs);
     public static AutoScoreConstants scoreFromNoteCenterSide =
-        new AutoScoreConstants(0.0, 40, ShooterConstants.velocityInRPMs);
+        new AutoScoreConstants(0.0, 18, ShooterConstants.velocityInRPMs);
     public static AutoScoreConstants scoreFromSpeakerSourceSide =
         new AutoScoreConstants(0.0, 45, ShooterConstants.velocityInRPMs);
     public static AutoScoreConstants scoreFromNoteSourceSide =
