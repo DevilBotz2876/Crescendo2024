@@ -29,6 +29,10 @@ public class RobotConfigInferno extends RobotConfig {
 
     // Inferno has a Swerve drive train
     // TODO: set DriveConstants.maxVelocityMetersPerSec
+    DriveConstants.anglePidKp = 0.02;
+    DriveConstants.anglePidKi = 0.0;
+    DriveConstants.anglePidKd = 0.0;
+    DriveConstants.pidAngleErrorInDegrees = 0.5;
     drive = new DriveSwerveYAGSL("yagsl/inferno");
 
     // Inferno has a TalonSRX based intake
@@ -97,7 +101,7 @@ public class RobotConfigInferno extends RobotConfig {
     /* TODO: Measure and set camera name/location */
     cameras.add(
         new VisionCamera(
-            "photonvision",
+            "shooter",
             new Transform3d(
                 new Translation3d(-0.3048, 0, 0.22),
                 new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(180)))));
