@@ -77,8 +77,9 @@ public class RobotConfig {
     public static double intakeAngleInDegrees = 1;
     public static double ejectAngleInDegrees = 15;
     public static double ampScoreAngleInDegrees = 80;
-    public static double subwooferScoreAngleInDegrees = 20;
-    public static double stowIntakeAngleInDegrees = 45;
+    public static double subwooferScoreAngleInDegrees = 10;
+    public static double subwooferScoreFromPodiumAngleInDegrees = 20;
+    public static double stowIntakeAngleInDegrees = 15;
 
     public static double defaultSpeedInVolts = 6.0;
   }

@@ -46,7 +46,7 @@ public class RobotConfigInferno extends RobotConfig {
 
     // Values from Nilesh's Shooter SysId Run @ WPI on Inferno 2024-03-09
     ShooterConstants.ffKs =
-    0.033556; // SysId calculated -0.036669, but likely erroneous.  Will need to re-run sysid
+        0.033556; // SysId calculated -0.036669, but likely erroneous.  Will need to re-run sysid
     ShooterConstants.ffKv = 0.019623;
     ShooterConstants.ffKa = 0.0069448;
 
@@ -78,9 +78,10 @@ public class RobotConfigInferno extends RobotConfig {
 
     ArmConstants.minAngleInDegrees = -1.0;
     ArmConstants.intakeAngleInDegrees = 1;
-    ArmConstants.subwooferScoreAngleInDegrees = 10;
     ArmConstants.ampScoreAngleInDegrees = 80;
-    ArmConstants.stowIntakeAngleInDegrees = 45;
+    ArmConstants.subwooferScoreAngleInDegrees = 9.80;
+    ArmConstants.subwooferScoreFromPodiumAngleInDegrees = 20; // Needs to be determined
+    ArmConstants.stowIntakeAngleInDegrees = 14.64;
 
     arm = new ArmSubsystem(new ArmIOSparkMax(4, true));
 

@@ -1,9 +1,12 @@
 package frc.robot.controls;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -19,6 +22,7 @@ import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.util.RobotState;
 import frc.robot.util.RobotState.DriveMode;
+import frc.robot.util.RobotState.SpeakerShootingMode;
 import frc.robot.util.RobotState.TargetMode;
 import java.util.Map;
 import java.util.Optional;
@@ -37,12 +41,6 @@ public class DriverControls {
         .withSize(2, 1);
 
     driverTab
-        .addBoolean("Amp Mode", () -> RobotState.isAmpMode())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(colIndex, rowIndex++)
-        .withSize(2, 1);
-
-    driverTab
         .addBoolean("Field Oriented", () -> RobotState.isFieldOriented())
         .withWidget(BuiltInWidgets.kBooleanBox)
         .withPosition(colIndex, rowIndex++)
@@ -51,6 +49,7 @@ public class DriverControls {
     /* TODO: Intake Camera */
 
     /* Shooter Camera */
+    /*
     colIndex += 2;
     rowIndex = 0;
     driverTab
@@ -59,6 +58,56 @@ public class DriverControls {
         .withPosition(colIndex, rowIndex)
         .withSize(3, 3);
     rowIndex += 3;
+    */
+
+    colIndex += 2;
+    rowIndex = 0;
+
+    driverTab
+        .addBoolean("Amp Mode", () -> RobotState.isAmpMode())
+        .withWidget(BuiltInWidgets.kBooleanBox)
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+
+    driverTab
+        .addDouble("Angle (degrees)", () -> RobotConfig.arm.getAngle())
+        .withWidget(BuiltInWidgets.kNumberBar)
+        .withProperties(
+            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
+        .withSize(2, 1)
+        .withPosition(colIndex, rowIndex++);
+
+    ShuffleboardLayout speakerModeLayout =
+        driverTab
+            .getLayout("Speaker Mode", BuiltInLayouts.kList)
+            //            .withProperties(Map.of("Label position", "HIDDEN"))
+            .withSize(2, 3)
+            .withPosition(colIndex, rowIndex++);
+
+    Command speakerModeFromSubwoofer =
+        new InstantCommand(
+            () -> RobotState.setSpeakerShootingMode(SpeakerShootingMode.SPEAKER_FROM_SUBWOOFER));
+    speakerModeFromSubwoofer.setName("From Subwoofer");
+
+    Command speakerModeFromPodium =
+        new InstantCommand(
+            () -> RobotState.setSpeakerShootingMode(SpeakerShootingMode.SPEAKER_FROM_PODIUM));
+    speakerModeFromPodium.setName("From Podium");
+
+    Command speakerModeVisionBased =
+        new InstantCommand(
+            () -> RobotState.setSpeakerShootingMode(SpeakerShootingMode.SPEAKER_VISION_BASED));
+    speakerModeVisionBased.setName("Vision Based");
+
+    speakerModeLayout
+        .addString("Speaker Mode", () -> RobotState.getShootingModeName())
+        .withWidget(BuiltInWidgets.kTextView)
+        .withPosition(0, 0)
+        .withSize(2, 1);
+
+    speakerModeLayout.add(speakerModeFromSubwoofer).withPosition(0, 1);
+    speakerModeLayout.add(speakerModeFromPodium).withPosition(0, 2);
+    speakerModeLayout.add(speakerModeVisionBased).withPosition(0, 3);
   }
 
   public static void setupControls(CommandXboxController mainController) {
@@ -156,16 +205,9 @@ public class DriverControls {
                           if (RobotState.isAmpMode()) {
                             RobotConfig.arm.setAngle(ArmConstants.ampScoreAngleInDegrees);
                           } else {
-                            Optional<Double> distanceToTarget =
-                                RobotConfig.vision.getDistanceToAprilTag(
-                                    RobotState.getActiveTargetId());
-                            if (distanceToTarget.isPresent()) {
-                              Optional<Double> armAngle =
-                                  RobotConfig.instance.getArmAngleFromDistance(
-                                      distanceToTarget.get());
-                              if (armAngle.isPresent()) {
-                                RobotConfig.arm.setAngle((armAngle.get()));
-                              }
+                            Optional<Double> armAngle = RobotState.getArmAngleToTarget();
+                            if (armAngle.isPresent()) {
+                              RobotConfig.arm.setAngle((armAngle.get()));
                             }
                           }
                         },
