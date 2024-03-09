@@ -42,6 +42,7 @@ public class RobotConfig {
     public static double anglePidKi = 0.0;
     public static double anglePidKd = 0.0;
     public static double pidAngleErrorInDegrees = 2.0;
+    public static double pidTimeoutInSeconds = 0.5;
 
     public static double slewRateLimiterX = 3;
     public static double slewRateLimiterY = 3;

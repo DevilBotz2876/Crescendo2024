@@ -17,8 +17,10 @@ import frc.robot.commands.assist.ScorePiece;
 import frc.robot.commands.climber.ClimberCommand;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.shooter.SetShooterVelocity;
+import frc.robot.commands.vision.AlignToTarget;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
+import frc.robot.config.RobotConfig.DriveConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.util.RobotState;
 import frc.robot.util.RobotState.DriveMode;
@@ -182,37 +184,29 @@ public class DriverControls {
     /* TODO: Make this is a toggle, not just while right bumper is pressed */
     mainController
         .rightBumper()
-        .whileTrue(
+        .onTrue(
             new ParallelCommandGroup(
                 new InstantCommand(
                     () -> RobotConfig.intake.runVoltage(0),
                     RobotConfig.intake), // turn off intake in case it is on
-                new DriveCommand(
-                    RobotConfig.drive,
-                    () -> MathUtil.applyDeadband(-mainController.getLeftY(), 0.05),
-                    () -> MathUtil.applyDeadband(-mainController.getLeftX(), 0.05),
-                    () -> MathUtil.applyDeadband(-mainController.getRightX(), 0.05),
-                    () ->
-                        RobotConfig.vision.getYawToAprilTag(
-                            RobotState
-                                .getActiveTargetId())), // adjust robot yaw to line up with vision
-                // target
+                new AlignToTarget(
+                    RobotConfig.drive, RobotConfig.vision, () -> RobotState.getActiveTargetId()).withTimeout(DriveConstants.pidTimeoutInSeconds),
                 new SetShooterVelocity(RobotConfig.shooter, () -> RobotState.getShooterVelocity())
                     .withTimeout(ShooterConstants.pidTimeoutInSeconds), // turn on shooter
                 /* TODO: Use ArmToPositionTP instead of setting arm angle directly */
                 new InstantCommand(
-                        () -> {
-                          if (RobotState.isAmpMode()) {
-                            RobotConfig.arm.setAngle(ArmConstants.ampScoreAngleInDegrees);
-                          } else {
-                            Optional<Double> armAngle = RobotState.getArmAngleToTarget();
-                            if (armAngle.isPresent()) {
-                              RobotConfig.arm.setAngle((armAngle.get()));
-                            }
-                          }
-                        },
-                        RobotConfig.arm) // adjust arm angle based on vision's distance from target
-                    .repeatedly()));
+                    () -> {
+                      if (RobotState.isAmpMode()) {
+                        RobotConfig.arm.setAngle(ArmConstants.ampScoreAngleInDegrees);
+                      } else {
+                        Optional<Double> armAngle = RobotState.getArmAngleToTarget();
+                        if (armAngle.isPresent()) {
+                          RobotConfig.arm.setAngle((armAngle.get()));
+                        }
+                      }
+                    },
+                    RobotConfig.arm) // adjust arm angle based on vision's distance from target
+                ));
 
     /* Target Selection Controls */
     /*     A Button = Amp Mode
