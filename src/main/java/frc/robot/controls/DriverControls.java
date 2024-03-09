@@ -1,7 +1,6 @@
 package frc.robot.controls;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -25,9 +24,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public class DriverControls {
-  private static GenericEntry ampModeEntry;
-  private static GenericEntry fieldOrientedModeEntry;
-
   public static void setupGUI() {
     int colIndex = 0;
     int rowIndex = 0;
@@ -40,21 +36,17 @@ public class DriverControls {
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
 
-    ampModeEntry =
-        driverTab
-            .add("Amp Mode", RobotState.isAmpMode())
-            .withWidget(BuiltInWidgets.kBooleanBox)
-            .withPosition(colIndex, rowIndex++)
-            .withSize(2, 1)
-            .getEntry();
+    driverTab
+        .addBoolean("Amp Mode", () -> RobotState.isAmpMode())
+        .withWidget(BuiltInWidgets.kBooleanBox)
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
 
-    fieldOrientedModeEntry =
-        driverTab
-            .add("Field Oriented", RobotState.isFieldOriented())
-            .withWidget(BuiltInWidgets.kBooleanBox)
-            .withPosition(colIndex, rowIndex++)
-            .withSize(2, 1)
-            .getEntry();
+    driverTab
+        .addBoolean("Field Oriented", () -> RobotState.isFieldOriented())
+        .withWidget(BuiltInWidgets.kBooleanBox)
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
 
     /* TODO: Intake Camera */
 
@@ -81,7 +73,6 @@ public class DriverControls {
      *         Auto Orient On: Vision based rotation/arm angle
      */
     RobotState.setDriveMode(DriveMode.FIELD);
-    fieldOrientedModeEntry.setBoolean(RobotState.isFieldOriented());
 
     RobotConfig.drive.setDefaultCommand(
         new DriveCommand(
@@ -92,6 +83,13 @@ public class DriverControls {
 
     // TODO: Eventually remove!....this is for debug only
     mainController.back().onTrue(new InstantCommand(() -> RobotConfig.drive.resetOdometry()));
+    mainController
+        .start()
+        .onTrue(
+            new InstantCommand(
+                () ->
+                    RobotConfig.drive.setFieldOrientedDrive(
+                        !RobotConfig.drive.isFieldOrientedDrive())));
 
     /* Climber Controls */
     /*     D-Pad Up = Climber Up
@@ -184,7 +182,6 @@ public class DriverControls {
             new InstantCommand(
                 () -> {
                   RobotState.setTargetMode(TargetMode.AMP);
-                  ampModeEntry.setBoolean(RobotState.isAmpMode());
                 }));
     mainController
         .b()
@@ -192,7 +189,6 @@ public class DriverControls {
             new InstantCommand(
                 () -> {
                   RobotState.setTargetMode(TargetMode.SPEAKER);
-                  ampModeEntry.setBoolean(RobotState.isAmpMode());
                 }));
   }
 }
