@@ -93,7 +93,7 @@ public class RobotConfig {
     public static double ffKaBottom = 0.019246;
 
     /* PID */
-    public static double pidVelocityErrorInRPMS = 20;
+    public static double pidVelocityErrorInRPMS = 300;
     public static double pidSettlingTimeInMilliseconds = 0.1;
     public static double pidTimeoutInSeconds = 1.0;
     public static double pidKp = 0.043566;
