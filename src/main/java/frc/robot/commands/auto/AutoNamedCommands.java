@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.assist.PrepareForIntake;
 import frc.robot.config.RobotConfig;
+import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.util.RobotState;
 import java.util.Optional;
@@ -27,15 +28,18 @@ public class AutoNamedCommands {
   public static class AutoConstants {
     /* TODO: Fill in the values for scoring here */
     public static AutoScoreConstants scoreFromSpeakerAmpSide =
-        new AutoScoreConstants(0.0, 8, ShooterConstants.velocityInRPMs);
+        new AutoScoreConstants(
+            0.0, ArmConstants.subwooferScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
+    public static AutoScoreConstants scoreFromSpeakerCenterSide =
+        new AutoScoreConstants(
+            0.0, ArmConstants.subwooferScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
+    public static AutoScoreConstants scoreFromSpeakerSourceSide =
+        new AutoScoreConstants(
+            0.0, ArmConstants.subwooferScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
     public static AutoScoreConstants scoreFromNoteAmpSide =
         new AutoScoreConstants(40, 8, ShooterConstants.velocityInRPMs);
-    public static AutoScoreConstants scoreFromSpeakerCenterSide =
-        new AutoScoreConstants(0.0, 8, ShooterConstants.velocityInRPMs);
     public static AutoScoreConstants scoreFromNoteCenterSide =
         new AutoScoreConstants(0.0, 18, ShooterConstants.velocityInRPMs);
-    public static AutoScoreConstants scoreFromSpeakerSourceSide =
-        new AutoScoreConstants(0.0, 45, ShooterConstants.velocityInRPMs);
     public static AutoScoreConstants scoreFromNoteSourceSide =
         new AutoScoreConstants(320.0, 30.0, ShooterConstants.velocityInRPMs);
     public static AutoScoreConstants scoreFromOutsideSourceSide =
