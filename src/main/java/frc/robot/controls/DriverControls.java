@@ -190,7 +190,8 @@ public class DriverControls {
                     () -> RobotConfig.intake.runVoltage(0),
                     RobotConfig.intake), // turn off intake in case it is on
                 new AlignToTarget(
-                    RobotConfig.drive, RobotConfig.vision, () -> RobotState.getActiveTargetId()).withTimeout(DriveConstants.pidTimeoutInSeconds),
+                        RobotConfig.drive, RobotConfig.vision, () -> RobotState.getActiveTargetId())
+                    .withTimeout(DriveConstants.pidTimeoutInSeconds),
                 new SetShooterVelocity(RobotConfig.shooter, () -> RobotState.getShooterVelocity())
                     .withTimeout(ShooterConstants.pidTimeoutInSeconds), // turn on shooter
                 /* TODO: Use ArmToPositionTP instead of setting arm angle directly */
