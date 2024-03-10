@@ -109,7 +109,15 @@ public class PitControls {
             .getEntry();
 
     armLayout
-        .addDouble("Angle (degrees)", () -> RobotConfig.arm.getAngle())
+        .addDouble("Abs Angle (degrees)", () -> RobotConfig.arm.getAngle())
+        .withWidget(BuiltInWidgets.kNumberBar)
+        .withProperties(
+            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
+        //        .withSize(maxWidth, 1)
+        .withPosition(layoutColIndex, layoutRowIndex++);
+
+    armLayout
+        .addDouble("Rel Angle (degrees)", () -> RobotConfig.arm.getRelativeAngle())
         .withWidget(BuiltInWidgets.kNumberBar)
         .withProperties(
             Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))

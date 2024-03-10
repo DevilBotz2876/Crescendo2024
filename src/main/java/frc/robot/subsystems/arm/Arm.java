@@ -9,6 +9,10 @@ public interface Arm extends Subsystem {
     return 0;
   }
 
+  public default double getRelativeAngle() {
+    return getAngle();
+  }
+
   // sets of the angle of the arm
   public default void setAngle(double degrees) {}
 

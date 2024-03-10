@@ -129,6 +129,11 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     return inputs.absolutePositionDegree;
   }
 
+  @Override
+  public double getRelativeAngle() {
+    return inputs.relativePositionDegrees;
+  }
+
   // sets of the angle of the arm
   @Override
   public void setAngle(double degrees) {
@@ -239,7 +244,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-    if (inputs.absolutePositionDegree >= positionDegreeMax) {
+    //    if (inputs.absolutePositionDegree >= positionDegreeMax) {
+    if (inputs.relativePositionDegrees >= positionDegreeMax) {
       inputs.limitHigh = true;
     } else {
       inputs.limitHigh = false;
@@ -252,7 +258,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-    if (inputs.absolutePositionDegree <= positionDegreeMin) {
+    //    if (inputs.absolutePositionDegree <= positionDegreeMin) {
+    if (inputs.relativePositionDegrees <= positionDegreeMin) {
       inputs.limitLow = true;
 
     } else {

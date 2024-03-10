@@ -60,10 +60,10 @@ public class ArmIOSparkMax implements ArmIO {
     // encoder is not. Perhaps we just say that if abs encoder is at 80, set rel to X, or abs
     // encoder is at 0, set rel to 0.  Everything else is invalid and requires arm to rehome itself.
     //
-    // relEncoder.setPosition(0);
-    relEncoder.setPosition(
-        Units.radiansToDegrees(
-            absoluteEncoder.getDistance() * ArmConstants.absoluteEncoderInversion));
+    relEncoder.setPosition(0);
+    //    relEncoder.setPosition(
+    //        Units.radiansToDegrees(
+    //            absoluteEncoder.getDistance() * ArmConstants.absoluteEncoderInversion));
 
     lkP = RobotConfig.ArmConstants.pidKp;
     lkI = RobotConfig.ArmConstants.pidKi;

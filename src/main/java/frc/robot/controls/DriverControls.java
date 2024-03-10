@@ -79,7 +79,15 @@ public class DriverControls {
         .withSize(2, 1);
 
     driverTab
-        .addDouble("Angle (degrees)", () -> RobotConfig.arm.getAngle())
+        .addDouble("Abs Angle (degrees)", () -> RobotConfig.arm.getAngle())
+        .withWidget(BuiltInWidgets.kNumberBar)
+        .withProperties(
+            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
+        .withSize(2, 1)
+        .withPosition(colIndex, rowIndex++);
+
+    driverTab
+        .addDouble("Rel Angle (degrees)", () -> RobotConfig.arm.getRelativeAngle())
         .withWidget(BuiltInWidgets.kNumberBar)
         .withProperties(
             Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
