@@ -25,6 +25,7 @@ import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.DriveConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
+import frc.robot.subsystems.vision.VisionCamera;
 import frc.robot.util.RobotState;
 import frc.robot.util.RobotState.DriveMode;
 import frc.robot.util.RobotState.SpeakerShootingMode;
@@ -50,22 +51,25 @@ public class DriverControls {
         .withWidget(BuiltInWidgets.kBooleanBox)
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
-
-    /* TODO: Intake Camera */
-
-    /* Shooter Camera */
-    /*
     colIndex += 2;
     rowIndex = 0;
-    driverTab
-        .addCamera("Shooter Camera", "shooter", "mjpg:http://10.28.76.11:1181/?action=stream")
-        .withProperties(Map.of("showControls", false))
-        .withPosition(colIndex, rowIndex)
-        .withSize(3, 3);
-    rowIndex += 3;
-    */
 
-    colIndex += 2;
+    for (VisionCamera camera : RobotConfig.cameras) {
+      try {
+        driverTab
+            .addCamera(
+                camera.getName() + " cam",
+                camera.getName(),
+                "mjpg:http://10.28.76.11:" + camera.getPort() + "/?action=stream")
+            .withProperties(Map.of("showControls", false))
+            .withPosition(colIndex, rowIndex)
+            .withSize(3, 3);
+      } catch (Exception e) {
+        // Do Nothing
+      }
+      rowIndex += 3;
+    }
+    colIndex += 3;
     rowIndex = 0;
 
     driverTab

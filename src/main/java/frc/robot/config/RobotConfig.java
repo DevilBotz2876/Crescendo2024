@@ -21,6 +21,7 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.vision.VisionCamera;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /* Put all constants here with reasonable defaults */
@@ -33,6 +34,7 @@ public class RobotConfig {
   public static ClimberSubsystem climber;
   public static VisionSubsystem vision;
   public static RobotConfig instance;
+  public static List<VisionCamera> cameras;
 
   public static class DriveConstants {
     public static double maxVelocityMetersPerSec = 4.5;
@@ -204,7 +206,7 @@ public class RobotConfig {
     }
 
     if (stubVision) {
-      ArrayList<VisionCamera> cameras = new ArrayList<VisionCamera>();
+      cameras = new ArrayList<VisionCamera>();
       if (Robot.isSimulation()) {
         cameras.add(
             new VisionCamera(

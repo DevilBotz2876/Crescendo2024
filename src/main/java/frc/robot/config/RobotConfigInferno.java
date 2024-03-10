@@ -100,11 +100,12 @@ public class RobotConfigInferno extends RobotConfig {
     // retract the climber after auto-zeroing
     climber = new ClimberSubsystem(new ClimberIOSparkMax(7, false), new ClimberIOSparkMax(6, true));
 
-    ArrayList<VisionCamera> cameras = new ArrayList<VisionCamera>();
+    cameras = new ArrayList<VisionCamera>();
     /* TODO: Measure and set camera name/location */
     cameras.add(
         new VisionCamera(
             "shooter",
+            "1188",
             new Transform3d(
                 new Translation3d(-0.3048, 0, 0.22),
                 new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(180)))));

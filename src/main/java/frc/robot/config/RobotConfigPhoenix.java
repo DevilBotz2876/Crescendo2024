@@ -25,10 +25,11 @@ public class RobotConfigPhoenix extends RobotConfig {
     DriveConstants.pidAngleErrorInDegrees = 1;
     drive = new DriveSwerveYAGSL("yagsl/phoenix");
 
-    ArrayList<VisionCamera> cameras = new ArrayList<VisionCamera>();
+    cameras = new ArrayList<VisionCamera>();
     cameras.add(
         new VisionCamera(
             "shooter",
+            "1182",
             new Transform3d(
                 new Translation3d(-0.3048, 0, 0.22),
                 new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(180)))));
