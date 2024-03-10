@@ -72,7 +72,7 @@ public class RobotConfig {
 
     public static double pidAngleErrorInDegrees = 2.0;
     public static double pidSettlingTimeInMilliseconds = 0.1;
-    public static double pidTimeoutInSeconds = 0.5;
+    public static double pidTimeoutInSeconds = 3.0;
 
     public static double maxAngleInDegrees = 90.0;
     public static double minAngleInDegrees = 0.0;
