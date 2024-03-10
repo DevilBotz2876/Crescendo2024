@@ -12,11 +12,7 @@ import java.util.function.DoubleSupplier;
 
 public class PrepareForIntake extends SequentialCommandGroup {
   public PrepareForIntake(
-      Arm arm,
-      Intake intake,
-      DoubleSupplier intakeAngle,
-      DoubleSupplier intakeVoltage,
-      DoubleSupplier intakeFeedVoltage) {
+      Arm arm, Intake intake, DoubleSupplier intakeAngle, DoubleSupplier intakeVoltage) {
     if (Constants.debugCommands) {
       addCommands(new PrintCommand("START: " + this.getClass().getSimpleName()));
     }
@@ -26,7 +22,7 @@ public class PrepareForIntake extends SequentialCommandGroup {
     } else {
       addCommands(
           new ParallelCommandGroup(new ArmToPositionTP(intakeAngle, arm)),
-          new IndexPiece(intake, intakeVoltage, intakeFeedVoltage));
+          new IndexPiece(intake, intakeVoltage));
     }
     addCommands(new ProtectArm(arm));
     if (Constants.debugCommands) {
@@ -37,6 +33,6 @@ public class PrepareForIntake extends SequentialCommandGroup {
   // Sets the Arm to the ideal angle for intake
   // Turns the intake motor on
   public PrepareForIntake(Arm arm, Intake intake) {
-    this(arm, intake, () -> ArmConstants.intakeAngleInDegrees, null, null);
+    this(arm, intake, () -> ArmConstants.intakeAngleInDegrees, null);
   }
 }

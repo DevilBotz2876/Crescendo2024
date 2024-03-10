@@ -42,15 +42,6 @@ public class DebugControls {
             .withSize(2, 1)
             .getEntry();
 
-    GenericEntry intakeIndexVoltageEntry =
-        debugTab
-            .add("Intake: Index Volts", IntakeConstants.indexSpeedInVolts)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0, "max", 12))
-            .withPosition(colIndex, rowIndex++)
-            .withSize(2, 1)
-            .getEntry();
-
     debugTab
         .add(
             "Assist: Prepare For Intake",
@@ -58,8 +49,7 @@ public class DebugControls {
                 RobotConfig.arm,
                 RobotConfig.intake,
                 () -> intakeAngleEntry.getDouble(ArmConstants.intakeAngleInDegrees),
-                () -> intakeVoltageEntry.getDouble(IntakeConstants.defaultSpeedInVolts),
-                () -> intakeIndexVoltageEntry.getDouble(IntakeConstants.indexSpeedInVolts)))
+                () -> intakeVoltageEntry.getDouble(IntakeConstants.defaultSpeedInVolts)))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
 
