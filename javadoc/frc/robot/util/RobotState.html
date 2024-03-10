@@ -93,8 +93,11 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="RobotState.DriveMode.html" class="type-name-link" title="enum class in frc.robot.util">RobotState.DriveMode</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static enum&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="RobotState.TargetMode.html" class="type-name-link" title="enum class in frc.robot.util">RobotState.TargetMode</a></code></div>
+<div class="col-second odd-row-color"><code><a href="RobotState.SpeakerShootingMode.html" class="type-name-link" title="enum class in frc.robot.util">RobotState.SpeakerShootingMode</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static enum&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="RobotState.TargetMode.html" class="type-name-link" title="enum class in frc.robot.util">RobotState.TargetMode</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -125,8 +128,14 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getActiveTargetId()" class="member-name-link">getActiveTargetId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static double</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getShooterVelocity()" class="member-name-link">getShooterVelocity</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getArmAngleToTarget()" class="member-name-link">getArmAngleToTarget</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static double</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getShooterVelocity()" class="member-name-link">getShooterVelocity</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getShootingModeName()" class="member-name-link">getShootingModeName</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="RobotState.TargetMode.html" title="enum class in frc.robot.util">RobotState.TargetMode</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getTargetMode()" class="member-name-link">getTargetMode</a>()</code></div>
@@ -144,8 +153,11 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setDriveMode(frc.robot.util.RobotState.DriveMode)" class="member-name-link">setDriveMode</a><wbr>(<a href="RobotState.DriveMode.html" title="enum class in frc.robot.util">RobotState.DriveMode</a>&nbsp;driveMode)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setTargetMode(frc.robot.util.RobotState.TargetMode)" class="member-name-link">setTargetMode</a><wbr>(<a href="RobotState.TargetMode.html" title="enum class in frc.robot.util">RobotState.TargetMode</a>&nbsp;targetMode)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setSpeakerShootingMode(frc.robot.util.RobotState.SpeakerShootingMode)" class="member-name-link">setSpeakerShootingMode</a><wbr>(<a href="RobotState.SpeakerShootingMode.html" title="enum class in frc.robot.util">RobotState.SpeakerShootingMode</a>&nbsp;position)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setTargetMode(frc.robot.util.RobotState.TargetMode)" class="member-name-link">setTargetMode</a><wbr>(<a href="RobotState.TargetMode.html" title="enum class in frc.robot.util">RobotState.TargetMode</a>&nbsp;targetMode)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -223,6 +235,24 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="isFieldOriented()">
 <h3>isFieldOriented</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isFieldOriented</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setSpeakerShootingMode(frc.robot.util.RobotState.SpeakerShootingMode)">
+<h3>setSpeakerShootingMode</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setSpeakerShootingMode</span><wbr><span class="parameters">(<a href="RobotState.SpeakerShootingMode.html" title="enum class in frc.robot.util">RobotState.SpeakerShootingMode</a>&nbsp;position)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="getShootingModeName()">
+<h3>getShootingModeName</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getShootingModeName</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getArmAngleToTarget()">
+<h3>getArmAngleToTarget</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</span>&nbsp;<span class="element-name">getArmAngleToTarget</span>()</div>
 </section>
 </li>
 </ul>

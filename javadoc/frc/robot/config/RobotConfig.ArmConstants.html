@@ -132,25 +132,31 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><code><a href="#minAngleInDegrees" class="member-name-link">minAngleInDegrees</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static double</code></div>
-<div class="col-second even-row-color"><code><a href="#pidAngleErrorInDegrees" class="member-name-link">pidAngleErrorInDegrees</a></code></div>
+<div class="col-second even-row-color"><code><a href="#noteScoreAngleInDegrees" class="member-name-link">noteScoreAngleInDegrees</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static double</code></div>
-<div class="col-second odd-row-color"><code><a href="#pidKd" class="member-name-link">pidKd</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#pidAngleErrorInDegrees" class="member-name-link">pidAngleErrorInDegrees</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static double</code></div>
-<div class="col-second even-row-color"><code><a href="#pidKi" class="member-name-link">pidKi</a></code></div>
+<div class="col-second even-row-color"><code><a href="#pidKd" class="member-name-link">pidKd</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static double</code></div>
-<div class="col-second odd-row-color"><code><a href="#pidKp" class="member-name-link">pidKp</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#pidKi" class="member-name-link">pidKi</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static double</code></div>
-<div class="col-second even-row-color"><code><a href="#pidMaxOutput" class="member-name-link">pidMaxOutput</a></code></div>
+<div class="col-second even-row-color"><code><a href="#pidKp" class="member-name-link">pidKp</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static double</code></div>
-<div class="col-second odd-row-color"><code><a href="#pidMinOutput" class="member-name-link">pidMinOutput</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#pidMaxOutput" class="member-name-link">pidMaxOutput</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static double</code></div>
-<div class="col-second even-row-color"><code><a href="#pidSettlingTimeInMilliseconds" class="member-name-link">pidSettlingTimeInMilliseconds</a></code></div>
+<div class="col-second even-row-color"><code><a href="#pidMinOutput" class="member-name-link">pidMinOutput</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static double</code></div>
+<div class="col-second odd-row-color"><code><a href="#pidSettlingTimeInMilliseconds" class="member-name-link">pidSettlingTimeInMilliseconds</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static double</code></div>
+<div class="col-second even-row-color"><code><a href="#pidTimeoutInSeconds" class="member-name-link">pidTimeoutInSeconds</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static double</code></div>
 <div class="col-second odd-row-color"><code><a href="#stowIntakeAngleInDegrees" class="member-name-link">stowIntakeAngleInDegrees</a></code></div>
@@ -158,6 +164,9 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>static double</code></div>
 <div class="col-second even-row-color"><code><a href="#subwooferScoreAngleInDegrees" class="member-name-link">subwooferScoreAngleInDegrees</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static double</code></div>
+<div class="col-second odd-row-color"><code><a href="#subwooferScoreFromPodiumAngleInDegrees" class="member-name-link">subwooferScoreFromPodiumAngleInDegrees</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -283,6 +292,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="pidTimeoutInSeconds">
+<h3>pidTimeoutInSeconds</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">pidTimeoutInSeconds</span></div>
+</section>
+</li>
+<li>
 <section class="detail" id="maxAngleInDegrees">
 <h3>maxAngleInDegrees</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">maxAngleInDegrees</span></div>
@@ -316,6 +331,18 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="subwooferScoreAngleInDegrees">
 <h3>subwooferScoreAngleInDegrees</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">subwooferScoreAngleInDegrees</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="subwooferScoreFromPodiumAngleInDegrees">
+<h3>subwooferScoreFromPodiumAngleInDegrees</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">subwooferScoreFromPodiumAngleInDegrees</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="noteScoreAngleInDegrees">
+<h3>noteScoreAngleInDegrees</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">noteScoreAngleInDegrees</span></div>
 </section>
 </li>
 <li>
