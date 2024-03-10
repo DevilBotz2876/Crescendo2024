@@ -244,8 +244,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-    //    if (inputs.absolutePositionDegree >= positionDegreeMax) {
-    if (inputs.relativePositionDegrees >= positionDegreeMax) {
+    if (inputs.absolutePositionDegree >= positionDegreeMax) {
       inputs.limitHigh = true;
     } else {
       inputs.limitHigh = false;
@@ -258,8 +257,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-    //    if (inputs.absolutePositionDegree <= positionDegreeMin) {
-    if (inputs.relativePositionDegrees <= positionDegreeMin) {
+    if (inputs.absolutePositionDegree <= positionDegreeMin) {
       inputs.limitLow = true;
 
     } else {
