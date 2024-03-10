@@ -19,6 +19,7 @@ public class AlignToTarget extends Command {
   Vision vision;
   PIDController turnPID;
   double setpoint;
+  boolean hasSetpoint;
   IntSupplier targetId;
 
   /** Creates a new AlignToTarget. */
@@ -50,6 +51,7 @@ public class AlignToTarget extends Command {
   @Override
   public void initialize() {
     Optional<Double> yawToTarget;
+    hasSetpoint = false;
     if (targetId != null) {
       yawToTarget = vision.getYawToAprilTag(targetId.getAsInt());
     } else {
@@ -61,28 +63,31 @@ public class AlignToTarget extends Command {
       //
       // TODO: check sign/math is right
       setpoint = drive.getAngle() - yawToTarget.get();
-    } else {
-      setpoint = drive.getAngle();
+      hasSetpoint = true;
     }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double rotate = turnPID.calculate(drive.getAngle(), setpoint);
-    ChassisSpeeds speeds = new ChassisSpeeds(0, 0, rotate * drive.getMaxAngularSpeed());
-    drive.runVelocity(speeds);
+    if (hasSetpoint) {
+      double rotate = turnPID.calculate(drive.getAngle(), setpoint);
+      ChassisSpeeds speeds = new ChassisSpeeds(0, 0, rotate * drive.getMaxAngularSpeed());
+      drive.runVelocity(speeds);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    drive.runVelocity(new ChassisSpeeds());
+    if (hasSetpoint) {
+      drive.runVelocity(new ChassisSpeeds());
+    }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return turnPID.atSetpoint();
+    return !hasSetpoint || turnPID.atSetpoint();
   }
 }
