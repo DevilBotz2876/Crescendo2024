@@ -88,7 +88,7 @@ public class PitControls {
   private static int setupArmControls(ShuffleboardTab tab, int col, int row, int maxWidth) {
     int layoutColIndex = 0;
     int layoutRowIndex = 0;
-    int layoutMaxHeight = 4;
+    int layoutMaxHeight = 5;
     List<Command> commands = new ArrayList<Command>();
     maxWidth = Math.min(1, maxWidth);
 
@@ -490,7 +490,7 @@ public class PitControls {
         .addDouble("Battery (volts)", () -> RobotController.getBatteryVoltage())
         .withWidget(BuiltInWidgets.kVoltageView)
         .withProperties(Map.of("min", 0, "max", 12))
-        //        .withSize(maxWidth, 1)
+        .withSize(1, 1)
         .withPosition(colIndex, rowIndex++);
 
     pitTab
