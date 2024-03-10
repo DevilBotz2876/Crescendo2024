@@ -8,6 +8,9 @@ import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.commands.assist.ScorePiece;
 import frc.robot.commands.drive.DriveToYaw;
 import frc.robot.commands.shooter.SetShooterVelocity;
+import frc.robot.config.RobotConfig.ArmConstants;
+import frc.robot.config.RobotConfig.DriveConstants;
+import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.intake.Intake;
@@ -43,9 +46,11 @@ public class AutoScore extends SequentialCommandGroup {
     }
     addCommands(
         new ParallelCommandGroup(
-            new DriveToYaw(drive, robotYawInDegrees),
-            new ArmToPosition(arm, armAngleInDegrees),
-            new SetShooterVelocity(shooter, shooterVelocityInRPMs)));
+            new DriveToYaw(drive, robotYawInDegrees)
+                .withTimeout(DriveConstants.pidTimeoutInSeconds),
+            new ArmToPosition(arm, armAngleInDegrees).withTimeout(ArmConstants.pidTimeoutInSeconds),
+            new SetShooterVelocity(shooter, shooterVelocityInRPMs)
+                .withTimeout(ShooterConstants.pidTimeoutInSeconds)));
     addCommands(new ScorePiece(intake, shooter));
 
     if (Constants.debugCommands) {

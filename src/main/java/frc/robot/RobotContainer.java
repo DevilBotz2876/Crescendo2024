@@ -14,6 +14,7 @@ import frc.robot.config.RobotConfigSherman;
 import frc.robot.controls.DebugControls;
 import frc.robot.controls.DriverControls;
 import frc.robot.controls.PitControls;
+import frc.robot.controls.SysIdControls;
 
 public class RobotContainer {
   public final CommandXboxController controller;
@@ -53,7 +54,7 @@ public class RobotContainer {
     DriverControls.setupControls(controller);
     PitControls.setupControls();
     DebugControls.setupControls();
-    //    SysIdControls.setupGUI();
+    SysIdControls.setupGUI();
   }
 
   public Command getAutonomousCommand() {

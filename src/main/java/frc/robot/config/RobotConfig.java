@@ -21,6 +21,7 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.vision.VisionCamera;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /* Put all constants here with reasonable defaults */
@@ -33,6 +34,7 @@ public class RobotConfig {
   public static ClimberSubsystem climber;
   public static VisionSubsystem vision;
   public static RobotConfig instance;
+  public static List<VisionCamera> cameras;
 
   public static class DriveConstants {
     public static double maxVelocityMetersPerSec = 4.5;
@@ -42,6 +44,7 @@ public class RobotConfig {
     public static double anglePidKi = 0.0;
     public static double anglePidKd = 0.0;
     public static double pidAngleErrorInDegrees = 2.0;
+    public static double pidTimeoutInSeconds = 0.5;
 
     public static double slewRateLimiterX = 3;
     public static double slewRateLimiterY = 3;
@@ -71,14 +74,17 @@ public class RobotConfig {
 
     public static double pidAngleErrorInDegrees = 2.0;
     public static double pidSettlingTimeInMilliseconds = 0.1;
+    public static double pidTimeoutInSeconds = 3.0;
 
     public static double maxAngleInDegrees = 90.0;
     public static double minAngleInDegrees = 0.0;
     public static double intakeAngleInDegrees = 1;
     public static double ejectAngleInDegrees = 15;
     public static double ampScoreAngleInDegrees = 80;
-    public static double subwooferScoreAngleInDegrees = 20;
-    public static double stowIntakeAngleInDegrees = 45;
+    public static double subwooferScoreAngleInDegrees = 10;
+    public static double subwooferScoreFromPodiumAngleInDegrees = 20;
+    public static double noteScoreAngleInDegrees = 25;
+    public static double stowIntakeAngleInDegrees = 15;
 
     public static double defaultSpeedInVolts = 6.0;
   }
@@ -93,9 +99,9 @@ public class RobotConfig {
     public static double ffKaBottom = 0.019246;
 
     /* PID */
-    public static double pidVelocityErrorInRPMS = 20;
+    public static double pidVelocityErrorInRPMS = 300;
     public static double pidSettlingTimeInMilliseconds = 0.1;
-    public static double pidTimeoutInSeconds = 1.0;
+    public static double pidTimeoutInSeconds = 0.5;
     public static double pidKp = 0.043566;
     public static double pidKi = 0.0;
     public static double pidKd = 0.0;
@@ -200,7 +206,7 @@ public class RobotConfig {
     }
 
     if (stubVision) {
-      ArrayList<VisionCamera> cameras = new ArrayList<VisionCamera>();
+      cameras = new ArrayList<VisionCamera>();
       if (Robot.isSimulation()) {
         cameras.add(
             new VisionCamera(

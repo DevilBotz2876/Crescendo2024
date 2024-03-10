@@ -19,16 +19,17 @@ public class RobotConfigPhoenix extends RobotConfig {
     super(false, true, true, true, false, true, false);
 
     // Phoenix has a Swerve drive train
-    DriveConstants.anglePidKp = 0.02;
+    DriveConstants.anglePidKp = 0.025;
     DriveConstants.anglePidKi = 0.0;
     DriveConstants.anglePidKd = 0.0;
-    DriveConstants.pidAngleErrorInDegrees = 0.5;
+    DriveConstants.pidAngleErrorInDegrees = 1;
     drive = new DriveSwerveYAGSL("yagsl/phoenix");
 
-    ArrayList<VisionCamera> cameras = new ArrayList<VisionCamera>();
+    cameras = new ArrayList<VisionCamera>();
     cameras.add(
         new VisionCamera(
             "shooter",
+            "1182",
             new Transform3d(
                 new Translation3d(-0.3048, 0, 0.22),
                 new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(180)))));

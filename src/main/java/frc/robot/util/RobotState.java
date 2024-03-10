@@ -3,6 +3,7 @@ package frc.robot.util;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.config.RobotConfig;
+import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
 import java.util.Optional;
 
@@ -119,5 +120,68 @@ public class RobotState {
 
   public static boolean isFieldOriented() {
     return (driveMode == DriveMode.FIELD);
+  }
+
+  public enum SpeakerShootingMode {
+    SPEAKER_FROM_SUBWOOFER,
+    SPEAKER_FROM_PODIUM,
+    SPEAKER_VISION_BASED,
+  }
+
+  private static SpeakerShootingMode shootingMode = SpeakerShootingMode.SPEAKER_FROM_SUBWOOFER;
+
+  public static void setSpeakerShootingMode(SpeakerShootingMode position) {
+    RobotState.shootingMode = position;
+  }
+
+  public static String getShootingModeName() {
+    if (isAmpMode()) {
+      return "Amp";
+    }
+
+    switch (RobotState.shootingMode) {
+      case SPEAKER_FROM_SUBWOOFER:
+        return "Speaker - From Subwoofer";
+
+      case SPEAKER_FROM_PODIUM:
+        return "Speaker - From Podium";
+
+      case SPEAKER_VISION_BASED:
+        return "Speaker - Vision Based";
+
+      default:
+        return "Unknown";
+    }
+  }
+
+  public static Optional<Double> getArmAngleToTarget() {
+    {
+      if (isAmpMode()) {
+        return Optional.of(ArmConstants.ampScoreAngleInDegrees);
+      }
+
+      switch (RobotState.shootingMode) {
+        case SPEAKER_FROM_SUBWOOFER:
+          return Optional.of(ArmConstants.subwooferScoreAngleInDegrees);
+
+        case SPEAKER_FROM_PODIUM:
+          return Optional.of(ArmConstants.subwooferScoreFromPodiumAngleInDegrees);
+
+        case SPEAKER_VISION_BASED:
+          Optional<Double> distanceToTarget =
+              RobotConfig.vision.getDistanceToAprilTag(RobotState.getActiveTargetId());
+          if (distanceToTarget.isPresent()) {
+            Optional<Double> armAngle =
+                RobotConfig.instance.getArmAngleFromDistance(distanceToTarget.get());
+
+            return armAngle;
+          }
+          return Optional.empty();
+
+        default:
+          System.err.println("Shooting Mode Not Implemented!");
+          return Optional.empty();
+      }
+    }
   }
 }

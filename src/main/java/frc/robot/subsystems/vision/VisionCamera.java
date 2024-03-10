@@ -4,7 +4,6 @@ import edu.wpi.first.math.geometry.Transform3d;
 
 public class VisionCamera {
   final String name;
-
   /*
    * Location of the camera view relative to the robot (in meters)
    *
@@ -21,13 +20,28 @@ public class VisionCamera {
    *  E.g. Rotation(0, Units.degreesToRadians(-20), Units.degreesToRadians(-90)) is pitched up by 20 degrees, and facing to the right
    */
   Transform3d robotToCamera;
+  final String port;
 
   /**
    * @param cameraName
    * @param robotToCamera
+   * @param port
    */
-  public VisionCamera(String cameraName, Transform3d robotToCamera) {
+  public VisionCamera(String cameraName, String port, Transform3d robotToCamera) {
     this.name = cameraName;
+    this.port = port;
     this.robotToCamera = robotToCamera;
+  }
+
+  public VisionCamera(String cameraName, Transform3d robotToCamera) {
+    this(cameraName, null, robotToCamera);
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public String getPort() {
+    return port;
   }
 }

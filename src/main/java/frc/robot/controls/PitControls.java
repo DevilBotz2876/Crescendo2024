@@ -88,7 +88,7 @@ public class PitControls {
   private static int setupArmControls(ShuffleboardTab tab, int col, int row, int maxWidth) {
     int layoutColIndex = 0;
     int layoutRowIndex = 0;
-    int layoutMaxHeight = 4;
+    int layoutMaxHeight = 5;
     List<Command> commands = new ArrayList<Command>();
     maxWidth = Math.min(1, maxWidth);
 
@@ -109,7 +109,15 @@ public class PitControls {
             .getEntry();
 
     armLayout
-        .addDouble("Angle (degrees)", () -> RobotConfig.arm.getAngle())
+        .addDouble("Abs Angle (degrees)", () -> RobotConfig.arm.getAngle())
+        .withWidget(BuiltInWidgets.kNumberBar)
+        .withProperties(
+            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
+        //        .withSize(maxWidth, 1)
+        .withPosition(layoutColIndex, layoutRowIndex++);
+
+    armLayout
+        .addDouble("Rel Angle (degrees)", () -> RobotConfig.arm.getRelativeAngle())
         .withWidget(BuiltInWidgets.kNumberBar)
         .withProperties(
             Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
@@ -482,7 +490,7 @@ public class PitControls {
         .addDouble("Battery (volts)", () -> RobotController.getBatteryVoltage())
         .withWidget(BuiltInWidgets.kVoltageView)
         .withProperties(Map.of("min", 0, "max", 12))
-        //        .withSize(maxWidth, 1)
+        .withSize(1, 1)
         .withPosition(colIndex, rowIndex++);
 
     pitTab

@@ -10,20 +10,17 @@ import java.util.function.DoubleSupplier;
 public class IndexPiece extends Command {
   Intake intake;
   DoubleSupplier intakeVoltage = null;
-  DoubleSupplier indexVoltage = null;
   double targetIntakeVoltage;
-  double targetIndexVoltage;
 
-  public IndexPiece(Intake intake, DoubleSupplier intakeVoltage, DoubleSupplier indexVoltage) {
+  public IndexPiece(Intake intake, DoubleSupplier intakeVoltage) {
     this.intake = intake;
     this.intakeVoltage = intakeVoltage;
-    this.indexVoltage = indexVoltage;
 
     addRequirements((Subsystem) intake);
   }
 
   public IndexPiece(Intake intake) {
-    this(intake, null, null);
+    this(intake, null);
   }
 
   @Override
@@ -36,12 +33,6 @@ public class IndexPiece extends Command {
     } else {
       targetIntakeVoltage = IntakeConstants.defaultSpeedInVolts;
     }
-
-    if (indexVoltage != null) {
-      targetIndexVoltage = indexVoltage.getAsDouble();
-    } else {
-      targetIndexVoltage = IntakeConstants.indexSpeedInVolts;
-    }
   }
 
   @Override
@@ -53,7 +44,10 @@ public class IndexPiece extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    intake.runVoltage(0);
+
+    if (!interrupted) {
+      intake.runVoltage(0);
+    }
     if (Constants.debugCommands) {
       System.out.println("  END: " + this.getClass().getSimpleName());
     }

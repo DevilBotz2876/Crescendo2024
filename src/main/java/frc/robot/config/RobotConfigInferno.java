@@ -29,6 +29,10 @@ public class RobotConfigInferno extends RobotConfig {
 
     // Inferno has a Swerve drive train
     // TODO: set DriveConstants.maxVelocityMetersPerSec
+    DriveConstants.anglePidKp = 0.02;
+    DriveConstants.anglePidKi = 0.0;
+    DriveConstants.anglePidKd = 0.0;
+    DriveConstants.pidAngleErrorInDegrees = 0.5;
     drive = new DriveSwerveYAGSL("yagsl/inferno");
 
     // Inferno has a TalonSRX based intake
@@ -40,15 +44,16 @@ public class RobotConfigInferno extends RobotConfig {
 
     // Inferno has a single SparkMax based shooter
 
-    // Values from Nilesh's Shooter SysId Run on Inferno 2024-02-22
-    ShooterConstants.ffKs = 0.0084987;
-    ShooterConstants.ffKv = 0.021041;
-    ShooterConstants.ffKa = 0.010693;
+    // Values from Nilesh's Shooter SysId Run @ WPI on Inferno 2024-03-09
+    ShooterConstants.ffKs =
+        0.033556; // SysId calculated -0.036669, but likely erroneous.  Will need to re-run sysid
+    ShooterConstants.ffKv = 0.019623;
+    ShooterConstants.ffKa = 0.0069448;
 
-    ShooterConstants.pidKp = 0.0072355;
+    ShooterConstants.pidKp = 0.0037689;
     ShooterConstants.pidKi = 0.0;
     ShooterConstants.pidKd = 0.0;
-    ShooterConstants.pidVelocityErrorInRPMS = 20;
+    ShooterConstants.pidVelocityErrorInRPMS = 100;
 
     ShooterConstants.ampScoreVelocityInRPMs = 2000;
     ShooterConstants.velocityInRPMs = 4500;
@@ -73,9 +78,11 @@ public class RobotConfigInferno extends RobotConfig {
 
     ArmConstants.minAngleInDegrees = -1.0;
     ArmConstants.intakeAngleInDegrees = 1;
-    ArmConstants.subwooferScoreAngleInDegrees = 10;
     ArmConstants.ampScoreAngleInDegrees = 80;
-    ArmConstants.stowIntakeAngleInDegrees = 45;
+    ArmConstants.subwooferScoreAngleInDegrees = 9.80;
+    ArmConstants.subwooferScoreFromPodiumAngleInDegrees = 26.5;
+    ArmConstants.noteScoreAngleInDegrees = 22.56;
+    ArmConstants.stowIntakeAngleInDegrees = 14.64;
 
     arm = new ArmSubsystem(new ArmIOSparkMax(4, true));
 
@@ -93,11 +100,12 @@ public class RobotConfigInferno extends RobotConfig {
     // retract the climber after auto-zeroing
     climber = new ClimberSubsystem(new ClimberIOSparkMax(7, false), new ClimberIOSparkMax(6, true));
 
-    ArrayList<VisionCamera> cameras = new ArrayList<VisionCamera>();
+    cameras = new ArrayList<VisionCamera>();
     /* TODO: Measure and set camera name/location */
     cameras.add(
         new VisionCamera(
-            "photonvision",
+            "shooter",
+            "1188",
             new Transform3d(
                 new Translation3d(-0.3048, 0, 0.22),
                 new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(180)))));

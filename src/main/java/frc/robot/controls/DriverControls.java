@@ -1,10 +1,15 @@
 package frc.robot.controls;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.event.BooleanEvent;
+import edu.wpi.first.wpilibj.event.EventLoop;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -15,19 +20,20 @@ import frc.robot.commands.assist.ScorePiece;
 import frc.robot.commands.climber.ClimberCommand;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.shooter.SetShooterVelocity;
+import frc.robot.commands.vision.AlignToTarget;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
+import frc.robot.config.RobotConfig.DriveConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
+import frc.robot.subsystems.vision.VisionCamera;
 import frc.robot.util.RobotState;
 import frc.robot.util.RobotState.DriveMode;
+import frc.robot.util.RobotState.SpeakerShootingMode;
 import frc.robot.util.RobotState.TargetMode;
 import java.util.Map;
 import java.util.Optional;
 
 public class DriverControls {
-  private static GenericEntry ampModeEntry;
-  private static GenericEntry fieldOrientedModeEntry;
-
   public static void setupGUI() {
     int colIndex = 0;
     int rowIndex = 0;
@@ -40,33 +46,85 @@ public class DriverControls {
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
 
-    ampModeEntry =
-        driverTab
-            .add("Amp Mode", RobotState.isAmpMode())
-            .withWidget(BuiltInWidgets.kBooleanBox)
-            .withPosition(colIndex, rowIndex++)
-            .withSize(2, 1)
-            .getEntry();
-
-    fieldOrientedModeEntry =
-        driverTab
-            .add("Field Oriented", RobotState.isFieldOriented())
-            .withWidget(BuiltInWidgets.kBooleanBox)
-            .withPosition(colIndex, rowIndex++)
-            .withSize(2, 1)
-            .getEntry();
-
-    /* TODO: Intake Camera */
-
-    /* Shooter Camera */
+    driverTab
+        .addBoolean("Field Oriented", () -> RobotState.isFieldOriented())
+        .withWidget(BuiltInWidgets.kBooleanBox)
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
     colIndex += 2;
     rowIndex = 0;
+
+    for (VisionCamera camera : RobotConfig.cameras) {
+      try {
+        driverTab
+            .addCamera(
+                camera.getName() + " cam",
+                camera.getName(),
+                "mjpg:http://10.28.76.11:" + camera.getPort() + "/?action=stream")
+            .withProperties(Map.of("showControls", false))
+            .withPosition(colIndex, rowIndex)
+            .withSize(3, 3);
+      } catch (Exception e) {
+        // Do Nothing
+      }
+      rowIndex += 3;
+    }
+    colIndex += 3;
+    rowIndex = 0;
+
     driverTab
-        .addCamera("Shooter Camera", "shooter", "mjpg:http://10.28.76.11:1181/?action=stream")
-        .withProperties(Map.of("showControls", false))
-        .withPosition(colIndex, rowIndex)
-        .withSize(3, 3);
-    rowIndex += 3;
+        .addBoolean("Amp Mode", () -> RobotState.isAmpMode())
+        .withWidget(BuiltInWidgets.kBooleanBox)
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+
+    driverTab
+        .addDouble("Abs Angle (degrees)", () -> RobotConfig.arm.getAngle())
+        .withWidget(BuiltInWidgets.kNumberBar)
+        .withProperties(
+            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
+        .withSize(2, 1)
+        .withPosition(colIndex, rowIndex++);
+
+    driverTab
+        .addDouble("Rel Angle (degrees)", () -> RobotConfig.arm.getRelativeAngle())
+        .withWidget(BuiltInWidgets.kNumberBar)
+        .withProperties(
+            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
+        .withSize(2, 1)
+        .withPosition(colIndex, rowIndex++);
+
+    ShuffleboardLayout speakerModeLayout =
+        driverTab
+            .getLayout("Speaker Mode", BuiltInLayouts.kList)
+            //            .withProperties(Map.of("Label position", "HIDDEN"))
+            .withSize(2, 3)
+            .withPosition(colIndex, rowIndex++);
+
+    Command speakerModeFromSubwoofer =
+        new InstantCommand(
+            () -> RobotState.setSpeakerShootingMode(SpeakerShootingMode.SPEAKER_FROM_SUBWOOFER));
+    speakerModeFromSubwoofer.setName("From Subwoofer");
+
+    Command speakerModeFromPodium =
+        new InstantCommand(
+            () -> RobotState.setSpeakerShootingMode(SpeakerShootingMode.SPEAKER_FROM_PODIUM));
+    speakerModeFromPodium.setName("From Podium");
+
+    Command speakerModeVisionBased =
+        new InstantCommand(
+            () -> RobotState.setSpeakerShootingMode(SpeakerShootingMode.SPEAKER_VISION_BASED));
+    speakerModeVisionBased.setName("Vision Based");
+
+    speakerModeLayout
+        .addString("Speaker Mode", () -> RobotState.getShootingModeName())
+        .withWidget(BuiltInWidgets.kTextView)
+        .withPosition(0, 0)
+        .withSize(2, 1);
+
+    speakerModeLayout.add(speakerModeFromSubwoofer).withPosition(0, 1);
+    speakerModeLayout.add(speakerModeFromPodium).withPosition(0, 2);
+    speakerModeLayout.add(speakerModeVisionBased).withPosition(0, 3);
   }
 
   public static void setupControls(CommandXboxController mainController) {
@@ -81,7 +139,6 @@ public class DriverControls {
      *         Auto Orient On: Vision based rotation/arm angle
      */
     RobotState.setDriveMode(DriveMode.FIELD);
-    fieldOrientedModeEntry.setBoolean(RobotState.isFieldOriented());
 
     RobotConfig.drive.setDefaultCommand(
         new DriveCommand(
@@ -92,6 +149,13 @@ public class DriverControls {
 
     // TODO: Eventually remove!....this is for debug only
     mainController.back().onTrue(new InstantCommand(() -> RobotConfig.drive.resetOdometry()));
+    mainController
+        .start()
+        .onTrue(
+            new InstantCommand(
+                () ->
+                    RobotConfig.drive.setFieldOrientedDrive(
+                        !RobotConfig.drive.isFieldOrientedDrive())));
 
     /* Climber Controls */
     /*     D-Pad Up = Climber Up
@@ -135,44 +199,30 @@ public class DriverControls {
     /* TODO: Make this is a toggle, not just while right bumper is pressed */
     mainController
         .rightBumper()
-        .whileTrue(
+        .onTrue(
             new ParallelCommandGroup(
                 new InstantCommand(
                     () -> RobotConfig.intake.runVoltage(0),
                     RobotConfig.intake), // turn off intake in case it is on
-                new DriveCommand(
-                    RobotConfig.drive,
-                    () -> MathUtil.applyDeadband(-mainController.getLeftY(), 0.05),
-                    () -> MathUtil.applyDeadband(-mainController.getLeftX(), 0.05),
-                    () -> MathUtil.applyDeadband(-mainController.getRightX(), 0.05),
-                    () ->
-                        RobotConfig.vision.getYawToAprilTag(
-                            RobotState
-                                .getActiveTargetId())), // adjust robot yaw to line up with vision
-                // target
+                new AlignToTarget(
+                        RobotConfig.drive, RobotConfig.vision, () -> RobotState.getActiveTargetId())
+                    .withTimeout(DriveConstants.pidTimeoutInSeconds),
                 new SetShooterVelocity(RobotConfig.shooter, () -> RobotState.getShooterVelocity())
                     .withTimeout(ShooterConstants.pidTimeoutInSeconds), // turn on shooter
                 /* TODO: Use ArmToPositionTP instead of setting arm angle directly */
                 new InstantCommand(
-                        () -> {
-                          if (RobotState.isAmpMode()) {
-                            RobotConfig.arm.setAngle(ArmConstants.ampScoreAngleInDegrees);
-                          } else {
-                            Optional<Double> distanceToTarget =
-                                RobotConfig.vision.getDistanceToAprilTag(
-                                    RobotState.getActiveTargetId());
-                            if (distanceToTarget.isPresent()) {
-                              Optional<Double> armAngle =
-                                  RobotConfig.instance.getArmAngleFromDistance(
-                                      distanceToTarget.get());
-                              if (armAngle.isPresent()) {
-                                RobotConfig.arm.setAngle((armAngle.get()));
-                              }
-                            }
-                          }
-                        },
-                        RobotConfig.arm) // adjust arm angle based on vision's distance from target
-                    .repeatedly()));
+                    () -> {
+                      if (RobotState.isAmpMode()) {
+                        RobotConfig.arm.setAngle(ArmConstants.ampScoreAngleInDegrees);
+                      } else {
+                        Optional<Double> armAngle = RobotState.getArmAngleToTarget();
+                        if (armAngle.isPresent()) {
+                          RobotConfig.arm.setAngle((armAngle.get()));
+                        }
+                      }
+                    },
+                    RobotConfig.arm) // adjust arm angle based on vision's distance from target
+                ));
 
     /* Target Selection Controls */
     /*     A Button = Amp Mode
@@ -184,7 +234,6 @@ public class DriverControls {
             new InstantCommand(
                 () -> {
                   RobotState.setTargetMode(TargetMode.AMP);
-                  ampModeEntry.setBoolean(RobotState.isAmpMode());
                 }));
     mainController
         .b()
@@ -192,7 +241,21 @@ public class DriverControls {
             new InstantCommand(
                 () -> {
                   RobotState.setTargetMode(TargetMode.SPEAKER);
-                  ampModeEntry.setBoolean(RobotState.isAmpMode());
                 }));
+
+    EventLoop eventLoop = CommandScheduler.getInstance().getDefaultButtonLoop();
+    BooleanEvent havePiece =
+        new BooleanEvent(eventLoop, () -> RobotConfig.intake.isPieceDetected());
+    havePiece.ifHigh(
+        () -> {
+          RobotConfig.shooter.runVelocity(RobotState.getShooterVelocity());
+        });
+
+    havePiece
+        .negate()
+        .ifHigh(
+            () -> {
+              RobotConfig.shooter.runVelocity(0);
+            });
   }
 }
