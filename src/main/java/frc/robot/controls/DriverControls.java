@@ -1,12 +1,15 @@
 package frc.robot.controls;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.event.BooleanEvent;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -227,5 +230,20 @@ public class DriverControls {
                 () -> {
                   RobotState.setTargetMode(TargetMode.SPEAKER);
                 }));
+
+    EventLoop eventLoop = CommandScheduler.getInstance().getDefaultButtonLoop();
+    BooleanEvent havePiece =
+        new BooleanEvent(eventLoop, () -> RobotConfig.intake.isPieceDetected());
+    havePiece.ifHigh(
+        () -> {
+          RobotConfig.shooter.runVelocity(RobotState.getShooterVelocity());
+        });
+
+    havePiece
+        .negate()
+        .ifHigh(
+            () -> {
+              RobotConfig.shooter.runVelocity(0);
+            });
   }
 }
