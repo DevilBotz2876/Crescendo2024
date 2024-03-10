@@ -11,7 +11,7 @@ public interface ArmIO {
     public boolean absoluteEncoderConnected = false;
     public double current;
     public double appliedVolts = 0.0;
-    public double relativePositionRotations = 0.0;
+    public double relativePositionDegrees = 0.0;
     public boolean limitHigh = false;
     public boolean limitLow = false;
   }
