@@ -198,10 +198,6 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="frc/robot/subsystems/climber/Climber.html" class="type-name-link" title="interface in frc.robot.subsystems.climber">Climber</a> - Interface in <a href="frc/robot/subsystems/climber/package-summary.html">frc.robot.subsystems.climber</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="frc/robot/commands/climber/ClimberCommand.html" class="type-name-link" title="class in frc.robot.commands.climber">ClimberCommand</a> - Class in <a href="frc/robot/commands/climber/package-summary.html">frc.robot.commands.climber</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="frc/robot/commands/climber/ClimberCommand.html#%3Cinit%3E(frc.robot.subsystems.climber.Climber,boolean)" class="member-name-link">ClimberCommand(Climber, boolean)</a> - Constructor for class frc.robot.commands.climber.<a href="frc/robot/commands/climber/ClimberCommand.html" title="class in frc.robot.commands.climber">ClimberCommand</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="frc/robot/config/RobotConfig.ClimberConstants.html#%3Cinit%3E()" class="member-name-link">ClimberConstants()</a> - Constructor for class frc.robot.config.<a href="frc/robot/config/RobotConfig.ClimberConstants.html" title="class in frc.robot.config">RobotConfig.ClimberConstants</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="frc/robot/subsystems/climber/ClimberIO.html" class="type-name-link" title="interface in frc.robot.subsystems.climber">ClimberIO</a> - Interface in <a href="frc/robot/subsystems/climber/package-summary.html">frc.robot.subsystems.climber</a></dt>
@@ -494,6 +490,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="frc/robot/subsystems/vision/VisionSubsystem.html#getEstimatedRobotPoses()" class="member-name-link">getEstimatedRobotPoses()</a> - Method in class frc.robot.subsystems.vision.<a href="frc/robot/subsystems/vision/VisionSubsystem.html" title="class in frc.robot.subsystems.vision">VisionSubsystem</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="frc/robot/subsystems/climber/Climber.html#getExtendCommand()" class="member-name-link">getExtendCommand()</a> - Method in interface frc.robot.subsystems.climber.<a href="frc/robot/subsystems/climber/Climber.html" title="interface in frc.robot.subsystems.climber">Climber</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="frc/robot/subsystems/climber/ClimberSubsystem.html#getExtendCommand()" class="member-name-link">getExtendCommand()</a> - Method in class frc.robot.subsystems.climber.<a href="frc/robot/subsystems/climber/ClimberSubsystem.html" title="class in frc.robot.subsystems.climber">ClimberSubsystem</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="frc/robot/subsystems/drive/DriveTrain.html#getLeftFollower()" class="member-name-link">getLeftFollower()</a> - Method in class frc.robot.subsystems.drive.<a href="frc/robot/subsystems/drive/DriveTrain.html" title="class in frc.robot.subsystems.drive">DriveTrain</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="frc/robot/subsystems/drive/DriveTrain.html#getLeftMaster()" class="member-name-link">getLeftMaster()</a> - Method in class frc.robot.subsystems.drive.<a href="frc/robot/subsystems/drive/DriveTrain.html" title="class in frc.robot.subsystems.drive">DriveTrain</a></dt>
@@ -534,6 +534,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="frc/robot/subsystems/arm/ArmSubsystem.html#getRelativeAngle()" class="member-name-link">getRelativeAngle()</a> - Method in class frc.robot.subsystems.arm.<a href="frc/robot/subsystems/arm/ArmSubsystem.html" title="class in frc.robot.subsystems.arm">ArmSubsystem</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="frc/robot/subsystems/climber/Climber.html#getRetractCommand()" class="member-name-link">getRetractCommand()</a> - Method in interface frc.robot.subsystems.climber.<a href="frc/robot/subsystems/climber/Climber.html" title="interface in frc.robot.subsystems.climber">Climber</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="frc/robot/subsystems/climber/ClimberSubsystem.html#getRetractCommand()" class="member-name-link">getRetractCommand()</a> - Method in class frc.robot.subsystems.climber.<a href="frc/robot/subsystems/climber/ClimberSubsystem.html" title="class in frc.robot.subsystems.climber">ClimberSubsystem</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="frc/robot/subsystems/drive/DriveTrain.html#getRightFollower()" class="member-name-link">getRightFollower()</a> - Method in class frc.robot.subsystems.drive.<a href="frc/robot/subsystems/drive/DriveTrain.html" title="class in frc.robot.subsystems.drive">DriveTrain</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="frc/robot/subsystems/drive/DriveTrain.html#getRightMaster()" class="member-name-link">getRightMaster()</a> - Method in class frc.robot.subsystems.drive.<a href="frc/robot/subsystems/drive/DriveTrain.html" title="class in frc.robot.subsystems.drive">DriveTrain</a></dt>
@@ -546,9 +550,25 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="frc/robot/subsystems/arm/ArmSubsystem.html#getState()" class="member-name-link">getState()</a> - Method in class frc.robot.subsystems.arm.<a href="frc/robot/subsystems/arm/ArmSubsystem.html" title="class in frc.robot.subsystems.arm">ArmSubsystem</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="frc/robot/subsystems/arm/Arm.html#getStowCommand()" class="member-name-link">getStowCommand()</a> - Method in interface frc.robot.subsystems.arm.<a href="frc/robot/subsystems/arm/Arm.html" title="interface in frc.robot.subsystems.arm">Arm</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="frc/robot/subsystems/arm/ArmSubsystem.html#getStowCommand()" class="member-name-link">getStowCommand()</a> - Method in class frc.robot.subsystems.arm.<a href="frc/robot/subsystems/arm/ArmSubsystem.html" title="class in frc.robot.subsystems.arm">ArmSubsystem</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="frc/robot/util/RobotState.html#getTargetMode()" class="member-name-link">getTargetMode()</a> - Static method in class frc.robot.util.<a href="frc/robot/util/RobotState.html" title="class in frc.robot.util">RobotState</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="frc/robot/util/RobotState.html#getTargetName(int)" class="member-name-link">getTargetName(int)</a> - Static method in class frc.robot.util.<a href="frc/robot/util/RobotState.html" title="class in frc.robot.util">RobotState</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="frc/robot/subsystems/intake/Intake.html#getTurnOffCommand()" class="member-name-link">getTurnOffCommand()</a> - Method in interface frc.robot.subsystems.intake.<a href="frc/robot/subsystems/intake/Intake.html" title="interface in frc.robot.subsystems.intake">Intake</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="frc/robot/subsystems/intake/IntakeSubsystem.html#getTurnOffCommand()" class="member-name-link">getTurnOffCommand()</a> - Method in class frc.robot.subsystems.intake.<a href="frc/robot/subsystems/intake/IntakeSubsystem.html" title="class in frc.robot.subsystems.intake">IntakeSubsystem</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="frc/robot/subsystems/shooter/Shooter.html#getTurnOffCommand()" class="member-name-link">getTurnOffCommand()</a> - Method in interface frc.robot.subsystems.shooter.<a href="frc/robot/subsystems/shooter/Shooter.html" title="interface in frc.robot.subsystems.shooter">Shooter</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="frc/robot/subsystems/shooter/ShooterSubsystem.html#getTurnOffCommand()" class="member-name-link">getTurnOffCommand()</a> - Method in class frc.robot.subsystems.shooter.<a href="frc/robot/subsystems/shooter/ShooterSubsystem.html" title="class in frc.robot.subsystems.shooter">ShooterSubsystem</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="frc/robot/subsystems/intake/Intake.html#getTurnOnCommand()" class="member-name-link">getTurnOnCommand()</a> - Method in interface frc.robot.subsystems.intake.<a href="frc/robot/subsystems/intake/Intake.html" title="interface in frc.robot.subsystems.intake">Intake</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="frc/robot/subsystems/intake/IntakeSubsystem.html#getTurnOnCommand()" class="member-name-link">getTurnOnCommand()</a> - Method in class frc.robot.subsystems.intake.<a href="frc/robot/subsystems/intake/IntakeSubsystem.html" title="class in frc.robot.subsystems.intake">IntakeSubsystem</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="frc/robot/subsystems/shooter/Shooter.html#getVoltage()" class="member-name-link">getVoltage()</a> - Method in interface frc.robot.subsystems.shooter.<a href="frc/robot/subsystems/shooter/Shooter.html" title="interface in frc.robot.subsystems.shooter">Shooter</a></dt>
 <dd>&nbsp;</dd>
@@ -610,8 +630,6 @@ loadScripts(document, 'script');</script>
 <dt><a href="frc/robot/commands/assist/IndexPiece.html#initialize()" class="member-name-link">initialize()</a> - Method in class frc.robot.commands.assist.<a href="frc/robot/commands/assist/IndexPiece.html" title="class in frc.robot.commands.assist">IndexPiece</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="frc/robot/commands/assist/ScorePiece.html#initialize()" class="member-name-link">initialize()</a> - Method in class frc.robot.commands.assist.<a href="frc/robot/commands/assist/ScorePiece.html" title="class in frc.robot.commands.assist">ScorePiece</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="frc/robot/commands/climber/ClimberCommand.html#initialize()" class="member-name-link">initialize()</a> - Method in class frc.robot.commands.climber.<a href="frc/robot/commands/climber/ClimberCommand.html" title="class in frc.robot.commands.climber">ClimberCommand</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="frc/robot/commands/climber/ClimberToPosition.html#initialize()" class="member-name-link">initialize()</a> - Method in class frc.robot.commands.climber.<a href="frc/robot/commands/climber/ClimberToPosition.html" title="class in frc.robot.commands.climber">ClimberToPosition</a></dt>
 <dd>&nbsp;</dd>
@@ -714,8 +732,6 @@ loadScripts(document, 'script');</script>
 <dt><a href="frc/robot/commands/assist/IndexPiece.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class frc.robot.commands.assist.<a href="frc/robot/commands/assist/IndexPiece.html" title="class in frc.robot.commands.assist">IndexPiece</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="frc/robot/commands/assist/ScorePiece.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class frc.robot.commands.assist.<a href="frc/robot/commands/assist/ScorePiece.html" title="class in frc.robot.commands.assist">ScorePiece</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="frc/robot/commands/climber/ClimberCommand.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class frc.robot.commands.climber.<a href="frc/robot/commands/climber/ClimberCommand.html" title="class in frc.robot.commands.climber">ClimberCommand</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="frc/robot/commands/climber/ClimberToPosition.html#isFinished()" class="member-name-link">isFinished()</a> - Method in class frc.robot.commands.climber.<a href="frc/robot/commands/climber/ClimberToPosition.html" title="class in frc.robot.commands.climber">ClimberToPosition</a></dt>
 <dd>&nbsp;</dd>
@@ -1199,6 +1215,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="frc/robot/util/RobotState.SpeakerShootingMode.html#SPEAKER_VISION_BASED" class="member-name-link">SPEAKER_VISION_BASED</a> - Enum constant in enum class frc.robot.util.<a href="frc/robot/util/RobotState.SpeakerShootingMode.html" title="enum class in frc.robot.util">RobotState.SpeakerShootingMode</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="frc/robot/subsystems/arm/Arm.html#stow()" class="member-name-link">stow()</a> - Method in interface frc.robot.subsystems.arm.<a href="frc/robot/subsystems/arm/Arm.html" title="interface in frc.robot.subsystems.arm">Arm</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="frc/robot/config/RobotConfig.ArmConstants.html#stowIntakeAngleInDegrees" class="member-name-link">stowIntakeAngleInDegrees</a> - Static variable in class frc.robot.config.<a href="frc/robot/config/RobotConfig.ArmConstants.html" title="class in frc.robot.config">RobotConfig.ArmConstants</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="frc/robot/config/RobotConfig.ArmConstants.html#subwooferScoreAngleInDegrees" class="member-name-link">subwooferScoreAngleInDegrees</a> - Static variable in class frc.robot.config.<a href="frc/robot/config/RobotConfig.ArmConstants.html" title="class in frc.robot.config">RobotConfig.ArmConstants</a></dt>
@@ -1284,6 +1302,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">When set to true you can adjust values of things like PID or input voltage on dashboard</div>
 </dd>
+<dt><a href="frc/robot/subsystems/intake/Intake.html#turnOff()" class="member-name-link">turnOff()</a> - Method in interface frc.robot.subsystems.intake.<a href="frc/robot/subsystems/intake/Intake.html" title="interface in frc.robot.subsystems.intake">Intake</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="frc/robot/subsystems/shooter/Shooter.html#turnOff()" class="member-name-link">turnOff()</a> - Method in interface frc.robot.subsystems.shooter.<a href="frc/robot/subsystems/shooter/Shooter.html" title="interface in frc.robot.subsystems.shooter">Shooter</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="frc/robot/subsystems/intake/Intake.html#turnOn()" class="member-name-link">turnOn()</a> - Method in interface frc.robot.subsystems.intake.<a href="frc/robot/subsystems/intake/Intake.html" title="interface in frc.robot.subsystems.intake">Intake</a></dt>
+<dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:U">U</h2>
 <dl class="index">
