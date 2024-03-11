@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.arm.ArmCommand;
 import frc.robot.commands.assist.EjectPiece;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.shooter.SetShooterVelocity;
@@ -22,17 +23,63 @@ import frc.robot.commands.vision.AlignToTarget;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.DriveConstants;
+import frc.robot.config.RobotConfig.IntakeConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.subsystems.vision.VisionCamera;
 import frc.robot.util.RobotState;
 import frc.robot.util.RobotState.DriveMode;
+import frc.robot.util.RobotState.PieceDetectionMode;
 import frc.robot.util.RobotState.SpeakerShootingMode;
 import frc.robot.util.RobotState.TargetMode;
 import java.util.Map;
 import java.util.Optional;
 
 public class DriverControls {
-  public static void setupGUI() {
+  public static CommandXboxController mainController;
+  public static CommandXboxController secondaryController;
+
+  static Command ampModeCommand =
+      new InstantCommand(() -> RobotState.setTargetMode(TargetMode.AMP));
+  static Command speakerModeCommand =
+      new InstantCommand(() -> RobotState.setTargetMode(TargetMode.SPEAKER));
+
+  static Command speakerModeFromSubwoofer =
+      new InstantCommand(
+          () -> {
+            RobotState.setTargetMode(TargetMode.SPEAKER);
+            RobotState.setShootingMode(SpeakerShootingMode.SPEAKER_FROM_SUBWOOFER);
+          });
+
+  static Command speakerModeFromPodium =
+      new InstantCommand(
+          () -> {
+            RobotState.setTargetMode(TargetMode.SPEAKER);
+            RobotState.setShootingMode(SpeakerShootingMode.SPEAKER_FROM_PODIUM);
+          });
+
+  static Command speakerModeVisionBased =
+      new InstantCommand(
+          () -> {
+            RobotState.setTargetMode(TargetMode.SPEAKER);
+            RobotState.setShootingMode(SpeakerShootingMode.SPEAKER_VISION_BASED);
+          });
+
+  public static void setupControls() {
+    mainController = new CommandXboxController(0);
+    secondaryController = new CommandXboxController(1);
+
+    setupMainControls(mainController);
+    setupCommonControls(mainController);
+
+    if (null != secondaryController) {
+      setupSecondaryControls(secondaryController);
+      setupCommonControls(secondaryController);
+    }
+
+    setupGUI();
+  }
+
+  private static void setupGUI() {
     int colIndex = 0;
     int rowIndex = 0;
     ShuffleboardTab driverTab = Shuffleboard.getTab("Driver");
@@ -71,12 +118,6 @@ public class DriverControls {
     rowIndex = 0;
 
     driverTab
-        .addBoolean("Amp Mode", () -> RobotState.isAmpMode())
-        .withWidget(BuiltInWidgets.kBooleanBox)
-        .withPosition(colIndex, rowIndex++)
-        .withSize(2, 1);
-
-    driverTab
         .addDouble("Abs Angle (degrees)", () -> RobotConfig.arm.getAngle())
         .withWidget(BuiltInWidgets.kNumberBar)
         .withProperties(
@@ -92,127 +133,129 @@ public class DriverControls {
         .withSize(2, 1)
         .withPosition(colIndex, rowIndex++);
 
-    ShuffleboardLayout speakerModeLayout =
+    ShuffleboardLayout aimingModeLayout =
         driverTab
-            .getLayout("Speaker Mode", BuiltInLayouts.kList)
+            .getLayout("Aiming Mode", BuiltInLayouts.kGrid)
             //            .withProperties(Map.of("Label position", "HIDDEN"))
             .withSize(2, 3)
             .withPosition(colIndex, rowIndex++);
 
-    Command speakerModeFromSubwoofer =
-        new InstantCommand(
-            () -> RobotState.setSpeakerShootingMode(SpeakerShootingMode.SPEAKER_FROM_SUBWOOFER));
-    speakerModeFromSubwoofer.setName("From Subwoofer");
+    ampModeCommand.setName("Amp Mode");
+    speakerModeCommand.setName("Speaker Mode");
+    speakerModeFromSubwoofer.setName("Speaker (Sub)");
+    speakerModeFromPodium.setName("Speaker (Pod)");
+    speakerModeVisionBased.setName("Speaker (Auto)");
 
-    Command speakerModeFromPodium =
-        new InstantCommand(
-            () -> RobotState.setSpeakerShootingMode(SpeakerShootingMode.SPEAKER_FROM_PODIUM));
-    speakerModeFromPodium.setName("From Podium");
-
-    Command speakerModeVisionBased =
-        new InstantCommand(
-            () -> RobotState.setSpeakerShootingMode(SpeakerShootingMode.SPEAKER_VISION_BASED));
-    speakerModeVisionBased.setName("Vision Based");
-
-    speakerModeLayout
-        .addString("Speaker Mode", () -> RobotState.getShootingModeName())
+    aimingModeLayout
+        .addString("Aiming Mode", () -> RobotState.getShootingModeName())
         .withWidget(BuiltInWidgets.kTextView)
         .withPosition(0, 0)
-        .withSize(2, 1);
+        .withSize(2, 3);
 
-    speakerModeLayout.add(speakerModeFromSubwoofer).withPosition(0, 1);
-    speakerModeLayout.add(speakerModeFromPodium).withPosition(0, 2);
-    speakerModeLayout.add(speakerModeVisionBased).withPosition(0, 3);
+    aimingModeLayout.add(ampModeCommand).withPosition(0, 1);
+    aimingModeLayout.add(speakerModeFromSubwoofer).withPosition(0, 2);
+    aimingModeLayout.add(speakerModeFromPodium).withPosition(0, 3);
+    aimingModeLayout.add(speakerModeVisionBased).withPosition(0, 4);
   }
 
-  public static void setupControls(CommandXboxController mainController) {
-    setupGUI();
-    /* Drive Controls */
-    /* Controller 0:
-     *     Left Stick Up/Down = *Field Oriented* Drive Away/Towards Driver Station
-     *     Left Stick Left/Right = *Field Oriented* Drive Left/Right relative to Driver Station
-     *     Right Bumper = Toggles Auto Orient/Prepare For Score
-     *     Right Stick Left/Right
-     *         Auto Orient Off: Rotate CCW/CW
-     *         Auto Orient On: Vision based rotation/arm angle
-     */
-    RobotState.setDriveMode(DriveMode.FIELD);
-
-    RobotConfig.drive.setDefaultCommand(
-        new DriveCommand(
-            RobotConfig.drive,
-            () -> MathUtil.applyDeadband(-mainController.getLeftY(), 0.05),
-            () -> MathUtil.applyDeadband(-mainController.getLeftX(), 0.05),
-            () -> MathUtil.applyDeadband(-mainController.getRightX(), 0.05)));
-
-    // TODO: Eventually remove!....this is for debug only
-    mainController.back().onTrue(new InstantCommand(() -> RobotConfig.drive.resetOdometry()));
-    mainController
-        .start()
-        .onTrue(
-            new InstantCommand(
-                () ->
-                    RobotConfig.drive.setFieldOrientedDrive(
-                        !RobotConfig.drive.isFieldOrientedDrive())));
-
+  private static void setupCommonControls(CommandXboxController controller) {
     /* Climber Controls */
-    /*     D-Pad Up = Climber Up
-     *     D-Pad Down = Climber Down
+    /*     Y Button = Prepare to Climb
+     *     X Button = Climber
      */
-    mainController
-        .pov(0)
+    controller
+        .y()
         .onTrue(
             new ParallelCommandGroup(
                 RobotConfig.intake.getTurnOffCommand(),
                 RobotConfig.shooter.getTurnOffCommand(),
                 RobotConfig.arm.getStowCommand(),
                 RobotConfig.climber.getExtendCommand()));
-    mainController.pov(180).onTrue(RobotConfig.climber.getRetractCommand());
+    controller.x().onTrue(RobotConfig.climber.getRetractCommand());
 
-    /* Driver Assist Controls */
-    /*     Left Trigger = "Lower Arm to Intake Piece"
-     *     Right Trigger = "Score Piece"
-     *     Left Bumper = "Eject Piece"
-     *     Right Bumper = "Prepare for Score" aka Auto Aim/Orient
+    /* Target Selection Controls */
+    /*     A Button = Amp Mode
+     *     B Button = Speaker Mode
      */
-    mainController
+    controller.a().onTrue(ampModeCommand);
+    controller.b().onTrue(speakerModeCommand);
+  }
+
+  private static void setupMainControls(CommandXboxController controller) {
+
+    /**** Drive Controls ****/
+    /* Competition:
+     *    Left Stick Up/Down/Left/Right = Robot Strafe
+     *    Right Stick Left/Right = Robot Rotate
+     */
+    RobotState.setDriveMode(DriveMode.FIELD);
+    RobotConfig.drive.setDefaultCommand(
+        new DriveCommand(
+            RobotConfig.drive,
+            () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.05), //  Robot Strafe Front/Back
+            () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.05), //  Robot Strafe Left/Right
+            () -> MathUtil.applyDeadband(-controller.getRightX(), 0.05))); // Robpt Rotate
+
+    /* Debug/Test Only:
+     *    Back Button = Zero Pose
+     *    Start Button = Toggle Drive Orientation
+     */
+    controller
+        .back()
+        .onTrue(new InstantCommand(() -> RobotConfig.drive.resetOdometry())); // Zero Pose
+    controller
+        .start()
+        .onTrue(
+            new InstantCommand(
+                () -> {
+                  if (RobotState.isFieldOriented()) {
+                    RobotState.setDriveMode(DriveMode.ROBOT);
+                  } else {
+                    RobotState.setDriveMode(DriveMode.FIELD);
+                  }
+                })); // Toggle Drive Orientation
+
+    /**** Note Manipulation Controls ****/
+    /* Competition:
+     *    Left Trigger =
+     *       On True:
+     *           Piece Not Detected: "Intake Note"
+     *           Piece Detected: "Stow Note"
+     *       On False: "Stow Arm"
+     *    Left Bumper = "Eject Note"
+     *    Right Bumper = "Aim"
+     *    Right Trigger = "Shoot Note"
+     */
+    controller
         .leftTrigger()
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (false == RobotConfig.intake.isPieceDetected()) {
-                    RobotConfig.intake.turnOn(); // turn on intake, if it isn't already
-                    RobotConfig.arm.setAngle(ArmConstants.intakeAngleInDegrees);
+                  if ((false == RobotConfig.intake.isPieceDetected())
+                      || (false == RobotState.isPieceDetectionEnabled())) {
+                    RobotConfig.intake.turnOn();
+                    RobotConfig.arm.setAngle(ArmConstants.intakeAngleInDegrees); // Intake Note
                   } else {
-                    RobotConfig.arm.setAngle(ArmConstants.stowIntakeAngleInDegrees);
+                    RobotConfig.arm.setAngle(ArmConstants.stowIntakeAngleInDegrees); // Stow Arm
                   }
                 },
                 RobotConfig.arm));
 
-    mainController
+    controller
         .leftTrigger()
         .onFalse(
             new InstantCommand(
-                () -> RobotConfig.arm.setAngle(ArmConstants.stowIntakeAngleInDegrees),
+                () -> RobotConfig.arm.setAngle(ArmConstants.stowIntakeAngleInDegrees), // Stow Arm
                 RobotConfig.arm));
 
-    mainController
-        .rightTrigger()
+    controller
+        .leftBumper()
         .onTrue(
             new SequentialCommandGroup(
-                new InstantCommand(
-                    () -> RobotConfig.drive.lockPose(),
-                    RobotConfig.drive), // lock drive wheels/pose
-                new SetShooterVelocity(RobotConfig.shooter, () -> RobotState.getShooterVelocity())
-                    .withTimeout(
-                        ShooterConstants
-                            .pidTimeoutInSeconds), // set shooter velocity in case it's not already
-                // on
-                RobotConfig.intake.getTurnOnCommand()));
+                RobotConfig.shooter.getTurnOffCommand(),
+                new EjectPiece(RobotConfig.intake, RobotConfig.arm))); // Eject Note
 
-    mainController.leftBumper().onTrue(new EjectPiece(RobotConfig.intake, RobotConfig.arm));
-
-    mainController
+    controller
         .rightBumper()
         .onTrue(
             new ParallelCommandGroup(
@@ -221,7 +264,7 @@ public class DriverControls {
                         RobotConfig.drive, RobotConfig.vision, () -> RobotState.getActiveTargetId())
                     .withTimeout(DriveConstants.pidTimeoutInSeconds),
                 new SetShooterVelocity(RobotConfig.shooter, () -> RobotState.getShooterVelocity())
-                    .withTimeout(ShooterConstants.pidTimeoutInSeconds), // turn on shooter
+                    .withTimeout(ShooterConstants.pidTimeoutInSeconds),
                 /* TODO: Use ArmToPositionTP instead of setting arm angle directly */
                 new InstantCommand(
                     () -> {
@@ -235,34 +278,31 @@ public class DriverControls {
                       }
                     },
                     RobotConfig.arm) // adjust arm angle based on vision's distance from target
-                ));
+                )); // Aim
 
-    /* Target Selection Controls */
-    /*     A Button = Amp Mode
-     *     B Button = Speaker Mode
-     */
-    mainController
-        .a()
+    controller
+        .rightTrigger()
         .onTrue(
-            new InstantCommand(
-                () -> {
-                  RobotState.setTargetMode(TargetMode.AMP);
-                }));
-    mainController
-        .b()
-        .onTrue(
-            new InstantCommand(
-                () -> {
-                  RobotState.setTargetMode(TargetMode.SPEAKER);
-                }));
+            new SequentialCommandGroup(
+                new InstantCommand(
+                    () -> RobotConfig.drive.lockPose(),
+                    RobotConfig.drive), // lock drive wheels/pose
+                new SetShooterVelocity(RobotConfig.shooter, () -> RobotState.getShooterVelocity())
+                    .withTimeout(
+                        ShooterConstants
+                            .pidTimeoutInSeconds), // set shooter velocity in case it's not already
+                // on
+                RobotConfig.intake.getTurnOnCommand())); // Shoot Note
 
     EventLoop eventLoop = CommandScheduler.getInstance().getDefaultButtonLoop();
     BooleanEvent havePiece =
-        new BooleanEvent(eventLoop, () -> RobotConfig.intake.isPieceDetected());
+        new BooleanEvent(
+            eventLoop,
+            () -> RobotConfig.intake.isPieceDetected() && RobotState.isPieceDetectionEnabled());
 
     Trigger havePieceTriggerRising = havePiece.rising().castTo(Trigger::new);
 
-    // We've picked up a note
+    // Note is Detected
     havePieceTriggerRising.onTrue(
         new SequentialCommandGroup(
             RobotConfig.intake.getTurnOffCommand(), // Turn off intake
@@ -276,7 +316,7 @@ public class DriverControls {
 
     Trigger havePieceTriggerFalling = havePiece.falling().castTo(Trigger::new);
 
-    // We no longer have a note
+    // // Note is no longer Detected
     havePieceTriggerFalling.onFalse(
         new ParallelCommandGroup(
             RobotConfig.intake.getTurnOnCommand(), // Turn on intake
@@ -286,5 +326,58 @@ public class DriverControls {
             new InstantCommand(
                 () -> RobotConfig.shooter.runVelocity(0), RobotConfig.shooter) // Turn off shooter
             ));
+  }
+
+  private static void setupSecondaryControls(CommandXboxController controller) {
+    /* Low Level Intake Controls
+     *    Left Bumper = Intake: Out
+     *    Right Bumper = Intake: In
+     *    D-Pad Down = Intake: Off
+     *    Back Button = Intake: Disable Detection
+     *    Start Button = Intake: Enable Detection
+     */
+    controller
+        .leftBumper()
+        .onTrue(
+            new InstantCommand(
+                () -> RobotConfig.intake.runVoltage(-IntakeConstants.defaultSpeedInVolts),
+                RobotConfig.intake)); // Intake: Out
+    controller
+        .rightBumper()
+        .onTrue(
+            new InstantCommand(
+                () -> RobotConfig.intake.runVoltage(IntakeConstants.defaultSpeedInVolts),
+                RobotConfig.intake)); // Intake: In
+    controller.pov(180).onTrue(RobotConfig.intake.getTurnOffCommand()); // Intake: Off
+    controller
+        .back()
+        .onTrue(
+            new InstantCommand(
+                () ->
+                    RobotState.SetPieceDetectionMode(
+                        PieceDetectionMode.DISABLED))); // Intake: Disable Detection
+    controller
+        .start()
+        .onTrue(
+            new InstantCommand(
+                () ->
+                    RobotState.SetPieceDetectionMode(
+                        PieceDetectionMode.ENABLED))); // Intake: Enable Detection
+
+    /* Low Level Arm Controls */
+    /* Left Stick Up/Down = Arm Down/Up */
+    RobotConfig.arm.setDefaultCommand(
+        new ArmCommand(
+            RobotConfig.arm,
+            () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.05))); //  Arm Up/Down
+
+    /* Aim Controls
+     * D-Pad Up = Aim:Auto
+     * D-Pad Left = Aim:Subwoofer
+     * D-Pad Right = Aim:Podium
+     */
+    controller.pov(0).onTrue(speakerModeVisionBased);
+    controller.pov(90).onTrue(speakerModeFromPodium);
+    controller.pov(270).onTrue(speakerModeFromSubwoofer);
   }
 }

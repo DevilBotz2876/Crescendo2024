@@ -70,6 +70,7 @@ public class RobotConfig {
     public static double ffKa = 0.0;
 
     public static double maxVelocity = 3.0;
+    public static double maxVelocityInDegreesPerSecond = 45;
     public static double maxAcceleration = 6.0;
 
     public static double pidAngleErrorInDegrees = 2.0;

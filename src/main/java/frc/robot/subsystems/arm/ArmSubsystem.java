@@ -177,7 +177,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
   // Sets the voltage to volts. the volts value is -12 to 12
   public void runVoltage(double volts) {
-    desiredVoltage = voltageSafety(volts);
+    desiredVoltage = volts;
     io.setVoltage(desiredVoltage);
   }
 

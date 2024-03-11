@@ -50,4 +50,7 @@ public interface Arm extends Subsystem {
   }
 
   public Command getStowCommand();
+
+  public default void runVoltage(double volts) {}
+  ;
 }
