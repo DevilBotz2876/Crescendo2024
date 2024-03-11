@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.climber.ClimberCommand;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.ClimberConstants;
@@ -396,11 +395,11 @@ public class PitControls {
     climberAutoZero.setName("Zero");
     commands.add(climberAutoZero);
 
-    Command climberExtend = new ClimberCommand(RobotConfig.climber, true);
+    Command climberExtend = RobotConfig.climber.getExtendCommand();
     climberExtend.setName("Extend");
     commands.add(climberExtend);
 
-    Command climberRetract = new ClimberCommand(RobotConfig.climber, false);
+    Command climberRetract = RobotConfig.climber.getRetractCommand();
     climberRetract.setName("Retract");
     commands.add(climberRetract);
 

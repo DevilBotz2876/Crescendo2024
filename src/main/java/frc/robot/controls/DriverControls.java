@@ -14,10 +14,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.assist.EjectPiece;
-import frc.robot.commands.assist.PrepareForIntake;
-import frc.robot.commands.assist.ScorePiece;
-import frc.robot.commands.climber.ClimberCommand;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.shooter.SetShooterVelocity;
 import frc.robot.commands.vision.AlignToTarget;
@@ -161,24 +159,36 @@ public class DriverControls {
     /*     D-Pad Up = Climber Up
      *     D-Pad Down = Climber Down
      */
-    mainController.pov(0).onTrue(new ClimberCommand(RobotConfig.climber, true));
-    mainController.pov(180).onTrue(new ClimberCommand(RobotConfig.climber, false));
+    mainController.pov(0).onTrue(RobotConfig.climber.getExtendCommand());
+    mainController.pov(180).onTrue(RobotConfig.climber.getRetractCommand());
 
     /* Driver Assist Controls */
-    /*     Left Trigger = "Prepare for Intake"
+    /*     Left Trigger = "Lower Arm to Intake Piece"
      *     Right Trigger = "Score Piece"
      *     Left Bumper = "Eject Piece"
-     *     Right Bumper = "Prepare for Score" aka Auto Orient
+     *     Right Bumper = "Prepare for Score" aka Auto Aim/Orient
      */
     mainController
         .leftTrigger()
         .onTrue(
-            new SequentialCommandGroup(
-                new InstantCommand(
-                    () -> RobotConfig.shooter.runVelocity(0),
-                    RobotConfig.shooter), // Turn off shooter in case it is on
-                new PrepareForIntake(
-                    RobotConfig.arm, RobotConfig.intake))); // Set arm angle and turn on intake
+            new InstantCommand(
+                () -> {
+                  if (false == RobotConfig.intake.isPieceDetected()) {
+                    RobotConfig.intake.turnOn(); // turn on intake, if it isn't already
+                    RobotConfig.arm.setAngle(ArmConstants.intakeAngleInDegrees);
+                  } else {
+                    RobotConfig.arm.setAngle(ArmConstants.stowIntakeAngleInDegrees);
+                  }
+                },
+                RobotConfig.arm));
+
+    mainController
+        .leftTrigger()
+        .onFalse(
+            new InstantCommand(
+                () -> RobotConfig.arm.setAngle(ArmConstants.stowIntakeAngleInDegrees),
+                RobotConfig.arm));
+
     mainController
         .rightTrigger()
         .onTrue(
@@ -191,19 +201,15 @@ public class DriverControls {
                         ShooterConstants
                             .pidTimeoutInSeconds), // set shooter velocity in case it's not already
                 // on
-                new ScorePiece(
-                    RobotConfig.intake,
-                    RobotConfig.shooter))); // Turn on intake to feed piece into shooter
+                RobotConfig.intake.getTurnOnCommand()));
+
     mainController.leftBumper().onTrue(new EjectPiece(RobotConfig.intake, RobotConfig.arm));
 
-    /* TODO: Make this is a toggle, not just while right bumper is pressed */
     mainController
         .rightBumper()
         .onTrue(
             new ParallelCommandGroup(
-                new InstantCommand(
-                    () -> RobotConfig.intake.runVoltage(0),
-                    RobotConfig.intake), // turn off intake in case it is on
+                RobotConfig.intake.getTurnOffCommand(),
                 new AlignToTarget(
                         RobotConfig.drive, RobotConfig.vision, () -> RobotState.getActiveTargetId())
                     .withTimeout(DriveConstants.pidTimeoutInSeconds),
@@ -246,16 +252,32 @@ public class DriverControls {
     EventLoop eventLoop = CommandScheduler.getInstance().getDefaultButtonLoop();
     BooleanEvent havePiece =
         new BooleanEvent(eventLoop, () -> RobotConfig.intake.isPieceDetected());
-    havePiece.ifHigh(
-        () -> {
-          RobotConfig.shooter.runVelocity(RobotState.getShooterVelocity());
-        });
 
-    havePiece
-        .negate()
-        .ifHigh(
-            () -> {
-              RobotConfig.shooter.runVelocity(0);
-            });
+    Trigger havePieceTriggerRising = havePiece.rising().castTo(Trigger::new);
+
+    // We've picked up a note
+    havePieceTriggerRising.onTrue(
+        new SequentialCommandGroup(
+            RobotConfig.intake.getTurnOffCommand(), // Turn off intake
+            new InstantCommand(
+                () -> RobotConfig.arm.setAngle(ArmConstants.stowIntakeAngleInDegrees),
+                RobotConfig.arm), // Put arm in stow mode
+            new InstantCommand(
+                () -> RobotConfig.shooter.runVelocity(RobotState.getShooterVelocity()),
+                RobotConfig.shooter) // Turn on the shooter
+            ));
+
+    Trigger havePieceTriggerFalling = havePiece.falling().castTo(Trigger::new);
+
+    // We no longer have a note
+    havePieceTriggerFalling.onFalse(
+        new ParallelCommandGroup(
+            RobotConfig.intake.getTurnOnCommand(), // Turn on intake
+            new InstantCommand(
+                () -> RobotConfig.arm.setAngle(ArmConstants.stowIntakeAngleInDegrees),
+                RobotConfig.arm), // Put arm in stow mode
+            new InstantCommand(
+                () -> RobotConfig.shooter.runVelocity(0), RobotConfig.shooter) // Turn off shooter
+            ));
   }
 }

@@ -168,6 +168,7 @@ public class DebugControls {
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
 
+    debugTab.add(RobotConfig.drive).withPosition(colIndex, rowIndex++).withSize(2, 1);
     /*
     debugTab
         .add("Drive Speed Limit", 100)
