@@ -3,26 +3,24 @@ package frc.robot.subsystems.shooter;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.SparkPIDController.ArbFFUnits;
+
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.config.RobotConfig.ShooterConstants;
 
 public class ShooterIOSparkMax implements ShooterIO {
   // Gear ratio for the shooter mechanism
   private static final double GEAR_RATIO = 1.0;
 
-  // define the 2 SparkMax Controllers. A top, and a bottom
   private final CANSparkMax flywheel;
-  // private final CANSparkMax bottom = new CANSparkMax(1, MotorType.kBrushless);
-
   private SparkPIDController pid;
 
   public double tkP, tkI, tkD, tkIz, tkFF, tkMaxOutput, tkMinOutput, tmaxRPS;
-
-  // TODO: probably remove bottom since shooter will have one motor, not two independent motors
 
   // Gets the NEO encoder
   private final RelativeEncoder encoder;
@@ -31,34 +29,64 @@ public class ShooterIOSparkMax implements ShooterIO {
     flywheel = new CANSparkMax(id, MotorType.kBrushless);
     flywheel.restoreFactoryDefaults();
 
-    pid = flywheel.getPIDController();
-    encoder = flywheel.getEncoder();
     flywheel.setInverted(false);
-
     flywheel.enableVoltageCompensation(10.0);
     flywheel.setSmartCurrentLimit(30);
-
     // Set motor to brake mode so shooter stops spinning immediately
     flywheel.setIdleMode(IdleMode.kBrake);
 
-    // TODO: these values are samples picked from REV example PID code.  Need to tune PID and choose
-    // real values.
-    tkP = 0.0010514;
+    encoder = flywheel.getEncoder();
+
+    // Short answer to why we need to change these values.  It's a good starting point to try
+    // period=16 and depth=2
+    // https://www.chiefdelphi.com/t/what-is-the-best-performance-for-a-shooter/457903/25
+    //
+    // Read this entire thread to get complete story, this specific post again mentions values to
+    // use for period and depth that worked for one team.
+    // https://www.chiefdelphi.com/t/psa-default-neo-sparkmax-velocity-readings-are-still-bad-for-flywheels/454453/32
+    REVLibError revStatus;
+    int periodMS = 16;
+    revStatus = encoder.setMeasurementPeriod(periodMS);
+    if (revStatus != REVLibError.kOk) {
+      System.out.println(
+          "Failed to set shooter encoder measurement period to "
+              + periodMS
+              + " revStatus="
+              + revStatus);
+    }
+    periodMS = encoder.getMeasurementPeriod();
+    System.out.println("shooter encoder measurement period set to " + periodMS);
+
+    int avgDepth = 2;
+    revStatus = encoder.setAverageDepth(avgDepth);
+    if (revStatus != REVLibError.kOk) {
+      System.out.println(
+          "Failed to set shooter encoder average depth to " + avgDepth + " revStatus=" + revStatus);
+    }
+    avgDepth = encoder.getAverageDepth();
+    System.out.println("shooter encoder average depth to " + avgDepth);
+
+    // Tips for tuning flywheel.  Use feed-forward AND PID.  Don't use I/D terms in PID, just P.
+    //
+    // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/introduction/tuning-flywheel.html#choice-of-control-strategies
+
+    // tkP = 0.0010514;
+    tkP = ShooterConstants.pidKp;
     tkI = 0;
     tkD = 0;
     tkIz = 0;
-    tkFF = 0.08134;
+    // tkFF = 0.08134;
+    tkFF = ShooterConstants.ffKv;
     tkMaxOutput = 1;
     tkMinOutput = -1;
     tmaxRPS = 300;
 
-    // TODO: probably remove bottom since shooter will have one motor, not two independent motors
-
+    pid = flywheel.getPIDController();
     pid.setP(tkP);
     pid.setI(tkI);
     pid.setD(tkD);
     pid.setIZone(tkIz);
-    // pid.setFF(tkFF);
+    pid.setFF(tkFF);
     pid.setOutputRange(tkMinOutput, tkMaxOutput);
 
     // TODO: probably remove bottom since shooter will have one motor, not two independent motor
@@ -71,7 +99,6 @@ public class ShooterIOSparkMax implements ShooterIO {
       SmartDashboard.putNumber("Shooter/top/Max Output", tkMaxOutput);
       SmartDashboard.putNumber("Shooter/top/Min Output", tkMinOutput);
     }
-
     // Last thing we do is save all settings to flash on sparkmax
     flywheel.burnFlash();
   }
@@ -82,12 +109,7 @@ public class ShooterIOSparkMax implements ShooterIO {
     // and converted into Radians Per Second
     inputs.velocityRadPerSec =
         Units.rotationsPerMinuteToRadiansPerSecond(encoder.getVelocity() / GEAR_RATIO);
-    // Get applied voltage from the top motor
     inputs.appliedVolts = flywheel.getAppliedOutput() * flywheel.getBusVoltage();
-    //    inputs.velocityRadPerSecBottom =
-    //        Units.rotationsPerMinuteToRadiansPerSecond(bottomEncoder.getVelocity() / GEAR_RATIO);
-    // Get applied voltage from the top motor
-    //    inputs.appliedVoltsBottom = bottom.getAppliedOutput() * bottom.getBusVoltage();
     inputs.current = flywheel.getOutputCurrent();
 
     // double tp = SmartDashboard.getNumber("Shooter/P Gain", 0);
@@ -97,9 +119,6 @@ public class ShooterIOSparkMax implements ShooterIO {
     // double tff = SmartDashboard.getNumber("Shooter/Feed Forward", 0);
     // double tmax = SmartDashboard.getNumber("Shooter/Max Output", 0);
     // double tmin = SmartDashboard.getNumber("Shooter/Min Output", 0);
-
-    // // TODO: probably remove this since shooter will have one motor, not two independent motors
-    // //
 
     // if ((tp != tkP)) {
     //   pid.setP(tp);
@@ -157,8 +176,6 @@ public class ShooterIOSparkMax implements ShooterIO {
 
   @Override
   public void setVoltage(double volts) {
-    // Set the voltage output for the top motor
     flywheel.setVoltage(volts);
-    // bottom.setVoltage(volts);
   }
 }
