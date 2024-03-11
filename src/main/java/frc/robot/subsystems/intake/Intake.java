@@ -14,15 +14,15 @@ public interface Intake {
     return 0;
   }
 
-  public default void turnOn() {
-    runVoltage(IntakeConstants.defaultSpeedInVolts);
-  }
-
   public default void turnOff() {
     runVoltage(0);
   }
 
-  public Command getTurnOnCommand();
-
   public Command getTurnOffCommand();
+
+  public default void turnOn() {
+    runVoltage(IntakeConstants.defaultSpeedInVolts);
+  }
+
+  public Command getTurnOnCommand();
 }

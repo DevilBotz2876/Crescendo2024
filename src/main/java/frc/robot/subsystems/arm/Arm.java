@@ -1,7 +1,9 @@
 package frc.robot.subsystems.arm;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.config.RobotConfig.ArmConstants;
 
 public interface Arm extends Subsystem {
   // gets the angle of the arm
@@ -42,4 +44,10 @@ public interface Arm extends Subsystem {
     return false;
   }
   ;
+
+  public default void stow() {
+    setAngle(ArmConstants.stowIntakeAngleInDegrees);
+  }
+
+  public Command getStowCommand();
 }

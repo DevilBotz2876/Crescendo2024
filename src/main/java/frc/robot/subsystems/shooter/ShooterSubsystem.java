@@ -182,4 +182,8 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     return sysId.dynamic(direction);
   }
+
+  public Command getTurnOffCommand() {
+    return runOnce(() -> turnOff());
+  }
 }

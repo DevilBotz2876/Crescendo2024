@@ -1,5 +1,7 @@
 package frc.robot.subsystems.shooter;
 
+import edu.wpi.first.wpilibj2.command.Command;
+
 public interface Shooter {
   /**
    * Set the voltage of motors for the shooter.
@@ -14,4 +16,10 @@ public interface Shooter {
   public double getCurrentSpeed();
 
   public double getVoltage();
+
+  public default void turnOff() {
+    runVelocity(0);
+  }
+
+  public Command getTurnOffCommand();
 }

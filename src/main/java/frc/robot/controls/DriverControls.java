@@ -159,7 +159,14 @@ public class DriverControls {
     /*     D-Pad Up = Climber Up
      *     D-Pad Down = Climber Down
      */
-    mainController.pov(0).onTrue(RobotConfig.climber.getExtendCommand());
+    mainController
+        .pov(0)
+        .onTrue(
+            new ParallelCommandGroup(
+                RobotConfig.intake.getTurnOffCommand(),
+                RobotConfig.shooter.getTurnOffCommand(),
+                RobotConfig.arm.getStowCommand(),
+                RobotConfig.climber.getExtendCommand()));
     mainController.pov(180).onTrue(RobotConfig.climber.getRetractCommand());
 
     /* Driver Assist Controls */
