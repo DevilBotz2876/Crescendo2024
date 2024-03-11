@@ -52,7 +52,7 @@ public class ArmIOSparkMax implements ArmIO {
 
     motor.setInverted(inverted);
 
-    // motor.enableVoltageCompensation(12.0);
+    motor.enableVoltageCompensation(10.0);
     motor.setSmartCurrentLimit(40);
 
     // Initialize the relative encoder position based on absolute encoder position.  The abs and rel

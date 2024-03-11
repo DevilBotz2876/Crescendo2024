@@ -26,7 +26,7 @@ public class ClimberIOSparkMax implements ClimberIO {
 
     motor.setInverted(inverted);
 
-    motor.enableVoltageCompensation(12.0);
+    motor.enableVoltageCompensation(10.0);
     motor.setSmartCurrentLimit(30);
     motor.setIdleMode(IdleMode.kBrake);
 

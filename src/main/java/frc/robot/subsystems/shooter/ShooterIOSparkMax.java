@@ -35,7 +35,7 @@ public class ShooterIOSparkMax implements ShooterIO {
     encoder = flywheel.getEncoder();
     flywheel.setInverted(false);
 
-    flywheel.enableVoltageCompensation(12.0);
+    flywheel.enableVoltageCompensation(10.0);
     flywheel.setSmartCurrentLimit(30);
 
     // Set motor to brake mode so shooter stops spinning immediately
