@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 public class IntakeIOStub implements IntakeIO {
   private FlywheelSim sim = new FlywheelSim(DCMotor.getNEO(1), 1.5, 0.004);
   private double appliedVolts = 0.0;
-  private boolean limitSwitchIntakeToggled = false;
   private double elapsedTimeMotorOn = 0.0;
 
   @Override
@@ -24,14 +23,12 @@ public class IntakeIOStub implements IntakeIO {
     if (appliedVolts != 0.0) {
       elapsedTimeMotorOn += 0.02;
 
-      if (!limitSwitchIntakeToggled
-          && (elapsedTimeMotorOn > (inputs.limitSwitchIntake ? 0.5 : 3.0))) {
+      if ((elapsedTimeMotorOn > 1.0)) {
         inputs.limitSwitchIntake = !inputs.limitSwitchIntake;
-        limitSwitchIntakeToggled = true;
+        elapsedTimeMotorOn = 0.0;
       }
     } else {
       elapsedTimeMotorOn = 0.0;
-      limitSwitchIntakeToggled = false;
     }
   }
 

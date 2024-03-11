@@ -1,5 +1,7 @@
 package frc.robot.subsystems.climber;
 
+import edu.wpi.first.wpilibj2.command.Command;
+
 public interface Climber {
   /** Extends climber arms min limit */
   public void extend();
@@ -44,4 +46,8 @@ public interface Climber {
   public default boolean isAtMinLimitRight() {
     return false;
   }
+
+  public Command getExtendCommand();
+
+  public Command getRetractCommand();
 }

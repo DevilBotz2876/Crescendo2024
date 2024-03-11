@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants;
 import frc.robot.config.RobotConfig.DriveConstants;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.vision.Vision;
@@ -51,6 +52,7 @@ public class AlignToTarget extends Command {
   @Override
   public void initialize() {
     Optional<Double> yawToTarget;
+
     hasSetpoint = false;
     if (targetId != null) {
       yawToTarget = vision.getYawToAprilTag(targetId.getAsInt());
@@ -64,6 +66,14 @@ public class AlignToTarget extends Command {
       // TODO: check sign/math is right
       setpoint = drive.getAngle() - yawToTarget.get();
       hasSetpoint = true;
+    }
+
+    if (Constants.debugCommands) {
+      if (hasSetpoint) {
+        System.out.println("START: " + this.getClass().getSimpleName() + " angle: " + setpoint);
+      } else {
+        System.out.println("START: " + this.getClass().getSimpleName());
+      }
     }
   }
 
@@ -82,6 +92,10 @@ public class AlignToTarget extends Command {
   public void end(boolean interrupted) {
     if (hasSetpoint) {
       drive.runVelocity(new ChassisSpeeds());
+    }
+
+    if (Constants.debugCommands) {
+      System.out.println("  END: " + this.getClass().getSimpleName());
     }
   }
 

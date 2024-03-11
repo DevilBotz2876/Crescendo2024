@@ -280,11 +280,13 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   public boolean isAtMaxLimit() {
     return isLimitHigh();
   }
-  ;
 
   @Override
   public boolean isAtMinLimit() {
     return isLimitLow();
   }
-  ;
+
+  public Command getStowCommand() {
+    return runOnce(() -> stow());
+  }
 }
