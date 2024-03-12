@@ -1,0 +1,118 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.32,
+      "y": 5.51
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Piece from Speaker Center Side"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center Note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Piece"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Note Return"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Piece from Speaker Center Side"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center To Source Note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Piece"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center To Source Note Return"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Piece from Speaker Center Side"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center To Amp Note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Piece"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center To Amp Note Return"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Piece from Speaker Center Side"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
