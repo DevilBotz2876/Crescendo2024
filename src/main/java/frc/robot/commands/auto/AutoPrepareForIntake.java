@@ -1,4 +1,4 @@
-package frc.robot.commands.assist;
+package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -10,21 +10,22 @@ import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.intake.Intake;
 import java.util.function.DoubleSupplier;
 
-public class PrepareForIntake extends SequentialCommandGroup {
-  public PrepareForIntake(
+public class AutoPrepareForIntake extends SequentialCommandGroup {
+  public AutoPrepareForIntake(
       Arm arm, Intake intake, DoubleSupplier intakeAngle, DoubleSupplier intakeVoltage) {
     if (Constants.debugCommands) {
       addCommands(new PrintCommand("START: " + this.getClass().getSimpleName()));
     }
     if (intakeVoltage == null) {
       addCommands(
-          new ParallelCommandGroup(new ArmToPositionTP(intakeAngle, arm)), new IndexPiece(intake));
+          new ParallelCommandGroup(new ArmToPositionTP(intakeAngle, arm)),
+          new AutoIndexPiece(intake));
     } else {
       addCommands(
           new ParallelCommandGroup(new ArmToPositionTP(intakeAngle, arm)),
-          new IndexPiece(intake, intakeVoltage));
+          new AutoIndexPiece(intake, intakeVoltage));
     }
-    addCommands(new ProtectArm(arm));
+    addCommands(arm.getStowCommand());
     if (Constants.debugCommands) {
       addCommands(new PrintCommand("  END: " + this.getClass().getSimpleName()));
     }
@@ -32,7 +33,7 @@ public class PrepareForIntake extends SequentialCommandGroup {
 
   // Sets the Arm to the ideal angle for intake
   // Turns the intake motor on
-  public PrepareForIntake(Arm arm, Intake intake) {
+  public AutoPrepareForIntake(Arm arm, Intake intake) {
     this(arm, intake, () -> ArmConstants.intakeAngleInDegrees, null);
   }
 }

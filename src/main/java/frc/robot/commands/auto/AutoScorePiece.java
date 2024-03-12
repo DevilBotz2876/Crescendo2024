@@ -1,4 +1,4 @@
-package frc.robot.commands.assist;
+package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -8,7 +8,7 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.shooter.Shooter;
 import java.util.function.DoubleSupplier;
 
-public class ScorePiece extends Command {
+public class AutoScorePiece extends Command {
   Intake intake;
   Shooter shooter;
   DoubleSupplier intakeFeedVoltage;
@@ -17,11 +17,11 @@ public class ScorePiece extends Command {
   // Wait for piece to be shot out
   // Turn off intake
   // Turn off shooter
-  public ScorePiece(Intake intake, Shooter shooter) {
+  public AutoScorePiece(Intake intake, Shooter shooter) {
     this(intake, shooter, () -> IntakeConstants.feedSpeedInVolts);
   }
 
-  public ScorePiece(Intake intake, Shooter shooter, DoubleSupplier intakeFeedVoltage) {
+  public AutoScorePiece(Intake intake, Shooter shooter, DoubleSupplier intakeFeedVoltage) {
     this.intake = intake;
     this.shooter = shooter;
     this.intakeFeedVoltage = intakeFeedVoltage;

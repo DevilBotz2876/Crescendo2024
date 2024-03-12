@@ -1,4 +1,4 @@
-package frc.robot.commands.assist;
+package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -7,19 +7,19 @@ import frc.robot.config.RobotConfig.IntakeConstants;
 import frc.robot.subsystems.intake.Intake;
 import java.util.function.DoubleSupplier;
 
-public class IndexPiece extends Command {
+public class AutoIndexPiece extends Command {
   Intake intake;
   DoubleSupplier intakeVoltage = null;
   double targetIntakeVoltage;
 
-  public IndexPiece(Intake intake, DoubleSupplier intakeVoltage) {
+  public AutoIndexPiece(Intake intake, DoubleSupplier intakeVoltage) {
     this.intake = intake;
     this.intakeVoltage = intakeVoltage;
 
     addRequirements((Subsystem) intake);
   }
 
-  public IndexPiece(Intake intake) {
+  public AutoIndexPiece(Intake intake) {
     this(intake, null);
   }
 
