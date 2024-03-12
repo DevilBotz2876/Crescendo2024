@@ -361,7 +361,12 @@ public class DriverControls {
 
     /* Low Level Arm Controls */
     /* Left Stick Up/Down = Arm Down/Up */
-    RobotConfig.arm.setDefaultCommand(
+    EventLoop eventLoop = CommandScheduler.getInstance().getDefaultButtonLoop();
+    BooleanEvent leftYPressed =
+        new BooleanEvent(eventLoop, () -> Math.abs(controller.getLeftY()) > 0.05);
+
+    Trigger leftYPressedTrigger = leftYPressed.castTo(Trigger::new);
+    leftYPressedTrigger.onTrue(
         new ArmCommand(
             RobotConfig.arm,
             () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.05))); //  Arm Up/Down
