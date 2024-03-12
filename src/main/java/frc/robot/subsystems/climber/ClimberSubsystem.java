@@ -3,7 +3,6 @@ package frc.robot.subsystems.climber;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -11,29 +10,24 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.config.RobotConfig.ClimberConstants;
 import java.util.ArrayList;
 import java.util.List;
-import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class ClimberSubsystem extends SubsystemBase implements Climber {
   private class ClimberInstance {
     private final ClimberIO io;
     private final ClimberIOInputsAutoLogged inputs;
-    @AutoLogOutput private final String name;
+    private final String name;
     private double voltage = 0.0;
-    @AutoLogOutput private boolean atLimit = false;
     private boolean extend = false;
     private boolean autoZeroMode = false;
     private boolean enableLimits = true;
 
-    private final MechanismLigament2d climber2d;
+    private MechanismLigament2d climber2d = null;
 
-    ClimberInstance(ClimberIO io, String name, MechanismRoot2d root2d) {
+    ClimberInstance(ClimberIO io, String name) {
       this.io = io;
       this.name = name;
       inputs = new ClimberIOInputsAutoLogged();
-
-      climber2d =
-          root2d.append(new MechanismLigament2d(name, 10, 90, 6, new Color8Bit(Color.kSilver)));
     }
 
     void periodic() {
@@ -47,7 +41,7 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
         io.setVoltage(voltage);
       }
 
-      if (voltage != 0) {
+      if ((null != climber2d) && (voltage != 0)) {
         climber2d.setLength(
             10 + 30 * (inputs.positionRadians / ClimberConstants.maxPositionInRadians));
       }
@@ -110,6 +104,11 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
     public void enableLimits(boolean enable) {
       enableLimits = enable;
     }
+
+    public void add2dSim(MechanismRoot2d root2d) {
+      climber2d =
+          root2d.append(new MechanismLigament2d(name, 10, 90, 6, new Color8Bit(Color.kSilver)));
+    }
   }
 
   private final ClimberInstance left, right;
@@ -117,18 +116,11 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
   private boolean extend = false;
 
   public ClimberSubsystem(ClimberIO left, ClimberIO right) {
-    // Create 2D simulated display of a Climber
-    Mechanism2d mech2d = new Mechanism2d(60, 60);
-
-    this.left =
-        new ClimberInstance(left, "Climber Left", mech2d.getRoot("Left Climber Pivot", 10, 10));
+    this.left = new ClimberInstance(left, "Climber Left");
     climbers.add(this.left);
 
-    this.right =
-        new ClimberInstance(right, "Climber Right", mech2d.getRoot("Right ClimberPivot", 50, 10));
+    this.right = new ClimberInstance(right, "Climber Right");
     climbers.add(this.right);
-
-    SmartDashboard.putData("Climber Simulation", mech2d);
   }
 
   @Override
@@ -232,5 +224,11 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
   @Override
   public Command getRetractCommand() {
     return runOnce(() -> retract());
+  }
+
+  @Override
+  public void add2dSim(Mechanism2d mech2d) {
+    left.add2dSim(mech2d.getRoot("Left Climber Pivot", 5, 10));
+    right.add2dSim(mech2d.getRoot("Right Climber Pivot", 55, 10));
   }
 }
