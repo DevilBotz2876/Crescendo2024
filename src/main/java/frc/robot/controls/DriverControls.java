@@ -118,6 +118,14 @@ public class DriverControls {
     rowIndex = 0;
 
     driverTab
+        .addDouble("Target Angle (degrees)", () -> RobotConfig.arm.getTargetAngle())
+        .withWidget(BuiltInWidgets.kNumberBar)
+        .withProperties(
+            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
+        .withSize(2, 1)
+        .withPosition(colIndex, rowIndex++);
+
+    driverTab
         .addDouble("Abs Angle (degrees)", () -> RobotConfig.arm.getAngle())
         .withWidget(BuiltInWidgets.kNumberBar)
         .withProperties(
@@ -150,7 +158,7 @@ public class DriverControls {
         .addString("Aiming Mode", () -> RobotState.getShootingModeName())
         .withWidget(BuiltInWidgets.kTextView)
         .withPosition(0, 0)
-        .withSize(2, 3);
+        .withSize(2, 2);
 
     aimingModeLayout.add(ampModeCommand).withPosition(0, 1);
     aimingModeLayout.add(speakerModeFromSubwoofer).withPosition(0, 2);

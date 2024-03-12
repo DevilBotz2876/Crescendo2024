@@ -134,6 +134,11 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     return inputs.relativePositionDegrees;
   }
 
+  @Override
+  public double getTargetAngle() {
+    return setPoint;
+  }
+
   // sets of the angle of the arm
   @Override
   public void setAngle(double degrees) {
