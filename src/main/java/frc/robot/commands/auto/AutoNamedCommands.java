@@ -4,7 +4,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
-import frc.robot.commands.assist.PrepareForIntake;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
@@ -50,7 +49,7 @@ public class AutoNamedCommands {
   public static void configure() {
 
     NamedCommands.registerCommand(
-        "Intake Piece", new PrepareForIntake(RobotConfig.arm, RobotConfig.intake));
+        "Intake Piece", new AutoPrepareForIntake(RobotConfig.arm, RobotConfig.intake));
 
     NamedCommands.registerCommand(
         "Shoot Piece from Speaker Amp Side",
