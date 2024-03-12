@@ -4,9 +4,9 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import frc.robot.commands.assist.PrepareForIntake;
-import frc.robot.commands.assist.PrepareForScore;
-import frc.robot.commands.assist.ScorePiece;
+import frc.robot.commands.auto.AutoPrepareForIntake;
+import frc.robot.commands.auto.AutoScorePiece;
+import frc.robot.commands.debug.PrepareForScore;
 import frc.robot.commands.debug.TestShooterAngle;
 import frc.robot.commands.vision.AlignToTarget;
 import frc.robot.config.RobotConfig;
@@ -45,7 +45,7 @@ public class DebugControls {
     debugTab
         .add(
             "Assist: Prepare For Intake",
-            new PrepareForIntake(
+            new AutoPrepareForIntake(
                 RobotConfig.arm,
                 RobotConfig.intake,
                 () -> intakeAngleEntry.getDouble(ArmConstants.intakeAngleInDegrees),
@@ -126,7 +126,7 @@ public class DebugControls {
     debugTab
         .add(
             "Assist: Shoot Piece",
-            new ScorePiece(
+            new AutoScorePiece(
                 RobotConfig.intake,
                 RobotConfig.shooter,
                 () -> intakeFeedVoltageEntry.getDouble(IntakeConstants.feedSpeedInVolts)))

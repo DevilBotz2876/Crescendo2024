@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.arm.ArmToPosition;
-import frc.robot.commands.assist.ScorePiece;
 import frc.robot.commands.drive.DriveToYaw;
 import frc.robot.commands.shooter.SetShooterVelocity;
 import frc.robot.config.RobotConfig.ArmConstants;
@@ -51,7 +50,7 @@ public class AutoScore extends SequentialCommandGroup {
             new ArmToPosition(arm, armAngleInDegrees).withTimeout(ArmConstants.pidTimeoutInSeconds),
             new SetShooterVelocity(shooter, shooterVelocityInRPMs)
                 .withTimeout(ShooterConstants.pidTimeoutInSeconds)));
-    addCommands(new ScorePiece(intake, shooter));
+    addCommands(new AutoScorePiece(intake, shooter));
 
     if (Constants.debugCommands) {
       addCommands(new PrintCommand("  END: AutoScore"));
