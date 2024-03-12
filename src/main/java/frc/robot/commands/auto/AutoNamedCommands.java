@@ -8,7 +8,7 @@ import frc.robot.commands.assist.PrepareForIntake;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
-import frc.robot.util.RobotState;
+import frc.robot.util.DevilBotState;
 import java.util.Optional;
 
 public class AutoNamedCommands {
@@ -157,7 +157,7 @@ public class AutoNamedCommands {
 
   private static double getYawToTarget(double defaultYawToTarget) {
     Optional<Double> getYawToAprilTag =
-        RobotConfig.vision.getYawToAprilTag(RobotState.getActiveTargetId());
+        RobotConfig.vision.getYawToAprilTag(DevilBotState.getActiveTargetId());
 
     if (getYawToAprilTag.isPresent()) {
       double visionYaw = RobotConfig.drive.getAngle() - getYawToAprilTag.get();
@@ -172,7 +172,7 @@ public class AutoNamedCommands {
 
   private static double getAngleToTarget(double defaultAngleToTarget) {
     Optional<Double> getDistanceToAprilTag =
-        RobotConfig.vision.getDistanceToAprilTag(RobotState.getActiveTargetId());
+        RobotConfig.vision.getDistanceToAprilTag(DevilBotState.getActiveTargetId());
 
     if (getDistanceToAprilTag.isPresent()) {
       double distance = getDistanceToAprilTag.get();

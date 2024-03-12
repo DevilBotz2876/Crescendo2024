@@ -26,11 +26,12 @@ import frc.robot.config.RobotConfig.DriveConstants;
 import frc.robot.config.RobotConfig.IntakeConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.subsystems.vision.VisionCamera;
-import frc.robot.util.RobotState;
-import frc.robot.util.RobotState.DriveMode;
-import frc.robot.util.RobotState.PieceDetectionMode;
-import frc.robot.util.RobotState.SpeakerShootingMode;
-import frc.robot.util.RobotState.TargetMode;
+import frc.robot.util.DevilBotState;
+import frc.robot.util.DevilBotState.DriveMode;
+import frc.robot.util.DevilBotState.PieceDetectionMode;
+import frc.robot.util.DevilBotState.SpeakerShootingMode;
+import frc.robot.util.DevilBotState.State;
+import frc.robot.util.DevilBotState.TargetMode;
 import java.util.Map;
 import java.util.Optional;
 
@@ -39,29 +40,29 @@ public class DriverControls {
   public static CommandXboxController secondaryController;
 
   static Command ampModeCommand =
-      new InstantCommand(() -> RobotState.setTargetMode(TargetMode.AMP));
+      new InstantCommand(() -> DevilBotState.setTargetMode(TargetMode.AMP));
   static Command speakerModeCommand =
-      new InstantCommand(() -> RobotState.setTargetMode(TargetMode.SPEAKER));
+      new InstantCommand(() -> DevilBotState.setTargetMode(TargetMode.SPEAKER));
 
   static Command speakerModeFromSubwoofer =
       new InstantCommand(
           () -> {
-            RobotState.setTargetMode(TargetMode.SPEAKER);
-            RobotState.setShootingMode(SpeakerShootingMode.SPEAKER_FROM_SUBWOOFER);
+            DevilBotState.setTargetMode(TargetMode.SPEAKER);
+            DevilBotState.setShootingMode(SpeakerShootingMode.SPEAKER_FROM_SUBWOOFER);
           });
 
   static Command speakerModeFromPodium =
       new InstantCommand(
           () -> {
-            RobotState.setTargetMode(TargetMode.SPEAKER);
-            RobotState.setShootingMode(SpeakerShootingMode.SPEAKER_FROM_PODIUM);
+            DevilBotState.setTargetMode(TargetMode.SPEAKER);
+            DevilBotState.setShootingMode(SpeakerShootingMode.SPEAKER_FROM_PODIUM);
           });
 
   static Command speakerModeVisionBased =
       new InstantCommand(
           () -> {
-            RobotState.setTargetMode(TargetMode.SPEAKER);
-            RobotState.setShootingMode(SpeakerShootingMode.SPEAKER_VISION_BASED);
+            DevilBotState.setTargetMode(TargetMode.SPEAKER);
+            DevilBotState.setShootingMode(SpeakerShootingMode.SPEAKER_VISION_BASED);
           });
 
   public static void setupControls() {
@@ -92,7 +93,7 @@ public class DriverControls {
         .withSize(2, 1);
 
     driverTab
-        .addBoolean("Field Oriented", () -> RobotState.isFieldOriented())
+        .addBoolean("Field Oriented", () -> DevilBotState.isFieldOriented())
         .withWidget(BuiltInWidgets.kBooleanBox)
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
@@ -155,7 +156,7 @@ public class DriverControls {
     speakerModeVisionBased.setName("Speaker (Auto)");
 
     aimingModeLayout
-        .addString("Aiming Mode", () -> RobotState.getShootingModeName())
+        .addString("Aiming Mode", () -> DevilBotState.getShootingModeName())
         .withWidget(BuiltInWidgets.kTextView)
         .withPosition(0, 0)
         .withSize(2, 2);
@@ -195,7 +196,7 @@ public class DriverControls {
      *    Left Stick Up/Down/Left/Right = Robot Strafe
      *    Right Stick Left/Right = Robot Rotate
      */
-    RobotState.setDriveMode(DriveMode.FIELD);
+    DevilBotState.setDriveMode(DriveMode.FIELD);
 
     RobotConfig.drive.setDefaultCommand(
         new DriveCommand(
@@ -216,10 +217,10 @@ public class DriverControls {
         .onTrue(
             new InstantCommand(
                 () -> {
-                  if (RobotState.isFieldOriented()) {
-                    RobotState.setDriveMode(DriveMode.ROBOT);
+                  if (DevilBotState.isFieldOriented()) {
+                    DevilBotState.setDriveMode(DriveMode.ROBOT);
                   } else {
-                    RobotState.setDriveMode(DriveMode.FIELD);
+                    DevilBotState.setDriveMode(DriveMode.FIELD);
                   }
                 })); // Toggle Drive Orientation
 
@@ -240,7 +241,7 @@ public class DriverControls {
             new InstantCommand(
                 () -> {
                   if ((false == RobotConfig.intake.isPieceDetected())
-                      || (false == RobotState.isPieceDetectionEnabled())) {
+                      || (false == DevilBotState.isPieceDetectionEnabled())) {
                     RobotConfig.intake.turnOn();
                     RobotConfig.arm.setAngle(ArmConstants.intakeAngleInDegrees); // Intake Note
                   } else {
@@ -266,17 +267,20 @@ public class DriverControls {
             new ParallelCommandGroup(
                 RobotConfig.intake.getTurnOffCommand(),
                 new AlignToTarget(
-                        RobotConfig.drive, RobotConfig.vision, () -> RobotState.getActiveTargetId())
+                        RobotConfig.drive,
+                        RobotConfig.vision,
+                        () -> DevilBotState.getActiveTargetId())
                     .withTimeout(DriveConstants.pidTimeoutInSeconds),
-                new SetShooterVelocity(RobotConfig.shooter, () -> RobotState.getShooterVelocity())
+                new SetShooterVelocity(
+                        RobotConfig.shooter, () -> DevilBotState.getShooterVelocity())
                     .withTimeout(ShooterConstants.pidTimeoutInSeconds), // turn on shooter
                 /* TODO: Use ArmToPositionTP instead of setting arm angle directly */
                 new InstantCommand(
                     () -> {
-                      if (RobotState.isAmpMode()) {
+                      if (DevilBotState.isAmpMode()) {
                         RobotConfig.arm.setAngle(ArmConstants.ampScoreAngleInDegrees);
                       } else {
-                        Optional<Double> armAngle = RobotState.getArmAngleToTarget();
+                        Optional<Double> armAngle = DevilBotState.getArmAngleToTarget();
                         if (armAngle.isPresent()) {
                           RobotConfig.arm.setAngle((armAngle.get()));
                         }
@@ -292,7 +296,8 @@ public class DriverControls {
                 new InstantCommand(
                     () -> RobotConfig.drive.lockPose(),
                     RobotConfig.drive), // lock drive wheels/pose
-                new SetShooterVelocity(RobotConfig.shooter, () -> RobotState.getShooterVelocity())
+                new SetShooterVelocity(
+                        RobotConfig.shooter, () -> DevilBotState.getShooterVelocity())
                     .withTimeout(
                         ShooterConstants
                             .pidTimeoutInSeconds), // set shooter velocity in case it's not already
@@ -306,29 +311,34 @@ public class DriverControls {
     Trigger havePieceTriggerRising = havePiece.rising().castTo(Trigger::new);
 
     // We've picked up a note
-    havePieceTriggerRising.onTrue(
-        new SequentialCommandGroup(
-            RobotConfig.intake.getTurnOffCommand(), // Turn off intake
-            new InstantCommand(
-                () -> RobotConfig.arm.setAngle(ArmConstants.stowIntakeAngleInDegrees),
-                RobotConfig.arm), // Put arm in stow mode
-            new InstantCommand(
-                () -> RobotConfig.shooter.runVelocity(RobotState.getShooterVelocity()),
-                RobotConfig.shooter) // Turn on the shooter
-            ));
+    havePieceTriggerRising
+        .and(() -> DevilBotState.getState() == State.TELEOP)
+        .onTrue(
+            new SequentialCommandGroup(
+                RobotConfig.intake.getTurnOffCommand(), // Turn off intake
+                new InstantCommand(
+                    () -> RobotConfig.arm.setAngle(ArmConstants.stowIntakeAngleInDegrees),
+                    RobotConfig.arm), // Put arm in stow mode
+                new InstantCommand(
+                    () -> RobotConfig.shooter.runVelocity(DevilBotState.getShooterVelocity()),
+                    RobotConfig.shooter) // Turn on the shooter
+                ));
 
     Trigger havePieceTriggerFalling = havePiece.falling().castTo(Trigger::new);
 
     // We no longer have a note
-    havePieceTriggerFalling.onFalse(
-        new ParallelCommandGroup(
-            RobotConfig.intake.getTurnOnCommand(), // Turn on intake
-            new InstantCommand(
-                () -> RobotConfig.arm.setAngle(ArmConstants.stowIntakeAngleInDegrees),
-                RobotConfig.arm), // Put arm in stow mode
-            new InstantCommand(
-                () -> RobotConfig.shooter.runVelocity(0), RobotConfig.shooter) // Turn off shooter
-            ));
+    havePieceTriggerFalling
+        .and(() -> DevilBotState.getState() == State.TELEOP)
+        .onFalse(
+            new ParallelCommandGroup(
+                RobotConfig.intake.getTurnOnCommand(), // Turn on intake
+                new InstantCommand(
+                    () -> RobotConfig.arm.setAngle(ArmConstants.stowIntakeAngleInDegrees),
+                    RobotConfig.arm), // Put arm in stow mode
+                new InstantCommand(
+                    () -> RobotConfig.shooter.runVelocity(0),
+                    RobotConfig.shooter) // Turn off shooter
+                ));
   }
 
   private static void setupSecondaryControls(CommandXboxController controller) {
@@ -357,14 +367,14 @@ public class DriverControls {
         .onTrue(
             new InstantCommand(
                 () ->
-                    RobotState.SetPieceDetectionMode(
+                    DevilBotState.setPieceDetectionMode(
                         PieceDetectionMode.DISABLED))); // Intake: Disable Detection
     controller
         .start()
         .onTrue(
             new InstantCommand(
                 () ->
-                    RobotState.SetPieceDetectionMode(
+                    DevilBotState.setPieceDetectionMode(
                         PieceDetectionMode.ENABLED))); // Intake: Enable Detection
 
     /* Low Level Arm Controls */
