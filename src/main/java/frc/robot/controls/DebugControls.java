@@ -13,7 +13,7 @@ import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.IntakeConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
-import frc.robot.util.RobotState;
+import frc.robot.util.DevilBotState;
 import java.util.Map;
 
 public class DebugControls {
@@ -99,12 +99,12 @@ public class DebugControls {
                 RobotConfig.arm,
                 RobotConfig.shooter,
                 () -> {
-                  if (RobotState.isAmpMode())
+                  if (DevilBotState.isAmpMode())
                     return armAngleAmpEntry.getDouble(ArmConstants.ampScoreAngleInDegrees);
                   else return armAngleEntry.getDouble(ArmConstants.subwooferScoreAngleInDegrees);
                 },
                 () -> {
-                  if (RobotState.isAmpMode())
+                  if (DevilBotState.isAmpMode())
                     return shooterVelocityAmpEntry.getDouble(
                         ShooterConstants.ampScoreVelocityInRPMs);
                   else return shooterVelocityEntry.getDouble(ShooterConstants.velocityInRPMs);
@@ -151,7 +151,7 @@ public class DebugControls {
 
     GenericEntry visionTargetId =
         debugTab
-            .add("Vision: Target ID", RobotState.getActiveTargetId())
+            .add("Vision: Target ID", DevilBotState.getActiveTargetId())
             .withWidget(BuiltInWidgets.kTextView)
             .withProperties(Map.of("min", 1, "max", 16))
             .withPosition(colIndex, rowIndex++)
@@ -164,7 +164,7 @@ public class DebugControls {
             new AlignToTarget(
                 RobotConfig.drive,
                 RobotConfig.vision,
-                () -> (int) visionTargetId.getInteger(RobotState.getActiveTargetId())))
+                () -> (int) visionTargetId.getInteger(DevilBotState.getActiveTargetId())))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
 
