@@ -130,7 +130,7 @@ public class RobotState {
 
   private static SpeakerShootingMode shootingMode = SpeakerShootingMode.SPEAKER_FROM_SUBWOOFER;
 
-  public static void setSpeakerShootingMode(SpeakerShootingMode position) {
+  public static void setShootingMode(SpeakerShootingMode position) {
     RobotState.shootingMode = position;
   }
 
@@ -141,13 +141,13 @@ public class RobotState {
 
     switch (RobotState.shootingMode) {
       case SPEAKER_FROM_SUBWOOFER:
-        return "Speaker - From Subwoofer";
+        return "Speaker (Sub)";
 
       case SPEAKER_FROM_PODIUM:
-        return "Speaker - From Podium";
+        return "Speaker (Podium)";
 
       case SPEAKER_VISION_BASED:
-        return "Speaker - Vision Based";
+        return "Speaker (Auto)";
 
       default:
         return "Unknown";
@@ -183,5 +183,20 @@ public class RobotState {
           return Optional.empty();
       }
     }
+  }
+
+  public enum PieceDetectionMode {
+    ENABLED,
+    DISABLED
+  }
+
+  private static PieceDetectionMode pieceDetectionMode = PieceDetectionMode.ENABLED;
+
+  public static boolean isPieceDetectionEnabled() {
+    return PieceDetectionMode.ENABLED == pieceDetectionMode;
+  }
+
+  public static void SetPieceDetectionMode(PieceDetectionMode mode) {
+    pieceDetectionMode = mode;
   }
 }
