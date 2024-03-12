@@ -181,29 +181,29 @@ public class DriverControls {
     controller.b().onTrue(speakerModeCommand);
   }
 
-  private static void setupMainControls(CommandXboxController controller) {
-
+  public static void setupMainControls(CommandXboxController mainController) {
     /**** Drive Controls ****/
     /* Competition:
      *    Left Stick Up/Down/Left/Right = Robot Strafe
      *    Right Stick Left/Right = Robot Rotate
      */
     RobotState.setDriveMode(DriveMode.FIELD);
+
     RobotConfig.drive.setDefaultCommand(
         new DriveCommand(
             RobotConfig.drive,
-            () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.05), //  Robot Strafe Front/Back
-            () -> MathUtil.applyDeadband(-controller.getLeftX(), 0.05), //  Robot Strafe Left/Right
-            () -> MathUtil.applyDeadband(-controller.getRightX(), 0.05))); // Robpt Rotate
+            () ->
+                MathUtil.applyDeadband(-mainController.getLeftY(), 0.05), // Robot Strafe Front/Back
+            () ->
+                MathUtil.applyDeadband(-mainController.getLeftX(), 0.05), // Robot Strafe Left/Right
+            () -> MathUtil.applyDeadband(-mainController.getRightX(), 0.05))); // Robot Rotate
 
     /* Debug/Test Only:
      *    Back Button = Zero Pose
      *    Start Button = Toggle Drive Orientation
      */
-    controller
-        .back()
-        .onTrue(new InstantCommand(() -> RobotConfig.drive.resetOdometry())); // Zero Pose
-    controller
+    mainController.back().onTrue(new InstantCommand(() -> RobotConfig.drive.resetOdometry()));
+    mainController
         .start()
         .onTrue(
             new InstantCommand(
@@ -226,7 +226,7 @@ public class DriverControls {
      *    Right Bumper = "Aim"
      *    Right Trigger = "Shoot Note"
      */
-    controller
+    mainController
         .leftTrigger()
         .onTrue(
             new InstantCommand(
@@ -241,21 +241,18 @@ public class DriverControls {
                 },
                 RobotConfig.arm));
 
-    controller
+    mainController
         .leftTrigger()
         .onFalse(
             new InstantCommand(
-                () -> RobotConfig.arm.setAngle(ArmConstants.stowIntakeAngleInDegrees), // Stow Arm
-                RobotConfig.arm));
+                () -> RobotConfig.arm.setAngle(ArmConstants.stowIntakeAngleInDegrees),
+                RobotConfig.arm)); // Stow Arm
 
-    controller
+    mainController
         .leftBumper()
-        .onTrue(
-            new SequentialCommandGroup(
-                RobotConfig.shooter.getTurnOffCommand(),
-                new EjectPiece(RobotConfig.intake, RobotConfig.arm))); // Eject Note
+        .onTrue(new EjectPiece(RobotConfig.intake, RobotConfig.arm)); // Eject Note
 
-    controller
+    mainController
         .rightBumper()
         .onTrue(
             new ParallelCommandGroup(
@@ -264,7 +261,7 @@ public class DriverControls {
                         RobotConfig.drive, RobotConfig.vision, () -> RobotState.getActiveTargetId())
                     .withTimeout(DriveConstants.pidTimeoutInSeconds),
                 new SetShooterVelocity(RobotConfig.shooter, () -> RobotState.getShooterVelocity())
-                    .withTimeout(ShooterConstants.pidTimeoutInSeconds),
+                    .withTimeout(ShooterConstants.pidTimeoutInSeconds), // turn on shooter
                 /* TODO: Use ArmToPositionTP instead of setting arm angle directly */
                 new InstantCommand(
                     () -> {
@@ -280,7 +277,7 @@ public class DriverControls {
                     RobotConfig.arm) // adjust arm angle based on vision's distance from target
                 )); // Aim
 
-    controller
+    mainController
         .rightTrigger()
         .onTrue(
             new SequentialCommandGroup(
@@ -296,13 +293,11 @@ public class DriverControls {
 
     EventLoop eventLoop = CommandScheduler.getInstance().getDefaultButtonLoop();
     BooleanEvent havePiece =
-        new BooleanEvent(
-            eventLoop,
-            () -> RobotConfig.intake.isPieceDetected() && RobotState.isPieceDetectionEnabled());
+        new BooleanEvent(eventLoop, () -> RobotConfig.intake.isPieceDetected());
 
     Trigger havePieceTriggerRising = havePiece.rising().castTo(Trigger::new);
 
-    // Note is Detected
+    // We've picked up a note
     havePieceTriggerRising.onTrue(
         new SequentialCommandGroup(
             RobotConfig.intake.getTurnOffCommand(), // Turn off intake
@@ -316,7 +311,7 @@ public class DriverControls {
 
     Trigger havePieceTriggerFalling = havePiece.falling().castTo(Trigger::new);
 
-    // // Note is no longer Detected
+    // We no longer have a note
     havePieceTriggerFalling.onFalse(
         new ParallelCommandGroup(
             RobotConfig.intake.getTurnOnCommand(), // Turn on intake
