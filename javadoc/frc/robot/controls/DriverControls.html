@@ -44,13 +44,13 @@ loadScripts(document, 'script');</script>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -80,6 +80,24 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- =========== FIELD SUMMARY =========== -->
+<li>
+<section class="field-summary" id="field-summary">
+<h2>Field Summary</h2>
+<div class="caption"><span>Fields</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static edu.wpi.first.wpilibj2.command.button.CommandXboxController</code></div>
+<div class="col-second even-row-color"><code><a href="#mainController" class="member-name-link">mainController</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static edu.wpi.first.wpilibj2.command.button.CommandXboxController</code></div>
+<div class="col-second odd-row-color"><code><a href="#secondaryController" class="member-name-link">secondaryController</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor-summary">
@@ -105,10 +123,10 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setupControls(edu.wpi.first.wpilibj2.command.button.CommandXboxController)" class="member-name-link">setupControls</a><wbr>(edu.wpi.first.wpilibj2.command.button.CommandXboxController&nbsp;mainController)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setupControls()" class="member-name-link">setupControls</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setupGUI()" class="member-name-link">setupGUI</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#setupMainControls(edu.wpi.first.wpilibj2.command.button.CommandXboxController)" class="member-name-link">setupMainControls</a><wbr>(edu.wpi.first.wpilibj2.command.button.CommandXboxController&nbsp;mainController)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
@@ -122,6 +140,26 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="details">
 <ul class="details-list">
+<!-- ============ FIELD DETAIL =========== -->
+<li>
+<section class="field-details" id="field-detail">
+<h2>Field Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="mainController">
+<h3>mainController</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">edu.wpi.first.wpilibj2.command.button.CommandXboxController</span>&nbsp;<span class="element-name">mainController</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="secondaryController">
+<h3>secondaryController</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">edu.wpi.first.wpilibj2.command.button.CommandXboxController</span>&nbsp;<span class="element-name">secondaryController</span></div>
+</section>
+</li>
+</ul>
+</section>
+</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
 <section class="constructor-details" id="constructor-detail">
@@ -142,15 +180,15 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="setupGUI()">
-<h3>setupGUI</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setupGUI</span>()</div>
+<section class="detail" id="setupControls()">
+<h3>setupControls</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setupControls</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="setupControls(edu.wpi.first.wpilibj2.command.button.CommandXboxController)">
-<h3>setupControls</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setupControls</span><wbr><span class="parameters">(edu.wpi.first.wpilibj2.command.button.CommandXboxController&nbsp;mainController)</span></div>
+<section class="detail" id="setupMainControls(edu.wpi.first.wpilibj2.command.button.CommandXboxController)">
+<h3>setupMainControls</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setupMainControls</span><wbr><span class="parameters">(edu.wpi.first.wpilibj2.command.button.CommandXboxController&nbsp;mainController)</span></div>
 </section>
 </li>
 </ul>
