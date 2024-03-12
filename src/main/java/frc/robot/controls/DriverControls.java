@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -147,7 +149,8 @@ public class DriverControls {
             .getLayout("Aiming Mode", BuiltInLayouts.kGrid)
             //            .withProperties(Map.of("Label position", "HIDDEN"))
             .withSize(2, 3)
-            .withPosition(colIndex, rowIndex++);
+            .withPosition(colIndex, rowIndex);
+    rowIndex += 3;
 
     ampModeCommand.setName("Amp Mode");
     speakerModeCommand.setName("Speaker Mode");
@@ -165,6 +168,14 @@ public class DriverControls {
     aimingModeLayout.add(speakerModeFromSubwoofer).withPosition(0, 2);
     aimingModeLayout.add(speakerModeFromPodium).withPosition(0, 3);
     aimingModeLayout.add(speakerModeVisionBased).withPosition(0, 4);
+
+    Mechanism2d mech2d = new Mechanism2d(60, 60);
+    RobotConfig.arm.add2dSim(mech2d);
+    RobotConfig.intake.add2dSim(mech2d);
+    RobotConfig.shooter.add2dSim(mech2d);
+    RobotConfig.climber.add2dSim(mech2d);
+
+    SmartDashboard.putData("Inferno 2D Simulation", mech2d);
   }
 
   private static void setupCommonControls(CommandXboxController controller) {
@@ -306,7 +317,9 @@ public class DriverControls {
 
     EventLoop eventLoop = CommandScheduler.getInstance().getDefaultButtonLoop();
     BooleanEvent havePiece =
-        new BooleanEvent(eventLoop, () -> RobotConfig.intake.isPieceDetected());
+        new BooleanEvent(
+            eventLoop,
+            () -> RobotConfig.intake.isPieceDetected() && DevilBotState.isPieceDetectionEnabled());
 
     Trigger havePieceTriggerRising = havePiece.rising().castTo(Trigger::new);
 

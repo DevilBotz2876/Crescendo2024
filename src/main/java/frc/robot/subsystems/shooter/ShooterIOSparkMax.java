@@ -8,6 +8,7 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.SparkPIDController.ArbFFUnits;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 
 public class ShooterIOSparkMax implements ShooterIO {
   // Gear ratio for the shooter mechanism
@@ -61,14 +62,15 @@ public class ShooterIOSparkMax implements ShooterIO {
     pid.setOutputRange(tkMinOutput, tkMaxOutput);
 
     // TODO: probably remove bottom since shooter will have one motor, not two independent motor
-
-    SmartDashboard.putNumber("Shooter/top/P Gain", tkP);
-    SmartDashboard.putNumber("Shooter/top/I Gain", tkI);
-    SmartDashboard.putNumber("Shooter/top/D Gain", tkD);
-    SmartDashboard.putNumber("Shooter/top/I Zone", tkIz);
-    SmartDashboard.putNumber("Shooter/top/Feed Forward", tkFF);
-    SmartDashboard.putNumber("Shooter/top/Max Output", tkMaxOutput);
-    SmartDashboard.putNumber("Shooter/top/Min Output", tkMinOutput);
+    if (Constants.debugMode) {
+      SmartDashboard.putNumber("Shooter/top/P Gain", tkP);
+      SmartDashboard.putNumber("Shooter/top/I Gain", tkI);
+      SmartDashboard.putNumber("Shooter/top/D Gain", tkD);
+      SmartDashboard.putNumber("Shooter/top/I Zone", tkIz);
+      SmartDashboard.putNumber("Shooter/top/Feed Forward", tkFF);
+      SmartDashboard.putNumber("Shooter/top/Max Output", tkMaxOutput);
+      SmartDashboard.putNumber("Shooter/top/Min Output", tkMinOutput);
+    }
 
     // Last thing we do is save all settings to flash on sparkmax
     flywheel.burnFlash();
@@ -139,8 +141,10 @@ public class ShooterIOSparkMax implements ShooterIO {
         ffVolts,
         ArbFFUnits.kVoltage);
 
-    SmartDashboard.putNumber("Shooter/top/velocityRadPerSec", velocityRadPerSec);
-    SmartDashboard.putNumber("Shooter/top/ProcessVariable", encoder.getVelocity());
+    if (Constants.debugMode) {
+      SmartDashboard.putNumber("Shooter/top/velocityRadPerSec", velocityRadPerSec);
+      SmartDashboard.putNumber("Shooter/top/ProcessVariable", encoder.getVelocity());
+    }
 
     // TODO: probably remove bottom since shooter will have one motor, not two independent motors
     //
