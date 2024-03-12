@@ -1,5 +1,6 @@
 package frc.robot.subsystems.shooter;
 
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public interface Shooter {
@@ -22,4 +23,7 @@ public interface Shooter {
   }
 
   public Command getTurnOffCommand();
+
+  public default void add2dSim(Mechanism2d mech2d) {}
+  ;
 }

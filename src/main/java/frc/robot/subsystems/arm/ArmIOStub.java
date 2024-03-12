@@ -7,14 +7,13 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.robot.config.RobotConfig.ArmConstants;
-import org.littletonrobotics.junction.AutoLogOutput;
 
 public class ArmIOStub implements ArmIO {
   // The P gain for the PID controller that drives this arm.
   private double armKp = .1;
   private double armKd = 0;
-  @AutoLogOutput private double targetDegrees = 0;
-  @AutoLogOutput private double feedForwardVolts = 0;
+  private double targetDegrees = 0;
+  private double feedForwardVolts = 0;
   private double armGearingReduction = 317;
   private double armLengthInMeters = .5;
   private double minAngleInDegrees = ArmConstants.minAngleInDegrees;
