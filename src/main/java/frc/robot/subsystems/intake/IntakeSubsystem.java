@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.config.RobotConfig.IntakeConstants;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -16,6 +18,8 @@ public class IntakeSubsystem extends SubsystemBase implements Intake {
   private final IntakeIO IO;
   private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
   @AutoLogOutput private double targetVoltage;
+  @AutoLogOutput private boolean limitSwitchDelayed = false;
+  private double limitSwitchTimer = 0.0;
 
   // Mechanism2d display of an Intake
   private List<MechanismLigament2d> intake2d = new ArrayList<MechanismLigament2d>();
@@ -52,8 +56,31 @@ public class IntakeSubsystem extends SubsystemBase implements Intake {
       }
     }
 
-    if (inputs.limitSwitchIntake != noteVisibility) {
-      noteVisibility = inputs.limitSwitchIntake;
+    if (inputs.limitSwitchIntake != limitSwitchDelayed)
+    {
+      limitSwitchTimer += 0.02;
+      double sensorDelayInSeconds;
+      if (limitSwitchDelayed)
+      {
+        sensorDelayInSeconds = IntakeConstants.sensorDelayTrueToFalseInSeconds;
+      }
+      else
+      {
+        sensorDelayInSeconds = IntakeConstants.sensorDelayFalseToTrueInSeconds;
+      }
+
+      if (limitSwitchTimer >= sensorDelayInSeconds)
+      {
+        limitSwitchDelayed = inputs.limitSwitchIntake;
+      }
+    }
+    else
+    {
+      limitSwitchTimer = 0.0;
+    }
+
+    if (isPieceDetected() != noteVisibility) {
+      noteVisibility = isPieceDetected();
 
       for (MechanismLigament2d note : note2d) {
         if (noteVisibility) {
@@ -69,7 +96,7 @@ public class IntakeSubsystem extends SubsystemBase implements Intake {
 
   @Override
   public boolean isPieceDetected() {
-    return inputs.limitSwitchIntake;
+    return limitSwitchDelayed;
   }
 
   @Override
