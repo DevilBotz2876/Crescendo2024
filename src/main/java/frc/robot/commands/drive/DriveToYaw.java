@@ -5,6 +5,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
+import frc.robot.config.RobotConfig.DriveConstants;
 import frc.robot.subsystems.drive.Drive;
 import java.util.function.DoubleSupplier;
 
@@ -12,7 +13,9 @@ public class DriveToYaw extends Command {
   Drive drive;
   DoubleSupplier yawDegrees;
   double targetYaw;
-  PIDController turnPID = new PIDController(0.1, 0, 0);
+  PIDController turnPID =
+      new PIDController(
+          DriveConstants.anglePidKp, DriveConstants.anglePidKi, DriveConstants.anglePidKd);
 
   public DriveToYaw(Drive drive, DoubleSupplier yawDegrees) {
     this.drive = drive;
