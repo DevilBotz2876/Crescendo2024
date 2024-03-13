@@ -46,7 +46,6 @@ public class AutoScorePiece extends Command {
   @Override
   public void end(boolean interrupted) {
     intake.runVoltage(0);
-    //    shooter.runVelocity(0);
     if (Constants.debugCommands) {
       System.out.println("  END: " + this.getClass().getSimpleName());
     }

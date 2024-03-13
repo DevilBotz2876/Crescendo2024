@@ -8,10 +8,10 @@ package frc.robot;
 public final class Constants {
 
   /** When set to true you can adjust values of things like PID or input voltage on dashboard */
-  public static final boolean tuningMode = true;
+  public static final boolean tuningMode = false;
 
   /** Use this to output Smartdashboard or other debug messages */
-  public static final boolean debugMode = true;
+  public static final boolean debugMode = false;
 
-  public static final boolean debugCommands = true;
+  public static final boolean debugCommands = false;
 }
