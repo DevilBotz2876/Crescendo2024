@@ -356,9 +356,7 @@ public class DriverControls {
     Trigger enabledEventTrigger = enabledEvent.rising().castTo(Trigger::new);
     enabledEventTrigger.onTrue(
         new ParallelCommandGroup(
-            RobotConfig.shooter.getTurnOffCommand(),
-            RobotConfig.intake.getTurnOffCommand(),
-            RobotConfig.arm.getStowCommand()));
+            RobotConfig.shooter.getTurnOffCommand(), RobotConfig.intake.getTurnOffCommand()));
   }
 
   private static void setupSecondaryControls(CommandXboxController controller) {
