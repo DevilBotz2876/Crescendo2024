@@ -59,7 +59,7 @@ public class RobotConfigInferno extends RobotConfig {
     ShooterConstants.velocityInRPMs = 4500;
     shooter = new ShooterSubsystem(new ShooterIOSparkMax(2));
 
-    ArmConstants.absolutePositionOffset = 0.362; // Determined empirically on 2024-02-22
+    ArmConstants.absolutePositionOffset = 0.1355697033892426; // Determined empirically on 2024-03-12
     ArmConstants.absoluteEncoderInversion = -1;
 
     ArmConstants.pidKp = 0.1;
