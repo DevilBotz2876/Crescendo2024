@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.51,
-        "y": 6.992561413694256
+        "x": 2.7337543047179125,
+        "y": 6.843527962547876
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.51,
-        "y": 6.992561413694256
+        "x": 3.7337543047179125,
+        "y": 6.843527962547876
       },
       "isLocked": false,
       "linkedName": "Note - Amp Side"
@@ -32,7 +32,7 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
