@@ -8,9 +8,10 @@ import frc.robot.commands.auto.AutoPrepareForIntake;
 import frc.robot.commands.auto.AutoScorePiece;
 import frc.robot.commands.debug.PrepareForScore;
 import frc.robot.commands.debug.TestShooterAngle;
-import frc.robot.commands.vision.AlignToTarget;
+import frc.robot.commands.drive.DriveToYaw;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
+import frc.robot.config.RobotConfig.DriveConstants;
 import frc.robot.config.RobotConfig.IntakeConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.util.DevilBotState;
@@ -149,22 +150,19 @@ public class DebugControls {
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
 
-    GenericEntry visionTargetId =
-        debugTab
-            .add("Vision: Target ID", DevilBotState.getActiveTargetId())
-            .withWidget(BuiltInWidgets.kTextView)
-            .withProperties(Map.of("min", 1, "max", 16))
-            .withPosition(colIndex, rowIndex++)
-            .withSize(2, 1)
-            .getEntry();
+    debugTab
+        .add("Vision: Target ID", DevilBotState.getActiveTargetId())
+        .withWidget(BuiltInWidgets.kTextView)
+        .withProperties(Map.of("min", 1, "max", 16))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1)
+        .getEntry();
 
     debugTab
         .add(
             "Vision: Align To Target",
-            new AlignToTarget(
-                RobotConfig.drive,
-                RobotConfig.vision,
-                () -> (int) visionTargetId.getInteger(DevilBotState.getActiveTargetId())))
+            new DriveToYaw(RobotConfig.drive, () -> DevilBotState.getVisionRobotYawToTarget())
+                .withTimeout(DriveConstants.pidTimeoutInSeconds))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
 

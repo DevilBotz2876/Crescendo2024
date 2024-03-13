@@ -20,8 +20,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.arm.ArmCommand;
 import frc.robot.commands.assist.EjectPiece;
 import frc.robot.commands.drive.DriveCommand;
+import frc.robot.commands.drive.DriveToYaw;
 import frc.robot.commands.shooter.SetShooterVelocity;
-import frc.robot.commands.vision.AlignToTarget;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.DriveConstants;
@@ -277,10 +277,7 @@ public class DriverControls {
         .onTrue(
             new ParallelCommandGroup(
                 RobotConfig.intake.getTurnOffCommand(),
-                new AlignToTarget(
-                        RobotConfig.drive,
-                        RobotConfig.vision,
-                        () -> DevilBotState.getActiveTargetId())
+                new DriveToYaw(RobotConfig.drive, () -> DevilBotState.getVisionRobotYawToTarget())
                     .withTimeout(DriveConstants.pidTimeoutInSeconds),
                 new SetShooterVelocity(
                         RobotConfig.shooter, () -> DevilBotState.getShooterVelocity())
