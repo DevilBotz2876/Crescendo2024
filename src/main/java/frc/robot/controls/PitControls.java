@@ -146,6 +146,17 @@ public class PitControls {
     armOn.setName("On");
     commands.add(armOn);
 
+    Command PrepareArmForMatch =
+        new SequentialCommandGroup(
+            new InstantCommand(
+                () -> RobotConfig.arm.setAngle(ArmConstants.matchStartArmAngle),
+                RobotConfig.arm)); //,
+            // new InstantCommand(
+            //     () -> RobotConfig.climber.,
+            //     RobotConfig.arm));
+    armOn.setName("On");
+    commands.add(armOn);
+
     for (Command command : commands) {
       armLayout
           .add(command)

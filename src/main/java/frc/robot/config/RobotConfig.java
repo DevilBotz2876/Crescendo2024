@@ -85,8 +85,10 @@ public class RobotConfig {
     public static double subwooferScoreFromPodiumAngleInDegrees = 20;
     public static double noteScoreAngleInDegrees = 25;
     public static double stowIntakeAngleInDegrees = 15;
+    public static double matchStartArmAngle = 90;
 
     public static double defaultSpeedInVolts = 6.0;
+
   }
 
   public static class ShooterConstants {
@@ -132,6 +134,7 @@ public class RobotConfig {
     public static double autoZeroMaxRetractTimeInSeconds = 5.0;
     public static double autoZeroOffset =
         -0.5; // When auto-zeroing, to reduce stress on the mechanism, this is the amount we want to
+    public static double matchStartPositionRight = 0.36;
     // retract the climber after auto-zeroing
   }
 

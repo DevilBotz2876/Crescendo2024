@@ -83,6 +83,7 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.subwooferScoreFromPodiumAngleInDegrees = 26.5;
     ArmConstants.noteScoreAngleInDegrees = 22.56;
     ArmConstants.stowIntakeAngleInDegrees = 14.64;
+    ArmConstants.matchStartArmAngle = 90;
 
     arm = new ArmSubsystem(new ArmIOSparkMax(4, true));
 
@@ -97,6 +98,7 @@ public class RobotConfigInferno extends RobotConfig {
         10.0 + ClimberConstants.autoZeroExtendTimeInSeconds;
     ClimberConstants.autoZeroOffset =
         -0.5; // When auto-zeroing, to reduce stress on the mechanism, this is the amount we want to
+    ClimberConstants.matchStartPositionRight = 0.36;
     // retract the climber after auto-zeroing
     climber = new ClimberSubsystem(new ClimberIOSparkMax(7, false), new ClimberIOSparkMax(6, true));
 
