@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.config.RobotConfig.IntakeConstants;
-
 import java.util.ArrayList;
 import java.util.List;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -56,26 +55,19 @@ public class IntakeSubsystem extends SubsystemBase implements Intake {
       }
     }
 
-    if (inputs.limitSwitchIntake != limitSwitchDelayed)
-    {
+    if (inputs.limitSwitchIntake != limitSwitchDelayed) {
       limitSwitchTimer += 0.02;
       double sensorDelayInSeconds;
-      if (limitSwitchDelayed)
-      {
+      if (limitSwitchDelayed) {
         sensorDelayInSeconds = IntakeConstants.sensorDelayTrueToFalseInSeconds;
-      }
-      else
-      {
+      } else {
         sensorDelayInSeconds = IntakeConstants.sensorDelayFalseToTrueInSeconds;
       }
 
-      if (limitSwitchTimer >= sensorDelayInSeconds)
-      {
+      if (limitSwitchTimer >= sensorDelayInSeconds) {
         limitSwitchDelayed = inputs.limitSwitchIntake;
       }
-    }
-    else
-    {
+    } else {
       limitSwitchTimer = 0.0;
     }
 

@@ -354,16 +354,14 @@ public class DriverControls {
                 ));
 
     BooleanEvent enabledEvent =
-            new BooleanEvent(
-            eventLoop,
-            () -> DevilBotState.getState() == State.TELEOP); 
-            
+        new BooleanEvent(eventLoop, () -> DevilBotState.getState() == State.TELEOP);
+
     Trigger enabledEventTrigger = enabledEvent.rising().castTo(Trigger::new);
-    enabledEventTrigger.onTrue(new ParallelCommandGroup(
-        RobotConfig.shooter.getTurnOffCommand(),
-        RobotConfig.intake.getTurnOffCommand(),
-        RobotConfig.arm.getStowCommand()
-    ));
+    enabledEventTrigger.onTrue(
+        new ParallelCommandGroup(
+            RobotConfig.shooter.getTurnOffCommand(),
+            RobotConfig.intake.getTurnOffCommand(),
+            RobotConfig.arm.getStowCommand()));
   }
 
   private static void setupSecondaryControls(CommandXboxController controller) {
