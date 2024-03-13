@@ -4,24 +4,24 @@
     {
       "anchor": {
         "x": 1.3172810049270662,
-        "y": 5.514641868978395
+        "y": 5.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9554131415955147,
-        "y": 4.949074942872605
+        "x": 1.3172810049270662,
+        "y": 5.05
       },
       "isLocked": false,
       "linkedName": "Speaker - Center Side"
     },
     {
       "anchor": {
-        "x": 2.8365540809793615,
-        "y": 4.038562638842631
+        "x": 2.5,
+        "y": 4.1
       },
       "prevControl": {
-        "x": 2.3225551996721174,
-        "y": 4.552561520149875
+        "x": 1.0042890150638826,
+        "y": 3.9866481162863634
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": -45.426278993807536,
+      "rotationDegrees": 0.0,
       "rotateFast": false
     }
   ],
@@ -45,8 +45,8 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -43.78112476486865,
-    "rotateFast": true
+    "rotation": 0.0,
+    "rotateFast": false
   },
   "reversed": false,
   "folder": null,

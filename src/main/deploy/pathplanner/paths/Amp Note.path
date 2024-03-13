@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 2.7337543047179125,
-        "y": 6.843527962547876
+        "x": 2.5,
+        "y": 7.0
       },
       "prevControl": {
-        "x": 1.6176424481650398,
-        "y": 6.828842280224812
+        "x": 1.3838871595849211,
+        "y": 6.985389282571375
       },
       "nextControl": null,
       "isLocked": true,
-      "linkedName": "Note - Amp Side"
+      "linkedName": "Note - Amp Side From Amp Side Speaker"
     }
   ],
   "rotationTargets": [

@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 1.3172810049270662,
-        "y": 5.514641868978395
+        "y": 5.55
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.3172810049270636,
-        "y": 5.514641868978395
+        "y": 5.55
       },
       "isLocked": false,
       "linkedName": "Speaker - Center Side"

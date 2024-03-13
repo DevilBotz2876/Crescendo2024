@@ -4,34 +4,34 @@
     {
       "anchor": {
         "x": 1.3172810049270662,
-        "y": 5.514641868978395
+        "y": 5.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8952671238675813,
-        "y": 6.045256651916812
+        "x": 1.67083439552034,
+        "y": 5.903553390593274
       },
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "Speaker - Center Side"
     },
     {
       "anchor": {
-        "x": 2.7337543047179125,
-        "y": 6.843527962547876
+        "x": 2.6,
+        "y": 6.7
       },
       "prevControl": {
-        "x": 2.2259315346864077,
-        "y": 6.3991830387703095
+        "x": 2.2464466094067266,
+        "y": 6.346446609406726
       },
       "nextControl": null,
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "Note - Amp Side"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": 42.65627387731838,
+      "rotationDegrees": 45.0,
       "rotateFast": false
     }
   ],
@@ -46,7 +46,7 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": 44.999999999999964,
-    "rotateFast": true
+    "rotateFast": false
   },
   "reversed": false,
   "folder": null,
