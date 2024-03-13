@@ -7,7 +7,6 @@ frc.robot.commands.debug
 frc.robot.commands.drive
 frc.robot.commands.intake
 frc.robot.commands.shooter
-frc.robot.commands.vision
 frc.robot.config
 frc.robot.controls
 frc.robot.subsystems.arm
