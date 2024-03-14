@@ -90,7 +90,6 @@ public class RobotConfig {
     public static double matchStartArmAngle = 90;
 
     public static double defaultSpeedInVolts = 6.0;
-
   }
 
   public static class ShooterConstants {

@@ -96,7 +96,7 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
     public void resetPosition() {
       io.setPosition(0);
     }
-    
+
     public void autoZeroMode(boolean enable) {
       autoZeroMode = enable;
     }
@@ -144,9 +144,7 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
     runVoltage(-ClimberConstants.defaultSpeedInVolts);
   }
 
-  public void PrepareArmForMatch() {
-    
-  }
+  public void PrepareArmForMatch() {}
 
   @Override
   public boolean isExtending() {
@@ -232,8 +230,8 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
 
   @Override
   public void overridePosition(double leftpos, double rightPos) {
-      left.io.setPosition(leftpos);
-      right.io.setPosition(rightPos);
+    left.io.setPosition(leftpos);
+    right.io.setPosition(rightPos);
   }
 
   @Override
