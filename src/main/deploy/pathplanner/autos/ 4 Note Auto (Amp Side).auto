@@ -1,0 +1,118 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.65,
+      "y": 6.65
+    },
+    "rotation": 60.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Piece from Speaker Amp Side"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Piece"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp to Center Amp Middle"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Amp Middle to Amp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Piece Next to Note Amp Side"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Piece"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "To Amp Note"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "To Amp Note Return"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Piece Next to Note Amp Side"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Piece"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp to Center Amp"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Center Amp to Amp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Piece Next to Note Amp Side"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

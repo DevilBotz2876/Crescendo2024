@@ -37,6 +37,8 @@ public class AutoNamedCommands {
             0.0, ArmConstants.subwooferScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
     public static AutoScoreConstants scoreFromNoteAmpSide =
         new AutoScoreConstants(40, 8, ShooterConstants.velocityInRPMs);
+    public static AutoScoreConstants scoreNextToNoteAmpSide =
+        new AutoScoreConstants(35, 8, ShooterConstants.velocityInRPMs);
     public static AutoScoreConstants scoreFromNoteCenterSide =
         new AutoScoreConstants(
             0.0, ArmConstants.noteScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
@@ -94,6 +96,17 @@ public class AutoNamedCommands {
             () -> getYawToTarget(AutoConstants.scoreFromNoteAmpSide.robotYawInDegrees),
             () -> getAngleToTarget(AutoConstants.scoreFromNoteAmpSide.armAngleInDegrees),
             () -> AutoConstants.scoreFromNoteAmpSide.shooterVelocityInRPMs));
+
+    NamedCommands.registerCommand(
+        "Shoot Piece Next to Note Amp Side",
+        new AutoScore(
+            RobotConfig.drive,
+            RobotConfig.arm,
+            RobotConfig.intake,
+            RobotConfig.shooter,
+            () -> getYawToTarget(AutoConstants.scoreNextToNoteAmpSide.robotYawInDegrees),
+            () -> getAngleToTarget(AutoConstants.scoreNextToNoteAmpSide.armAngleInDegrees),
+            () -> AutoConstants.scoreNextToNoteAmpSide.shooterVelocityInRPMs));
 
     NamedCommands.registerCommand(
         "Shoot Piece from Note Center Side",
@@ -178,7 +191,8 @@ public class AutoNamedCommands {
       Optional<Double> armAngle = RobotConfig.instance.getArmAngleFromDistance(distance);
       if (armAngle.isPresent()) {
         double visionAngle = armAngle.get();
-        if (Constants.debugCommands) {
+        //if (Constants.debugCommands) 
+        {
           System.out.println(
               "Using Vision Angle "
                   + visionAngle

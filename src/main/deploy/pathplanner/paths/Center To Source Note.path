@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3172810049270662,
-        "y": 5.05
+        "x": 1.8430493800489387,
+        "y": 5.5410316277334815
       },
       "isLocked": false,
       "linkedName": "Speaker - Center Side"
@@ -39,7 +39,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
