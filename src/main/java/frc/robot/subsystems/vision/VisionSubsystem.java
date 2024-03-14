@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.util.RobotState;
+import frc.robot.util.DevilBotState;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -91,10 +91,10 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
 
   /* Debug Info */
   @AutoLogOutput private int debugTargetsVisible;
-  @AutoLogOutput private int debugCurrentTargetId = RobotState.getActiveTargetId();
+  @AutoLogOutput private int debugCurrentTargetId = DevilBotState.getActiveTargetId();
 
   @AutoLogOutput
-  private String debugCurrentTargetName = RobotState.getTargetName(debugCurrentTargetId);
+  private String debugCurrentTargetName = DevilBotState.getTargetName(debugCurrentTargetId);
 
   @AutoLogOutput private double debugTargetDistance = 0;
   @AutoLogOutput private double debugTargetYaw = 0;
@@ -159,11 +159,11 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
 
     Optional<Double> distance;
     Optional<Double> yaw;
-    if (debugCurrentTargetId != RobotState.getActiveTargetId()) {
-      debugCurrentTargetId = RobotState.getActiveTargetId();
+    if (debugCurrentTargetId != DevilBotState.getActiveTargetId()) {
+      debugCurrentTargetId = DevilBotState.getActiveTargetId();
       debugTargetDistance = 0;
       debugTargetYaw = 0;
-      debugCurrentTargetName = RobotState.getTargetName(debugCurrentTargetId);
+      debugCurrentTargetName = DevilBotState.getTargetName(debugCurrentTargetId);
     }
     distance = getDistanceToAprilTag(debugCurrentTargetId);
     yaw = getYawToAprilTag(debugCurrentTargetId);

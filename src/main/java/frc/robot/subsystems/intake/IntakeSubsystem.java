@@ -3,11 +3,11 @@ package frc.robot.subsystems.intake;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.config.RobotConfig.IntakeConstants;
 import java.util.ArrayList;
 import java.util.List;
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -17,6 +17,8 @@ public class IntakeSubsystem extends SubsystemBase implements Intake {
   private final IntakeIO IO;
   private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
   @AutoLogOutput private double targetVoltage;
+  @AutoLogOutput private boolean limitSwitchDelayed = false;
+  private double limitSwitchTimer = 0.0;
 
   // Mechanism2d display of an Intake
   private List<MechanismLigament2d> intake2d = new ArrayList<MechanismLigament2d>();
@@ -29,29 +31,6 @@ public class IntakeSubsystem extends SubsystemBase implements Intake {
     this.IO = IO;
 
     targetVoltage = 0;
-
-    // Create 2D simulated display of an Intake/Note
-    Mechanism2d mech2d = new Mechanism2d(60, 60);
-    MechanismRoot2d intakePivot2d = mech2d.getRoot("Intake Pivot", 50, 50);
-    MechanismRoot2d notePivot2d = mech2d.getRoot("Note Pivot", 25, 40);
-
-    intake2d.add(
-        intakePivot2d.append(
-            new MechanismLigament2d("Wheel Spoke A", 5, 0, 6, new Color8Bit(Color.kGray))));
-    intake2d.add(
-        intakePivot2d.append(
-            new MechanismLigament2d("Wheel Spoke B", 5, 90, 6, new Color8Bit(Color.kRed))));
-    intake2d.add(
-        intakePivot2d.append(
-            new MechanismLigament2d("Wheel Spoke C", 5, 180, 6, new Color8Bit(Color.kGray))));
-    intake2d.add(
-        intakePivot2d.append(
-            new MechanismLigament2d("Wheel Spoke D", 5, 270, 6, new Color8Bit(Color.kRed))));
-
-    note2d.add(
-        notePivot2d.append(new MechanismLigament2d("Note", 0, 0, 0, new Color8Bit(Color.kOrange))));
-
-    SmartDashboard.putData("Intake Simulation", mech2d);
   }
 
   @Override
@@ -76,8 +55,24 @@ public class IntakeSubsystem extends SubsystemBase implements Intake {
       }
     }
 
-    if (inputs.limitSwitchIntake != noteVisibility) {
-      noteVisibility = inputs.limitSwitchIntake;
+    if (inputs.limitSwitchIntake != limitSwitchDelayed) {
+      limitSwitchTimer += 0.02;
+      double sensorDelayInSeconds;
+      if (limitSwitchDelayed) {
+        sensorDelayInSeconds = IntakeConstants.sensorDelayTrueToFalseInSeconds;
+      } else {
+        sensorDelayInSeconds = IntakeConstants.sensorDelayFalseToTrueInSeconds;
+      }
+
+      if (limitSwitchTimer >= sensorDelayInSeconds) {
+        limitSwitchDelayed = inputs.limitSwitchIntake;
+      }
+    } else {
+      limitSwitchTimer = 0.0;
+    }
+
+    if (isPieceDetected() != noteVisibility) {
+      noteVisibility = isPieceDetected();
 
       for (MechanismLigament2d note : note2d) {
         if (noteVisibility) {
@@ -93,7 +88,7 @@ public class IntakeSubsystem extends SubsystemBase implements Intake {
 
   @Override
   public boolean isPieceDetected() {
-    return inputs.limitSwitchIntake;
+    return limitSwitchDelayed;
   }
 
   @Override
@@ -109,5 +104,28 @@ public class IntakeSubsystem extends SubsystemBase implements Intake {
   @Override
   public Command getTurnOffCommand() {
     return runOnce(() -> turnOff());
+  }
+
+  @Override
+  public void add2dSim(Mechanism2d mech2d) {
+    // Create 2D simulated display of an Intake/Note
+    MechanismRoot2d intakePivot2d = mech2d.getRoot("Intake Pivot", 45, 50);
+    MechanismRoot2d notePivot2d = mech2d.getRoot("Note Pivot", 25, 40);
+
+    intake2d.add(
+        intakePivot2d.append(
+            new MechanismLigament2d("Wheel Spoke A", 5, 0, 6, new Color8Bit(Color.kGray))));
+    intake2d.add(
+        intakePivot2d.append(
+            new MechanismLigament2d("Wheel Spoke B", 5, 90, 6, new Color8Bit(Color.kRed))));
+    intake2d.add(
+        intakePivot2d.append(
+            new MechanismLigament2d("Wheel Spoke C", 5, 180, 6, new Color8Bit(Color.kGray))));
+    intake2d.add(
+        intakePivot2d.append(
+            new MechanismLigament2d("Wheel Spoke D", 5, 270, 6, new Color8Bit(Color.kRed))));
+
+    note2d.add(
+        notePivot2d.append(new MechanismLigament2d("Note", 0, 0, 0, new Color8Bit(Color.kOrange))));
   }
 }

@@ -1,5 +1,6 @@
 package frc.robot.subsystems.intake;
 
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.config.RobotConfig.IntakeConstants;
 
@@ -25,4 +26,7 @@ public interface Intake {
   }
 
   public Command getTurnOnCommand();
+
+  public default void add2dSim(Mechanism2d mech2d) {}
+  ;
 }

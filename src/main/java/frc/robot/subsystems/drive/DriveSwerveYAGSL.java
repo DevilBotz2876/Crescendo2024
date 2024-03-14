@@ -28,7 +28,7 @@ public class DriveSwerveYAGSL extends DriveBase {
   public DriveSwerveYAGSL(String configPath) {
     swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), configPath);
 
-    // SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+    // SwerveDriveTelemetry.verbosity = TelemetryVerbosity.LOW;
     try {
       swerveDrive =
           new SwerveParser(swerveJsonDirectory)
@@ -147,7 +147,7 @@ public class DriveSwerveYAGSL extends DriveBase {
 
   @Override
   public double getAngle() {
-    return swerveDrive.getYaw().getDegrees();
+    return swerveDrive.getOdometryHeading().getDegrees();
   }
 
   @Override

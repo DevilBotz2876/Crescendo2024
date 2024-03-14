@@ -4,16 +4,17 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import frc.robot.commands.assist.PrepareForIntake;
-import frc.robot.commands.assist.PrepareForScore;
-import frc.robot.commands.assist.ScorePiece;
+import frc.robot.commands.auto.AutoPrepareForIntake;
+import frc.robot.commands.auto.AutoScorePiece;
+import frc.robot.commands.debug.PrepareForScore;
 import frc.robot.commands.debug.TestShooterAngle;
-import frc.robot.commands.vision.AlignToTarget;
+import frc.robot.commands.drive.DriveToYaw;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
+import frc.robot.config.RobotConfig.DriveConstants;
 import frc.robot.config.RobotConfig.IntakeConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
-import frc.robot.util.RobotState;
+import frc.robot.util.DevilBotState;
 import java.util.Map;
 
 public class DebugControls {
@@ -45,7 +46,7 @@ public class DebugControls {
     debugTab
         .add(
             "Assist: Prepare For Intake",
-            new PrepareForIntake(
+            new AutoPrepareForIntake(
                 RobotConfig.arm,
                 RobotConfig.intake,
                 () -> intakeAngleEntry.getDouble(ArmConstants.intakeAngleInDegrees),
@@ -99,12 +100,12 @@ public class DebugControls {
                 RobotConfig.arm,
                 RobotConfig.shooter,
                 () -> {
-                  if (RobotState.isAmpMode())
+                  if (DevilBotState.isAmpMode())
                     return armAngleAmpEntry.getDouble(ArmConstants.ampScoreAngleInDegrees);
                   else return armAngleEntry.getDouble(ArmConstants.subwooferScoreAngleInDegrees);
                 },
                 () -> {
-                  if (RobotState.isAmpMode())
+                  if (DevilBotState.isAmpMode())
                     return shooterVelocityAmpEntry.getDouble(
                         ShooterConstants.ampScoreVelocityInRPMs);
                   else return shooterVelocityEntry.getDouble(ShooterConstants.velocityInRPMs);
@@ -126,7 +127,7 @@ public class DebugControls {
     debugTab
         .add(
             "Assist: Shoot Piece",
-            new ScorePiece(
+            new AutoScorePiece(
                 RobotConfig.intake,
                 RobotConfig.shooter,
                 () -> intakeFeedVoltageEntry.getDouble(IntakeConstants.feedSpeedInVolts)))
@@ -149,22 +150,19 @@ public class DebugControls {
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
 
-    GenericEntry visionTargetId =
-        debugTab
-            .add("Vision: Target ID", RobotState.getActiveTargetId())
-            .withWidget(BuiltInWidgets.kTextView)
-            .withProperties(Map.of("min", 1, "max", 16))
-            .withPosition(colIndex, rowIndex++)
-            .withSize(2, 1)
-            .getEntry();
+    debugTab
+        .add("Vision: Target ID", DevilBotState.getActiveTargetId())
+        .withWidget(BuiltInWidgets.kTextView)
+        .withProperties(Map.of("min", 1, "max", 16))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1)
+        .getEntry();
 
     debugTab
         .add(
             "Vision: Align To Target",
-            new AlignToTarget(
-                RobotConfig.drive,
-                RobotConfig.vision,
-                () -> (int) visionTargetId.getInteger(RobotState.getActiveTargetId())))
+            new DriveToYaw(RobotConfig.drive, () -> DevilBotState.getVisionRobotYawToTarget())
+                .withTimeout(DriveConstants.pidTimeoutInSeconds))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
 

@@ -212,13 +212,19 @@ public class ArmIOSparkMax implements ArmIO {
     IdleMode mode;
     if (brake) {
       mode = CANSparkMax.IdleMode.kBrake;
-      SmartDashboard.putString("Arm/Idle Mode", "kBrake");
+      if (Constants.debugMode) {
+        SmartDashboard.putString("Arm/Idle Mode", "kBrake");
+      }
     } else {
       mode = CANSparkMax.IdleMode.kCoast;
-      SmartDashboard.putString("Arm/Idle Mode", "kCoast");
+      if (Constants.debugMode) {
+        SmartDashboard.putString("Arm/Idle Mode", "kCoast");
+      }
     }
     if (motor.setIdleMode(mode) != REVLibError.kOk) {
-      SmartDashboard.putString("Arm/Idle Mode", "Error");
+      if (Constants.debugMode) {
+        SmartDashboard.putString("Arm/Idle Mode", "Error");
+      }
     }
   }
 }

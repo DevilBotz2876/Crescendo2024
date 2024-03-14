@@ -8,7 +8,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,16 +21,18 @@ import org.littletonrobotics.junction.Logger;
 
 public class ShooterSubsystem extends SubsystemBase implements Shooter {
   ShooterIO io;
-  ShooterIO ioBottom = null;
   private final SimpleMotorFeedforward feedforward;
-  private final SimpleMotorFeedforward feedforwardBottom;
   private final PIDController pid;
-  private final PIDController pidBottom;
   private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
+
+  ShooterIO ioBottom = null;
+  private final SimpleMotorFeedforward feedforwardBottom;
+  private final PIDController pidBottom;
+  private ShooterIOInputsAutoLogged inputsBottom;
+
   private final SysIdRoutine sysId;
-  private final ShooterIOInputsAutoLogged inputsBottom = new ShooterIOInputsAutoLogged();
-  @AutoLogOutput private double voltage;
-  @AutoLogOutput private double velocityRPM;
+  @AutoLogOutput private double targetVoltage;
+  @AutoLogOutput private double targetVelocityRPM;
   @AutoLogOutput private double targetVelocityRadPerSec;
   boolean useSoftwarePid = false;
   boolean softwarePidEnabled = false;
@@ -66,8 +67,8 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
       pid = null;
       pidBottom = null;
     }
-    voltage = 0;
-    velocityRPM = 0.0;
+    targetVoltage = 0;
+    targetVelocityRPM = 0.0;
 
     sysId =
         new SysIdRoutine(
@@ -77,48 +78,30 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
                 null,
                 (state) -> Logger.recordOutput("Shooter/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism((voltage) -> runVoltage(voltage.in(Volts)), null, this));
-
-    // Create 2D simulated display of a Shooter
-    Mechanism2d mech2d = new Mechanism2d(60, 60);
-    MechanismRoot2d intakePivot2d = mech2d.getRoot("Shooter Pivot", 10, 50);
-
-    shooter2d.add(
-        intakePivot2d.append(
-            new MechanismLigament2d("Wheel Spoke A", 5, 0, 12, new Color8Bit(Color.kGray))));
-    shooter2d.add(
-        intakePivot2d.append(
-            new MechanismLigament2d("Wheel Spoke B", 5, 90, 12, new Color8Bit(Color.kBlue))));
-    shooter2d.add(
-        intakePivot2d.append(
-            new MechanismLigament2d("Wheel Spoke C", 5, 180, 12, new Color8Bit(Color.kGray))));
-    shooter2d.add(
-        intakePivot2d.append(
-            new MechanismLigament2d("Wheel Spoke D", 5, 270, 12, new Color8Bit(Color.kBlue))));
-
-    SmartDashboard.putData("Shooter Simulation", mech2d);
   }
 
   public ShooterSubsystem(ShooterIO ioTop, ShooterIO ioBottom) {
     this(ioTop);
     this.ioBottom = ioBottom;
+    inputsBottom = new ShooterIOInputsAutoLogged();
   }
 
   @Override
   // Sets the voltage to volts. the volts value is -12 to 12
   public void runVoltage(double volts) {
-    voltage = volts;
+    targetVoltage = volts;
     targetVelocityRadPerSec = 0;
-    io.setVoltage(voltage);
+    io.setVoltage(targetVoltage);
     if (ioBottom != null) {
-      ioBottom.setVoltage(voltage);
+      ioBottom.setVoltage(targetVoltage);
     }
-    this.velocityRPM = ShooterConstants.maxVelocityInRPMs * (volts / 12.0);
+    this.targetVelocityRPM = ShooterConstants.maxVelocityInRPMs * (volts / 12.0);
   }
 
   @Override
   public void runVelocity(double velocityRPM) {
-    voltage = 0;
-    this.velocityRPM = velocityRPM;
+    targetVoltage = 0;
+    this.targetVelocityRPM = velocityRPM;
     targetVelocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(velocityRPM);
 
     if (useSoftwarePid) {
@@ -164,8 +147,8 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
       }
     }
 
-    if (velocityRPM != 0) {
-      currentSimAngle -= (velocityRPM / ShooterConstants.maxVelocityInRPMs) * 45;
+    if (targetVelocityRPM != 0) {
+      currentSimAngle -= (targetVelocityRPM / ShooterConstants.maxVelocityInRPMs) * 45;
 
       int angleOffset = 0;
       for (MechanismLigament2d shooter : shooter2d) {
@@ -186,4 +169,24 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
   public Command getTurnOffCommand() {
     return runOnce(() -> turnOff());
   }
+
+  @Override
+  public void add2dSim(Mechanism2d mech2d) {
+    // Create 2D simulated display of a Shooter
+    MechanismRoot2d intakePivot2d = mech2d.getRoot("Shooter Pivot", 15, 50);
+
+    shooter2d.add(
+        intakePivot2d.append(
+            new MechanismLigament2d("Wheel Spoke A", 5, 0, 12, new Color8Bit(Color.kGray))));
+    shooter2d.add(
+        intakePivot2d.append(
+            new MechanismLigament2d("Wheel Spoke B", 5, 90, 12, new Color8Bit(Color.kBlue))));
+    shooter2d.add(
+        intakePivot2d.append(
+            new MechanismLigament2d("Wheel Spoke C", 5, 180, 12, new Color8Bit(Color.kGray))));
+    shooter2d.add(
+        intakePivot2d.append(
+            new MechanismLigament2d("Wheel Spoke D", 5, 270, 12, new Color8Bit(Color.kBlue))));
+  }
+  ;
 }

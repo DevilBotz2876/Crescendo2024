@@ -7,7 +7,7 @@ import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
 import java.util.Optional;
 
-public class RobotState {
+public class DevilBotState {
   public enum TargetMode {
     SPEAKER,
     AMP
@@ -35,7 +35,7 @@ public class RobotState {
   };
 
   public static void setTargetMode(TargetMode targetMode) {
-    RobotState.targetMode = targetMode;
+    DevilBotState.targetMode = targetMode;
   }
 
   public static TargetMode getTargetMode() {
@@ -106,7 +106,7 @@ public class RobotState {
   private static DriveMode driveMode = DriveMode.FIELD;
 
   public static void setDriveMode(DriveMode driveMode) {
-    RobotState.driveMode = driveMode;
+    DevilBotState.driveMode = driveMode;
 
     switch (driveMode) {
       case FIELD:
@@ -130,8 +130,8 @@ public class RobotState {
 
   private static SpeakerShootingMode shootingMode = SpeakerShootingMode.SPEAKER_FROM_SUBWOOFER;
 
-  public static void setSpeakerShootingMode(SpeakerShootingMode position) {
-    RobotState.shootingMode = position;
+  public static void setShootingMode(SpeakerShootingMode position) {
+    DevilBotState.shootingMode = position;
   }
 
   public static String getShootingModeName() {
@@ -139,15 +139,15 @@ public class RobotState {
       return "Amp";
     }
 
-    switch (RobotState.shootingMode) {
+    switch (DevilBotState.shootingMode) {
       case SPEAKER_FROM_SUBWOOFER:
-        return "Speaker - From Subwoofer";
+        return "Speaker (Sub)";
 
       case SPEAKER_FROM_PODIUM:
-        return "Speaker - From Podium";
+        return "Speaker (Podium)";
 
       case SPEAKER_VISION_BASED:
-        return "Speaker - Vision Based";
+        return "Speaker (Auto)";
 
       default:
         return "Unknown";
@@ -160,7 +160,7 @@ public class RobotState {
         return Optional.of(ArmConstants.ampScoreAngleInDegrees);
       }
 
-      switch (RobotState.shootingMode) {
+      switch (DevilBotState.shootingMode) {
         case SPEAKER_FROM_SUBWOOFER:
           return Optional.of(ArmConstants.subwooferScoreAngleInDegrees);
 
@@ -169,7 +169,7 @@ public class RobotState {
 
         case SPEAKER_VISION_BASED:
           Optional<Double> distanceToTarget =
-              RobotConfig.vision.getDistanceToAprilTag(RobotState.getActiveTargetId());
+              RobotConfig.vision.getDistanceToAprilTag(DevilBotState.getActiveTargetId());
           if (distanceToTarget.isPresent()) {
             Optional<Double> armAngle =
                 RobotConfig.instance.getArmAngleFromDistance(distanceToTarget.get());
@@ -183,5 +183,47 @@ public class RobotState {
           return Optional.empty();
       }
     }
+  }
+
+  public static double getVisionRobotYawToTarget() {
+    double yawToTarget = RobotConfig.drive.getAngle();
+    Optional<Double> visionYawToTarget =
+        RobotConfig.vision.getYawToAprilTag(DevilBotState.getActiveTargetId());
+    if (visionYawToTarget.isPresent()) {
+      yawToTarget -= visionYawToTarget.get();
+    }
+    return yawToTarget;
+  }
+
+  public enum PieceDetectionMode {
+    ENABLED,
+    DISABLED
+  }
+
+  private static PieceDetectionMode pieceDetectionMode = PieceDetectionMode.ENABLED;
+
+  public static boolean isPieceDetectionEnabled() {
+    return PieceDetectionMode.ENABLED == pieceDetectionMode;
+  }
+
+  public static void setPieceDetectionMode(PieceDetectionMode mode) {
+    pieceDetectionMode = mode;
+  }
+
+  public enum State {
+    DISABLED,
+    AUTO,
+    TELEOP,
+    TEST
+  }
+
+  private static State state;
+
+  public static void setState(State state) {
+    DevilBotState.state = state;
+  }
+
+  public static State getState() {
+    return DevilBotState.state;
   }
 }

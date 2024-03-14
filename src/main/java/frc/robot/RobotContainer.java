@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfigInferno;
 import frc.robot.config.RobotConfigPhoenix;
@@ -17,13 +16,11 @@ import frc.robot.controls.PitControls;
 import frc.robot.controls.SysIdControls;
 
 public class RobotContainer {
-  public final CommandXboxController controller;
   public final RobotConfig robotConfig;
   private static final String robotNameKey = "Robot Name";
 
   public RobotContainer() {
     String robotName = "UNKNOWN";
-    controller = new CommandXboxController(0);
 
     Preferences.initString(robotNameKey, robotName);
     robotName = Preferences.getString(robotNameKey, robotName);
@@ -51,7 +48,7 @@ public class RobotContainer {
   }
 
   void configureBindings() {
-    DriverControls.setupControls(controller);
+    DriverControls.setupControls();
     PitControls.setupControls();
     DebugControls.setupControls();
     SysIdControls.setupGUI();

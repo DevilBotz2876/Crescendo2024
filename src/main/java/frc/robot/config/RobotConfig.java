@@ -45,6 +45,7 @@ public class RobotConfig {
     public static double anglePidKd = 0.0;
     public static double pidAngleErrorInDegrees = 2.0;
     public static double pidTimeoutInSeconds = 0.5;
+    public static double pidSettlingTimeInMilliseconds = 0.1;
 
     public static double slewRateLimiterX = 3;
     public static double slewRateLimiterY = 3;
@@ -70,6 +71,7 @@ public class RobotConfig {
     public static double ffKa = 0.0;
 
     public static double maxVelocity = 3.0;
+    public static double maxVelocityInDegreesPerSecond = 45;
     public static double maxAcceleration = 6.0;
 
     public static double pidAngleErrorInDegrees = 2.0;
@@ -103,7 +105,7 @@ public class RobotConfig {
     /* PID */
     public static double pidVelocityErrorInRPMS = 300;
     public static double pidSettlingTimeInMilliseconds = 0.1;
-    public static double pidTimeoutInSeconds = 0.5;
+    public static double pidTimeoutInSeconds = 2.0;
     public static double pidKp = 0.043566;
     public static double pidKi = 0.0;
     public static double pidKd = 0.0;
@@ -121,6 +123,8 @@ public class RobotConfig {
     public static double defaultSpeedInVolts = 6.0;
     public static double indexSpeedInVolts = 6.0;
     public static double feedSpeedInVolts = 6.0;
+    public static double sensorDelayFalseToTrueInSeconds = 0.06;
+    public static double sensorDelayTrueToFalseInSeconds = 1.0;
   }
 
   public static class ClimberConstants {

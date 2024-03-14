@@ -7,7 +7,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,12 +25,12 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   private final double positionDegreeMax = ArmConstants.maxAngleInDegrees;
   private final double positionDegreeMin = ArmConstants.minAngleInDegrees;
   private TrapezoidProfile.State currentState = new TrapezoidProfile.State();
-  @AutoLogOutput private double desiredVoltage;
-  @AutoLogOutput private double setPoint;
+  @AutoLogOutput private double targetVoltage;
+  @AutoLogOutput private double targetDegrees;
 
   // Create a Mechanism2d display of an Arm with a fixed ArmTower and moving Arm.
   private final double armAngle2dOffset = -45;
-  private final MechanismLigament2d arm2d;
+  private MechanismLigament2d arm2d = null;
 
   private static final LoggedTunableNumber armKp = new LoggedTunableNumber("Arm/pid/kP");
   private static final LoggedTunableNumber armKd = new LoggedTunableNumber("Arm/pid/kD");
@@ -82,20 +81,6 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
                 (state) -> Logger.recordOutput("Arm/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism((voltage) -> runVoltage(voltage.in(Volts)), null, this));
 
-    Mechanism2d mech2d = new Mechanism2d(60, 60);
-    MechanismRoot2d armPivot2d = mech2d.getRoot("Arm Pivot", 10, 30);
-    armPivot2d.append(new MechanismLigament2d("Arm Tower", 20, -90));
-    arm2d =
-        armPivot2d.append(
-            new MechanismLigament2d(
-                "Arm",
-                40,
-                inputs.absolutePositionDegree + armAngle2dOffset,
-                6,
-                new Color8Bit(Color.kYellow)));
-
-    SmartDashboard.putData("Arm Simulation", mech2d);
-
     relEncoderInit = true;
   }
 
@@ -134,6 +119,11 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     return inputs.relativePositionDegrees;
   }
 
+  @Override
+  public double getTargetAngle() {
+    return targetDegrees;
+  }
+
   // sets of the angle of the arm
   @Override
   public void setAngle(double degrees) {
@@ -151,23 +141,23 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     // Check if the angle is below the minimum limit or above the maximum limit
     // If it is the it is set to min/max
     if (degrees < ArmConstants.minAngleInDegrees) {
-      this.setPoint = ArmConstants.minAngleInDegrees; // Set to the minimum angle
+      this.targetDegrees = ArmConstants.minAngleInDegrees; // Set to the minimum angle
     } else if (degrees > ArmConstants.maxAngleInDegrees) {
-      this.setPoint = ArmConstants.maxAngleInDegrees; // Set to the maximum angle
+      this.targetDegrees = ArmConstants.maxAngleInDegrees; // Set to the maximum angle
     } else {
       // The  angle is within the range and is set
-      this.setPoint = degrees;
+      this.targetDegrees = degrees;
     }
 
     // We instantiate a new object here each time because constants can change when being tuned.
     feedforward = new ArmFeedforward(0, kG, kV, kA);
-    double ff = feedforward.calculate(this.setPoint, 0);
+    double ff = feedforward.calculate(this.targetDegrees, 0);
 
-    Logger.recordOutput("Arm/setAngle/setpointDegrees", this.setPoint);
+    Logger.recordOutput("Arm/setAngle/setpointDegrees", this.targetDegrees);
     Logger.recordOutput("Arm/setAngle/ffVolts", ff);
 
     // Set the position reference with feedforward voltage
-    io.setPosition(this.setPoint, ff);
+    io.setPosition(this.targetDegrees, ff);
   }
 
   @Override
@@ -177,8 +167,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
   // Sets the voltage to volts. the volts value is -12 to 12
   public void runVoltage(double volts) {
-    desiredVoltage = voltageSafety(volts);
-    io.setVoltage(desiredVoltage);
+    targetVoltage = voltageSafety(volts);
+    io.setVoltage(targetVoltage);
   }
 
   protected double voltageSafety(double voltage) {
@@ -236,7 +226,9 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
       io.setVoltage(0);
     }
 
-    arm2d.setAngle(inputs.absolutePositionDegree + armAngle2dOffset);
+    if (null != arm2d) {
+      arm2d.setAngle(inputs.absolutePositionDegree + armAngle2dOffset);
+    }
   }
 
   private boolean isLimitHigh() {
@@ -286,7 +278,22 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     return isLimitLow();
   }
 
+  @Override
   public Command getStowCommand() {
     return runOnce(() -> stow());
+  }
+
+  @Override
+  public void add2dSim(Mechanism2d mech2d) {
+    MechanismRoot2d armPivot2d = mech2d.getRoot("Arm Pivot", 15, 30);
+    armPivot2d.append(new MechanismLigament2d("Arm Tower", 20, -90));
+    arm2d =
+        armPivot2d.append(
+            new MechanismLigament2d(
+                "Arm",
+                30,
+                inputs.absolutePositionDegree + armAngle2dOffset,
+                6,
+                new Color8Bit(Color.kYellow)));
   }
 }
