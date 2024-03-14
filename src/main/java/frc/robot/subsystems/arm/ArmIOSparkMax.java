@@ -26,6 +26,13 @@ public class ArmIOSparkMax implements ArmIO {
     this(id, false);
   }
 
+  double getOffsetCorrectedAbsolutePositionInRadians() {
+    return ((absoluteEncoder.getAbsolutePosition() - ArmConstants.absolutePositionOffset)
+            * ArmConstants.absoluteEncoderInversion)
+        * 2.0
+        * Math.PI;
+  }
+
   public ArmIOSparkMax(int id, boolean inverted) {
     /* Instantiate 1x SparkMax motors and absolute encoder */
     motor = new CANSparkMax(id, MotorType.kBrushless);
@@ -43,12 +50,7 @@ public class ArmIOSparkMax implements ArmIO {
     // leave off numbers.
     //
     System.out.println("ArmIOSparkMax(): Absolute Position Offset: " + absoluteEncoder.get());
-    absoluteEncoder.setPositionOffset(ArmConstants.absolutePositionOffset);
     absoluteEncoder.setDutyCycleRange(1.0 / 1024.0, 1023.0 / 1024.0);
-
-    // I don't think 2PI is correct.. try 360?
-    absoluteEncoder.setDistancePerRotation(2.0 * Math.PI);
-    // encoder.setDistancePerRotation(360.0);
 
     motor.setInverted(inverted);
 
@@ -61,9 +63,7 @@ public class ArmIOSparkMax implements ArmIO {
     // encoder is at 0, set rel to 0.  Everything else is invalid and requires arm to rehome itself.
     //
     // relEncoder.setPosition(0);
-    relEncoder.setPosition(
-        Units.radiansToDegrees(
-            absoluteEncoder.getDistance() * ArmConstants.absoluteEncoderInversion));
+    relEncoder.setPosition(Units.radiansToDegrees(getOffsetCorrectedAbsolutePositionInRadians()));
 
     lkP = RobotConfig.ArmConstants.pidKp;
     lkI = RobotConfig.ArmConstants.pidKi;
@@ -96,8 +96,7 @@ public class ArmIOSparkMax implements ArmIO {
   /** Updates the set of loggable inputs. */
   @Override
   public void updateInputs(ArmIOInputs inputs) {
-    inputs.absolutePositionRad =
-        absoluteEncoder.getDistance() * ArmConstants.absoluteEncoderInversion;
+    inputs.absolutePositionRad = getOffsetCorrectedAbsolutePositionInRadians();
     inputs.absolutePositionDegree = Units.radiansToDegrees(inputs.absolutePositionRad);
     inputs.absolutePositionRaw = absoluteEncoder.getAbsolutePosition();
 
@@ -152,19 +151,6 @@ public class ArmIOSparkMax implements ArmIO {
       // change?
       // How? Record observations so you can share with rest of us
       SmartDashboard.putNumber("Arm/absEncoder/absolutePos", absoluteEncoder.getAbsolutePosition());
-      SmartDashboard.putNumber(
-          "Arm/absEncoder/getPositionOffset", absoluteEncoder.getPositionOffset());
-
-      // I don't think this number changes if you rotate the arm/encoder.  What does affect it?
-      SmartDashboard.putNumber(
-          "Arm/absEncoder/getDistancePerRotation", absoluteEncoder.getDistancePerRotation());
-
-      SmartDashboard.putNumber("Arm/absEncoder/get", absoluteEncoder.get());
-      SmartDashboard.putNumber("Arm/absEncoder/getDistance", absoluteEncoder.getDistance());
-
-      // Try out different encoder.get methods here and see if you can get a range of values that
-      // works by applying different math/operations to the get values.  This is one example.
-      SmartDashboard.putNumber("Arm/absEncoder/angle", absoluteEncoder.get() * 360.0);
 
       // This should show what the relative encoder is reading.  When you use the sparkmax position
       // PID it expects a setpoint in rotations.  Not clear if that means degrees or what unit is
