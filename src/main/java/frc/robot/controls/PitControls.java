@@ -28,7 +28,7 @@ public class PitControls {
     int layoutRowIndex = 0;
     int layoutMaxHeight = 4;
     List<Command> commands = new ArrayList<Command>();
-    maxWidth = Math.min(1, maxWidth);
+    maxWidth = Math.min(2, maxWidth);
 
     /* Intake Controls */
     ShuffleboardLayout intakeLayout =
@@ -100,7 +100,7 @@ public class PitControls {
     int layoutRowIndex = 0;
     int layoutMaxHeight = 5;
     List<Command> commands = new ArrayList<Command>();
-    maxWidth = Math.min(1, maxWidth);
+    maxWidth = Math.min(2, maxWidth);
 
     ShuffleboardLayout armLayout =
         tab.getLayout("Arm", BuiltInLayouts.kGrid)
@@ -203,7 +203,7 @@ public class PitControls {
     int layoutRowIndex = 0;
     int layoutMaxHeight = 3;
     List<Command> commands = new ArrayList<Command>();
-    maxWidth = Math.min(1, maxWidth);
+    maxWidth = Math.min(2, maxWidth);
 
     ShuffleboardLayout shooterLayout =
         tab.getLayout("Shooter", BuiltInLayouts.kGrid)
@@ -271,7 +271,7 @@ public class PitControls {
     int layoutRowIndex = 0;
     int layoutMaxHeight = 2;
     List<Command> commands = new ArrayList<Command>();
-    maxWidth = Math.min(1, maxWidth);
+    maxWidth = Math.min(2, maxWidth);
 
     ShuffleboardLayout climberLowLevelLayout =
         tab.getLayout("Climber (Low Level)", BuiltInLayouts.kGrid)
@@ -466,7 +466,7 @@ public class PitControls {
     int layoutRowIndex = 0;
     int layoutMaxHeight = 2;
     //    List<Command> commands = new ArrayList<Command>();
-    maxWidth = Math.min(1, maxWidth);
+    maxWidth = Math.min(2, maxWidth);
 
     /* Vision Controls */
     ShuffleboardLayout visionLayout =
