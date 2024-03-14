@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.arm.ArmToPositionTP;
+import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.ClimberConstants;
@@ -175,7 +175,7 @@ public class PitControls {
     Command PrepareArmForMatch =
         new SequentialCommandGroup(
             RobotConfig.climber.getAutoZeroCommand(),
-            new ArmToPositionTP(() -> ArmConstants.matchStartArmAngle, RobotConfig.arm),
+            new ArmToPosition(RobotConfig.arm, () -> ArmConstants.matchStartArmAngle),
             RobotConfig.climber.getPrepareClimberToHoldArmCommand());
     PrepareArmForMatch.setName("Prepare Arm For Match");
     commands.add(PrepareArmForMatch);
