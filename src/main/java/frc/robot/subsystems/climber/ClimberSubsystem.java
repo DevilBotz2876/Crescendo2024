@@ -6,6 +6,9 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.config.RobotConfig.ClimberConstants;
 import java.util.ArrayList;
@@ -174,8 +177,7 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
     }
   }
 
-  @Override
-  public void autoZeroMode(boolean enable) {
+  private void autoZeroMode(boolean enable) {
     for (ClimberInstance climber : climbers) {
       climber.autoZeroMode(enable);
     }
@@ -226,6 +228,42 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
   @Override
   public Command getRetractCommand() {
     return runOnce(() -> retract());
+  }
+
+  @Override
+  public Command getAutoZeroCommand() {
+    return new SequentialCommandGroup(
+        new InstantCommand(
+            () -> {
+              System.out.println("Auto Zero: Disable Limits");
+              enableLimits(false);
+              System.out.println("Auto Zero: Extend Climber");
+              runVoltage(ClimberConstants.autoZeroVoltage);
+              System.out.println("Auto Zero: Wait For Extend");
+            },
+            this),
+        Commands.waitSeconds(ClimberConstants.autoZeroExtendTimeInSeconds),
+        new InstantCommand(
+            () -> {
+              System.out.println("Auto Zero: Enable Limits");
+              enableLimits(true);
+              System.out.println("Auto Zero: Enable Auto Zero Mode");
+              autoZeroMode(true);
+              System.out.println("Auto Zero: Retract Climber");
+              runVoltage(-ClimberConstants.autoZeroVoltage);
+              System.out.println("Auto Zero: Wait until done or timeout");
+            },
+            this),
+        Commands.waitSeconds(ClimberConstants.autoZeroMaxRetractTimeInSeconds)
+            .until(() -> ((left.autoZeroMode == false) && (right.autoZeroMode == false))),
+        new InstantCommand(
+            () -> {
+              System.out.println("Auto Zero: Disable Auto Zero Mode");
+              autoZeroMode(false);
+              System.out.println("Auto Zero: Turn Off Climber");
+              runVoltage(0);
+            },
+            this));
   }
 
   @Override
