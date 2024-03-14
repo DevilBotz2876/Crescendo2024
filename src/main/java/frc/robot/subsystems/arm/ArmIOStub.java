@@ -64,6 +64,7 @@ public class ArmIOStub implements ArmIO {
   /** Run the arm motor at the specified voltage. */
   @Override
   public void setVoltage(double volts) {
+    softwarePidEnabled = false;
     currentVoltage = volts;
   }
 
