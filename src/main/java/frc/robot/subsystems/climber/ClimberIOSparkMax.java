@@ -54,6 +54,6 @@ public class ClimberIOSparkMax implements ClimberIO {
 
   @Override
   public void setPosition(double position) {
-    encoder.setPosition(Units.radiansToRotations(position) * GEAR_RATIO);
+    encoder.setPosition(Units.radiansToRotations(position * GEAR_RATIO));
   }
 }

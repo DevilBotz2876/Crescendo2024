@@ -142,8 +142,6 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
     runVoltage(-ClimberConstants.defaultSpeedInVolts);
   }
 
-  public void PrepareArmForMatch() {}
-
   @Override
   public void runVoltage(double volts) {
     runVoltageLeft(volts);

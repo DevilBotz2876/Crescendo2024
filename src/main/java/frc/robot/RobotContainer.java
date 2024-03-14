@@ -58,11 +58,10 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
     Command StartMatchCommand =
-    new SequentialCommandGroup(
-      RobotConfig.climber.getPrepareClimberForMatchStartCommand(),
-      RobotConfig.climber.getAutoZeroCommand(),
-      RobotConfig.autoChooser.getSelected()
-    );
+        new SequentialCommandGroup(
+            RobotConfig.climber.getPrepareClimberForMatchStartCommand(),
+            RobotConfig.climber.getAutoZeroCommand(),
+            RobotConfig.autoChooser.getSelected());
 
     return StartMatchCommand;
   }
