@@ -222,52 +222,56 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
 
   @Override
   public Command getExtendCommand() {
-    return runOnce(() -> extend());
+    return new SequentialCommandGroup(
+        new InstantCommand(() -> extend(), this),
+        Commands.waitUntil(() -> left.isAtMaxLimit() && right.isAtMaxLimit()));
   }
 
   @Override
   public Command getRetractCommand() {
-    return runOnce(() -> retract());
+    return new SequentialCommandGroup(
+        new InstantCommand(() -> retract(), this),
+        Commands.waitUntil(() -> left.isAtMinLimit() && right.isAtMinLimit()));
   }
 
   @Override
   public Command getAutoZeroCommand() {
     return new SequentialCommandGroup(
-        new InstantCommand(
-            () -> {
-              System.out.println("Auto Zero: Disable Limits");
-              enableLimits(false);
-              System.out.println("Auto Zero: Extend Climber");
-              runVoltage(ClimberConstants.autoZeroVoltage);
-              System.out.println("Auto Zero: Wait For Extend");
-            },
-            this),
-        Commands.waitSeconds(ClimberConstants.autoZeroExtendTimeInSeconds),
-        new InstantCommand(
-            () -> {
-              System.out.println("Auto Zero: Enable Limits");
-              enableLimits(true);
-              System.out.println("Auto Zero: Enable Auto Zero Mode");
-              autoZeroMode(true);
-              System.out.println("Auto Zero: Retract Climber");
-              runVoltage(-ClimberConstants.autoZeroVoltage);
-              System.out.println("Auto Zero: Wait until done or timeout");
-            },
-            this),
-        Commands.waitSeconds(ClimberConstants.autoZeroMaxRetractTimeInSeconds)
-            .until(() -> ((left.autoZeroMode == false) && (right.autoZeroMode == false))),
-        new InstantCommand(
+            new InstantCommand(
+                () -> {
+                  System.out.println("Auto Zero: Disable Limits");
+                  enableLimits(false);
+                  System.out.println("Auto Zero: Extend Climber");
+                  runVoltage(ClimberConstants.autoZeroVoltage);
+                  System.out.println("Auto Zero: Wait For Extend");
+                },
+                this),
+            Commands.waitSeconds(ClimberConstants.autoZeroExtendTimeInSeconds),
+            new InstantCommand(
+                () -> {
+                  System.out.println("Auto Zero: Enable Limits");
+                  enableLimits(true);
+                  System.out.println("Auto Zero: Enable Auto Zero Mode");
+                  autoZeroMode(true);
+                  System.out.println("Auto Zero: Retract Climber");
+                  runVoltage(-ClimberConstants.autoZeroVoltage);
+                  System.out.println("Auto Zero: Wait until done or timeout");
+                },
+                this),
+            Commands.waitSeconds(ClimberConstants.autoZeroMaxRetractTimeInSeconds)
+                .until(() -> ((left.autoZeroMode == false) && (right.autoZeroMode == false))))
+        .finallyDo(
             () -> {
               System.out.println("Auto Zero: Disable Auto Zero Mode");
               autoZeroMode(false);
               System.out.println("Auto Zero: Turn Off Climber");
               runVoltage(0);
-            },
-            this));
+            });
   }
 
   @Override
   public void overridePosition(double leftpos, double rightPos) {
+    runVoltage(0);
     left.io.setPosition(leftpos);
     right.io.setPosition(rightPos);
   }
