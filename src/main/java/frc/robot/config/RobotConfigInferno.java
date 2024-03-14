@@ -75,7 +75,7 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.maxVelocity = 6.0;
     ArmConstants.maxAcceleration = 8.0;
 
-    ArmConstants.pidAngleErrorInDegrees = 6.0;
+    ArmConstants.pidAngleErrorInDegrees = 0.5;
     ArmConstants.maxAngleInDegrees = 84.0;
 
     ArmConstants.minAngleInDegrees = -1.0;
