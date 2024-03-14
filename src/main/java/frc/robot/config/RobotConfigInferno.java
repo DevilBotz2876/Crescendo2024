@@ -72,13 +72,17 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.ffKv = 6.18;
     ArmConstants.ffKa = 0.04;
 
-    ArmConstants.maxVelocity = 6.0;
-    ArmConstants.maxAcceleration = 8.0;
+    ArmConstants.maxVelocity = 1.5;
+    ArmConstants.maxAcceleration = .5;
+
+    ArmConstants.pidMaxOutput = 6.0;
+    ArmConstants.pidMinOutput = -5.0;
 
     ArmConstants.pidAngleErrorInDegrees = 6.0;
-    ArmConstants.maxAngleInDegrees = 84.0;
 
+    ArmConstants.maxAngleInDegrees = 89.0;
     ArmConstants.minAngleInDegrees = -1.0;
+
     ArmConstants.intakeAngleInDegrees = 1;
     ArmConstants.ampScoreAngleInDegrees = 80;
     ArmConstants.subwooferScoreAngleInDegrees = 9.80;
