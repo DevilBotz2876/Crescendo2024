@@ -146,16 +146,42 @@ public class PitControls {
     armOn.setName("On");
     commands.add(armOn);
 
-    Command PrepareArmForMatch =
+    Command climberAutoZero =
         new SequentialCommandGroup(
             new InstantCommand(
+                () -> {
+                  RobotConfig.climber.enableLimits(false);
+                  RobotConfig.climber.runVoltage(ClimberConstants.autoZeroVoltage);
+                },
+                RobotConfig.climber),
+            new WaitCommand(ClimberConstants.autoZeroExtendTimeInSeconds),
+            new InstantCommand(
+                () -> {
+                  RobotConfig.climber.enableLimits(true);
+                  RobotConfig.climber.autoZeroMode(true);
+                  RobotConfig.climber.runVoltage(-ClimberConstants.autoZeroVoltage);
+                },
+                RobotConfig.climber),
+            new WaitCommand(ClimberConstants.autoZeroMaxRetractTimeInSeconds),
+            new InstantCommand(
+                () -> {
+                  RobotConfig.climber.autoZeroMode(false);
+                  RobotConfig.climber.runVoltage(0);
+                },
+                RobotConfig.climber));
+    
+    Command PrepareArmForMatch =
+        new SequentialCommandGroup(
+            climberAutoZero,
+            new InstantCommand(
                 () -> RobotConfig.arm.setAngle(ArmConstants.matchStartArmAngle),
-                RobotConfig.arm)); //,
-            // new InstantCommand(
-            //     () -> RobotConfig.climber.,
-            //     RobotConfig.arm));
-    armOn.setName("On");
-    commands.add(armOn);
+                RobotConfig.arm),
+            new InstantCommand(
+                () -> RobotConfig.climber.overridePosition(ClimberConstants.maxPositionInRadians, ClimberConstants.maxPositionInRadians - ClimberConstants.matchStartPositionRight),
+                RobotConfig.arm),
+            RobotConfig.climber.getExtendCommand());
+    PrepareArmForMatch.setName("Prepare Arm For Match");
+    commands.add(PrepareArmForMatch);
 
     for (Command command : commands) {
       armLayout
