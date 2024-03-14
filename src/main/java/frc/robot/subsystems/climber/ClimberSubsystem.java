@@ -116,7 +116,6 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
 
   private final ClimberInstance left, right;
   private final List<ClimberInstance> climbers = new ArrayList<ClimberInstance>();
-  private boolean extend = false;
 
   public ClimberSubsystem(ClimberIO left, ClimberIO right) {
     this.left = new ClimberInstance(left, "Climber Left");
@@ -134,25 +133,16 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
   }
 
   /** Extends climber arms min limit */
-  @Override
-  public void extend() {
-    extend = true;
+  private void extend() {
     runVoltage(ClimberConstants.defaultSpeedInVolts);
   }
 
   /** Retracts climber to min limit */
-  @Override
-  public void retract() {
-    extend = false;
+  private void retract() {
     runVoltage(-ClimberConstants.defaultSpeedInVolts);
   }
 
   public void PrepareArmForMatch() {}
-
-  @Override
-  public boolean isExtending() {
-    return extend;
-  }
 
   @Override
   public void runVoltage(double volts) {
@@ -234,7 +224,6 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
         Commands.waitUntil(() -> left.isAtMinLimit() && right.isAtMinLimit()));
   }
 
-  @Override
   public Command getAutoZeroCommand() {
     return new SequentialCommandGroup(
             new InstantCommand(
@@ -269,8 +258,20 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
             });
   }
 
-  @Override
-  public void overridePosition(double leftpos, double rightPos) {
+  public Command getPrepareClimberToHoldArmCommand() {
+    return new SequentialCommandGroup(
+        new InstantCommand(
+            () ->
+                overridePosition(
+                    ClimberConstants.maxPositionInRadians,
+                    ClimberConstants.maxPositionInRadians
+                        - ClimberConstants.matchStartPositionRight),
+            this),
+        getExtendCommand(),
+        new InstantCommand(() -> overridePosition(0, ClimberConstants.matchStartPositionRight)));
+  }
+
+  private void overridePosition(double leftpos, double rightPos) {
     runVoltage(0);
     left.io.setPosition(leftpos);
     right.io.setPosition(rightPos);

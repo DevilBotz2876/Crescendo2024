@@ -176,18 +176,7 @@ public class PitControls {
         new SequentialCommandGroup(
             RobotConfig.climber.getAutoZeroCommand(),
             new ArmToPositionTP(() -> ArmConstants.matchStartArmAngle, RobotConfig.arm),
-            new InstantCommand(
-                () ->
-                    RobotConfig.climber.overridePosition(
-                        ClimberConstants.maxPositionInRadians,
-                        ClimberConstants.maxPositionInRadians
-                            - ClimberConstants.matchStartPositionRight),
-                RobotConfig.arm),
-            RobotConfig.climber.getExtendCommand(),
-            new InstantCommand(
-                () ->
-                    RobotConfig.climber.overridePosition(
-                        0, ClimberConstants.matchStartPositionRight)));
+            RobotConfig.climber.getPrepareClimberToHoldArmCommand());
     PrepareArmForMatch.setName("Prepare Arm For Match");
     commands.add(PrepareArmForMatch);
 
