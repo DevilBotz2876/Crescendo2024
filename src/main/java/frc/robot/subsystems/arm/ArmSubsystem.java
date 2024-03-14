@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.config.RobotConfig.ArmConstants;
+import frc.robot.util.DevilBotState;
+import frc.robot.util.DevilBotState.State;
 import frc.robot.util.LoggedTunableNumber;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -132,6 +134,9 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return;
     }
+    if (isAbsoluteEncoderReadingValid() == false) {
+      return;
+    }
     // Check if the arm angle is within limits.  Don't try to move the arm to new angle if it is
     // already at limit.
     // if (isHighLimit() || isLowLimit()) {
@@ -163,6 +168,14 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   @Override
   public boolean isAbsoluteEncoderConnected() {
     return io.isAbsoluteEncoderConnected();
+  }
+
+  public boolean isAbsoluteEncoderReadingValid() {
+    if (getAngle() > ArmConstants.minAngleInDegrees - 5
+        && getAngle() < ArmConstants.maxAngleInDegrees + 5) {
+      return true;
+    }
+    return false;
   }
 
   // Sets the voltage to volts. the volts value is -12 to 12
@@ -215,6 +228,9 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     //   // encoder
     //   relEncoderInit = false;
     // }
+    if (DevilBotState.getState() == State.DISABLED && io.isAbsoluteEncoderConnected()) {
+      io.resetRelativeEncoder(getAngle());
+    }
 
     if (isLimitHigh() && inputs.appliedVolts > 0) {
       // TODO: turn off voltage or stop pid
@@ -236,7 +252,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-    if (inputs.absolutePositionDegree >= positionDegreeMax) {
+    if (inputs.absolutePositionDegree >= positionDegreeMax
+        || inputs.relativePositionDegrees >= positionDegreeMax) {
       inputs.limitHigh = true;
     } else {
       inputs.limitHigh = false;
