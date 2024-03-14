@@ -42,8 +42,7 @@ public class ClimberIOSparkMax implements ClimberIO {
     // Get applied voltage from the top motor
     inputs.appliedVolts = motor.getAppliedOutput() * motor.getBusVoltage();
     inputs.current = motor.getOutputCurrent();
-    inputs.positionRadians =
-        Units.rotationsPerMinuteToRadiansPerSecond(encoder.getPosition() / GEAR_RATIO);
+    inputs.positionRadians = Units.rotationsToRadians(encoder.getPosition() / GEAR_RATIO);
   }
 
   @Override
@@ -55,6 +54,6 @@ public class ClimberIOSparkMax implements ClimberIO {
 
   @Override
   public void setPosition(double position) {
-    encoder.setPosition(position);
+    encoder.setPosition(Units.radiansToRotations(position) * GEAR_RATIO);
   }
 }
