@@ -60,6 +60,7 @@ public class RobotContainer {
     Command StartMatchCommand =
     new SequentialCommandGroup(
       RobotConfig.climber.getPrepareClimberForMatchStartCommand(),
+      RobotConfig.climber.getAutoZeroCommand(),
       RobotConfig.autoChooser.getSelected()
     );
 
