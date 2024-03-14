@@ -204,6 +204,7 @@ public class ArmIOSparkMax implements ArmIO {
 
   @Override
   public void resetRelativeEncoder(double position) {
+    // System.out.println("resetRelativeEncoder " + position);
     relEncoder.setPosition(position);
   }
 

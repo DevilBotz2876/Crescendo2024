@@ -46,7 +46,8 @@ public class RobotConfigSherman extends RobotConfig {
     ShooterConstants.velocityInRPMs = 3000;
     shooter = new ShooterSubsystem(new ShooterIOSparkMax(2), new ShooterIOSparkMax(1));
 
-    ArmConstants.absolutePositionOffset = 0.426777535;
+    // ArmConstants.absolutePositionOffset = 0.426777535;
+    ArmConstants.absolutePositionOffset = 0.4401;
 
     ArmConstants.pidKp = 0.1;
     ArmConstants.pidKi = 0.0;
@@ -56,8 +57,14 @@ public class RobotConfigSherman extends RobotConfig {
     ArmConstants.ffKv = 6.18;
     ArmConstants.ffKa = 0.04;
 
+    ArmConstants.pidMaxOutput = 6.0;
+    ArmConstants.pidMinOutput = -5.0;
+
+    ArmConstants.maxVelocity = 1.5;
+    ArmConstants.maxAcceleration = 1.0;
+
     ArmConstants.pidAngleErrorInDegrees = 6.0;
-    ArmConstants.maxAngleInDegrees = 84.0;
+    ArmConstants.maxAngleInDegrees = 90.0;
     ArmConstants.minAngleInDegrees = 0.0;
     ArmConstants.intakeAngleInDegrees = 1;
     ArmConstants.subwooferScoreAngleInDegrees = 30;
