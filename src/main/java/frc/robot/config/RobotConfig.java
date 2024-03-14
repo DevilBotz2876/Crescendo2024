@@ -137,7 +137,7 @@ public class RobotConfig {
     public static double autoZeroMaxRetractTimeInSeconds = 5.0;
     public static double autoZeroOffset =
         -0.5; // When auto-zeroing, to reduce stress on the mechanism, this is the amount we want to
-    public static double matchStartPositionRight = 0.36;
+    public static double matchStartPositionRadiansRight = 0.36;
     // retract the climber after auto-zeroing
   }
 

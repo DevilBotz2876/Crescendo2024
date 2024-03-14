@@ -265,7 +265,7 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
                 overridePosition(
                     ClimberConstants.maxPositionInRadians,
                     ClimberConstants.maxPositionInRadians
-                        - ClimberConstants.matchStartPositionRight),
+                        - ClimberConstants.matchStartPositionRadiansRight),
             this), // Fake the climber into thinking the left is maxed out, and the right is almost
         // maxed
         getExtendCommand(), // Extend the arm (left should stay stationary....right should extend to
@@ -275,13 +275,13 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
                 overridePosition(
                     0,
                     ClimberConstants
-                        .matchStartPositionRight))); // set positions back to what they really are
+                        .matchStartPositionRadiansRight))); // set positions back to what they really are
   }
 
   public Command getPrepareClimberForMatchStartCommand() {
     return new SequentialCommandGroup(
         new InstantCommand(
-            () -> overridePosition(0, ClimberConstants.matchStartPositionRight),
+            () -> overridePosition(0, ClimberConstants.matchStartPositionRadiansRight),
             this), // set positions back to what they are assuming the arm is being held up
         getRetractCommand()); // retract the right arm back to zero
   }

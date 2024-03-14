@@ -89,7 +89,7 @@ public class RobotConfigInferno extends RobotConfig {
     arm = new ArmSubsystem(new ArmIOSparkMax(4, true));
 
     ClimberConstants.minPositionInRadians = 0.01;
-    ClimberConstants.maxPositionInRadians = 0.47;
+    ClimberConstants.maxPositionInRadians = 27.875;
     ClimberConstants.defaultSpeedInVolts = 12.0;
     ClimberConstants.autoZeroVoltage = 2.0;
     ClimberConstants.autoZeroMaxCurrent = 16;
@@ -99,7 +99,7 @@ public class RobotConfigInferno extends RobotConfig {
         10.0 + ClimberConstants.autoZeroExtendTimeInSeconds;
     ClimberConstants.autoZeroOffset =
         -0.5; // When auto-zeroing, to reduce stress on the mechanism, this is the amount we want to
-    ClimberConstants.matchStartPositionRight = 0.36;
+    ClimberConstants.matchStartPositionRadiansRight = 21;
     // retract the climber after auto-zeroing
     climber = new ClimberSubsystem(new ClimberIOSparkMax(7, false), new ClimberIOSparkMax(6, true));
 
