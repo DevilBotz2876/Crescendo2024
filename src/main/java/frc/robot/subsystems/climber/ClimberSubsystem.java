@@ -226,32 +226,32 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
     return new SequentialCommandGroup(
             new InstantCommand(
                 () -> {
-                  System.out.println("Auto Zero: Disable Limits");
+                  //                  System.out.println("Auto Zero: Disable Limits");
                   enableLimits(false);
-                  System.out.println("Auto Zero: Extend Climber");
+                  //                  System.out.println("Auto Zero: Extend Climber");
                   runVoltage(ClimberConstants.autoZeroVoltage);
-                  System.out.println("Auto Zero: Wait For Extend");
+                  //                  System.out.println("Auto Zero: Wait For Extend");
                 },
                 this),
             Commands.waitSeconds(ClimberConstants.autoZeroExtendTimeInSeconds),
             new InstantCommand(
                 () -> {
-                  System.out.println("Auto Zero: Enable Limits");
+                  //                  System.out.println("Auto Zero: Enable Limits");
                   enableLimits(true);
-                  System.out.println("Auto Zero: Enable Auto Zero Mode");
+                  //                  System.out.println("Auto Zero: Enable Auto Zero Mode");
                   autoZeroMode(true);
-                  System.out.println("Auto Zero: Retract Climber");
+                  //                  System.out.println("Auto Zero: Retract Climber");
                   runVoltage(-ClimberConstants.autoZeroVoltage);
-                  System.out.println("Auto Zero: Wait until done or timeout");
+                  //                  System.out.println("Auto Zero: Wait until done or timeout");
                 },
                 this),
             Commands.waitSeconds(ClimberConstants.autoZeroMaxRetractTimeInSeconds)
                 .until(() -> ((left.autoZeroMode == false) && (right.autoZeroMode == false))))
         .finallyDo(
             () -> {
-              System.out.println("Auto Zero: Disable Auto Zero Mode");
+              //              System.out.println("Auto Zero: Disable Auto Zero Mode");
               autoZeroMode(false);
-              System.out.println("Auto Zero: Turn Off Climber");
+              //              System.out.println("Auto Zero: Turn Off Climber");
               runVoltage(0);
             });
   }
@@ -273,7 +273,8 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
                 overridePosition(
                     0,
                     ClimberConstants
-                        .matchStartPositionRadiansRight))); // set positions back to what they really are
+                        .matchStartPositionRadiansRight))); // set positions back to what they
+    // really are
   }
 
   public Command getPrepareClimberForMatchStartCommand() {
