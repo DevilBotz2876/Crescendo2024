@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfigInferno;
 import frc.robot.config.RobotConfigPhoenix;
@@ -55,6 +56,13 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return RobotConfig.autoChooser.getSelected();
+
+    Command StartMatchCommand =
+    new SequentialCommandGroup(
+      RobotConfig.climber.getPrepareClimberForMatchStartCommand(),
+      RobotConfig.autoChooser.getSelected()
+    );
+
+    return StartMatchCommand;
   }
 }
