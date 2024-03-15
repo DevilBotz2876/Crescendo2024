@@ -8,6 +8,9 @@ import frc.robot.config.RobotConfig.ShooterConstants;
 import java.util.Optional;
 
 public class DevilBotState {
+  public static boolean climberNeedsToBeZeroedAtStart =
+      false; // Set to true is the climber is holding up the arm
+
   public enum TargetMode {
     SPEAKER,
     AMP

@@ -4,12 +4,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public interface Climber {
-  /** Extends climber arms min limit */
-  public void extend();
-
-  /** Retracts climber to min limit */
-  public void retract();
-
   public void runVoltage(double volts);
 
   public default void runVoltageLeft(double volts) {}
@@ -18,11 +12,7 @@ public interface Climber {
 
   public void resetPosition();
 
-  public default void autoZeroMode(boolean enable) {}
-
   public default void enableLimits(boolean enable) {}
-
-  public boolean isExtending();
 
   public default double getCurrentPositionLeft() {
     return 0;

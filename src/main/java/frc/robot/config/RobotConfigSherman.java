@@ -68,6 +68,7 @@ public class RobotConfigSherman extends RobotConfig {
     ArmConstants.minAngleInDegrees = 0.0;
     ArmConstants.intakeAngleInDegrees = 1;
     ArmConstants.subwooferScoreAngleInDegrees = 30;
+    ArmConstants.matchStartArmAngle = 90;
 
     arm = new ArmSubsystem(new ArmIOSparkMax(4));
   }

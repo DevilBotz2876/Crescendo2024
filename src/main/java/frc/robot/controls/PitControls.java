@@ -11,12 +11,13 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.ClimberConstants;
 import frc.robot.config.RobotConfig.IntakeConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
+import frc.robot.util.DevilBotState;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,37 +29,51 @@ public class PitControls {
     int layoutRowIndex = 0;
     int layoutMaxHeight = 4;
     List<Command> commands = new ArrayList<Command>();
-    maxWidth = Math.min(1, maxWidth);
+    maxWidth = Math.min(2, maxWidth);
 
     /* Intake Controls */
     ShuffleboardLayout intakeLayout =
         tab.getLayout("Intake", BuiltInLayouts.kGrid)
-            //            .withProperties(Map.of("Label position", "HIDDEN"))
+            .withProperties(Map.of("Label position", "TOP", "Number of columns", 1))
             .withSize(maxWidth, layoutMaxHeight)
             .withPosition(col, row);
     row += layoutMaxHeight;
 
-    GenericEntry intakeVolts =
+    ShuffleboardLayout intakeStatusLayout =
         intakeLayout
+            .getLayout("Status", BuiltInLayouts.kGrid)
+            .withProperties(Map.of("Number of columns", 1))
+            .withPosition(0, 0);
+    layoutColIndex = 0;
+    layoutRowIndex = 0;
+
+    GenericEntry intakeVolts =
+        intakeStatusLayout
             .add("Volts", IntakeConstants.defaultSpeedInVolts)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", -12, "max", 12))
             .withPosition(layoutColIndex, layoutRowIndex++)
-            //            .withSize(maxWidth, 1)
             .getEntry();
 
-    intakeLayout
+    intakeStatusLayout
         .addDouble("Applied Volts", () -> RobotConfig.intake.getCurrentVoltage())
         .withWidget(BuiltInWidgets.kNumberBar)
         .withProperties(Map.of("min", -12, "max", 12))
-        //        .withSize(maxWidth, 1)
         .withPosition(layoutColIndex, layoutRowIndex++);
 
-    intakeLayout
+    intakeStatusLayout
         .addBoolean("Piece Detected", () -> RobotConfig.intake.isPieceDetected())
         .withWidget(BuiltInWidgets.kBooleanBox)
         .withProperties(Map.of("Color when false", "black", "Color when true", "orange"))
         .withPosition(layoutColIndex, layoutRowIndex++);
+
+    ShuffleboardLayout intakeCommandLayout =
+        intakeLayout
+            .getLayout("Commands", BuiltInLayouts.kGrid)
+            .withProperties(Map.of("Label position", "HIDDEN", "Number of columns", 1))
+            .withPosition(0, 1);
+    layoutColIndex = 0;
+    layoutRowIndex = 0;
 
     Command intakeStop =
         new InstantCommand(() -> RobotConfig.intake.runVoltage(0), RobotConfig.intake);
@@ -75,10 +90,7 @@ public class PitControls {
     commands.add(intakeOn);
 
     for (Command command : commands) {
-      intakeLayout
-          .add(command)
-          //        .withSize(maxWidth, 1)
-          .withPosition(layoutColIndex, layoutRowIndex++);
+      intakeCommandLayout.add(command).withPosition(layoutColIndex, layoutRowIndex++);
     }
 
     return maxWidth;
@@ -89,25 +101,32 @@ public class PitControls {
     int layoutRowIndex = 0;
     int layoutMaxHeight = 5;
     List<Command> commands = new ArrayList<Command>();
-    maxWidth = Math.min(1, maxWidth);
+    maxWidth = Math.min(2, maxWidth);
 
     ShuffleboardLayout armLayout =
         tab.getLayout("Arm", BuiltInLayouts.kGrid)
-            //            .withProperties(Map.of("Label position", "HIDDEN"))
+            .withProperties(Map.of("Label position", "TOP", "Number of columns", 1))
             .withSize(maxWidth, layoutMaxHeight)
             .withPosition(col, row);
     row += layoutMaxHeight;
 
-    GenericEntry armVolts =
+    ShuffleboardLayout armStatusLayout =
         armLayout
+            .getLayout("Status", BuiltInLayouts.kGrid)
+            .withProperties(Map.of("Number of columns", 1))
+            .withPosition(0, 0);
+    layoutColIndex = 0;
+    layoutRowIndex = 0;
+
+    GenericEntry armVolts =
+        armStatusLayout
             .add("Volts", ArmConstants.defaultSpeedInVolts)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", -12, "max", 12))
-            //            .withSize(maxWidth, 1)
             .withPosition(layoutColIndex, layoutRowIndex++)
             .getEntry();
 
-    armLayout
+    armStatusLayout
         .addDouble("Abs Angle (degrees)", () -> RobotConfig.arm.getAngle())
         .withWidget(BuiltInWidgets.kNumberBar)
         .withProperties(
@@ -115,7 +134,7 @@ public class PitControls {
         //        .withSize(maxWidth, 1)
         .withPosition(layoutColIndex, layoutRowIndex++);
 
-    armLayout
+    armStatusLayout
         .addDouble("Rel Angle (degrees)", () -> RobotConfig.arm.getRelativeAngle())
         .withWidget(BuiltInWidgets.kNumberBar)
         .withProperties(
@@ -123,17 +142,25 @@ public class PitControls {
         //        .withSize(maxWidth, 1)
         .withPosition(layoutColIndex, layoutRowIndex++);
 
-    armLayout
+    armStatusLayout
         .addBoolean("High Limit", () -> RobotConfig.arm.isAtMaxLimit())
         .withWidget(BuiltInWidgets.kBooleanBox)
         .withProperties(Map.of("Color when false", "black", "Color when true", "red"))
         .withPosition(layoutColIndex, layoutRowIndex++);
 
-    armLayout
+    armStatusLayout
         .addBoolean("Low Limit", () -> RobotConfig.arm.isAtMinLimit())
         .withWidget(BuiltInWidgets.kBooleanBox)
         .withProperties(Map.of("Color when false", "black", "Color when true", "red"))
         .withPosition(layoutColIndex, layoutRowIndex++);
+
+    ShuffleboardLayout armCommandLayout =
+        armLayout
+            .getLayout("Commands", BuiltInLayouts.kGrid)
+            .withProperties(Map.of("Label position", "HIDDEN", "Number of columns", 1))
+            .withPosition(0, 1);
+    layoutColIndex = 0;
+    layoutRowIndex = 0;
 
     Command armStop = new InstantCommand(() -> RobotConfig.arm.runVoltage(0), RobotConfig.arm);
     armStop.setName("Stop");
@@ -146,11 +173,17 @@ public class PitControls {
     armOn.setName("On");
     commands.add(armOn);
 
+    Command PrepareArmForMatch =
+        new SequentialCommandGroup(
+            RobotConfig.climber.getAutoZeroCommand(),
+            new ArmToPosition(RobotConfig.arm, () -> ArmConstants.matchStartArmAngle),
+            RobotConfig.climber.getPrepareClimberToHoldArmCommand(),
+            new InstantCommand(() -> DevilBotState.climberNeedsToBeZeroedAtStart = true));
+    PrepareArmForMatch.setName("Prepare Arm For Match");
+    commands.add(PrepareArmForMatch);
+
     for (Command command : commands) {
-      armLayout
-          .add(command)
-          //        .withSize(maxWidth, 1)
-          .withPosition(layoutColIndex, layoutRowIndex++);
+      armCommandLayout.add(command).withPosition(layoutColIndex, layoutRowIndex++);
     }
 
     return maxWidth;
@@ -161,31 +194,46 @@ public class PitControls {
     int layoutRowIndex = 0;
     int layoutMaxHeight = 3;
     List<Command> commands = new ArrayList<Command>();
-    maxWidth = Math.min(1, maxWidth);
+    maxWidth = Math.min(2, maxWidth);
 
     ShuffleboardLayout shooterLayout =
         tab.getLayout("Shooter", BuiltInLayouts.kGrid)
-            //        .withProperties(Map.of("Label position", "HIDDEN"))
+            .withProperties(Map.of("Label position", "TOP", "Number of columns", 1))
             .withSize(maxWidth, layoutMaxHeight)
             .withPosition(col, row);
     row += layoutMaxHeight;
 
+    ShuffleboardLayout shooterStatusLayout =
+        shooterLayout
+            .getLayout("Status", BuiltInLayouts.kGrid)
+            .withProperties(Map.of("Number of columns", 1))
+            .withPosition(0, 0);
+    layoutColIndex = 0;
+    layoutRowIndex = 0;
+
     // Create volt entry under Shooter tab as a number sider with min = -1 and max = 1
     GenericEntry shooterVolts =
-        shooterLayout
+        shooterStatusLayout
             .add("Volts", ShooterConstants.defaultSpeedInVolts)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", -12, "max", 12))
             .withPosition(layoutColIndex, layoutRowIndex++)
             .getEntry();
-    shooterLayout
+    shooterStatusLayout
         .addDouble(
             "Velocity (RPMs)",
             () -> Units.radiansPerSecondToRotationsPerMinute(RobotConfig.shooter.getCurrentSpeed()))
         .withWidget(BuiltInWidgets.kNumberBar)
         .withProperties(Map.of("min", 0, "max", ShooterConstants.maxVelocityInRPMs))
-        //        .withSize(maxWidth, 1)
         .withPosition(layoutColIndex, layoutRowIndex++);
+
+    ShuffleboardLayout shooterCommandLayout =
+        shooterLayout
+            .getLayout("Commands", BuiltInLayouts.kGrid)
+            .withProperties(Map.of("Label position", "HIDDEN", "Number of columns", 1))
+            .withPosition(0, 1);
+    layoutColIndex = 0;
+    layoutRowIndex = 0;
 
     Command shooterStop =
         new InstantCommand(() -> RobotConfig.shooter.runVoltage(0), RobotConfig.shooter);
@@ -202,10 +250,7 @@ public class PitControls {
     commands.add(shooterOn);
 
     for (Command command : commands) {
-      shooterLayout
-          .add(command)
-          //        .withSize(maxWidth, 1)
-          .withPosition(layoutColIndex, layoutRowIndex++);
+      shooterCommandLayout.add(command).withPosition(layoutColIndex, layoutRowIndex++);
     }
 
     return maxWidth;
@@ -221,19 +266,34 @@ public class PitControls {
 
     ShuffleboardLayout climberLowLevelLayout =
         tab.getLayout("Climber (Low Level)", BuiltInLayouts.kGrid)
-            //            .withProperties(Map.of("Label position", "HIDDEN"))
+            .withProperties(Map.of("Label position", "TOP", "Number of columns", 1))
             .withSize(maxWidth, layoutMaxHeight)
             .withPosition(col, row);
     row += layoutMaxHeight;
 
-    GenericEntry climberVolts =
+    ShuffleboardLayout climberLowLevelStatusLayout =
         climberLowLevelLayout
+            .getLayout("Status", BuiltInLayouts.kGrid)
+            .withProperties(Map.of("Number of columns", 1))
+            .withPosition(0, 0);
+    layoutColIndex = 0;
+    layoutRowIndex = 0;
+
+    GenericEntry climberVolts =
+        climberLowLevelStatusLayout
             .add("Volts", ClimberConstants.defaultSpeedInVolts)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 12))
             .withPosition(layoutColIndex, layoutRowIndex++)
-            //            .withSize(maxWidth, 1)
             .getEntry();
+
+    ShuffleboardLayout climberLowLevelCommandLayout =
+        climberLowLevelLayout
+            .getLayout("Commands", BuiltInLayouts.kGrid)
+            .withProperties(Map.of("Label position", "HIDDEN", "Number of columns", 2))
+            .withPosition(0, 1);
+    layoutColIndex = 0;
+    layoutRowIndex = 0;
 
     Command climberLeftUp =
         new InstantCommand(
@@ -284,19 +344,8 @@ public class PitControls {
         layoutColIndex = 0;
         layoutRowIndex++;
       }
-      climberLowLevelLayout
-          .add(command)
-          .withSize(maxWidth, 1)
-          .withPosition(layoutColIndex++, layoutRowIndex);
+      climberLowLevelCommandLayout.add(command).withPosition(layoutColIndex++, layoutRowIndex);
     }
-
-    /*
-            commandTestTab
-            .add(
-                "Zero",
-                new InstantCommand(() -> RobotConfig.climber.resetPosition(), RobotConfig.climber))
-            .withPosition(colIndex + 1, rowIndex);
-    */
 
     return maxWidth;
   }
@@ -311,88 +360,76 @@ public class PitControls {
     /* Climber Controls */
     ShuffleboardLayout climberLayout =
         tab.getLayout("Climber", BuiltInLayouts.kGrid)
-            //            .withProperties(Map.of("Label position", "HIDDEN"))
+            .withProperties(Map.of("Label position", "TOP", "Number of columns", 1))
             .withSize(maxWidth, layoutMaxHeight)
             .withPosition(col, row);
     row += layoutMaxHeight;
 
-    climberLayout
+    ShuffleboardLayout climberStatusLayout =
+        climberLayout
+            .getLayout("Status", BuiltInLayouts.kGrid)
+            .withProperties(Map.of("Number of columns", 2))
+            .withPosition(0, 0);
+    layoutColIndex = 0;
+    layoutRowIndex = 0;
+
+    climberStatusLayout
         .addDouble("L Position", () -> RobotConfig.climber.getCurrentPositionLeft())
         .withWidget(BuiltInWidgets.kNumberBar)
         .withProperties(Map.of("min", 0, "max", ClimberConstants.maxPositionInRadians))
-        //        .withSize(maxWidth, 1)
         .withPosition(layoutColIndex++, layoutRowIndex);
 
-    climberLayout
+    climberStatusLayout
         .addDouble("R Position", () -> RobotConfig.climber.getCurrentPositionRight())
         .withWidget(BuiltInWidgets.kNumberBar)
         .withProperties(Map.of("min", 0, "max", ClimberConstants.maxPositionInRadians))
-        //            .withSize(maxWidth, 1)
         .withPosition(layoutColIndex, layoutRowIndex++);
     layoutColIndex = 0;
 
-    climberLayout
+    climberStatusLayout
         .addBoolean("L High Limit", () -> RobotConfig.climber.isAtMaxLimitLeft())
         .withWidget(BuiltInWidgets.kBooleanBox)
         .withProperties(Map.of("Color when false", "black", "Color when true", "red"))
         .withPosition(layoutColIndex++, layoutRowIndex);
 
-    climberLayout
+    climberStatusLayout
         .addBoolean("R High Limit", () -> RobotConfig.climber.isAtMaxLimitRight())
         .withWidget(BuiltInWidgets.kBooleanBox)
         .withProperties(Map.of("Color when false", "black", "Color when true", "red"))
-        .withPosition(layoutColIndex++, layoutRowIndex);
-
+        .withPosition(layoutColIndex++, layoutRowIndex++);
     layoutColIndex = 0;
-    layoutRowIndex++;
 
-    climberLayout
+    climberStatusLayout
         .addBoolean("L Low Limit", () -> RobotConfig.climber.isAtMinLimitLeft())
         .withWidget(BuiltInWidgets.kBooleanBox)
         .withProperties(Map.of("Color when false", "black", "Color when true", "red"))
         .withPosition(layoutColIndex++, layoutRowIndex);
 
-    climberLayout
+    climberStatusLayout
         .addBoolean("R Low Limit", () -> RobotConfig.climber.isAtMinLimitRight())
         .withWidget(BuiltInWidgets.kBooleanBox)
         .withProperties(Map.of("Color when false", "black", "Color when true", "red"))
         .withPosition(layoutColIndex, layoutRowIndex);
-
     layoutColIndex = 0;
-    layoutRowIndex++;
+
+    ShuffleboardLayout climberCommandLayout =
+        climberLayout
+            .getLayout("Commands", BuiltInLayouts.kGrid)
+            .withProperties(Map.of("Label position", "HIDDEN", "Number of columns", 1))
+            .withPosition(0, 1);
+    layoutColIndex = 0;
+    layoutRowIndex = 0;
 
     Command climberStop =
         new SequentialCommandGroup(
             new InstantCommand(() -> RobotConfig.climber.runVoltage(0), RobotConfig.climber),
-            new InstantCommand(() -> RobotConfig.climber.autoZeroMode(false), RobotConfig.climber),
             new InstantCommand(() -> RobotConfig.climber.enableLimits(true), RobotConfig.climber));
     climberStop.setName("Stop");
     commands.add(climberStop);
 
-    Command climberAutoZero =
-        new SequentialCommandGroup(
-            new InstantCommand(
-                () -> {
-                  RobotConfig.climber.enableLimits(false);
-                  RobotConfig.climber.runVoltage(ClimberConstants.autoZeroVoltage);
-                },
-                RobotConfig.climber),
-            new WaitCommand(ClimberConstants.autoZeroExtendTimeInSeconds),
-            new InstantCommand(
-                () -> {
-                  RobotConfig.climber.enableLimits(true);
-                  RobotConfig.climber.autoZeroMode(true);
-                  RobotConfig.climber.runVoltage(-ClimberConstants.autoZeroVoltage);
-                },
-                RobotConfig.climber),
-            new WaitCommand(ClimberConstants.autoZeroMaxRetractTimeInSeconds),
-            new InstantCommand(
-                () -> {
-                  RobotConfig.climber.autoZeroMode(false);
-                  RobotConfig.climber.runVoltage(0);
-                },
-                RobotConfig.climber));
-    climberAutoZero.setName("Zero");
+    Command climberAutoZero = RobotConfig.climber.getAutoZeroCommand();
+
+    climberAutoZero.setName("Auto Zero");
     commands.add(climberAutoZero);
 
     Command climberExtend = RobotConfig.climber.getExtendCommand();
@@ -404,15 +441,10 @@ public class PitControls {
     commands.add(climberRetract);
 
     for (Command command : commands) {
-      if (layoutColIndex >= 2) {
-        layoutColIndex = 0;
-        layoutRowIndex++;
-      }
-
-      climberLayout
+      climberCommandLayout
           .add(command)
-          //        .withSize(maxWidth, 1)
-          .withPosition(layoutColIndex++, layoutRowIndex);
+          .withProperties(Map.of("Label position", "HIDDEN"))
+          .withPosition(layoutColIndex, layoutRowIndex++);
     }
 
     setupLowLevelClimberControls(tab, col, row, maxWidth);
@@ -425,7 +457,7 @@ public class PitControls {
     int layoutRowIndex = 0;
     int layoutMaxHeight = 2;
     //    List<Command> commands = new ArrayList<Command>();
-    maxWidth = Math.min(1, maxWidth);
+    maxWidth = Math.min(2, maxWidth);
 
     /* Vision Controls */
     ShuffleboardLayout visionLayout =

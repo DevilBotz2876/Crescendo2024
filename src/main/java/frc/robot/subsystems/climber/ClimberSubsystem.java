@@ -6,6 +6,9 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.config.RobotConfig.ClimberConstants;
 import java.util.ArrayList;
@@ -113,7 +116,6 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
 
   private final ClimberInstance left, right;
   private final List<ClimberInstance> climbers = new ArrayList<ClimberInstance>();
-  private boolean extend = false;
 
   public ClimberSubsystem(ClimberIO left, ClimberIO right) {
     this.left = new ClimberInstance(left, "Climber Left");
@@ -131,22 +133,13 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
   }
 
   /** Extends climber arms min limit */
-  @Override
-  public void extend() {
-    extend = true;
+  private void extend() {
     runVoltage(ClimberConstants.defaultSpeedInVolts);
   }
 
   /** Retracts climber to min limit */
-  @Override
-  public void retract() {
-    extend = false;
+  private void retract() {
     runVoltage(-ClimberConstants.defaultSpeedInVolts);
-  }
-
-  @Override
-  public boolean isExtending() {
-    return extend;
   }
 
   @Override
@@ -157,12 +150,16 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
 
   @Override
   public void runVoltageLeft(double volts) {
-    left.runVoltage(volts);
+    if (left != null) {
+      left.runVoltage(volts);
+    }
   }
 
   @Override
   public void runVoltageRight(double volts) {
-    right.runVoltage(volts);
+    if (right != null) {
+      right.runVoltage(volts);
+    }
   }
 
   @Override
@@ -172,8 +169,7 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
     }
   }
 
-  @Override
-  public void autoZeroMode(boolean enable) {
+  private void autoZeroMode(boolean enable) {
     for (ClimberInstance climber : climbers) {
       climber.autoZeroMode(enable);
     }
@@ -188,47 +184,180 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
 
   @Override
   public double getCurrentPositionLeft() {
-    return left.inputs.positionRadians;
+    if (left != null) {
+      return left.inputs.positionRadians;
+    }
+    return 0.0;
   }
 
   @Override
   public double getCurrentPositionRight() {
-    return right.inputs.positionRadians;
+    if (right != null) {
+      return right.inputs.positionRadians;
+    }
+    return 0.0;
   }
 
   @Override
   public boolean isAtMaxLimitLeft() {
-    return left.isAtMaxLimit();
+    if (left != null) {
+      return left.isAtMaxLimit();
+    }
+    return false;
   }
 
   @Override
   public boolean isAtMinLimitLeft() {
-    return left.isAtMinLimit();
+    if (left != null) {
+      return left.isAtMinLimit();
+    }
+    return true;
   }
 
   @Override
   public boolean isAtMaxLimitRight() {
-    return right.isAtMaxLimit();
+    if (right != null) {
+      return right.isAtMaxLimit();
+    }
+    return false;
   }
 
   @Override
   public boolean isAtMinLimitRight() {
-    return right.isAtMinLimit();
+    if (right != null) {
+      return right.isAtMinLimit();
+    }
+    return true;
+  }
+
+  private boolean isAtMaxLimit() {
+    boolean atLimit = true;
+
+    for (ClimberInstance climber : climbers) {
+      atLimit &= climber.isAtMaxLimit();
+    }
+
+    return atLimit;
+  }
+
+  private boolean isAtMinLimit() {
+    boolean atLimit = true;
+
+    for (ClimberInstance climber : climbers) {
+      atLimit &= climber.isAtMinLimit();
+    }
+
+    return atLimit;
+  }
+
+  private boolean isAutoZeroed() {
+    boolean autoZeroed = true;
+
+    for (ClimberInstance climber : climbers) {
+      autoZeroed &= (climber.autoZeroMode == false);
+    }
+
+    return autoZeroed;
   }
 
   @Override
   public Command getExtendCommand() {
-    return runOnce(() -> extend());
+    return new SequentialCommandGroup(
+        new InstantCommand(() -> extend(), this),
+        Commands.waitUntil(() -> isAtMaxLimit())
+            .withTimeout(ClimberConstants.maxExtendTimeInSeconds));
   }
 
   @Override
   public Command getRetractCommand() {
-    return runOnce(() -> retract());
+    return new SequentialCommandGroup(
+        new InstantCommand(() -> retract(), this),
+        Commands.waitUntil(() -> isAtMinLimit())
+            .withTimeout(ClimberConstants.maxRetractTimeInSeconds));
+  }
+
+  public Command getAutoZeroCommand() {
+    return new SequentialCommandGroup(
+            new InstantCommand(
+                () -> {
+                  //                  System.out.println("Auto Zero: Disable Limits");
+                  enableLimits(false);
+                  //                  System.out.println("Auto Zero: Extend Climber");
+                  runVoltage(ClimberConstants.autoZeroVoltage);
+                  //                  System.out.println("Auto Zero: Wait For Extend");
+                },
+                this),
+            Commands.waitSeconds(ClimberConstants.autoZeroExtendTimeInSeconds),
+            new InstantCommand(
+                () -> {
+                  //                  System.out.println("Auto Zero: Enable Limits");
+                  enableLimits(true);
+                  //                  System.out.println("Auto Zero: Enable Auto Zero Mode");
+                  autoZeroMode(true);
+                  //                  System.out.println("Auto Zero: Retract Climber");
+                  runVoltage(-ClimberConstants.autoZeroVoltage);
+                  //                  System.out.println("Auto Zero: Wait until done or timeout");
+                },
+                this),
+            Commands.waitSeconds(ClimberConstants.autoZeroMaxRetractTimeInSeconds)
+                .until(() -> (isAutoZeroed())))
+        .finallyDo(
+            () -> {
+              //              System.out.println("Auto Zero: Disable Auto Zero Mode");
+              autoZeroMode(false);
+              //              System.out.println("Auto Zero: Turn Off Climber");
+              runVoltage(0);
+            });
+  }
+
+  public Command getPrepareClimberToHoldArmCommand() {
+    return new SequentialCommandGroup(
+        new InstantCommand(
+            () ->
+                overridePosition(
+                    ClimberConstants.maxPositionInRadians,
+                    ClimberConstants.maxPositionInRadians
+                        - ClimberConstants.matchStartPositionRadiansRight),
+            this), // Fake the climber into thinking the left is maxed out, and the right is almost
+        // maxed
+        getExtendCommand(), // Extend the arm (left should stay stationary....right should extend to
+        // desired arm hold)
+        new InstantCommand(
+            () ->
+                overridePosition(
+                    0,
+                    ClimberConstants
+                        .matchStartPositionRadiansRight))); // set positions back to what they
+    // really are
+  }
+
+  public Command getPrepareClimberForMatchStartCommand() {
+    return new SequentialCommandGroup(
+        new InstantCommand(
+            () -> overridePosition(0, ClimberConstants.matchStartPositionRadiansRight),
+            this), // set positions back to what they are assuming the arm is being held up
+        getRetractCommand()); // retract the right arm back to zero
+  }
+
+  private void overridePosition(double leftpos, double rightPos) {
+    runVoltage(0);
+    if (left != null) {
+      left.io.setPosition(leftpos);
+    }
+
+    if (right != null) {
+      right.io.setPosition(rightPos);
+    }
   }
 
   @Override
   public void add2dSim(Mechanism2d mech2d) {
-    left.add2dSim(mech2d.getRoot("Left Climber Pivot", 5, 10));
-    right.add2dSim(mech2d.getRoot("Right Climber Pivot", 55, 10));
+    if (left != null) {
+      left.add2dSim(mech2d.getRoot("Left Climber Pivot", 5, 10));
+    }
+
+    if (right != null) {
+      right.add2dSim(mech2d.getRoot("Right Climber Pivot", 55, 10));
+    }
   }
 }
