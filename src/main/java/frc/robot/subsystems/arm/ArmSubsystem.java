@@ -5,7 +5,9 @@ import static edu.wpi.first.units.Units.Volts;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -26,7 +28,6 @@ import org.littletonrobotics.junction.Logger;
 public class ArmSubsystem extends SubsystemBase implements Arm {
   private final ArmIO io;
   private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
-  private ArmFeedforward feedforward;
   private final SysIdRoutine sysId;
   private final double positionDegreeMax = ArmConstants.maxAngleInDegrees;
   private final double positionDegreeMin = ArmConstants.minAngleInDegrees;
@@ -34,7 +35,10 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   @AutoLogOutput private double targetVoltage;
   @AutoLogOutput private double targetDegrees;
 
-  PIDController pid = new PIDController(ArmConstants.pidKp, ArmConstants.pidKi, ArmConstants.pidKd);
+  private final PIDController pid = new PIDController(ArmConstants.pidKp, ArmConstants.pidKi, ArmConstants.pidKd);
+  private ArmFeedforward feedforward = new ArmFeedforward(ArmConstants.ffKs, ArmConstants.ffKg, ArmConstants.ffKv);
+  boolean useSoftwarePid = false;
+  boolean softwarePidEnabled = false;
 
   // private final ProfiledPIDController ppid = new ProfiledPIDController(ArmConstants.pidKp, ArmConstants.pidKi, ArmConstants.pidKd, new TrapezoidProfile.Constraints(
   //               ArmConstants.maxVelocity, ArmConstants.maxAcceleration));
@@ -163,15 +167,22 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
       this.targetDegrees = degrees;
     }
 
-    // We instantiate a new object here each time because constants can change when being tuned.
-    feedforward = new ArmFeedforward(0, kG, kV, kA);
-    double ff = feedforward.calculate(this.targetDegrees, 0);
-
-    Logger.recordOutput("Arm/setAngle/setpointDegrees", this.targetDegrees);
-    Logger.recordOutput("Arm/setAngle/ffVolts", ff);
-
     // Set the position reference with feedforward voltage
-    io.setPosition(this.targetDegrees, ff);
+    if (useSoftwarePid)
+    {
+      softwarePidEnabled = true;
+    }
+    else
+    {
+      // We instantiate a new object here each time because constants can change when being tuned.
+      feedforward = new ArmFeedforward(0, kG, kV, kA);
+      double ff = feedforward.calculate(this.targetDegrees, 0);
+
+      Logger.recordOutput("Arm/setAngle/setpointDegrees", this.targetDegrees);
+      Logger.recordOutput("Arm/setAngle/ffVolts", ff);
+
+      io.setPosition(this.targetDegrees, ff);
+    }
     //pid.calculate(ff)
   }
 
@@ -245,6 +256,12 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     // }
     if (DevilBotState.getState() == State.DISABLED && io.isAbsoluteEncoderConnected()) {
       io.resetRelativeEncoder(getAngle());
+    }
+
+    if (softwarePidEnabled) {
+      io.setVoltage(
+          feedforward.calculate(Units.degreesToRadians(targetDegrees), 0)
+              + pid.calculate(inputs.absolutePositionDegree, targetDegrees));
     }
 
     if (isLimitHigh() && inputs.appliedVolts > 0) {
