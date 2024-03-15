@@ -6,6 +6,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfigInferno;
 import frc.robot.config.RobotConfigPhoenix;
@@ -14,10 +17,12 @@ import frc.robot.controls.DebugControls;
 import frc.robot.controls.DriverControls;
 import frc.robot.controls.PitControls;
 import frc.robot.controls.SysIdControls;
+import frc.robot.util.DevilBotState;
 
 public class RobotContainer {
   public final RobotConfig robotConfig;
   private static final String robotNameKey = "Robot Name";
+  private Command autoCommand = null;
 
   public RobotContainer() {
     String robotName = "UNKNOWN";
@@ -55,6 +60,25 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return RobotConfig.autoChooser.getSelected();
+    if (autoCommand == null) {
+      autoCommand =
+          new SequentialCommandGroup(
+              RobotConfig.climber
+                  .getPrepareClimberForMatchStartCommand()
+                  .onlyIf(() -> DevilBotState.climberNeedsToBeZeroedAtStart), // Move climber down
+              new ParallelCommandGroup(
+                  RobotConfig.climber
+                      .getAutoZeroCommand()
+                      .onlyIf(
+                          () ->
+                              DevilBotState
+                                  .climberNeedsToBeZeroedAtStart), // auto zero climber command
+                  // while
+                  // running selected auto
+                  RobotConfig.autoChooser.getSelected()),
+              new InstantCommand(() -> DevilBotState.climberNeedsToBeZeroedAtStart = false));
+    }
+
+    return autoCommand;
   }
 }

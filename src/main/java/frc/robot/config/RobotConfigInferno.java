@@ -72,24 +72,28 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.ffKv = 6.18;
     ArmConstants.ffKa = 0.04;
 
-    ArmConstants.maxVelocity = 6.0;
-    ArmConstants.maxAcceleration = 8.0;
+    ArmConstants.maxVelocity = 1.5;
+    ArmConstants.maxAcceleration = .5;
 
-    ArmConstants.pidAngleErrorInDegrees = 0.5;
-    ArmConstants.maxAngleInDegrees = 84.0;
+    ArmConstants.pidMaxOutput = 6.0;
+    ArmConstants.pidMinOutput = -5.0;
 
+    ArmConstants.pidAngleErrorInDegrees = 6.0;
+    ArmConstants.maxAngleInDegrees = 89.0;
     ArmConstants.minAngleInDegrees = -1.0;
+
     ArmConstants.intakeAngleInDegrees = 1;
     ArmConstants.ampScoreAngleInDegrees = 80;
     ArmConstants.subwooferScoreAngleInDegrees = 9.80;
     ArmConstants.subwooferScoreFromPodiumAngleInDegrees = 26.5;
     ArmConstants.noteScoreAngleInDegrees = 22.56;
     ArmConstants.stowIntakeAngleInDegrees = 14.64;
+    ArmConstants.matchStartArmAngle = 90;
 
     arm = new ArmSubsystem(new ArmIOSparkMax(4, true));
 
     ClimberConstants.minPositionInRadians = 0.01;
-    ClimberConstants.maxPositionInRadians = 0.47;
+    ClimberConstants.maxPositionInRadians = 27.875;
     ClimberConstants.defaultSpeedInVolts = 12.0;
     ClimberConstants.autoZeroVoltage = 2.0;
     ClimberConstants.autoZeroMaxCurrent = 16;
@@ -99,6 +103,7 @@ public class RobotConfigInferno extends RobotConfig {
         10.0 + ClimberConstants.autoZeroExtendTimeInSeconds;
     ClimberConstants.autoZeroOffset =
         -0.5; // When auto-zeroing, to reduce stress on the mechanism, this is the amount we want to
+    ClimberConstants.matchStartPositionRadiansRight = 21;
     // retract the climber after auto-zeroing
     climber = new ClimberSubsystem(new ClimberIOSparkMax(7, false), new ClimberIOSparkMax(6, true));
 
@@ -111,6 +116,14 @@ public class RobotConfigInferno extends RobotConfig {
             new Transform3d(
                 new Translation3d(-0.3048, 0, 0.22),
                 new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(180)))));
+
+    cameras.add(
+        new VisionCamera(
+            "intake",
+            "1184",
+            new Transform3d(
+                new Translation3d(0.3048, 0, 0.22),
+                new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(0)))));
 
     vision = new VisionSubsystem(cameras, AprilTagFields.k2024Crescendo.loadAprilTagLayoutField());
 
