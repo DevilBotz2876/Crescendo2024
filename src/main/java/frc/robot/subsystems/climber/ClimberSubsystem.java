@@ -150,12 +150,16 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
 
   @Override
   public void runVoltageLeft(double volts) {
-    left.runVoltage(volts);
+    if (left != null) {
+      left.runVoltage(volts);
+    }
   }
 
   @Override
   public void runVoltageRight(double volts) {
-    right.runVoltage(volts);
+    if (right != null) {
+      right.runVoltage(volts);
+    }
   }
 
   @Override
@@ -180,46 +184,96 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
 
   @Override
   public double getCurrentPositionLeft() {
-    return left.inputs.positionRadians;
+    if (left != null) {
+      return left.inputs.positionRadians;
+    }
+    return 0.0;
   }
 
   @Override
   public double getCurrentPositionRight() {
-    return right.inputs.positionRadians;
+    if (right != null) {
+      return right.inputs.positionRadians;
+    }
+    return 0.0;
   }
 
   @Override
   public boolean isAtMaxLimitLeft() {
-    return left.isAtMaxLimit();
+    if (left != null) {
+      return left.isAtMaxLimit();
+    }
+    return false;
   }
 
   @Override
   public boolean isAtMinLimitLeft() {
-    return left.isAtMinLimit();
+    if (left != null) {
+      return left.isAtMinLimit();
+    }
+    return true;
   }
 
   @Override
   public boolean isAtMaxLimitRight() {
-    return right.isAtMaxLimit();
+    if (right != null) {
+      return right.isAtMaxLimit();
+    }
+    return false;
   }
 
   @Override
   public boolean isAtMinLimitRight() {
-    return right.isAtMinLimit();
+    if (right != null) {
+      return right.isAtMinLimit();
+    }
+    return true;
+  }
+
+  private boolean isAtMaxLimit() {
+    boolean atLimit = true;
+
+    for (ClimberInstance climber : climbers) {
+      atLimit &= climber.isAtMaxLimit();
+    }
+
+    return atLimit;
+  }
+
+  private boolean isAtMinLimit() {
+    boolean atLimit = true;
+
+    for (ClimberInstance climber : climbers) {
+      atLimit &= climber.isAtMinLimit();
+    }
+
+    return atLimit;
+  }
+
+  private boolean isAutoZeroed() {
+    boolean autoZeroed = true;
+
+    for (ClimberInstance climber : climbers) {
+      autoZeroed &= (climber.autoZeroMode == false);
+    }
+
+    return autoZeroed;
   }
 
   @Override
   public Command getExtendCommand() {
     return new SequentialCommandGroup(
         new InstantCommand(() -> extend(), this),
-        Commands.waitUntil(() -> left.isAtMaxLimit() && right.isAtMaxLimit()));
+        Commands.waitUntil(() -> isAtMaxLimit())
+            .withTimeout(ClimberConstants.maxExtendTimeInSeconds));
   }
 
   @Override
   public Command getRetractCommand() {
     return new SequentialCommandGroup(
         new InstantCommand(() -> retract(), this),
-        Commands.waitUntil(() -> left.isAtMinLimit() && right.isAtMinLimit()));
+        Commands.waitUntil(() -> isAtMinLimit())
+            .withTimeout(ClimberConstants.maxRetractTimeInSeconds));
   }
 
   public Command getAutoZeroCommand() {
@@ -246,7 +300,7 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
                 },
                 this),
             Commands.waitSeconds(ClimberConstants.autoZeroMaxRetractTimeInSeconds)
-                .until(() -> ((left.autoZeroMode == false) && (right.autoZeroMode == false))))
+                .until(() -> (isAutoZeroed())))
         .finallyDo(
             () -> {
               //              System.out.println("Auto Zero: Disable Auto Zero Mode");
@@ -287,13 +341,23 @@ public class ClimberSubsystem extends SubsystemBase implements Climber {
 
   private void overridePosition(double leftpos, double rightPos) {
     runVoltage(0);
-    left.io.setPosition(leftpos);
-    right.io.setPosition(rightPos);
+    if (left != null) {
+      left.io.setPosition(leftpos);
+    }
+
+    if (right != null) {
+      right.io.setPosition(rightPos);
+    }
   }
 
   @Override
   public void add2dSim(Mechanism2d mech2d) {
-    left.add2dSim(mech2d.getRoot("Left Climber Pivot", 5, 10));
-    right.add2dSim(mech2d.getRoot("Right Climber Pivot", 55, 10));
+    if (left != null) {
+      left.add2dSim(mech2d.getRoot("Left Climber Pivot", 5, 10));
+    }
+
+    if (right != null) {
+      right.add2dSim(mech2d.getRoot("Right Climber Pivot", 55, 10));
+    }
   }
 }
