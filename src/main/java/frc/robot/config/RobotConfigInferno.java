@@ -64,7 +64,7 @@ public class RobotConfigInferno extends RobotConfig {
     // encoder)
     ArmConstants.absoluteEncoderInversion = -1;
 
-    ArmConstants.pidKp = 48.0;
+    ArmConstants.pidKp = 200.0;
     ArmConstants.pidKi = 0.0;
     ArmConstants.pidKd = 0.0;
     ArmConstants.ffKs = 0.0;

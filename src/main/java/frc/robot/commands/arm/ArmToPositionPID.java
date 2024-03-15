@@ -27,11 +27,14 @@ public class ArmToPositionPID extends PIDCommand {
       ArmFeedforward armFeedforward = new ArmFeedforward(0, ArmConstants.ffKg, ArmConstants.ffKv, ArmConstants.ffKa);
       double ff = armFeedforward.calculate(positionDegrees.getAsDouble(), 0);
       arm.runVoltage(output+ff);
+      Logger.recordOutput("Arm/PID/ff", ff);
+      Logger.recordOutput("Arm/PID/output", output);
     },
     arm
     );
     
-    getController().setTolerance(5,10);
+    //getController().setTolerance(5,10);
+    
   }
 
   public boolean isFinished() {
