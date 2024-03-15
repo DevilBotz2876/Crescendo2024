@@ -18,6 +18,14 @@ public class IntakeIOTalonSRX implements IntakeIO {
     // leader motor is not inverted, and set follower motor to follow the leader
     leader.setInverted(inverted);
     leader.setNeutralMode(NeutralMode.Brake);
+
+    /* Peak Current and Duration must be exceeded before current limit is activated.
+    When activated, current will be limited to Continuous Current.
+    Set Peak Current params to 0 if desired behavior is to immediately current-limit. */
+    leader.configPeakCurrentLimit(35, 10); /* 35 A */
+    leader.configPeakCurrentDuration(200, 10); /* 200ms */
+    leader.configContinuousCurrentLimit(30, 10); /* 30 */
+    leader.enableCurrentLimit(true);
   }
 
   public IntakeIOTalonSRX(int id) {
