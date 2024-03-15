@@ -64,7 +64,7 @@ public class RobotConfigInferno extends RobotConfig {
     // encoder)
     ArmConstants.absoluteEncoderInversion = -1;
 
-    ArmConstants.pidKp = 0.1;
+    ArmConstants.pidKp = 48.0;
     ArmConstants.pidKi = 0.0;
     ArmConstants.pidKd = 0.0;
     ArmConstants.ffKs = 0.0;
@@ -72,8 +72,8 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.ffKv = 6.18;
     ArmConstants.ffKa = 0.04;
 
-    ArmConstants.maxVelocity = 1.5;
-    ArmConstants.maxAcceleration = .5;
+    ArmConstants.maxVelocity = 6.0;
+    ArmConstants.maxAcceleration = 6.0;
 
     ArmConstants.pidMaxOutput = 6.0;
     ArmConstants.pidMinOutput = -5.0;

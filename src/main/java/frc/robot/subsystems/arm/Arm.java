@@ -23,6 +23,8 @@ public interface Arm extends Subsystem {
   // sets of the angle of the arm
   public default void setAngle(double degrees) {}
 
+  public default void runVoltage(double voltage) {}
+
   public default boolean isAbsoluteEncoderConnected() {
     return true;
   }

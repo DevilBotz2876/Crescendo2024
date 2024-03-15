@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
-import frc.robot.commands.arm.ArmToPositionTP;
+import frc.robot.commands.arm.ArmToPositionPP;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.subsystems.arm.Arm;
 import frc.robot.subsystems.intake.Intake;
@@ -18,11 +18,11 @@ public class AutoPrepareForIntake extends SequentialCommandGroup {
     }
     if (intakeVoltage == null) {
       addCommands(
-          new ParallelCommandGroup(new ArmToPositionTP(intakeAngle, arm)),
+          new ParallelCommandGroup(new ArmToPositionPP(intakeAngle, arm)),
           new AutoIndexPiece(intake));
     } else {
       addCommands(
-          new ParallelCommandGroup(new ArmToPositionTP(intakeAngle, arm)),
+          new ParallelCommandGroup(new ArmToPositionPP(intakeAngle, arm)),
           new AutoIndexPiece(intake, intakeVoltage));
     }
     addCommands(arm.getStowCommand());

@@ -3,15 +3,19 @@ package frc.robot.subsystems.arm;
 import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.util.DevilBotState;
 import frc.robot.util.DevilBotState.State;
@@ -29,6 +33,11 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   private TrapezoidProfile.State currentState = new TrapezoidProfile.State();
   @AutoLogOutput private double targetVoltage;
   @AutoLogOutput private double targetDegrees;
+
+  PIDController pid = new PIDController(ArmConstants.pidKp, ArmConstants.pidKi, ArmConstants.pidKd);
+
+  // private final ProfiledPIDController ppid = new ProfiledPIDController(ArmConstants.pidKp, ArmConstants.pidKi, ArmConstants.pidKd, new TrapezoidProfile.Constraints(
+  //               ArmConstants.maxVelocity, ArmConstants.maxAcceleration));
 
   // Create a Mechanism2d display of an Arm with a fixed ArmTower and moving Arm.
   private final double armAngle2dOffset = -45;
@@ -163,6 +172,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
     // Set the position reference with feedforward voltage
     io.setPosition(this.targetDegrees, ff);
+    //pid.calculate(ff)
   }
 
   @Override
@@ -179,7 +189,9 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   }
 
   // Sets the voltage to volts. the volts value is -12 to 12
+  @Override
   public void runVoltage(double volts) {
+    Logger.recordOutput("Arm/runVoltage/runVoltage", volts);
     targetVoltage = voltageSafety(volts);
     io.setVoltage(targetVoltage);
   }
@@ -201,6 +213,9 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
   @Override
   public void periodic() {
+
+    //double volts = pid.calculate(getAngle(), setpoint);
+
     if (armKp.hasChanged(hashCode())
         || armKd.hasChanged(hashCode())
         || armOutputMin.hasChanged(hashCode())
