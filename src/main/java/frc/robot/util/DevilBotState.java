@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public class DevilBotState {
   public static boolean climberNeedsToBeZeroedAtStart =
-      true; // Set to true is the climber is holding up the arm
+      false; // Set to true is the climber is holding up the arm
 
   public enum TargetMode {
     SPEAKER,
