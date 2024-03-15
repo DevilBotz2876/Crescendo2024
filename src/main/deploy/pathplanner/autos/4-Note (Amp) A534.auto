@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3172810049270662,
-      "y": 5.55
+      "x": 0.65,
+      "y": 6.65
     },
-    "rotation": 0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Piece from Speaker Center Side"
+            "name": "Shoot Piece from Speaker Amp Side"
           }
         },
         {
@@ -22,15 +22,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "Center Note"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Intake Piece"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "A to 5"
                 }
               }
             ]
@@ -39,13 +39,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center Note Return"
+            "pathName": "5 to Between 3-4"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot Piece from Speaker Center Side"
+            "name": "Shoot Piece Next to Note Amp Side"
           }
         },
         {
@@ -53,15 +53,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "Center To Source Note"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Intake Piece"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Between 2-3 to 3"
                 }
               }
             ]
@@ -70,13 +70,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center To Source Note Return"
+            "pathName": "3 to Between 2-3"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot Piece from Speaker Center Side"
+            "name": "Shoot Piece Next to Note Amp Side"
           }
         },
         {
@@ -84,15 +84,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "Center To Amp Note"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Intake Piece"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Between 2-3 to 4"
                 }
               }
             ]
@@ -101,13 +101,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center To Amp Note Return"
+            "pathName": "4 to Between 2-3"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot Piece from Speaker Center Side"
+            "name": "Shoot Piece Next to Note Amp Side"
           }
         }
       ]
