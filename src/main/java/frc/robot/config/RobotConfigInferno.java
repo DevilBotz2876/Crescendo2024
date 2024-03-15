@@ -118,6 +118,14 @@ public class RobotConfigInferno extends RobotConfig {
                 new Translation3d(-0.3048, 0, 0.22),
                 new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(180)))));
 
+    cameras.add(
+        new VisionCamera(
+            "intake",
+            "1184",
+            new Transform3d(
+                new Translation3d(0.3048, 0, 0.22),
+                new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(0)))));
+
     vision = new VisionSubsystem(cameras, AprilTagFields.k2024Crescendo.loadAprilTagLayoutField());
 
     if (Robot.isSimulation()) {
