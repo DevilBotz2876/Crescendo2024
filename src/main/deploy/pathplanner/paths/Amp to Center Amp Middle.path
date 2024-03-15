@@ -12,7 +12,7 @@
         "y": 6.976857516056
       },
       "isLocked": false,
-      "linkedName": "Speaker - Amp Side"
+      "linkedName": "\"A\" Subwoofer (Amp Side)"
     },
     {
       "anchor": {
@@ -57,7 +57,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Center Amp Note"
+      "linkedName": "\"6\" Center Middle Note"
     }
   ],
   "rotationTargets": [

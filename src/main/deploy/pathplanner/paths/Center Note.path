@@ -12,7 +12,7 @@
         "y": 5.562517748155146
       },
       "isLocked": true,
-      "linkedName": "Speaker - Center Side"
+      "linkedName": "\"C\" Subwoofer (Center Side)"
     },
     {
       "anchor": {
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": true,
-      "linkedName": "Center Note"
+      "linkedName": "\"2\" Wing Speaker Note"
     }
   ],
   "rotationTargets": [],
