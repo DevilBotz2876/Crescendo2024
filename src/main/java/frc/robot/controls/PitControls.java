@@ -17,6 +17,7 @@ import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.ClimberConstants;
 import frc.robot.config.RobotConfig.IntakeConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
+import frc.robot.util.DevilBotState;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -176,7 +177,8 @@ public class PitControls {
         new SequentialCommandGroup(
             RobotConfig.climber.getAutoZeroCommand(),
             new ArmToPosition(RobotConfig.arm, () -> ArmConstants.matchStartArmAngle),
-            RobotConfig.climber.getPrepareClimberToHoldArmCommand());
+            RobotConfig.climber.getPrepareClimberToHoldArmCommand(),
+            new InstantCommand(() -> DevilBotState.climberNeedsToBeZeroedAtStart = true));
     PrepareArmForMatch.setName("Prepare Arm For Match");
     commands.add(PrepareArmForMatch);
 

@@ -139,6 +139,8 @@ public class RobotConfig {
         -0.5; // When auto-zeroing, to reduce stress on the mechanism, this is the amount we want to
     public static double matchStartPositionRadiansRight = 2.5;
     // retract the climber after auto-zeroing
+    public static double maxExtendTimeInSeconds = 5.0;
+    public static double maxRetractTimeInSeconds = 8.0;
   }
 
   public Optional<Double> getArmAngleFromDistance(double distanceInMeters) {
