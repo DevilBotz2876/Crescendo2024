@@ -60,7 +60,7 @@ public class RobotConfigInferno extends RobotConfig {
     shooter = new ShooterSubsystem(new ShooterIOSparkMax(2));
 
     ArmConstants.absolutePositionOffset =
-      0.49823866245596654; // Determined empirically on 2024-03-15 (after replacing broken abs)
+        0.49823866245596654; // Determined empirically on 2024-03-15 (after replacing broken abs)
     // encoder)
     ArmConstants.absoluteEncoderInversion = -1;
 
@@ -82,7 +82,7 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.maxAngleInDegrees = 89.0;
     ArmConstants.minAngleInDegrees = -1.0;
 
-    ArmConstants.intakeAngleInDegrees = 1.5 ;
+    ArmConstants.intakeAngleInDegrees = 1.5;
     ArmConstants.ampScoreAngleInDegrees = 80;
     ArmConstants.subwooferScoreAngleInDegrees = 9.80;
     ArmConstants.subwooferScoreFromPodiumAngleInDegrees = 26.5;
