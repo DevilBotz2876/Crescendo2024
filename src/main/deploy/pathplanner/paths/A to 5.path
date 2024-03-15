@@ -3,15 +3,15 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.65,
-        "y": 6.65
+        "x": 0.710067280599679,
+        "y": 6.679048320523311
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.0845110748745679,
-        "y": 6.976857516056
+        "x": 1.144578355474247,
+        "y": 7.00590583657931
       },
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "\"A\" Subwoofer (Amp Side)"
     },
     {
@@ -20,12 +20,12 @@
         "y": 6.329304872350202
       },
       "prevControl": {
-        "x": 1.75969507590788,
-        "y": 6.290885353756412
+        "x": 1.7596956443675824,
+        "y": 6.2908683037528155
       },
       "nextControl": {
-        "x": 4.0808637538059624,
-        "y": 6.368257643019683
+        "x": 4.0808631774562,
+        "y": 6.368274929672517
       },
       "isLocked": false,
       "linkedName": null
@@ -56,7 +56,7 @@
         "y": 6.115584995115032
       },
       "nextControl": null,
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "\"6\" Center Middle Note"
     }
   ],
