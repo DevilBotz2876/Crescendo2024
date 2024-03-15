@@ -191,7 +191,7 @@ public class AutoNamedCommands {
       Optional<Double> armAngle = RobotConfig.instance.getArmAngleFromDistance(distance);
       if (armAngle.isPresent()) {
         double visionAngle = armAngle.get();
-        //if (Constants.debugCommands) 
+        // if (Constants.debugCommands)
         {
           System.out.println(
               "Using Vision Angle "
