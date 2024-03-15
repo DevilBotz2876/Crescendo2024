@@ -99,7 +99,6 @@ public class ArmIOSparkMax implements ArmIO {
     inputs.absolutePositionRad = getOffsetCorrectedAbsolutePositionInRadians();
     inputs.absolutePositionDegree = Units.radiansToDegrees(inputs.absolutePositionRad);
     inputs.absolutePositionRaw = absoluteEncoder.getAbsolutePosition();
-
     inputs.absoluteEncoderConnected = isAbsoluteEncoderConnected();
 
     inputs.appliedVolts = motor.getAppliedOutput() * motor.getBusVoltage();
@@ -107,6 +106,7 @@ public class ArmIOSparkMax implements ArmIO {
     inputs.current = motor.getOutputCurrent();
 
     inputs.relativePositionDegrees = relEncoder.getPosition();
+    inputs.relativeVelocityInDegrees = relEncoder.getVelocity();
 
     // Code below allows PID to be tuned using SmartDashboard.  And outputs extra data to
     // SmartDashboard.

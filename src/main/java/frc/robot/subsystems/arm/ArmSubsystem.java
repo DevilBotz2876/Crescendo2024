@@ -232,6 +232,10 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
       io.resetRelativeEncoder(getAngle());
     }
 
+    if (Math.abs(inputs.relativeVelocityInDegrees) < 0.1) {
+      io.resetRelativeEncoder(getAngle());
+    }
+
     if (isLimitHigh() && inputs.appliedVolts > 0) {
       // TODO: turn off voltage or stop pid
       io.setVoltage(0);
