@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.71,
-        "y": 6.679048320523311
+        "x": 0.7,
+        "y": 6.65
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.0635533905932737,
-        "y": 7.032601711116585
+        "x": 1.0535533905932737,
+        "y": 7.003553390593274
       },
       "isLocked": false,
       "linkedName": "\"A\" Subwoofer (Amp Side)"

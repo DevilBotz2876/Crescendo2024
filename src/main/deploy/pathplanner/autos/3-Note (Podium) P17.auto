@@ -12,6 +12,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Score from P (Subwoofer Podium-Side)"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.3406207349661023,
-        "y": 5.562517748155146
+        "x": 1.35,
+        "y": 5.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8663891100879748,
-        "y": 5.553549375888628
+        "x": 1.8800000000000001,
+        "y": 5.55
       },
       "isLocked": false,
       "linkedName": "\"C\" Subwoofer (Center Side)"
