@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Piece from Speaker Center Side"
+            "name": "Score from C (Subwoofer Center)"
           }
         },
         {
@@ -37,15 +37,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "2 to C"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "2 to C"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prepare to Score from C (Subwoofer Center)"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot Piece from Speaker Center Side"
+            "name": "Score from C (Subwoofer Center)"
           }
         },
         {
@@ -68,15 +81,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "1 to C"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "1 to C"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prepare to Score from C (Subwoofer Center)"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot Piece from Speaker Center Side"
+            "name": "Score from C (Subwoofer Center)"
           }
         },
         {
@@ -99,15 +125,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "3 to C"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "3 to C"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prepare to Score from C (Subwoofer Center)"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot Piece from Speaker Center Side"
+            "name": "Score from C (Subwoofer Center)"
           }
         }
       ]

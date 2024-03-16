@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Piece from Speaker Center Side"
+            "name": "Score from C (Subwoofer Center)"
           }
         },
         {
@@ -39,7 +39,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Piece from Note Center Side"
+            "name": "Score from 2 (Wing Speaker Note)"
           }
         }
       ]

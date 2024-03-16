@@ -2,29 +2,23 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.71,
-      "y": 6.68
+      "x": 0.75,
+      "y": 4.45
     },
-    "rotation": 60.0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "Score from A (Subwoofer Amp-Side)"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "A to 3"
+                  "pathName": "P to 1"
                 }
               },
               {
@@ -39,7 +33,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Score from 3 (Wing Amp Note)"
+            "name": "Score from 1 (Wing Podium Note)"
           }
         },
         {
@@ -49,7 +43,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "3 to 5"
+                  "pathName": "1 to 7"
                 }
               },
               {
@@ -68,13 +62,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "5 to 3"
+                  "pathName": "7 to 1"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Prepare to Score from 3 (Wing Amp Note)"
+                  "name": "Prepare to Score from 1 (Wing Podium Note)"
                 }
               }
             ]
@@ -83,7 +77,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Score from 3 (Wing Amp Note)"
+            "name": "Score from 1 (Wing Podium Note)"
           }
         }
       ]

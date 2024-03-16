@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Piece from Speaker Amp Side"
+            "name": "Score from A (Subwoofer Amp-Side)"
           }
         },
         {
@@ -37,15 +37,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "5 to Between 3-4"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "5 to Between 2-3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prepare to Score from Between 2 and 3"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot Piece Next to Note Amp Side"
+            "name": "Score from Between 2 and 3"
           }
         },
         {
@@ -68,15 +81,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "3 to Between 2-3"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "3 to Between 2-3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prepare to Score from Between 2 and 3"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot Piece Next to Note Amp Side"
+            "name": "Score from Between 2 and 3"
           }
         },
         {
@@ -99,15 +125,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "4 to Between 2-3"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "4 to Between 2-3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prepare to Score from Between 2 and 3"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot Piece Next to Note Amp Side"
+            "name": "Score from Between 2 and 3"
           }
         }
       ]
