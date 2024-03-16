@@ -36,7 +36,7 @@ public class RobotConfigInferno extends RobotConfig {
     drive = new DriveSwerveYAGSL("yagsl/inferno");
 
     // Inferno has a TalonSRX based intake
-    //IntakeConstants.defaultSpeedInVolts = 6.0;
+    // IntakeConstants.defaultSpeedInVolts = 6.0;
     IntakeConstants.indexSpeedInVolts = 4.5;
     IntakeConstants.feedSpeedInVolts = 6.0;
 
@@ -50,7 +50,7 @@ public class RobotConfigInferno extends RobotConfig {
 
     // intake = new IntakeSubsystem(new IntakeIOTalonSRX(3, true));
 
-    IntakeConstants.defaultSpeedInVolts = 12.0; // SparkMax/NEO based voltage
+    IntakeConstants.defaultSpeedInVolts = 10.0; // SparkMax/NEO based voltage
     intake = new IntakeSubsystem(new IntakeIOSparkMax(3, false));
 
     // Inferno has a single SparkMax based shooter
