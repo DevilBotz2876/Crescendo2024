@@ -2,6 +2,8 @@ package frc.robot.commands.auto;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
@@ -37,19 +39,19 @@ public class AutoNamedCommands {
     public static AutoScoreConstants scoreFromPSubwooferPodiumSide =
         new AutoScoreConstants(
             0.0, ArmConstants.subwooferScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
-    public static AutoScoreConstants scoreFrom3WingAmpNote =
-        new AutoScoreConstants(40, 8, ShooterConstants.velocityInRPMs);
-    public static AutoScoreConstants scoreFromBetween2and3 =
-        new AutoScoreConstants(35, 8, ShooterConstants.velocityInRPMs);
+
+    public static AutoScoreConstants scoreFrom1WingPodiumNote =
+        new AutoScoreConstants(
+            -28, ArmConstants.noteScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
     public static AutoScoreConstants scoreFrom2WingSpeakerNote =
         new AutoScoreConstants(
             0.0, ArmConstants.noteScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
-    public static AutoScoreConstants scoreFromNoteSourceSide =
-        new AutoScoreConstants(320.0, 30.0, ShooterConstants.velocityInRPMs);
-    public static AutoScoreConstants scoreFromOutsideSourceSide =
-        new AutoScoreConstants(300.0, 15, ShooterConstants.velocityInRPMs);
-    public static AutoScoreConstants scoreFrom1WingPodiumNote =
-        new AutoScoreConstants(300, 15, ShooterConstants.velocityInRPMs);
+    public static AutoScoreConstants scoreFrom3WingAmpNote =
+        new AutoScoreConstants(
+            28, ArmConstants.noteScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
+    public static AutoScoreConstants scoreFromBetween2and3 =
+        new AutoScoreConstants(
+            21, ArmConstants.noteScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
   }
 
   public static void configure() {
@@ -134,14 +136,16 @@ public class AutoNamedCommands {
 
       NamedCommands.registerCommand(
           "Score from " + command.location,
-          new AutoScore(
-              RobotConfig.drive,
-              RobotConfig.arm,
-              RobotConfig.intake,
-              RobotConfig.shooter,
-              command.robotYawInDegrees,
-              command.armAngleInDegrees,
-              command.shooterVelocityInRPMs));
+          new SequentialCommandGroup(
+              new PrintCommand(command.location),
+              new AutoScore(
+                  RobotConfig.drive,
+                  RobotConfig.arm,
+                  RobotConfig.intake,
+                  RobotConfig.shooter,
+                  command.robotYawInDegrees,
+                  command.armAngleInDegrees,
+                  command.shooterVelocityInRPMs)));
     }
   }
 
@@ -151,8 +155,13 @@ public class AutoNamedCommands {
 
     if (getYawToAprilTag.isPresent()) {
       double visionYaw = RobotConfig.drive.getAngle() - getYawToAprilTag.get();
-      if (Constants.debugCommands) {
-        System.out.println("Using Vision Yaw " + visionYaw + " fixedYaw: " + defaultYawToTarget);
+      //      if (Constants.debugCommands)
+      {
+        System.out.println(
+            "Using Vision Yaw "
+                + visionYaw
+                + " fixedYaw: "
+                + translateForAlliance(defaultYawToTarget));
       }
       return visionYaw;
     }
@@ -188,7 +197,7 @@ public class AutoNamedCommands {
     var alliance = DriverStation.getAlliance();
 
     if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
-      angle += 90;
+      angle = 180 - angle;
     }
     return angle;
   }
