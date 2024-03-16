@@ -3,55 +3,55 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.6747008781654079,
-        "y": 4.423652164484061
+        "x": 1.35,
+        "y": 5.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.7718401325969174,
-        "y": 3.939785971193552
+        "x": 1.7035533905932738,
+        "y": 5.903553390593274
       },
-      "isLocked": false,
-      "linkedName": "Speaker-Podium Side"
+      "isLocked": true,
+      "linkedName": "\"C\" Subwoofer (Center Side)"
     },
     {
       "anchor": {
-        "x": 2.34,
-        "y": 4.100132718106626
+        "x": 2.7,
+        "y": 6.8
       },
       "prevControl": {
-        "x": 1.5157213062781745,
-        "y": 4.109517305637301
+        "x": 2.3464466094067262,
+        "y": 6.446446609406726
       },
       "nextControl": null,
-      "isLocked": false,
-      "linkedName": "Source note"
+      "isLocked": true,
+      "linkedName": "\"3\" Wing Amp Note (45 degrees)"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": 0,
+      "rotationDegrees": 45.0,
       "rotateFast": false
     }
   ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 44.999999999999964,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": -57.65255650055793,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

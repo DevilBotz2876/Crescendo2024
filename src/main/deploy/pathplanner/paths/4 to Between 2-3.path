@@ -3,50 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.3185166370332744,
-        "y": 6.992561413694256
+        "x": 7.873369436306303,
+        "y": 7.436411005137533
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.3185166370332744,
-        "y": 6.992561413694256
+        "x": 7.26759438251701,
+        "y": 7.32152263286715
       },
       "isLocked": false,
-      "linkedName": "Note - Amp Side"
+      "linkedName": "\"4\" Center Amp Note"
     },
     {
       "anchor": {
-        "x": 7.859057435467287,
-        "y": 7.460326620116567
+        "x": 1.74250811605949,
+        "y": 6.308416077391951
       },
       "prevControl": {
-        "x": 6.859057435467287,
-        "y": 7.460326620116567
+        "x": 2.5049491320356694,
+        "y": 6.3188604748710775
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Center - Amp Note"
+      "linkedName": "Start Between Wing Amp and Speaker Notes"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 5.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
-    "rotateFast": true
+    "rotation": 0,
+    "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": -1.3566021916704052,
+    "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

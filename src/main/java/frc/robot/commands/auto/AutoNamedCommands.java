@@ -2,13 +2,17 @@ package frc.robot.commands.auto;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.util.DevilBotState;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.DoubleSupplier;
 
 public class AutoNamedCommands {
   public static class AutoScoreConstants {
@@ -26,24 +30,28 @@ public class AutoNamedCommands {
 
   public static class AutoConstants {
     /* TODO: Fill in the values for scoring here */
-    public static AutoScoreConstants scoreFromSpeakerAmpSide =
+    public static AutoScoreConstants scoreFromASubwooferAmpSide =
         new AutoScoreConstants(
             0.0, ArmConstants.subwooferScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
-    public static AutoScoreConstants scoreFromSpeakerCenterSide =
+    public static AutoScoreConstants scoreFromCSubwooferCenter =
         new AutoScoreConstants(
             0.0, ArmConstants.subwooferScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
-    public static AutoScoreConstants scoreFromSpeakerSourceSide =
+    public static AutoScoreConstants scoreFromPSubwooferPodiumSide =
         new AutoScoreConstants(
             0.0, ArmConstants.subwooferScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
-    public static AutoScoreConstants scoreFromNoteAmpSide =
-        new AutoScoreConstants(40, 8, ShooterConstants.velocityInRPMs);
-    public static AutoScoreConstants scoreFromNoteCenterSide =
+
+    public static AutoScoreConstants scoreFrom1WingPodiumNote =
+        new AutoScoreConstants(
+            -28, ArmConstants.noteScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
+    public static AutoScoreConstants scoreFrom2WingSpeakerNote =
         new AutoScoreConstants(
             0.0, ArmConstants.noteScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
-    public static AutoScoreConstants scoreFromNoteSourceSide =
-        new AutoScoreConstants(320.0, 30.0, ShooterConstants.velocityInRPMs);
-    public static AutoScoreConstants scoreFromOutsideSourceSide =
-        new AutoScoreConstants(300.0, 15, ShooterConstants.velocityInRPMs);
+    public static AutoScoreConstants scoreFrom3WingAmpNote =
+        new AutoScoreConstants(
+            28, ArmConstants.noteScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
+    public static AutoScoreConstants scoreFromBetween2and3 =
+        new AutoScoreConstants(
+            21, ArmConstants.noteScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
   }
 
   public static void configure() {
@@ -51,107 +59,94 @@ public class AutoNamedCommands {
     NamedCommands.registerCommand(
         "Intake Piece", new AutoPrepareForIntake(RobotConfig.arm, RobotConfig.intake));
 
-    NamedCommands.registerCommand(
-        "Shoot Piece from Speaker Amp Side",
-        new AutoScore(
-            RobotConfig.drive,
-            RobotConfig.arm,
-            RobotConfig.intake,
-            RobotConfig.shooter,
-            () -> RobotConfig.drive.getAngle(),
-            () -> AutoConstants.scoreFromSpeakerAmpSide.armAngleInDegrees,
-            () -> AutoConstants.scoreFromSpeakerAmpSide.shooterVelocityInRPMs));
+    /* TODO: merge AutoScoreConstants and ScorePieceCommand */
+    class ScorePieceCommand {
+      String location;
+      DoubleSupplier armAngleInDegrees;
+      DoubleSupplier shooterVelocityInRPMs;
+      DoubleSupplier robotYawInDegrees;
 
-    NamedCommands.registerCommand(
-        "Shoot Piece from Speaker Center Side",
-        new AutoScore(
-            RobotConfig.drive,
-            RobotConfig.arm,
-            RobotConfig.intake,
-            RobotConfig.shooter,
-            () -> RobotConfig.drive.getAngle(),
-            () -> getAngleToTarget(AutoConstants.scoreFromSpeakerCenterSide.armAngleInDegrees),
-            () -> AutoConstants.scoreFromSpeakerCenterSide.shooterVelocityInRPMs));
+      ScorePieceCommand(
+          String location,
+          DoubleSupplier armAngleInDegrees,
+          DoubleSupplier shooterVelocityInRPMs,
+          DoubleSupplier robotYawInDegrees) {
+        this.location = location;
+        this.armAngleInDegrees = armAngleInDegrees;
+        this.shooterVelocityInRPMs = shooterVelocityInRPMs;
+        this.robotYawInDegrees = robotYawInDegrees;
+      }
+    }
 
-    NamedCommands.registerCommand(
-        "Shoot Piece from Speaker Source Side",
-        new AutoScore(
-            RobotConfig.drive,
-            RobotConfig.arm,
-            RobotConfig.intake,
-            RobotConfig.shooter,
-            () -> RobotConfig.drive.getAngle(),
-            () -> getAngleToTarget(AutoConstants.scoreFromSpeakerSourceSide.armAngleInDegrees),
-            () -> AutoConstants.scoreFromSpeakerSourceSide.shooterVelocityInRPMs));
+    List<ScorePieceCommand> commandList = new ArrayList<ScorePieceCommand>();
+    /* Hard Coded yaw/angle */
+    commandList.add(
+        new ScorePieceCommand(
+            "A (Subwoofer Amp-Side)",
+            () -> AutoConstants.scoreFromASubwooferAmpSide.armAngleInDegrees,
+            () -> AutoConstants.scoreFromASubwooferAmpSide.shooterVelocityInRPMs,
+            () -> RobotConfig.drive.getAngle()));
+    commandList.add(
+        new ScorePieceCommand(
+            "C (Subwoofer Center)",
+            () -> AutoConstants.scoreFromCSubwooferCenter.armAngleInDegrees,
+            () -> AutoConstants.scoreFromCSubwooferCenter.shooterVelocityInRPMs,
+            () -> RobotConfig.drive.getAngle()));
+    commandList.add(
+        new ScorePieceCommand(
+            "P (Subwoofer Podium-Side)",
+            () -> AutoConstants.scoreFromPSubwooferPodiumSide.armAngleInDegrees,
+            () -> AutoConstants.scoreFromPSubwooferPodiumSide.shooterVelocityInRPMs,
+            () -> RobotConfig.drive.getAngle()));
 
-    NamedCommands.registerCommand(
-        "Shoot Piece from Note Amp Side",
-        new AutoScore(
-            RobotConfig.drive,
-            RobotConfig.arm,
-            RobotConfig.intake,
-            RobotConfig.shooter,
-            () -> getYawToTarget(AutoConstants.scoreFromNoteAmpSide.robotYawInDegrees),
-            () -> getAngleToTarget(AutoConstants.scoreFromNoteAmpSide.armAngleInDegrees),
-            () -> AutoConstants.scoreFromNoteAmpSide.shooterVelocityInRPMs));
+    /* Vision Assisted yaw/angle*/
+    commandList.add(
+        new ScorePieceCommand(
+            "1 (Wing Podium Note)",
+            () -> getAngleToTarget(AutoConstants.scoreFrom1WingPodiumNote.armAngleInDegrees),
+            () -> AutoConstants.scoreFrom1WingPodiumNote.shooterVelocityInRPMs,
+            () -> getYawToTarget(AutoConstants.scoreFrom1WingPodiumNote.robotYawInDegrees)));
+    commandList.add(
+        new ScorePieceCommand(
+            "2 (Wing Speaker Note)",
+            () -> getAngleToTarget(AutoConstants.scoreFrom2WingSpeakerNote.armAngleInDegrees),
+            () -> AutoConstants.scoreFrom2WingSpeakerNote.shooterVelocityInRPMs,
+            () -> getYawToTarget(AutoConstants.scoreFrom2WingSpeakerNote.robotYawInDegrees)));
+    commandList.add(
+        new ScorePieceCommand(
+            "3 (Wing Amp Note)",
+            () -> getAngleToTarget(AutoConstants.scoreFrom3WingAmpNote.armAngleInDegrees),
+            () -> AutoConstants.scoreFrom3WingAmpNote.shooterVelocityInRPMs,
+            () -> getYawToTarget(AutoConstants.scoreFrom3WingAmpNote.robotYawInDegrees)));
+    commandList.add(
+        new ScorePieceCommand(
+            "Between 2 and 3",
+            () -> getAngleToTarget(AutoConstants.scoreFromBetween2and3.armAngleInDegrees),
+            () -> AutoConstants.scoreFromBetween2and3.shooterVelocityInRPMs,
+            () -> getYawToTarget(AutoConstants.scoreFromBetween2and3.robotYawInDegrees)));
 
-    NamedCommands.registerCommand(
-        "Shoot Piece from Note Center Side",
-        new SequentialCommandGroup(
-            new AutoScore(
-                RobotConfig.drive,
-                RobotConfig.arm,
-                RobotConfig.intake,
-                RobotConfig.shooter,
-                () -> getYawToTarget(AutoConstants.scoreFromNoteCenterSide.robotYawInDegrees),
-                () -> getAngleToTarget(AutoConstants.scoreFromNoteCenterSide.armAngleInDegrees),
-                () -> AutoConstants.scoreFromNoteCenterSide.shooterVelocityInRPMs)));
+    for (ScorePieceCommand command : commandList) {
+      NamedCommands.registerCommand(
+          "Prepare to Score from " + command.location,
+          new AutoPrepareForScore(
+              RobotConfig.arm,
+              RobotConfig.shooter,
+              command.armAngleInDegrees,
+              command.shooterVelocityInRPMs));
 
-    NamedCommands.registerCommand(
-        "Shoot Piece from Note Source Side",
-        new AutoScore(
-            RobotConfig.drive,
-            RobotConfig.arm,
-            RobotConfig.intake,
-            RobotConfig.shooter,
-            () -> getYawToTarget(AutoConstants.scoreFromNoteSourceSide.robotYawInDegrees),
-            () -> getAngleToTarget(AutoConstants.scoreFromNoteSourceSide.armAngleInDegrees),
-            () -> AutoConstants.scoreFromNoteSourceSide.shooterVelocityInRPMs));
-
-    NamedCommands.registerCommand(
-        "Shoot Piece from Outside Source Side",
-        new AutoScore(
-            RobotConfig.drive,
-            RobotConfig.arm,
-            RobotConfig.intake,
-            RobotConfig.shooter,
-            () -> getYawToTarget(AutoConstants.scoreFromOutsideSourceSide.robotYawInDegrees),
-            () -> AutoConstants.scoreFromOutsideSourceSide.armAngleInDegrees,
-            () -> AutoConstants.scoreFromOutsideSourceSide.shooterVelocityInRPMs));
-
-    NamedCommands.registerCommand(
-        "Prepare to Score from Amp Note",
-        new AutoPrepareForScore(
-            RobotConfig.arm,
-            RobotConfig.shooter,
-            () -> AutoConstants.scoreFromNoteAmpSide.armAngleInDegrees,
-            () -> AutoConstants.scoreFromNoteAmpSide.shooterVelocityInRPMs));
-
-    NamedCommands.registerCommand(
-        "Prepare to Score from Source Note",
-        new AutoPrepareForScore(
-            RobotConfig.arm,
-            RobotConfig.shooter,
-            () -> AutoConstants.scoreFromNoteSourceSide.armAngleInDegrees,
-            () -> AutoConstants.scoreFromNoteSourceSide.shooterVelocityInRPMs));
-
-    NamedCommands.registerCommand(
-        "Prepare to Score from Outside Source Side",
-        new AutoPrepareForScore(
-            RobotConfig.arm,
-            RobotConfig.shooter,
-            () -> AutoConstants.scoreFromOutsideSourceSide.armAngleInDegrees,
-            () -> AutoConstants.scoreFromOutsideSourceSide.shooterVelocityInRPMs));
+      NamedCommands.registerCommand(
+          "Score from " + command.location,
+          new SequentialCommandGroup(
+              new PrintCommand(command.location),
+              new AutoScore(
+                  RobotConfig.drive,
+                  RobotConfig.arm,
+                  RobotConfig.intake,
+                  RobotConfig.shooter,
+                  command.robotYawInDegrees,
+                  command.armAngleInDegrees,
+                  command.shooterVelocityInRPMs)));
+    }
   }
 
   private static double getYawToTarget(double defaultYawToTarget) {
@@ -160,8 +155,13 @@ public class AutoNamedCommands {
 
     if (getYawToAprilTag.isPresent()) {
       double visionYaw = RobotConfig.drive.getAngle() - getYawToAprilTag.get();
-      if (Constants.debugCommands) {
-        System.out.println("Using Vision Yaw " + visionYaw + " fixedYaw: " + defaultYawToTarget);
+      //      if (Constants.debugCommands)
+      {
+        System.out.println(
+            "Using Vision Yaw "
+                + visionYaw
+                + " fixedYaw: "
+                + translateForAlliance(defaultYawToTarget));
       }
       return visionYaw;
     }
@@ -197,7 +197,7 @@ public class AutoNamedCommands {
     var alliance = DriverStation.getAlliance();
 
     if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
-      angle += 90;
+      angle = 180 - angle;
     }
     return angle;
   }

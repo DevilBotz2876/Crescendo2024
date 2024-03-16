@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7,
+      "x": 0.75,
       "y": 4.45
     },
-    "rotation": -57.64999999999998
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Piece from Speaker Source Side"
+            "name": "Score from P (Subwoofer Podium-Side)"
           }
         },
         {
@@ -22,15 +22,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Intake Piece"
+                  "pathName": "P to 1"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Source Note"
+                  "name": "Intake Piece"
                 }
               }
             ]
@@ -39,7 +39,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Piece from Note Source Side"
+            "name": "Score from 1 (Wing Podium Note)"
           }
         },
         {
@@ -47,15 +47,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Intake Piece"
+                  "pathName": "1 to 7"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Source Side Note Center"
+                  "name": "Intake Piece"
                 }
               }
             ]
@@ -66,15 +66,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Prepare to Score from Source Note"
+                  "pathName": "7 to 1"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Source Side Note Center Return"
+                  "name": "Prepare to Score from 1 (Wing Podium Note)"
                 }
               }
             ]
@@ -83,7 +83,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Piece from Note Source Side"
+            "name": "Score from 1 (Wing Podium Note)"
           }
         }
       ]

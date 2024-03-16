@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.7,
+        "y": 6.8
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.1767288353915135,
+        "y": 6.669526014370095
+      },
+      "isLocked": false,
+      "linkedName": "\"3\" Wing Amp Note (45 degrees)"
+    },
+    {
+      "anchor": {
+        "x": 1.74250811605949,
+        "y": 6.308416077391951
+      },
+      "prevControl": {
+        "x": 2.2333947975784003,
+        "y": 6.5486372194118445
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Start Between Wing Amp and Speaker Notes"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 41.53177074108293,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": 0.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}
