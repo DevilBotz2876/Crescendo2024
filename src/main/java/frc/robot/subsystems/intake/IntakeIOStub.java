@@ -8,6 +8,7 @@ public class IntakeIOStub implements IntakeIO {
   private FlywheelSim sim = new FlywheelSim(DCMotor.getNEO(1), 1.5, 0.004);
   private double appliedVolts = 0.0;
   private double elapsedTimeMotorOn = 0.0;
+  private boolean limitSwitchState = true; // Start with piece inserted
 
   @Override
   public void updateInputs(IntakeIOInputs inputs) {
@@ -17,6 +18,7 @@ public class IntakeIOStub implements IntakeIO {
     // inputs.positionRad = 0.0;
     inputs.velocityRadPerSec = sim.getAngularVelocityRadPerSec();
     inputs.appliedVolts = appliedVolts;
+    inputs.limitSwitchIntake = limitSwitchState;
     // inputs.currentAmps = new double[] {sim.getCurrentDrawAmps()};
 
     // Simulate intake/shooter limit switches
@@ -24,7 +26,7 @@ public class IntakeIOStub implements IntakeIO {
       elapsedTimeMotorOn += 0.02;
 
       if ((elapsedTimeMotorOn > 1.0)) {
-        inputs.limitSwitchIntake = !inputs.limitSwitchIntake;
+        limitSwitchState = !limitSwitchState;
         elapsedTimeMotorOn = 0.0;
       }
     } else {
