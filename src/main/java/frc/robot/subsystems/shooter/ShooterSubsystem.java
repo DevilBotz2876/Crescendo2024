@@ -91,6 +91,7 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
   public void runVoltage(double volts) {
     targetVoltage = volts;
     targetVelocityRadPerSec = 0;
+    softwarePidEnabled = false;
     io.setVoltage(targetVoltage);
     if (ioBottom != null) {
       ioBottom.setVoltage(targetVoltage);
