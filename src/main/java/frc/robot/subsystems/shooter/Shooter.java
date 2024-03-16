@@ -19,7 +19,7 @@ public interface Shooter {
   public double getVoltage();
 
   public default void turnOff() {
-    runVelocity(0);
+    runVoltage(0);
   }
 
   public Command getTurnOffCommand();
