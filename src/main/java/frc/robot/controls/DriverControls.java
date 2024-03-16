@@ -99,8 +99,14 @@ public class DriverControls {
         .withWidget(BuiltInWidgets.kBooleanBox)
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
+
+    driverTab
+        .addBoolean("Piece Detected", () -> RobotConfig.intake.isPieceDetected())
+        .withWidget(BuiltInWidgets.kBooleanBox)
+        .withProperties(Map.of("Color when false", "black", "Color when true", "orange"))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
     colIndex += 2;
-    rowIndex = 0;
 
     for (VisionCamera camera : RobotConfig.cameras) {
       try {
