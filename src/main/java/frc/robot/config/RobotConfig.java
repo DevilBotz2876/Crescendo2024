@@ -123,7 +123,7 @@ public class RobotConfig {
     public static double indexSpeedInVolts = 6.0;
     public static double feedSpeedInVolts = 6.0;
     public static double sensorDelayFalseToTrueInSeconds = 0.06;
-    public static double sensorDelayTrueToFalseInSeconds = 1.0;
+    public static double sensorDelayTrueToFalseInSeconds = 0.1;
   }
 
   public static class ClimberConstants {
