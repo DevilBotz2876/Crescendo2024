@@ -13,7 +13,7 @@ import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.climber.ClimberIOSparkMax;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.DriveSwerveYAGSL;
-import frc.robot.subsystems.intake.IntakeIOTalonSRX;
+import frc.robot.subsystems.intake.IntakeIOSparkMax;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
@@ -36,22 +36,22 @@ public class RobotConfigInferno extends RobotConfig {
     drive = new DriveSwerveYAGSL("yagsl/inferno");
 
     // Inferno has a TalonSRX based intake
-    IntakeConstants.defaultSpeedInVolts = 6.0;
+    //IntakeConstants.defaultSpeedInVolts = 6.0;
     IntakeConstants.indexSpeedInVolts = 4.5;
     IntakeConstants.feedSpeedInVolts = 6.0;
 
     // Reading Intake v2.0
-    //    IntakeConstants.sensorDelayFalseToTrueInSeconds = 0.06;
-    //    IntakeConstants.sensorDelayTrueToFalseInSeconds = 0.1;
-
-    // WPI Intake v1.0
-    IntakeConstants.sensorDelayFalseToTrueInSeconds = 0.0;
+    IntakeConstants.sensorDelayFalseToTrueInSeconds = 0.06;
     IntakeConstants.sensorDelayTrueToFalseInSeconds = 0.1;
 
-    intake = new IntakeSubsystem(new IntakeIOTalonSRX(3, true));
+    // WPI Intake v1.0
+    // IntakeConstants.sensorDelayFalseToTrueInSeconds = 0.0;
+    // IntakeConstants.sensorDelayTrueToFalseInSeconds = 0.1;
 
-    // IntakeConstants.defaultSpeedInVolts = 12.0; // SparkMax/NEO based voltage
-    //    intake = new IntakeSubsystem(new IntakeIOSparkMax(3, true));
+    // intake = new IntakeSubsystem(new IntakeIOTalonSRX(3, true));
+
+    IntakeConstants.defaultSpeedInVolts = 12.0; // SparkMax/NEO based voltage
+    intake = new IntakeSubsystem(new IntakeIOSparkMax(3, true));
 
     // Inferno has a single SparkMax based shooter
 
