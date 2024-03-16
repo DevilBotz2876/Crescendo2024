@@ -85,6 +85,12 @@
           "data": {
             "name": "Score from 3 (Wing Amp Note)"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Turn off Shooter and Intake"
+          }
         }
       ]
     }

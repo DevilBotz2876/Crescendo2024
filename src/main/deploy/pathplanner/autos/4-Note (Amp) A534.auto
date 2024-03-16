@@ -148,6 +148,12 @@
           "data": {
             "name": "Score from Between 2 and 3"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Turn off Shooter and Intake"
+          }
         }
       ]
     }
