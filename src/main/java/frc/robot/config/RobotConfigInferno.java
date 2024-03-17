@@ -89,7 +89,7 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.pidMaxOutput = 6.0;
     ArmConstants.pidMinOutput = -5.0;
 
-    ArmConstants.pidAngleErrorInDegrees = 0.5;
+    ArmConstants.pidAngleErrorInDegrees = 1.5;
     ArmConstants.maxAngleInDegrees = 89.0;
     ArmConstants.minAngleInDegrees = -1.0;
 
@@ -101,6 +101,7 @@ public class RobotConfigInferno extends RobotConfig {
         24.24; // Empirically at reading practice field after running 2-note center
     ArmConstants.stowIntakeAngleInDegrees = 14.64;
     ArmConstants.matchStartArmAngle = 90;
+    ArmConstants.pidTimeoutInSeconds = 2.0;
 
     arm = new ArmSubsystem(new ArmIOSparkMax(4, true));
 
