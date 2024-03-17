@@ -26,7 +26,7 @@ public class IntakeIOStub implements IntakeIO {
     if (appliedVolts != 0.0) {
       elapsedTimeMotorOn += 0.02;
 
-      if ((elapsedTimeMotorOn > IntakeConstants.intakeTimeoutInSeconds/2)) {
+      if ((elapsedTimeMotorOn > IntakeConstants.intakeTimeoutInSeconds / 2)) {
         limitSwitchState = !limitSwitchState;
         elapsedTimeMotorOn = 0.0;
       }
