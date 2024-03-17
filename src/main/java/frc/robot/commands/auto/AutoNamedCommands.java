@@ -2,12 +2,15 @@ package frc.robot.commands.auto;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
+import frc.robot.config.RobotConfig.IntakeConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.util.DevilBotState;
 import java.util.ArrayList;
@@ -59,6 +62,21 @@ public class AutoNamedCommands {
 
     NamedCommands.registerCommand(
         "Prepare for Intake", new AutoPrepareForIntake(RobotConfig.arm, RobotConfig.intake));
+
+    NamedCommands.registerCommand(
+        "Prepare for Intake v2.0", new AutoPrepareForIntakeV2(RobotConfig.arm, RobotConfig.intake));
+
+    NamedCommands.registerCommand(
+        "Wait for Intake",
+        new SequentialCommandGroup(
+            new WaitUntilCommand(() -> RobotConfig.intake.isPieceDetected())
+                .withTimeout(
+                    IntakeConstants
+                        .intakeTimeoutInSeconds), // Wait for piece to be detected (with timeout)
+            new ParallelCommandGroup(
+                new InstantCommand(() -> RobotConfig.intake.runVoltage(0)), // turn off intake
+                RobotConfig.arm.getStowCommand() // stow arm
+                )));
 
     NamedCommands.registerCommand(
         "Turn off Shooter and Intake",
