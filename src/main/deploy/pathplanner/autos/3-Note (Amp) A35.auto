@@ -30,7 +30,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake Piece"
+                  "name": "Prepare for Intake"
                 }
               }
             ]
@@ -55,7 +55,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake Piece"
+                  "name": "Prepare for Intake"
                 }
               }
             ]

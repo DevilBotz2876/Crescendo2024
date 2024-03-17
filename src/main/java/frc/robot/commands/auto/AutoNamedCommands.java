@@ -58,7 +58,7 @@ public class AutoNamedCommands {
   public static void configure() {
 
     NamedCommands.registerCommand(
-        "Intake Piece", new AutoPrepareForIntake(RobotConfig.arm, RobotConfig.intake));
+        "Prepare for Intake", new AutoPrepareForIntake(RobotConfig.arm, RobotConfig.intake));
 
     NamedCommands.registerCommand(
         "Turn off Shooter and Intake",
