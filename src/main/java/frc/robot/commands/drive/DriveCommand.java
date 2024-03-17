@@ -5,6 +5,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.config.RobotConfig.DriveConstants;
 import frc.robot.subsystems.drive.DriveBase;
+import frc.robot.util.DevilBotState;
 import java.util.Optional;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
@@ -73,6 +74,12 @@ public class DriveCommand extends Command {
     if (this.autoRot.get().isPresent()) {
       double currentAngle = drive.getAngle();
       newRot = turnPID.calculate(currentAngle, currentAngle - this.autoRot.get().get());
+    }
+
+    /* Invert strafe controls if Field Oriented and on the Red Alliance */
+    if (DevilBotState.isFieldOriented() && DevilBotState.isRedAlliance()) {
+      xSpeed *= -1;
+      ySpeed *= -1;
     }
 
     ChassisSpeeds speeds =

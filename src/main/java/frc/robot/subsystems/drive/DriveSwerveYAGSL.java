@@ -7,11 +7,11 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.config.RobotConfig.DriveConstants;
+import frc.robot.util.DevilBotState;
 import java.io.File;
 import org.littletonrobotics.junction.AutoLogOutput;
 import swervelib.SwerveDrive;
@@ -69,17 +69,7 @@ public class DriveSwerveYAGSL extends DriveBase {
             new ReplanningConfig() // Default path replanning config. See the API for the options
             // here
             ),
-        () -> {
-          // Boolean supplier that controls when the path will be mirrored for the red alliance
-          // This will flip the path being followed to the red side of the field.
-          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-          var alliance = DriverStation.getAlliance();
-          if (alliance.isPresent()) {
-            return alliance.get() == DriverStation.Alliance.Red;
-          }
-          return false;
-        },
+        () -> DevilBotState.isRedAlliance(),
         this // Reference to this subsystem to set requirements
         );
   }

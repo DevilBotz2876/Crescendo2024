@@ -1,7 +1,6 @@
 package frc.robot.commands.auto;
 
 import com.pathplanner.lib.auto.NamedCommands;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -219,9 +218,7 @@ public class AutoNamedCommands {
   }
 
   private static double translateForAlliance(double angle) {
-    var alliance = DriverStation.getAlliance();
-
-    if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+    if (DevilBotState.isRedAlliance()) {
       angle = 180 - angle;
     }
     return angle;
