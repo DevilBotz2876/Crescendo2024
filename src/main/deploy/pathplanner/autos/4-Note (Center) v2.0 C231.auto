@@ -30,16 +30,10 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Prepare for Intake v2.0"
+                  "name": "Intake Piece v2.0"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Wait for Intake"
           }
         },
         {
@@ -80,16 +74,10 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Prepare for Intake v2.0"
+                  "name": "Intake Piece v2.0"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Wait for Intake"
           }
         },
         {
@@ -130,16 +118,10 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Prepare for Intake v2.0"
+                  "name": "Intake Piece v2.0"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Wait for Intake"
           }
         },
         {

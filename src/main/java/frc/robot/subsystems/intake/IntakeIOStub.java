@@ -3,6 +3,7 @@ package frc.robot.subsystems.intake;
 // import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import frc.robot.config.RobotConfig.IntakeConstants;
 
 public class IntakeIOStub implements IntakeIO {
   private FlywheelSim sim = new FlywheelSim(DCMotor.getNEO(1), 1.5, 0.004);
@@ -25,7 +26,7 @@ public class IntakeIOStub implements IntakeIO {
     if (appliedVolts != 0.0) {
       elapsedTimeMotorOn += 0.02;
 
-      if ((elapsedTimeMotorOn > 1.0)) {
+      if ((elapsedTimeMotorOn > IntakeConstants.intakeTimeoutInSeconds/2)) {
         limitSwitchState = !limitSwitchState;
         elapsedTimeMotorOn = 0.0;
       }
