@@ -385,6 +385,30 @@ public class DriverControls {
             new InstantCommand(
                 () -> RobotConfig.intake.runVoltage(IntakeConstants.defaultSpeedInVolts),
                 RobotConfig.intake)); // Intake: In
+
+    controller
+        .rightTrigger()
+        .onTrue(
+            new ParallelCommandGroup(
+                RobotConfig.intake.getTurnOffCommand(),
+                new SetShooterVelocity(
+                        RobotConfig.shooter, () -> DevilBotState.getShooterVelocity())
+                    .withTimeout(ShooterConstants.pidTimeoutInSeconds), // turn on shooter
+                /* TODO: Use ArmToPositionTP instead of setting arm angle directly */
+                new InstantCommand(
+                    () -> {
+                      if (DevilBotState.isAmpMode()) {
+                        RobotConfig.arm.setAngle(ArmConstants.ampScoreAngleInDegrees);
+                      } else {
+                        Optional<Double> armAngle = DevilBotState.getArmAngleToTarget();
+                        if (armAngle.isPresent()) {
+                          RobotConfig.arm.setAngle((armAngle.get()));
+                        }
+                      }
+                    },
+                    RobotConfig.arm) // adjust arm angle based on vision's distance from target
+                )); // Aim
+
     controller.pov(180).onTrue(RobotConfig.intake.getTurnOffCommand()); // Intake: Off
     controller
         .back()
