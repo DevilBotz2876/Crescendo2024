@@ -53,16 +53,16 @@ public class RobotConfigInferno extends RobotConfig {
 
     // Inferno has a single SparkMax based shooter
 
-    // Values from Nilesh's Shooter SysId Run @ WPI on Inferno 2024-03-09
+    // Values from Nilesh's Shooter SysId Run @ BHS on Inferno 2024-03-18
     ShooterConstants.ffKs =
-        0.033556; // SysId calculated -0.036669, but likely erroneous.  Will need to re-run sysid
-    ShooterConstants.ffKv = 0.019623;
-    ShooterConstants.ffKa = 0.0069448;
+        0.0; // SysId calculated -0.016149, but likely erroneous.  Will need to re-run sysid
+    ShooterConstants.ffKv = 0.021208;
+    ShooterConstants.ffKa = 0.0072313;
 
-    ShooterConstants.pidKp = 0.0037689;
+    ShooterConstants.pidKp = 0.0047154;
     ShooterConstants.pidKi = 0.0;
     ShooterConstants.pidKd = 0.0;
-    ShooterConstants.pidVelocityErrorInRPMS = 300;
+    ShooterConstants.pidVelocityErrorInRPMS = 50;
 
     ShooterConstants.ampScoreVelocityInRPMs = 2000;
     ShooterConstants.velocityInRPMs = 4500;
