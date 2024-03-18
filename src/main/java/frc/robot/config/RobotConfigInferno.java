@@ -37,8 +37,6 @@ public class RobotConfigInferno extends RobotConfig {
 
     // Inferno has a TalonSRX based intake
     // IntakeConstants.defaultSpeedInVolts = 6.0;
-    IntakeConstants.indexSpeedInVolts = 4.5;
-    IntakeConstants.feedSpeedInVolts = 6.0;
 
     // Reading Intake v2.0
     // IntakeConstants.sensorDelayFalseToTrueInSeconds = 0.06;

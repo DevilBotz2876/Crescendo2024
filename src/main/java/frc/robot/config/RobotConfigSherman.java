@@ -20,8 +20,6 @@ public class RobotConfigSherman extends RobotConfig {
 
     // Sherman has a TalonSRX based intake
     IntakeConstants.defaultSpeedInVolts = 6.0;
-    IntakeConstants.indexSpeedInVolts = 6.0;
-    IntakeConstants.feedSpeedInVolts = 6.0;
 
     intake = new IntakeSubsystem(new IntakeIOTalonSRX(3));
 
