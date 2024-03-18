@@ -16,6 +16,12 @@
           "data": {
             "name": "Score from C (Subwoofer Center)"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Turn off Shooter and Intake"
+          }
         }
       ]
     }

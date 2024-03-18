@@ -13,7 +13,7 @@ import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.climber.ClimberIOSparkMax;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.DriveSwerveYAGSL;
-import frc.robot.subsystems.intake.IntakeIOTalonSRX;
+import frc.robot.subsystems.intake.IntakeIOSparkMax;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
@@ -36,11 +36,22 @@ public class RobotConfigInferno extends RobotConfig {
     drive = new DriveSwerveYAGSL("yagsl/inferno");
 
     // Inferno has a TalonSRX based intake
-    IntakeConstants.defaultSpeedInVolts = 6.0;
+    // IntakeConstants.defaultSpeedInVolts = 6.0;
     IntakeConstants.indexSpeedInVolts = 4.5;
     IntakeConstants.feedSpeedInVolts = 6.0;
 
-    intake = new IntakeSubsystem(new IntakeIOTalonSRX(3, true));
+    // Reading Intake v2.0
+    // IntakeConstants.sensorDelayFalseToTrueInSeconds = 0.06;
+    IntakeConstants.sensorDelayTrueToFalseInSeconds = 0.1;
+
+    // WPI Intake v1.0
+    IntakeConstants.sensorDelayFalseToTrueInSeconds = 0.0;
+    // IntakeConstants.sensorDelayTrueToFalseInSeconds = 0.1;
+
+    // intake = new IntakeSubsystem(new IntakeIOTalonSRX(3, true));
+
+    IntakeConstants.defaultSpeedInVolts = 10.0; // SparkMax/NEO based voltage
+    intake = new IntakeSubsystem(new IntakeIOSparkMax(3, false));
 
     // Inferno has a single SparkMax based shooter
 
@@ -60,7 +71,7 @@ public class RobotConfigInferno extends RobotConfig {
     shooter = new ShooterSubsystem(new ShooterIOSparkMax(2));
 
     ArmConstants.absolutePositionOffset =
-        0.4693818117345453; // Determined empirically on 2024-03-14 (after replacing broken abs
+        0.5031059375776484; // Determined empirically on 2024-03-15 (after replacing broken abs)
     // encoder)
     ArmConstants.absoluteEncoderInversion = -1;
 
@@ -72,24 +83,25 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.ffKv = 6.18;
     ArmConstants.ffKa = 0.04;
 
-    ArmConstants.maxVelocity = 1.5;
+    ArmConstants.maxVelocity = 1.0;
     ArmConstants.maxAcceleration = .5;
 
     ArmConstants.pidMaxOutput = 6.0;
     ArmConstants.pidMinOutput = -5.0;
 
-    ArmConstants.pidAngleErrorInDegrees = 6.0;
-
+    ArmConstants.pidAngleErrorInDegrees = 1.5;
     ArmConstants.maxAngleInDegrees = 89.0;
     ArmConstants.minAngleInDegrees = -1.0;
 
-    ArmConstants.intakeAngleInDegrees = 1;
+    ArmConstants.intakeAngleInDegrees = 1.5;
     ArmConstants.ampScoreAngleInDegrees = 80;
     ArmConstants.subwooferScoreAngleInDegrees = 9.80;
-    ArmConstants.subwooferScoreFromPodiumAngleInDegrees = 26.5;
-    ArmConstants.noteScoreAngleInDegrees = 22.56;
+    ArmConstants.subwooferScoreFromPodiumAngleInDegrees = 33; // min/max = 33.24/34.37
+    ArmConstants.noteScoreAngleInDegrees =
+        24.24; // Empirically at reading practice field after running 2-note center
     ArmConstants.stowIntakeAngleInDegrees = 14.64;
     ArmConstants.matchStartArmAngle = 90;
+    ArmConstants.pidTimeoutInSeconds = 2.0;
 
     arm = new ArmSubsystem(new ArmIOSparkMax(4, true));
 

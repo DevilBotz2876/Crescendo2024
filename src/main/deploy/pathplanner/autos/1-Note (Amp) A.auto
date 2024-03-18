@@ -16,6 +16,12 @@
           "data": {
             "name": "Score from A (Subwoofer Amp-Side)"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Turn off Shooter and Intake"
+          }
         }
       ]
     }

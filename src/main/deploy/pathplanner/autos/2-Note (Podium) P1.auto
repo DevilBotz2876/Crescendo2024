@@ -43,50 +43,6 @@
           }
         },
         {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "1 to 7"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Piece"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "7 to 1"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Prepare to Score from 1 (Wing Podium Note)"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Score from 1 (Wing Podium Note)"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Turn off Shooter and Intake"

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.35,
-      "y": 5.55
+      "x": 0.71,
+      "y": 6.68
     },
-    "rotation": 0.0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Score from C (Subwoofer Center)"
+            "name": "Score from A (Subwoofer Amp-Side)"
           }
         },
         {
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "C to 2"
+                  "pathName": "A to 3"
                 }
               },
               {
@@ -39,7 +39,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Score from 2 (Wing Speaker Note)"
+            "name": "Score from 3 (Wing Amp Note)"
           }
         },
         {

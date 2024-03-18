@@ -49,15 +49,21 @@ public class DevilBotState {
     return (targetMode == TargetMode.AMP);
   }
 
-  public static int getActiveTargetId() {
+  public static boolean isRedAlliance() {
     Optional<Alliance> alliance = DriverStation.getAlliance();
-    DriverStation.Alliance currentAlliance;
 
     if (alliance.isPresent()) {
-      currentAlliance = alliance.get();
-    } else {
-      /* Default to blue, but this should never really happen */
-      currentAlliance = DriverStation.Alliance.Blue;
+      return (DriverStation.Alliance.Red == alliance.get());
+    }
+
+    return false; // Default to blue alliance if driver station doesn't indicate alliance
+  }
+
+  public static int getActiveTargetId() {
+    DriverStation.Alliance currentAlliance = DriverStation.Alliance.Blue;
+
+    if (isRedAlliance()) {
+      currentAlliance = DriverStation.Alliance.Red;
     }
 
     switch (targetMode) {

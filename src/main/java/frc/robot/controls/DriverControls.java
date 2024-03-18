@@ -99,8 +99,14 @@ public class DriverControls {
         .withWidget(BuiltInWidgets.kBooleanBox)
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
+
+    driverTab
+        .addBoolean("Piece Detected", () -> RobotConfig.intake.isPieceDetected())
+        .withWidget(BuiltInWidgets.kBooleanBox)
+        .withProperties(Map.of("Color when false", "black", "Color when true", "orange"))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
     colIndex += 2;
-    rowIndex = 0;
 
     for (VisionCamera camera : RobotConfig.cameras) {
       try {
@@ -379,6 +385,30 @@ public class DriverControls {
             new InstantCommand(
                 () -> RobotConfig.intake.runVoltage(IntakeConstants.defaultSpeedInVolts),
                 RobotConfig.intake)); // Intake: In
+
+    controller
+        .rightTrigger()
+        .onTrue(
+            new ParallelCommandGroup(
+                RobotConfig.intake.getTurnOffCommand(),
+                new SetShooterVelocity(
+                        RobotConfig.shooter, () -> DevilBotState.getShooterVelocity())
+                    .withTimeout(ShooterConstants.pidTimeoutInSeconds), // turn on shooter
+                /* TODO: Use ArmToPositionTP instead of setting arm angle directly */
+                new InstantCommand(
+                    () -> {
+                      if (DevilBotState.isAmpMode()) {
+                        RobotConfig.arm.setAngle(ArmConstants.ampScoreAngleInDegrees);
+                      } else {
+                        Optional<Double> armAngle = DevilBotState.getArmAngleToTarget();
+                        if (armAngle.isPresent()) {
+                          RobotConfig.arm.setAngle((armAngle.get()));
+                        }
+                      }
+                    },
+                    RobotConfig.arm) // adjust arm angle based on vision's distance from target
+                )); // Aim
+
     controller.pov(180).onTrue(RobotConfig.intake.getTurnOffCommand()); // Intake: Off
     controller
         .back()

@@ -1,7 +1,7 @@
 package frc.robot.commands.auto;
 
 import com.pathplanner.lib.auto.NamedCommands;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
@@ -58,6 +58,14 @@ public class AutoNamedCommands {
 
     NamedCommands.registerCommand(
         "Intake Piece", new AutoPrepareForIntake(RobotConfig.arm, RobotConfig.intake));
+
+    NamedCommands.registerCommand(
+        "Intake Piece v2.0", new AutoPrepareForIntakeV2(RobotConfig.arm, RobotConfig.intake));
+
+    NamedCommands.registerCommand(
+        "Turn off Shooter and Intake",
+        new ParallelCommandGroup(
+            RobotConfig.shooter.getTurnOffCommand(), RobotConfig.intake.getTurnOffCommand()));
 
     /* TODO: merge AutoScoreConstants and ScorePieceCommand */
     class ScorePieceCommand {
@@ -128,11 +136,12 @@ public class AutoNamedCommands {
     for (ScorePieceCommand command : commandList) {
       NamedCommands.registerCommand(
           "Prepare to Score from " + command.location,
-          new AutoPrepareForScore(
-              RobotConfig.arm,
-              RobotConfig.shooter,
-              command.armAngleInDegrees,
-              command.shooterVelocityInRPMs));
+          new SequentialCommandGroup(
+              new AutoPrepareForScore(
+                  RobotConfig.arm,
+                  RobotConfig.shooter,
+                  command.armAngleInDegrees,
+                  command.shooterVelocityInRPMs)));
 
       NamedCommands.registerCommand(
           "Score from " + command.location,
@@ -194,9 +203,7 @@ public class AutoNamedCommands {
   }
 
   private static double translateForAlliance(double angle) {
-    var alliance = DriverStation.getAlliance();
-
-    if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+    if (DevilBotState.isRedAlliance()) {
       angle = 180 - angle;
     }
     return angle;

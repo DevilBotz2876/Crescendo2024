@@ -1,36 +1,40 @@
 package frc.robot.subsystems.intake;
 
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 public class IntakeIOSparkMax implements IntakeIO {
-  private static final double GEAR_RATIO = 10.0;
+  private static final double GEAR_RATIO = 4.0;
 
   // define the 1 SparkMax Controller
-  private final CANSparkMax leader = new CANSparkMax(3, MotorType.kBrushless);
-
+  private final CANSparkMax leader;
   // Gets the NEO encoder
-  private final RelativeEncoder encoder = leader.getEncoder();
+  private final RelativeEncoder encoder;
+  DigitalInput limitSwitchIntake = new DigitalInput(1);
 
-  public IntakeIOSparkMax() {
+  public IntakeIOSparkMax(int id, boolean inverted) {
+    leader = new CANSparkMax(id, MotorType.kBrushless);
+    encoder = leader.getEncoder();
+
     // leader motor is not inverted, and set follower motor to follow the leader
     leader.restoreFactoryDefaults();
-    leader.setInverted(false);
+    leader.setInverted(inverted);
+    leader.setIdleMode(IdleMode.kBrake);
+    leader.setSmartCurrentLimit(35);
     leader.burnFlash();
   }
 
   @Override
   public void updateInputs(IntakeIOInputs inputs) {
-    // Set velocityRadPerSec to the encoder velocity(rotationsPerMinute) divided by the gear ratio
-    // and converted into Radians Per Second
+    inputs.appliedVolts = leader.getAppliedOutput() * leader.getBusVoltage();
+    inputs.limitSwitchIntake = !limitSwitchIntake.get();
+    inputs.current = leader.getOutputCurrent();
     inputs.velocityRadPerSec =
         Units.rotationsPerMinuteToRadiansPerSecond(encoder.getVelocity() / GEAR_RATIO);
-    // Get applied voltage from the leader motor
-    inputs.appliedVolts = leader.getAppliedOutput() * leader.getBusVoltage();
-
-    inputs.current = leader.getOutputCurrent();
   }
 
   @Override
