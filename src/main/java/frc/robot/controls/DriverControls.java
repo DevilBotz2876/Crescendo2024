@@ -1,6 +1,8 @@
 package frc.robot.controls;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.event.BooleanEvent;
 import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -15,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.arm.ArmCommand;
@@ -317,6 +320,32 @@ public class DriverControls {
                             .pidTimeoutInSeconds), // set shooter velocity in case it's not already
                 // on
                 RobotConfig.intake.getTurnOnCommand())); // Shoot Note
+    // A command to start the rumble
+    Command startRumbleCommand =
+        new InstantCommand(() -> mainController.getHID().setRumble(RumbleType.kBothRumble, 0.5));
+
+    // A command to stop the rumble after two second
+    Command stopRumbleCommand =
+        new SequentialCommandGroup(
+            new WaitCommand(2),
+            new InstantCommand(() -> mainController.getHID().setRumble(RumbleType.kLeftRumble, 0)));
+
+    // Trigger rumble when a note is detected
+    Trigger noteDetectedTrigger = new Trigger(() -> RobotConfig.intake.isPieceDetected());
+    noteDetectedTrigger.onTrue(startRumbleCommand.andThen(stopRumbleCommand));
+
+    // Trigger rumble when Shooter at RPM setpoint
+    Trigger shooterRPMTrigger =
+        new Trigger(
+            () ->
+                Units.radiansPerSecondToRotationsPerMinute(RobotConfig.shooter.getCurrentSpeed())
+                        >= DevilBotState.getShooterVelocity()
+                            - ShooterConstants.pidVelocityErrorInRPMS
+                    && Units.radiansPerSecondToRotationsPerMinute(
+                            RobotConfig.shooter.getCurrentSpeed())
+                        <= DevilBotState.getShooterVelocity()
+                            + ShooterConstants.pidVelocityErrorInRPMS);
+    shooterRPMTrigger.onTrue(startRumbleCommand.andThen(stopRumbleCommand));
 
     EventLoop eventLoop = CommandScheduler.getInstance().getDefaultButtonLoop();
     BooleanEvent havePiece =
