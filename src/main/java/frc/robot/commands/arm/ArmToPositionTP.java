@@ -20,7 +20,8 @@ public class ArmToPositionTP extends TrapezoidProfileCommand {
         new TrapezoidProfile(
             // The motion profile constraints
             new TrapezoidProfile.Constraints(
-                RobotConfig.ArmConstants.maxVelocity, RobotConfig.ArmConstants.maxAcceleration)),
+                RobotConfig.ArmConstants.maxVelocityInDegreesPerSecond,
+                RobotConfig.ArmConstants.maxAccelerationInDegreesPerSecondSquared)),
         state -> {
           // Apply current trajectory state to the arm.  We are setting the angle/setpoint
           // calculated by the trapezoid profile

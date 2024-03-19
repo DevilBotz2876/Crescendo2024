@@ -66,8 +66,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     armOutputMax.initDefault(ArmConstants.pidMaxOutput);
     armOutputMin.initDefault(ArmConstants.pidMinOutput);
 
-    armMaxVelocity.initDefault(ArmConstants.maxVelocity);
-    armMaxAccel.initDefault(ArmConstants.maxAcceleration);
+    armMaxVelocity.initDefault(ArmConstants.maxVelocityInDegreesPerSecond);
+    armMaxAccel.initDefault(ArmConstants.maxAccelerationInDegreesPerSecondSquared);
 
     kG = armKg.get();
     kV = armKv.get();
@@ -87,8 +87,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   }
 
   public TrapezoidProfile.Constraints getConstraints() {
-    double maxV = ArmConstants.maxVelocity;
-    double maxA = ArmConstants.maxAcceleration;
+    double maxV = ArmConstants.maxVelocityInDegreesPerSecond;
+    double maxA = ArmConstants.maxAccelerationInDegreesPerSecondSquared;
     if (armMaxVelocity.hasChanged(hashCode())) {
       maxV = armMaxVelocity.get();
     }
