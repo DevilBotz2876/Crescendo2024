@@ -2,6 +2,7 @@ package frc.robot.subsystems.shooter;
 
 import static edu.wpi.first.units.Units.Volts;
 
+import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
@@ -23,6 +24,7 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
   ShooterIO io;
   private final SimpleMotorFeedforward feedforward;
   private final PIDController pid;
+  private final BangBangController bangBang;
   private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
 
   ShooterIO ioBottom = null;
@@ -34,8 +36,9 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
   @AutoLogOutput private double targetVoltage;
   @AutoLogOutput private double targetVelocityRPM;
   @AutoLogOutput private double targetVelocityRadPerSec;
-  boolean useSoftwarePid = false;
-  boolean softwarePidEnabled = false;
+  boolean useBangBangControl = false;
+  boolean useSoftwareVelocityControl = false;
+  boolean softwareVelocityControlEnabled = false;
 
   // Mechanism2d display of a Shooter
   private List<MechanismLigament2d> shooter2d = new ArrayList<MechanismLigament2d>();
@@ -44,8 +47,8 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
   public ShooterSubsystem(ShooterIO io) {
     this.io = io;
     // TODO: These are sample values.  Need to run sysid on shooter and get real values.
-    useSoftwarePid = !io.supportsHardwarePid();
-    if (useSoftwarePid) {
+    useSoftwareVelocityControl = !io.supportsHardwarePid();
+    if (useSoftwareVelocityControl) {
       feedforward =
           new SimpleMotorFeedforward(
               ShooterConstants.ffKs, ShooterConstants.ffKv, ShooterConstants.ffKa);
@@ -54,18 +57,27 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
               ShooterConstants.ffKsBottom,
               ShooterConstants.ffKvBottom,
               ShooterConstants.ffKaBottom);
-      pid =
-          new PIDController(ShooterConstants.pidKp, ShooterConstants.pidKi, ShooterConstants.pidKd);
-      pidBottom =
-          new PIDController(
-              ShooterConstants.pidKpBottom,
-              ShooterConstants.pidKiBottom,
-              ShooterConstants.pidKdBottom);
+      if (useBangBangControl) {
+        pid = null;
+        pidBottom = null;
+        bangBang = new BangBangController();
+      } else {
+        pid =
+            new PIDController(
+                ShooterConstants.pidKp, ShooterConstants.pidKi, ShooterConstants.pidKd);
+        pidBottom =
+            new PIDController(
+                ShooterConstants.pidKpBottom,
+                ShooterConstants.pidKiBottom,
+                ShooterConstants.pidKdBottom);
+        bangBang = null;
+      }
     } else {
       feedforward = null;
       feedforwardBottom = null;
       pid = null;
       pidBottom = null;
+      bangBang = null;
     }
     targetVoltage = 0;
     targetVelocityRPM = 0.0;
@@ -91,7 +103,7 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
   public void runVoltage(double volts) {
     targetVoltage = volts;
     targetVelocityRadPerSec = 0;
-    softwarePidEnabled = false;
+    softwareVelocityControlEnabled = false;
     io.setVoltage(targetVoltage);
     if (ioBottom != null) {
       ioBottom.setVoltage(targetVoltage);
@@ -105,8 +117,8 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
     this.targetVelocityRPM = velocityRPM;
     targetVelocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(velocityRPM);
 
-    if (useSoftwarePid) {
-      softwarePidEnabled = true;
+    if (useSoftwareVelocityControl) {
+      softwareVelocityControlEnabled = true;
     } else {
       io.setVelocity(targetVelocityRadPerSec, feedforward.calculate(targetVelocityRadPerSec));
       if (ioBottom != null) {
@@ -137,14 +149,21 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
       Logger.processInputs("Shooter Bottom", inputsBottom);
     }
 
-    if (softwarePidEnabled) {
-      io.setVoltage(
-          feedforward.calculate(targetVelocityRadPerSec)
-              + pid.calculate(inputs.velocityRadPerSec, targetVelocityRadPerSec));
-      if (ioBottom != null) {
-        ioBottom.setVoltage(
-            feedforwardBottom.calculate(targetVelocityRadPerSec)
-                + pidBottom.calculate(inputsBottom.velocityRadPerSec, targetVelocityRadPerSec));
+    if (softwareVelocityControlEnabled) {
+      double ff = feedforward.calculate(targetVelocityRadPerSec);
+
+      if (useBangBangControl) {
+        ff *= 0.9; // Scale feedforward down since bang bang can only add voltage, not remove
+
+        io.setVoltage(
+            ff + bangBang.calculate(inputs.velocityRadPerSec, targetVelocityRadPerSec) * 12.0);
+      } else {
+        io.setVoltage(ff + pid.calculate(inputs.velocityRadPerSec, targetVelocityRadPerSec));
+        if (ioBottom != null) {
+          ioBottom.setVoltage(
+              feedforwardBottom.calculate(targetVelocityRadPerSec)
+                  + pidBottom.calculate(inputsBottom.velocityRadPerSec, targetVelocityRadPerSec));
+        }
       }
     }
 
