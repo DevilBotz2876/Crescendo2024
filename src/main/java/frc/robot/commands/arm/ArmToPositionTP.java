@@ -13,7 +13,7 @@ import java.util.function.DoubleSupplier;
 public class ArmToPositionTP extends TrapezoidProfileCommand {
 
   /** Creates a new ArmToPositionTP. */
-  public ArmToPositionTP(DoubleSupplier positionDegrees, Arm arm) {
+  public ArmToPositionTP(Arm arm, DoubleSupplier positionDegrees) {
 
     super(
         // The motion profile to be executed
