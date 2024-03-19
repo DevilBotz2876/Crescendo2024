@@ -326,14 +326,13 @@ public class DriverControls {
 
     // A command to stop the rumble after two second
     Command stopRumbleCommand =
-        new SequentialCommandGroup(
-            new WaitCommand(2),
-            new InstantCommand(() -> mainController.getHID().setRumble(RumbleType.kBothRumble, 0)));
+        new InstantCommand(() -> mainController.getHID().setRumble(RumbleType.kBothRumble, 0));
 
     // Trigger rumble when a note is detected
     Trigger noteDetectedTrigger = new Trigger(() -> RobotConfig.intake.isPieceDetected());
     noteDetectedTrigger.onTrue(new SequentialCommandGroup(
         startRumbleCommand,
+        new WaitCommand(2),
         stopRumbleCommand
     ));
 
@@ -350,6 +349,7 @@ public class DriverControls {
                             + ShooterConstants.pidVelocityErrorInRPMS);
     shooterRPMTrigger.onTrue(new SequentialCommandGroup(
         startRumbleCommand,
+        new WaitCommand(2),
         stopRumbleCommand
     ));
 
