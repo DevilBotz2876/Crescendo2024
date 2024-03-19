@@ -25,7 +25,7 @@ public class ArmToPositionTP extends TrapezoidProfileCommand {
         state -> {
           // Apply current trajectory state to the arm.  We are setting the angle/setpoint
           // calculated by the trapezoid profile
-          arm.setState(state);
+          arm.setAngle(state.position, state.velocity);
 
           // Should be logged in subsystem, delete this after verifying values are logged.
           // Logger.recordOutput("Arm/TP/curPos", state.position);
@@ -34,7 +34,7 @@ public class ArmToPositionTP extends TrapezoidProfileCommand {
         // Goal state, we want to get to requested position and hold arm there, so velocity is zero.
         () -> new TrapezoidProfile.State(positionDegrees.getAsDouble(), 0),
         // Current state
-        () -> new TrapezoidProfile.State(arm.getState().position, arm.getState().velocity),
+        () -> new TrapezoidProfile.State(arm.getAngle(), arm.getVelocity()),
         arm);
   }
 
