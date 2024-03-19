@@ -4,6 +4,8 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.robot.commands.arm.ArmToPosition;
+import frc.robot.commands.arm.ArmToPositionTP;
 import frc.robot.commands.auto.AutoPrepareForIntake;
 import frc.robot.commands.auto.AutoScorePiece;
 import frc.robot.commands.debug.PrepareForScore;
@@ -113,24 +115,13 @@ public class DebugControls {
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
 
-    colIndex += 2;
-    rowIndex = 0;
-    GenericEntry intakeFeedVoltageEntry =
-        debugTab
-            .add("Intake: Feed Volts", IntakeConstants.feedSpeedInVolts)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0, "max", 12))
-            .withPosition(colIndex, rowIndex++)
-            .withSize(2, 1)
-            .getEntry();
-
     debugTab
         .add(
             "Assist: Shoot Piece",
             new AutoScorePiece(
                 RobotConfig.intake,
                 RobotConfig.shooter,
-                () -> intakeFeedVoltageEntry.getDouble(IntakeConstants.feedSpeedInVolts)))
+                () -> intakeVoltageEntry.getDouble(IntakeConstants.defaultSpeedInVolts)))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
 
@@ -145,7 +136,25 @@ public class DebugControls {
                 RobotConfig.intake,
                 RobotConfig.arm,
                 () -> shooterVelocityEntry.getDouble(ShooterConstants.velocityInRPMs),
-                () -> intakeFeedVoltageEntry.getDouble(IntakeConstants.feedSpeedInVolts),
+                () -> intakeVoltageEntry.getDouble(IntakeConstants.defaultSpeedInVolts),
+                () -> armAngleEntry.getDouble(ArmConstants.subwooferScoreAngleInDegrees)))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+
+    debugTab
+        .add(
+            "Arm To Position",
+            new ArmToPosition(
+                RobotConfig.arm,
+                () -> armAngleEntry.getDouble(ArmConstants.subwooferScoreAngleInDegrees)))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+
+    debugTab
+        .add(
+            "Arm To Position (TP)",
+            new ArmToPositionTP(
+                RobotConfig.arm,
                 () -> armAngleEntry.getDouble(ArmConstants.subwooferScoreAngleInDegrees)))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);

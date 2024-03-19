@@ -11,13 +11,11 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.ClimberConstants;
 import frc.robot.config.RobotConfig.IntakeConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
-import frc.robot.util.DevilBotState;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -173,6 +171,7 @@ public class PitControls {
     armOn.setName("On");
     commands.add(armOn);
 
+    /*
     Command PrepareArmForMatch =
         new SequentialCommandGroup(
             RobotConfig.climber.getAutoZeroCommand(),
@@ -181,6 +180,7 @@ public class PitControls {
             new InstantCommand(() -> DevilBotState.climberNeedsToBeZeroedAtStart = true));
     PrepareArmForMatch.setName("Prepare Arm For Match");
     commands.add(PrepareArmForMatch);
+    */
 
     for (Command command : commands) {
       armCommandLayout.add(command).withPosition(layoutColIndex, layoutRowIndex++);

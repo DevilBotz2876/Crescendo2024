@@ -66,13 +66,9 @@ public class RobotConfig {
     public static double pidMinOutput = -0.4;
 
     public static double ffKs = 0.0;
-    public static double ffKg = 0.1;
     public static double ffKv = 0.0;
     public static double ffKa = 0.0;
-
-    public static double maxVelocity = 3.0;
-    public static double maxVelocityInDegreesPerSecond = 45;
-    public static double maxAcceleration = 6.0;
+    public static double ffKg = 0.1;
 
     public static double pidAngleErrorInDegrees = 2.0;
     public static double pidSettlingTimeInMilliseconds = 0.1;
@@ -80,6 +76,11 @@ public class RobotConfig {
 
     public static double maxAngleInDegrees = 90.0;
     public static double minAngleInDegrees = 0.0;
+    public static double maxVelocityInDegreesPerSecond =
+        (maxAngleInDegrees - minAngleInDegrees) / 3;
+    public static double maxAccelerationInDegreesPerSecondSquared =
+        maxVelocityInDegreesPerSecond / 2;
+
     public static double intakeAngleInDegrees = 1;
     public static double ejectAngleInDegrees = 15;
     public static double ampScoreAngleInDegrees = 80;
@@ -120,11 +121,9 @@ public class RobotConfig {
 
   public static class IntakeConstants {
     public static double defaultSpeedInVolts = 6.0;
-    public static double indexSpeedInVolts = 6.0;
-    public static double feedSpeedInVolts = 6.0;
     public static double sensorDelayFalseToTrueInSeconds = 0.06;
     public static double sensorDelayTrueToFalseInSeconds = 0.1;
-    public static double intakeTimeoutInSeconds = 0.5; // max time to wait for piece to be detected
+    public static double intakeTimeoutInSeconds = 2.0; // max time to wait for piece to be detected
   }
 
   public static class ClimberConstants {
