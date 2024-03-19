@@ -62,9 +62,9 @@ public class RobotConfigInferno extends RobotConfig {
     ShooterConstants.pidKp = 0.0047154;
     ShooterConstants.pidKi = 0.0;
     ShooterConstants.pidKd = 0.0;
-    ShooterConstants.pidVelocityErrorInRPMS = 50;
+    ShooterConstants.pidVelocityErrorInRPMS = 500;
 
-    ShooterConstants.ampScoreVelocityInRPMs = 2000;
+    ShooterConstants.ampScoreVelocityInRPMs = 2500;
     ShooterConstants.velocityInRPMs = 4500;
     shooter = new ShooterSubsystem(new ShooterIOSparkMax(2));
 
