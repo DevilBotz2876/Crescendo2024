@@ -15,7 +15,7 @@ import java.util.function.DoubleSupplier;
 
 public class ArmToPositionTP extends Command {
   private final Arm arm;
-  private final TrapezoidProfile motionProfile;
+  private TrapezoidProfile motionProfile;
   private TrapezoidProfile.State targetState;
   private DoubleSupplier positionDegrees;
   private final Timer timer = new Timer();
@@ -59,16 +59,17 @@ public class ArmToPositionTP extends Command {
     this.arm = arm;
     this.positionDegrees = positionDegrees;
 
-    motionProfile =
-        new TrapezoidProfile(
-            new TrapezoidProfile.Constraints(
-                RobotConfig.ArmConstants.maxVelocityInDegreesPerSecond,
-                RobotConfig.ArmConstants.maxAccelerationInDegreesPerSecondSquared));
     addRequirements((Subsystem) arm);
   }
 
   @Override
   public void initialize() {
+    motionProfile =
+        new TrapezoidProfile(
+            new TrapezoidProfile.Constraints(
+                RobotConfig.ArmConstants.maxVelocityInDegreesPerSecond,
+                RobotConfig.ArmConstants.maxAccelerationInDegreesPerSecondSquared));
+
     targetState =
         new TrapezoidProfile.State(
             MathUtil.clamp(
