@@ -58,8 +58,8 @@ public class RobotConfigSherman extends RobotConfig {
     ArmConstants.pidMaxOutput = 6.0;
     ArmConstants.pidMinOutput = -5.0;
 
-    ArmConstants.maxVelocity = 1.5;
-    ArmConstants.maxAcceleration = 1.0;
+    ArmConstants.maxVelocityInDegreesPerSecond = 1.5;
+    ArmConstants.maxAccelerationInDegreesPerSecondSquared = 1.0;
 
     ArmConstants.pidAngleErrorInDegrees = 6.0;
     ArmConstants.maxAngleInDegrees = 90.0;

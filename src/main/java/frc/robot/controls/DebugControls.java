@@ -4,6 +4,8 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.robot.commands.arm.ArmToPosition;
+import frc.robot.commands.arm.ArmToPositionTP;
 import frc.robot.commands.auto.AutoPrepareForIntake;
 import frc.robot.commands.auto.AutoScorePiece;
 import frc.robot.commands.debug.PrepareForScore;
@@ -135,6 +137,24 @@ public class DebugControls {
                 RobotConfig.arm,
                 () -> shooterVelocityEntry.getDouble(ShooterConstants.velocityInRPMs),
                 () -> intakeVoltageEntry.getDouble(IntakeConstants.defaultSpeedInVolts),
+                () -> armAngleEntry.getDouble(ArmConstants.subwooferScoreAngleInDegrees)))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+
+    debugTab
+        .add(
+            "Arm To Position",
+            new ArmToPosition(
+                RobotConfig.arm,
+                () -> armAngleEntry.getDouble(ArmConstants.subwooferScoreAngleInDegrees)))
+        .withPosition(colIndex, rowIndex++)
+        .withSize(2, 1);
+
+    debugTab
+        .add(
+            "Arm To Position (TP)",
+            new ArmToPositionTP(
+                RobotConfig.arm,
                 () -> armAngleEntry.getDouble(ArmConstants.subwooferScoreAngleInDegrees)))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);

@@ -3,7 +3,6 @@ package frc.robot.subsystems.arm;
 import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -26,12 +25,12 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   private final SysIdRoutine sysId;
   private final double positionDegreeMax = ArmConstants.maxAngleInDegrees;
   private final double positionDegreeMin = ArmConstants.minAngleInDegrees;
-  private TrapezoidProfile.State currentState = new TrapezoidProfile.State();
   @AutoLogOutput private double targetVoltage;
   @AutoLogOutput private double targetDegrees;
+  @AutoLogOutput private double targetVelocityDegreesPerSecond;
 
   // Create a Mechanism2d display of an Arm with a fixed ArmTower and moving Arm.
-  private final double armAngle2dOffset = -45;
+  private final double armAngle2dOffset = 0;
   private MechanismLigament2d arm2d = null;
 
   private static final LoggedTunableNumber armKp = new LoggedTunableNumber("Arm/pid/kP");
@@ -40,6 +39,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   private static final LoggedTunableNumber armKg = new LoggedTunableNumber("Arm/pid/kG");
   private static final LoggedTunableNumber armKv = new LoggedTunableNumber("Arm/pid/kV");
   private static final LoggedTunableNumber armKa = new LoggedTunableNumber("Arm/pid/kA");
+  private static final LoggedTunableNumber armKs = new LoggedTunableNumber("Arm/pid/kS");
 
   private static final LoggedTunableNumber armOutputMax =
       new LoggedTunableNumber("Arm/pid/outputMax");
@@ -51,9 +51,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   private static final LoggedTunableNumber armMaxAccel =
       new LoggedTunableNumber("Arm/constraints/minAccel");
 
-  private double kG, kV, kA;
-
-  private boolean relEncoderInit;
+  private double kG, kV, kA, kS;
 
   public ArmSubsystem(ArmIO io) {
     this.io = io;
@@ -63,15 +61,17 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     armKg.initDefault(ArmConstants.ffKg);
     armKv.initDefault(ArmConstants.ffKv);
     armKa.initDefault(ArmConstants.ffKa);
+    armKs.initDefault(ArmConstants.ffKs);
     armOutputMax.initDefault(ArmConstants.pidMaxOutput);
     armOutputMin.initDefault(ArmConstants.pidMinOutput);
 
-    armMaxVelocity.initDefault(ArmConstants.maxVelocity);
-    armMaxAccel.initDefault(ArmConstants.maxAcceleration);
+    armMaxVelocity.initDefault(ArmConstants.maxVelocityInDegreesPerSecond);
+    armMaxAccel.initDefault(ArmConstants.maxAccelerationInDegreesPerSecondSquared);
 
     kG = armKg.get();
     kV = armKv.get();
     kA = armKa.get();
+    kS = armKs.get();
 
     // Configure SysId based on the AdvantageKit example
     sysId =
@@ -82,38 +82,16 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
                 null,
                 (state) -> Logger.recordOutput("Arm/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism((voltage) -> runVoltage(voltage.in(Volts)), null, this));
-
-    relEncoderInit = true;
-  }
-
-  public TrapezoidProfile.Constraints getConstraints() {
-    double maxV = ArmConstants.maxVelocity;
-    double maxA = ArmConstants.maxAcceleration;
-    if (armMaxVelocity.hasChanged(hashCode())) {
-      maxV = armMaxVelocity.get();
-    }
-    if (armMaxAccel.hasChanged(hashCode())) {
-      maxA = armMaxAccel.get();
-    }
-    return new TrapezoidProfile.Constraints(maxV, maxA);
-  }
-
-  public void setState(TrapezoidProfile.State state) {
-    currentState = state;
-
-    Logger.recordOutput("Arm/state/position", state.position);
-    Logger.recordOutput("Arm/state/velocity", state.velocity);
-
-    setAngle(state.position);
-  }
-
-  public TrapezoidProfile.State getState() {
-    return currentState;
   }
 
   @Override
   public double getAngle() {
-    return inputs.absolutePositionDegree;
+    return inputs.positionDegree;
+  }
+
+  @Override
+  public double getVelocity() {
+    return inputs.velocityInDegrees;
   }
 
   @Override
@@ -128,7 +106,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
   // sets of the angle of the arm
   @Override
-  public void setAngle(double degrees) {
+  public void setAngle(double degrees, double velocityDegreesPerSecond) {
     Logger.recordOutput("Arm/setAngle/requestedAngleDegress", degrees);
     // Don't try to set position if absolute encoder is broken/missing.
     if (isAbsoluteEncoderConnected() == false) {
@@ -153,10 +131,11 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
       // The  angle is within the range and is set
       this.targetDegrees = degrees;
     }
+    this.targetVelocityDegreesPerSecond = velocityDegreesPerSecond;
 
     // We instantiate a new object here each time because constants can change when being tuned.
-    feedforward = new ArmFeedforward(0, kG, kV, kA);
-    double ff = feedforward.calculate(this.targetDegrees, 0);
+    feedforward = new ArmFeedforward(kS, kG, kV, kA);
+    double ff = feedforward.calculate(this.targetDegrees, this.targetVelocityDegreesPerSecond);
 
     Logger.recordOutput("Arm/setAngle/setpointDegrees", this.targetDegrees);
     Logger.recordOutput("Arm/setAngle/ffVolts", ff);
@@ -216,6 +195,9 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (armKa.hasChanged(hashCode())) {
       kA = armKa.get();
     }
+    if (armKs.hasChanged(hashCode())) {
+      kS = armKs.get();
+    }
     // Updates the inputs
     io.updateInputs(inputs);
     Logger.processInputs("Arm", inputs);
@@ -232,7 +214,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
       io.resetRelativeEncoder(getAngle());
     }
 
-    if (Math.abs(inputs.relativeVelocityInDegrees) < 0.1) {
+    if (Math.abs(inputs.velocityInDegrees) < 0.1) {
       io.resetRelativeEncoder(getAngle());
     }
 
@@ -247,7 +229,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     }
 
     if (null != arm2d) {
-      arm2d.setAngle(inputs.absolutePositionDegree + armAngle2dOffset);
+      arm2d.setAngle(inputs.positionDegree + armAngle2dOffset);
     }
   }
 
@@ -256,7 +238,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-    if (inputs.absolutePositionDegree >= positionDegreeMax
+    if (inputs.positionDegree >= positionDegreeMax
         || inputs.relativePositionDegrees >= positionDegreeMax) {
       inputs.limitHigh = true;
     } else {
@@ -270,7 +252,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-    if (inputs.absolutePositionDegree <= positionDegreeMin) {
+    if (inputs.positionDegree <= positionDegreeMin) {
       inputs.limitLow = true;
 
     } else {
@@ -306,14 +288,14 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
   @Override
   public void add2dSim(Mechanism2d mech2d) {
-    MechanismRoot2d armPivot2d = mech2d.getRoot("Arm Pivot", 15, 30);
-    armPivot2d.append(new MechanismLigament2d("Arm Tower", 20, -90));
+    MechanismRoot2d armPivot2d = mech2d.getRoot("Arm Pivot", 15, 10);
+    armPivot2d.append(new MechanismLigament2d("Arm Tower", 10, -90));
     arm2d =
         armPivot2d.append(
             new MechanismLigament2d(
                 "Arm",
                 30,
-                inputs.absolutePositionDegree + armAngle2dOffset,
+                inputs.positionDegree + armAngle2dOffset,
                 6,
                 new Color8Bit(Color.kYellow)));
   }

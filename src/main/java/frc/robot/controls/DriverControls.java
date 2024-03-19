@@ -279,7 +279,8 @@ public class DriverControls {
 
     mainController
         .leftBumper()
-        .onTrue(new EjectPiece(RobotConfig.intake, RobotConfig.arm)); // Eject Note
+        .onTrue(
+            new EjectPiece(RobotConfig.intake, RobotConfig.arm, RobotConfig.shooter)); // Eject Note
 
     mainController
         .rightBumper()
