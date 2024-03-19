@@ -30,7 +30,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   @AutoLogOutput private double targetVelocityDegreesPerSecond;
 
   // Create a Mechanism2d display of an Arm with a fixed ArmTower and moving Arm.
-  private final double armAngle2dOffset = -45;
+  private final double armAngle2dOffset = 0;
   private MechanismLigament2d arm2d = null;
 
   private static final LoggedTunableNumber armKp = new LoggedTunableNumber("Arm/pid/kP");
@@ -39,6 +39,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   private static final LoggedTunableNumber armKg = new LoggedTunableNumber("Arm/pid/kG");
   private static final LoggedTunableNumber armKv = new LoggedTunableNumber("Arm/pid/kV");
   private static final LoggedTunableNumber armKa = new LoggedTunableNumber("Arm/pid/kA");
+  private static final LoggedTunableNumber armKs = new LoggedTunableNumber("Arm/pid/kS");
 
   private static final LoggedTunableNumber armOutputMax =
       new LoggedTunableNumber("Arm/pid/outputMax");
@@ -50,7 +51,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   private static final LoggedTunableNumber armMaxAccel =
       new LoggedTunableNumber("Arm/constraints/minAccel");
 
-  private double kG, kV, kA;
+  private double kG, kV, kA, kS;
 
   public ArmSubsystem(ArmIO io) {
     this.io = io;
@@ -60,6 +61,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     armKg.initDefault(ArmConstants.ffKg);
     armKv.initDefault(ArmConstants.ffKv);
     armKa.initDefault(ArmConstants.ffKa);
+    armKs.initDefault(ArmConstants.ffKs);
     armOutputMax.initDefault(ArmConstants.pidMaxOutput);
     armOutputMin.initDefault(ArmConstants.pidMinOutput);
 
@@ -69,6 +71,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     kG = armKg.get();
     kV = armKv.get();
     kA = armKa.get();
+    kS = armKs.get();
 
     // Configure SysId based on the AdvantageKit example
     sysId =
@@ -131,7 +134,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     this.targetVelocityDegreesPerSecond = velocityDegreesPerSecond;
 
     // We instantiate a new object here each time because constants can change when being tuned.
-    feedforward = new ArmFeedforward(0, kG, kV, kA);
+    feedforward = new ArmFeedforward(kS, kG, kV, kA);
     double ff = feedforward.calculate(this.targetDegrees, this.targetVelocityDegreesPerSecond);
 
     Logger.recordOutput("Arm/setAngle/setpointDegrees", this.targetDegrees);
@@ -191,6 +194,9 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     }
     if (armKa.hasChanged(hashCode())) {
       kA = armKa.get();
+    }
+    if (armKs.hasChanged(hashCode())) {
+      kS = armKs.get();
     }
     // Updates the inputs
     io.updateInputs(inputs);
@@ -282,8 +288,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
   @Override
   public void add2dSim(Mechanism2d mech2d) {
-    MechanismRoot2d armPivot2d = mech2d.getRoot("Arm Pivot", 15, 30);
-    armPivot2d.append(new MechanismLigament2d("Arm Tower", 20, -90));
+    MechanismRoot2d armPivot2d = mech2d.getRoot("Arm Pivot", 15, 10);
+    armPivot2d.append(new MechanismLigament2d("Arm Tower", 10, -90));
     arm2d =
         armPivot2d.append(
             new MechanismLigament2d(

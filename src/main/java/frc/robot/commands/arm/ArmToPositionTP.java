@@ -4,6 +4,7 @@
 
 package frc.robot.commands.arm;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.TrapezoidProfileCommand;
 import frc.robot.config.RobotConfig;
@@ -11,7 +12,6 @@ import frc.robot.subsystems.arm.Arm;
 import java.util.function.DoubleSupplier;
 
 public class ArmToPositionTP extends TrapezoidProfileCommand {
-
   /** Creates a new ArmToPositionTP. */
   public ArmToPositionTP(Arm arm, DoubleSupplier positionDegrees) {
 
@@ -32,14 +32,25 @@ public class ArmToPositionTP extends TrapezoidProfileCommand {
           // Logger.recordOutput("Arm/TP/curVel", state.velocity);
         },
         // Goal state, we want to get to requested position and hold arm there, so velocity is zero.
-        () -> new TrapezoidProfile.State(positionDegrees.getAsDouble(), 0),
+        () ->
+            new TrapezoidProfile.State(
+                MathUtil.clamp(
+                    positionDegrees.getAsDouble(),
+                    RobotConfig.ArmConstants.minAngleInDegrees,
+                    RobotConfig.ArmConstants.maxAngleInDegrees),
+                0),
         // Current state
-        () -> new TrapezoidProfile.State(arm.getAngle(), arm.getVelocity()),
+        () -> {
+          System.out.println(
+              "current angle/velocity = " + arm.getAngle() + "/" + arm.getVelocity());
+          return new TrapezoidProfile.State(arm.getAngle(), arm.getVelocity());
+        },
         arm);
   }
 
   public boolean isFinished() {
     boolean done = super.isFinished();
+    System.out.println("ArmToPositionTP Finished");
     //    Logger.recordOutput("Arm/TP/isFinished", done);
     return done;
   }

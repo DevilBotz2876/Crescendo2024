@@ -3,7 +3,6 @@ package frc.robot.subsystems.arm;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
 
 public interface Arm extends Subsystem {
@@ -26,7 +25,7 @@ public interface Arm extends Subsystem {
 
   // sets of the angle of the arm
   public default void setAngle(double degrees) {
-    setAngle(degrees, RobotConfig.ArmConstants.maxVelocityInDegreesPerSecond);
+    setAngle(degrees, 0);
   }
 
   public default void setAngle(double degrees, double velocityDegreesPerSecond) {}

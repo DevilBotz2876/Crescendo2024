@@ -6,12 +6,11 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
 
 public class ArmIOStub implements ArmIO {
   // The P gain for the PID controller that drives this arm.
-  private double armKp = .1;
-  private double armKd = 0;
   private double targetDegrees = 0;
   private double feedForwardVolts = 0;
   private double armGearingReduction = 317;
@@ -25,7 +24,11 @@ public class ArmIOStub implements ArmIO {
   private double currentVoltage = 0.0;
 
   // Standard classes for controlling our arm
-  private final PIDController pid = new PIDController(armKp, 0, armKd);
+  private final PIDController pid =
+      new PIDController(
+          RobotConfig.ArmConstants.pidKp,
+          RobotConfig.ArmConstants.pidKi,
+          RobotConfig.ArmConstants.pidKd);
   private boolean softwarePidEnabled = false;
 
   // Simulation classes help us simulate what's going on, including gravity.
@@ -46,8 +49,9 @@ public class ArmIOStub implements ArmIO {
   /** Updates the set of loggable inputs. */
   @Override
   public void updateInputs(ArmIOInputs inputs) {
-    inputs.positionDegree = Units.radiansToDegrees(arm.getAngleRads());
     inputs.positionRad = arm.getAngleRads();
+    inputs.positionDegree = Units.radiansToDegrees(inputs.positionRad);
+    inputs.velocityInDegrees = Units.radiansToDegrees(arm.getVelocityRadPerSec());
     inputs.appliedVolts = currentVoltage;
 
     if (softwarePidEnabled) {
@@ -73,6 +77,7 @@ public class ArmIOStub implements ArmIO {
     targetDegrees = degrees;
     feedForwardVolts = ffVolts;
     softwarePidEnabled = true;
+    pid.reset();
   }
 
   @Override

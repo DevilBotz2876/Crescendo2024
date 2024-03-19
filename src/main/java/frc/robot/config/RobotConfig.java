@@ -66,12 +66,9 @@ public class RobotConfig {
     public static double pidMinOutput = -0.4;
 
     public static double ffKs = 0.0;
-    public static double ffKg = 0.1;
     public static double ffKv = 0.0;
     public static double ffKa = 0.0;
-
-    public static double maxVelocityInDegreesPerSecond = 45;
-    public static double maxAccelerationInDegreesPerSecondSquared = 5;
+    public static double ffKg = 0.1;
 
     public static double pidAngleErrorInDegrees = 2.0;
     public static double pidSettlingTimeInMilliseconds = 0.1;
@@ -79,6 +76,11 @@ public class RobotConfig {
 
     public static double maxAngleInDegrees = 90.0;
     public static double minAngleInDegrees = 0.0;
+    public static double maxVelocityInDegreesPerSecond =
+        (maxAngleInDegrees - minAngleInDegrees) / 3;
+    public static double maxAccelerationInDegreesPerSecondSquared =
+        maxVelocityInDegreesPerSecond / 2;
+
     public static double intakeAngleInDegrees = 1;
     public static double ejectAngleInDegrees = 15;
     public static double ampScoreAngleInDegrees = 80;
