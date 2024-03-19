@@ -3,7 +3,7 @@ package frc.robot.subsystems.led;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface LedIO {
-     @AutoLog
+  @AutoLog
   public static class LedIOInputs {
     public int red = 0;
     public int green = 0;

@@ -15,6 +15,8 @@ import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.DriveSwerveYAGSL;
 import frc.robot.subsystems.intake.IntakeIOSparkMax;
 import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.led.LedIOWS121b;
+import frc.robot.subsystems.led.LedSystem;
 import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.vision.VisionCamera;
@@ -144,6 +146,12 @@ public class RobotConfigInferno extends RobotConfig {
 
     AutoNamedCommands.configure();
     autoChooser = AutoBuilder.buildAutoChooser("Sit Still");
+
+    LedConstants.Led1PWDPort = 0;
+    LedConstants.Led1Length  = 60;
+    LedConstants.Led2PWDPort = 1;
+    LedConstants.Led2Length  = 60;
+    led = new LedSystem(new LedIOWS121b());
   }
 
   @Override

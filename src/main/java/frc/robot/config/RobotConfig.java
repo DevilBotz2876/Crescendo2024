@@ -16,6 +16,8 @@ import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.DriveBase;
 import frc.robot.subsystems.intake.IntakeIOStub;
 import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.led.LedIOStub;
+import frc.robot.subsystems.led.LedSystem;
 import frc.robot.subsystems.shooter.ShooterIOStub;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.vision.VisionCamera;
@@ -35,6 +37,7 @@ public class RobotConfig {
   public static VisionSubsystem vision;
   public static RobotConfig instance;
   public static List<VisionCamera> cameras;
+  public static LedSystem led;
 
   public static class DriveConstants {
     public static double maxVelocityMetersPerSec = 4.5;
@@ -143,7 +146,12 @@ public class RobotConfig {
   }
 
   public static class LedConstants {
-    public static int LedPWDPort = 9; // placeholder
+    public static int Led1PWDPort = 0;
+    public static int Led1Length = 60;
+
+    public static int Led2PWDPort = 1;
+    public static int Led2Length = 60;
+
   }
 
   public Optional<Double> getArmAngleFromDistance(double distanceInMeters) {
@@ -186,6 +194,18 @@ public class RobotConfig {
       boolean stubAuto,
       boolean stubClimber,
       boolean stubVision) {
+        this(stubDrive, stubShooter, stubIntake, stubArm, stubAuto, stubClimber, stubVision, true);
+      }
+
+  public RobotConfig(
+      boolean stubDrive,
+      boolean stubShooter,
+      boolean stubIntake,
+      boolean stubArm,
+      boolean stubAuto,
+      boolean stubClimber,
+      boolean stubVision,
+      boolean stubLed) {
     instance = this;
 
     if (stubDrive) {
@@ -246,6 +266,9 @@ public class RobotConfig {
       if (Robot.isSimulation()) {
         vision.enableSimulation(() -> RobotConfig.drive.getPose(), false);
       }
+    }
+    if (stubLed) {
+      led = new LedSystem(new LedIOStub());
     }
   }
 }

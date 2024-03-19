@@ -183,6 +183,7 @@ public class DriverControls {
     RobotConfig.intake.add2dSim(mech2d);
     RobotConfig.shooter.add2dSim(mech2d);
     RobotConfig.climber.add2dSim(mech2d);
+    RobotConfig.led.add2dSim(mech2d);;
 
     SmartDashboard.putData("Inferno 2D Simulation", mech2d);
   }
