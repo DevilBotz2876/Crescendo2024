@@ -320,19 +320,19 @@ public class DriverControls {
                             .pidTimeoutInSeconds), // set shooter velocity in case it's not already
                 // on
                 RobotConfig.intake.getTurnOnCommand())); // Shoot Note
-    // A command to start the rumble
-    Command startRumbleCommand =
-        new InstantCommand(() -> mainController.getHID().setRumble(RumbleType.kBothRumble, 0.5));
-
-    // A command to stop the rumble after two second
-    Command stopRumbleCommand =
-        new SequentialCommandGroup(
-            new WaitCommand(2),
-            new InstantCommand(() -> mainController.getHID().setRumble(RumbleType.kLeftRumble, 0)));
 
     // Trigger rumble when a note is detected
     Trigger noteDetectedTrigger = new Trigger(() -> RobotConfig.intake.isPieceDetected());
-    noteDetectedTrigger.onTrue(startRumbleCommand.andThen(stopRumbleCommand));
+    noteDetectedTrigger.onTrue(
+        new SequentialCommandGroup(
+            // Starts the controller rumble
+            new InstantCommand(
+                () -> mainController.getHID().setRumble(RumbleType.kBothRumble, 0.5)),
+            // Rumbles for 2 seconds
+            new WaitCommand(2),
+            // Ends the controller rumble
+            new InstantCommand(
+                () -> mainController.getHID().setRumble(RumbleType.kBothRumble, 0))));
 
     // Trigger rumble when Shooter at RPM setpoint
     Trigger shooterRPMTrigger =
@@ -345,7 +345,16 @@ public class DriverControls {
                             RobotConfig.shooter.getCurrentSpeed())
                         <= DevilBotState.getShooterVelocity()
                             + ShooterConstants.pidVelocityErrorInRPMS);
-    shooterRPMTrigger.onTrue(startRumbleCommand.andThen(stopRumbleCommand));
+    shooterRPMTrigger.onTrue(
+        new SequentialCommandGroup(
+            // Starts the controller rumble
+            new InstantCommand(
+                () -> mainController.getHID().setRumble(RumbleType.kBothRumble, 0.5)),
+            // Rumbles for 2 seconds
+            new WaitCommand(2),
+            // Ends the controller rumble
+            new InstantCommand(
+                () -> mainController.getHID().setRumble(RumbleType.kBothRumble, 0))));
 
     EventLoop eventLoop = CommandScheduler.getInstance().getDefaultButtonLoop();
     BooleanEvent havePiece =
