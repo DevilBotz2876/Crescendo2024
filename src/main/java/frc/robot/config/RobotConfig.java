@@ -142,6 +142,10 @@ public class RobotConfig {
     public static double maxRetractTimeInSeconds = 8.0;
   }
 
+  public static class LedConstants {
+    public static int LedPWDPort = 9; // placeholder
+  }
+
   public Optional<Double> getArmAngleFromDistance(double distanceInMeters) {
     if (distanceInMeters > 3.0) return Optional.empty();
     return Optional.of(45 * distanceInMeters / 3.0);
