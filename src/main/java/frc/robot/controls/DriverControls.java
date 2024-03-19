@@ -328,7 +328,7 @@ public class DriverControls {
         new SequentialCommandGroup(
             // Starts the controller rumble
             new InstantCommand(
-                () -> mainController.getHID().setRumble(RumbleType.kBothRumble, 0.5)),
+                () -> mainController.getHID().setRumble(RumbleType.kBothRumble, 1)),
             // Rumbles for 2 seconds
             new WaitCommand(2),
             // Ends the controller rumble
@@ -350,7 +350,7 @@ public class DriverControls {
         new SequentialCommandGroup(
             // Starts the controller rumble
             new InstantCommand(
-                () -> mainController.getHID().setRumble(RumbleType.kBothRumble, 0.5)),
+                () -> mainController.getHID().setRumble(RumbleType.kBothRumble, 1)),
             // Rumbles for 2 seconds
             new WaitCommand(2),
             // Ends the controller rumble
