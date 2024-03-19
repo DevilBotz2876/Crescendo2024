@@ -55,18 +55,18 @@ public class RobotConfigInferno extends RobotConfig {
 
     // Inferno has a single SparkMax based shooter
 
-    // Values from Nilesh's Shooter SysId Run @ WPI on Inferno 2024-03-09
+    // Values from Nilesh's Shooter SysId Run @ BHS on Inferno 2024-03-18
     ShooterConstants.ffKs =
-        0.033556; // SysId calculated -0.036669, but likely erroneous.  Will need to re-run sysid
-    ShooterConstants.ffKv = 0.019623;
-    ShooterConstants.ffKa = 0.0069448;
+        0.0; // SysId calculated -0.016149, but likely erroneous.  Will need to re-run sysid
+    ShooterConstants.ffKv = 0.021208;
+    ShooterConstants.ffKa = 0.0072313;
 
-    ShooterConstants.pidKp = 0.0037689;
+    ShooterConstants.pidKp = 0.0047154;
     ShooterConstants.pidKi = 0.0;
     ShooterConstants.pidKd = 0.0;
-    ShooterConstants.pidVelocityErrorInRPMS = 300;
+    ShooterConstants.pidVelocityErrorInRPMS = 500;
 
-    ShooterConstants.ampScoreVelocityInRPMs = 2000;
+    ShooterConstants.ampScoreVelocityInRPMs = 2500;
     ShooterConstants.velocityInRPMs = 4500;
     shooter = new ShooterSubsystem(new ShooterIOSparkMax(2));
 
@@ -83,8 +83,8 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.ffKv = 6.18;
     ArmConstants.ffKa = 0.04;
 
-    ArmConstants.maxVelocity = 1.0;
-    ArmConstants.maxAcceleration = .5;
+    ArmConstants.maxVelocityInDegreesPerSecond = 30;
+    ArmConstants.maxAccelerationInDegreesPerSecondSquared = 5;
 
     ArmConstants.pidMaxOutput = 6.0;
     ArmConstants.pidMinOutput = -5.0;
@@ -127,8 +127,8 @@ public class RobotConfigInferno extends RobotConfig {
             "shooter",
             "1188",
             new Transform3d(
-                new Translation3d(-0.3048, 0, 0.22),
-                new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(180)))));
+                new Translation3d(Units.inchesToMeters(10.5), 0, Units.inchesToMeters(13)),
+                new Rotation3d(0, Units.degreesToRadians(-28), Units.degreesToRadians(180)))));
 
     cameras.add(
         new VisionCamera(

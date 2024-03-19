@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
-import frc.robot.commands.arm.ArmToPositionTP;
+import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.IntakeConstants;
@@ -24,8 +24,8 @@ public class AutoPrepareForIntakeV2 extends SequentialCommandGroup {
                     () ->
                         intake.runVoltage(
                             RobotConfig.IntakeConstants.defaultSpeedInVolts)), // run intake
-                new ArmToPositionTP(
-                    () -> ArmConstants.intakeAngleInDegrees, arm) // Move arm to intake position
+                new ArmToPosition(
+                    arm, () -> ArmConstants.intakeAngleInDegrees) // Move arm to intake position
                 )
             .until(() -> intake.isPieceDetected())); // exit early if piece detected
     addCommands(
