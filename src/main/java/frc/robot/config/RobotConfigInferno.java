@@ -32,7 +32,10 @@ public class RobotConfigInferno extends RobotConfig {
     DriveConstants.anglePidKp = 0.02;
     DriveConstants.anglePidKi = 0.0;
     DriveConstants.anglePidKd = 0.0;
-    DriveConstants.pidAngleErrorInDegrees = 0.5;
+    DriveConstants.pidAngleErrorInDegrees = 0.1;
+    DriveConstants.pidTimeoutInSeconds = 2;
+    DriveConstants.pidSettlingTimeInMilliseconds = 0.5;
+
     drive = new DriveSwerveYAGSL("yagsl/inferno");
 
     // Inferno has a TalonSRX based intake
