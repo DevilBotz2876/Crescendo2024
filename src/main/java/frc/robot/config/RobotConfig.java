@@ -122,7 +122,7 @@ public class RobotConfig {
     public static double defaultSpeedInVolts = 6.0;
     public static double sensorDelayFalseToTrueInSeconds = 0.06;
     public static double sensorDelayTrueToFalseInSeconds = 0.1;
-    public static double intakeTimeoutInSeconds = 0.5; // max time to wait for piece to be detected
+    public static double intakeTimeoutInSeconds = 2.0; // max time to wait for piece to be detected
   }
 
   public static class ClimberConstants {
