@@ -125,8 +125,8 @@ public class RobotConfigInferno extends RobotConfig {
             "shooter",
             "1188",
             new Transform3d(
-                new Translation3d(-0.3048, 0, 0.22),
-                new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(180)))));
+                new Translation3d(Units.inchesToMeters(10.5), 0, Units.inchesToMeters(13)),
+                new Rotation3d(0, Units.degreesToRadians(-28), Units.degreesToRadians(180)))));
 
     cameras.add(
         new VisionCamera(
