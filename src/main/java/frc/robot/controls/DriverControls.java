@@ -327,8 +327,7 @@ public class DriverControls {
     noteDetectedTrigger.onTrue(
         new SequentialCommandGroup(
             // Starts the controller rumble
-            new InstantCommand(
-                () -> mainController.getHID().setRumble(RumbleType.kBothRumble, 1)),
+            new InstantCommand(() -> mainController.getHID().setRumble(RumbleType.kBothRumble, 1)),
             // Rumbles for 2 seconds
             new WaitCommand(2),
             // Ends the controller rumble
@@ -349,8 +348,7 @@ public class DriverControls {
     shooterRPMTrigger.onTrue(
         new SequentialCommandGroup(
             // Starts the controller rumble
-            new InstantCommand(
-                () -> mainController.getHID().setRumble(RumbleType.kBothRumble, 1)),
+            new InstantCommand(() -> mainController.getHID().setRumble(RumbleType.kBothRumble, 1)),
             // Rumbles for 2 seconds
             new WaitCommand(2),
             // Ends the controller rumble
