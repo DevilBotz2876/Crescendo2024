@@ -330,11 +330,8 @@ public class DriverControls {
 
     // Trigger rumble when a note is detected
     Trigger noteDetectedTrigger = new Trigger(() -> RobotConfig.intake.isPieceDetected());
-    noteDetectedTrigger.onTrue(new SequentialCommandGroup(
-        startRumbleCommand,
-        new WaitCommand(2),
-        stopRumbleCommand
-    ));
+    noteDetectedTrigger.onTrue(
+        new SequentialCommandGroup(startRumbleCommand, new WaitCommand(2), stopRumbleCommand));
 
     // Trigger rumble when Shooter at RPM setpoint
     Trigger shooterRPMTrigger =
@@ -347,11 +344,8 @@ public class DriverControls {
                             RobotConfig.shooter.getCurrentSpeed())
                         <= DevilBotState.getShooterVelocity()
                             + ShooterConstants.pidVelocityErrorInRPMS);
-    shooterRPMTrigger.onTrue(new SequentialCommandGroup(
-        startRumbleCommand,
-        new WaitCommand(2),
-        stopRumbleCommand
-    ));
+    shooterRPMTrigger.onTrue(
+        new SequentialCommandGroup(startRumbleCommand, new WaitCommand(2), stopRumbleCommand));
 
     EventLoop eventLoop = CommandScheduler.getInstance().getDefaultButtonLoop();
     BooleanEvent havePiece =
