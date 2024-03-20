@@ -9,6 +9,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants;
 import frc.robot.config.RobotConfig;
 import frc.robot.subsystems.arm.Arm;
 import java.util.function.DoubleSupplier;
@@ -49,6 +50,16 @@ public class ArmToPositionTP extends Command {
                 RobotConfig.ArmConstants.maxAngleInDegrees),
             0);
     timer.restart();
+
+    if (Constants.debugCommands) {
+      System.out.println(
+          "START: "
+              + this.getClass().getSimpleName()
+              + " angle: "
+              + initial.position
+              + " --> "
+              + goal.position);
+    }
   }
 
   @Override
@@ -59,6 +70,18 @@ public class ArmToPositionTP extends Command {
     arm.setAngle(current.position, current.velocity);
   }
 
+  @Override
+  public void end(boolean interrupted) {
+    if (interrupted) {
+      System.err.println("INTERRUPTED: " + this.getClass().getSimpleName());
+    }
+
+    if (Constants.debugCommands) {
+      System.out.println("  END: " + this.getClass().getSimpleName());
+    }
+  }
+
+  @Override
   public boolean isFinished() {
     return timer.hasElapsed(motionProfile.totalTime());
   }

@@ -44,6 +44,9 @@ public class AutoIndexPiece extends Command {
 
   @Override
   public void end(boolean interrupted) {
+    if (interrupted) {
+      System.err.println("INTERRUPTED: " + this.getClass().getSimpleName());
+    }
 
     if (!interrupted) {
       intake.runVoltage(0);

@@ -52,6 +52,10 @@ public class ArmToPosition extends Command {
   @Override
   public void end(boolean interrupted) {
     // arm.runVoltage(0);
+    if (interrupted) {
+      System.err.println("INTERRUPTED: " + this.getClass().getSimpleName());
+    }
+
     if (Constants.debugCommands) {
       System.out.println("  END: " + this.getClass().getSimpleName());
     }

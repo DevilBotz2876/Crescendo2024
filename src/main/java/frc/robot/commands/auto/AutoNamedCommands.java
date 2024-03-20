@@ -134,19 +134,22 @@ public class AutoNamedCommands {
             () -> getRobotYawToTarget(AutoConstants.scoreFromBetween2and3.robotYawInDegrees)));
 
     for (ScorePieceCommand command : commandList) {
+      String commandName = "Prepare to Score from " + command.location;
       NamedCommands.registerCommand(
-          "Prepare to Score from " + command.location,
+          commandName,
           new SequentialCommandGroup(
+              new PrintCommand(commandName).onlyIf(() -> Constants.debugCommands),
               new AutoPrepareForScore(
                   RobotConfig.arm,
                   RobotConfig.shooter,
                   command.armAngleInDegrees,
                   command.shooterVelocityInRPMs)));
 
+      commandName = "Score from " + command.location;
       NamedCommands.registerCommand(
-          "Score from " + command.location,
+          commandName,
           new SequentialCommandGroup(
-              new PrintCommand(command.location),
+              new PrintCommand(commandName).onlyIf(() -> Constants.debugCommands),
               new AutoScore(
                   RobotConfig.drive,
                   RobotConfig.arm,

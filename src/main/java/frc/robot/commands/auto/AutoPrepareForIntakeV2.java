@@ -31,9 +31,13 @@ public class AutoPrepareForIntakeV2 extends SequentialCommandGroup {
     addCommands(
         new SequentialCommandGroup(
             new WaitUntilCommand(() -> RobotConfig.intake.isPieceDetected())
-                .withTimeout(
-                    IntakeConstants
-                        .intakeTimeoutInSeconds), // Wait for piece to be detected (with timeout)
+                .withTimeout(IntakeConstants.intakeTimeoutInSeconds)
+                .handleInterrupt(
+                    () ->
+                        System.err.println(
+                            "INTERRUPTED: "
+                                + "Auto Wait For Piece")), // Wait for piece to be detected (with
+            // timeout)
             new ParallelCommandGroup(
                 new InstantCommand(() -> RobotConfig.intake.runVoltage(0)), // turn off intake
                 RobotConfig.arm.getStowCommand() // stow arm

@@ -50,6 +50,10 @@ public class SetShooterVelocity extends Command {
 
   @Override
   public void end(boolean interrupted) {
+    if (interrupted) {
+      System.err.println("INTERRUPTED: " + this.getClass().getSimpleName());
+    }
+
     if (Constants.debugCommands) {
       System.out.println("  END: " + this.getClass().getSimpleName());
     }

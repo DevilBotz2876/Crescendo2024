@@ -36,12 +36,13 @@ public class AutoScore extends SequentialCommandGroup {
     if (Constants.debugCommands) {
       addCommands(
           new PrintCommand(
-              "START: AutoScore yaw: "
-                  + robotYawInDegrees.getAsDouble()
-                  + " angle: "
-                  + armAngleInDegrees.getAsDouble()
-                  + " velocity: "
-                  + shooterVelocityInRPMs.getAsDouble()));
+                  "START: AutoScore yaw: "
+                      + robotYawInDegrees.getAsDouble()
+                      + " angle: "
+                      + armAngleInDegrees.getAsDouble()
+                      + " velocity: "
+                      + shooterVelocityInRPMs.getAsDouble())
+              .onlyIf(() -> Constants.debugCommands));
     }
     addCommands(
         new ParallelCommandGroup(
