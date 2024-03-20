@@ -1,9 +1,13 @@
 package frc.robot.controls;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.arm.ArmToPosition;
 import frc.robot.commands.arm.ArmToPositionTP;
 import frc.robot.commands.auto.AutoPrepareForIntake;
@@ -17,13 +21,86 @@ import frc.robot.config.RobotConfig.DriveConstants;
 import frc.robot.config.RobotConfig.IntakeConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
 import frc.robot.util.DevilBotState;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class DebugControls {
+  private static int setupshooterCalibrationControls(
+      ShuffleboardTab tab, int col, int row, int maxWidth) {
+    int layoutColIndex = 0;
+    int layoutRowIndex = 0;
+    int layoutMaxHeight = 4;
+    List<Command> commands = new ArrayList<Command>();
+    maxWidth = Math.min(2, maxWidth);
+
+    /* shooterCalibration Controls */
+    ShuffleboardLayout shooterCalibrationLayout =
+        tab.getLayout("shooterCalibration", BuiltInLayouts.kGrid)
+            .withProperties(Map.of("Label position", "TOP", "Number of columns", 1))
+            .withSize(maxWidth, layoutMaxHeight)
+            .withPosition(col, row);
+    row += layoutMaxHeight;
+
+    ShuffleboardLayout shooterCalibrationStatusLayout =
+        shooterCalibrationLayout
+            .getLayout("Status", BuiltInLayouts.kGrid)
+            .withProperties(Map.of("Number of columns", 1))
+            .withPosition(0, 0);
+    layoutColIndex = 0;
+    layoutRowIndex = 0;
+
+    shooterCalibrationStatusLayout
+        .addDouble("Odometry Distance (meters)", () -> RobotConfig.drive.getPose().getX())
+        .withWidget(BuiltInWidgets.kTextView)
+        .withPosition(layoutColIndex, layoutRowIndex++);
+
+    shooterCalibrationStatusLayout
+        .addDouble(
+            "Vision Distance (meters)",
+            () -> {
+              Optional<Double> distance =
+                  RobotConfig.vision.getDistanceToAprilTag(DevilBotState.getActiveTargetId());
+              if (distance.isPresent()) return distance.get();
+              else return -1;
+            })
+        .withWidget(BuiltInWidgets.kTextView)
+        .withPosition(layoutColIndex, layoutRowIndex++);
+
+    shooterCalibrationStatusLayout
+        .addDouble("Arm Abs Angle (degrees)", () -> RobotConfig.arm.getAngle())
+        .withWidget(BuiltInWidgets.kTextView)
+        .withProperties(
+            Map.of("min", ArmConstants.minAngleInDegrees, "max", ArmConstants.maxAngleInDegrees))
+        .withSize(2, 1)
+        .withPosition(layoutColIndex, layoutRowIndex++);
+
+    shooterCalibrationStatusLayout
+        .addDouble(
+            "Shooter Velocity (RPMs)",
+            () -> Units.radiansPerSecondToRotationsPerMinute(RobotConfig.shooter.getCurrentSpeed()))
+        .withWidget(BuiltInWidgets.kTextView)
+        .withPosition(layoutColIndex, layoutRowIndex++);
+    /*
+        ShuffleboardLayout shooterCalibrationCommandLayout =
+            shooterCalibrationLayout
+                .getLayout("Commands", BuiltInLayouts.kGrid)
+                .withProperties(Map.of("Label position", "HIDDEN", "Number of columns", 1))
+                .withPosition(0, 1);
+        layoutColIndex = 0;
+        layoutRowIndex = 0;
+    */
+    return maxWidth;
+  }
+
   public static void setupControls() {
     int colIndex = 0;
     int rowIndex = 0;
     ShuffleboardTab debugTab = Shuffleboard.getTab("Debug");
+
+    setupshooterCalibrationControls(debugTab, colIndex, rowIndex, 2);
+    colIndex += 2;
 
     GenericEntry intakeAngleEntry =
         debugTab
