@@ -2,6 +2,7 @@ package frc.robot.controls;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.event.BooleanEvent;
 import edu.wpi.first.wpilibj.event.EventLoop;
@@ -71,6 +72,8 @@ public class DriverControls {
           });
 
   public static void setupControls() {
+    DriverStation.silenceJoystickConnectionWarning(true);
+
     mainController = new CommandXboxController(0);
     secondaryController = new CommandXboxController(1);
 
