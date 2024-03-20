@@ -202,7 +202,7 @@ public class DevilBotState {
       yawToTarget -= visionYawToTarget.get();
     }
     if (DevilBotState.isAmpMode() == true) {
-      return 90;
+      return -90;
     } else {
       return yawToTarget;
     }
