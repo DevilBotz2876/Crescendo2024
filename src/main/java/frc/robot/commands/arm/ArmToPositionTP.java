@@ -16,8 +16,9 @@ import java.util.function.DoubleSupplier;
 public class ArmToPositionTP extends Command {
   private final Arm arm;
   private TrapezoidProfile motionProfile;
-  private TrapezoidProfile.State startState;
-  private TrapezoidProfile.State targetState;
+  private TrapezoidProfile.State initial;
+  private TrapezoidProfile.State current;
+  private TrapezoidProfile.State goal;
   private DoubleSupplier positionDegrees;
   private final Timer timer = new Timer();
 
@@ -37,9 +38,10 @@ public class ArmToPositionTP extends Command {
                 RobotConfig.ArmConstants.maxVelocityInDegreesPerSecond,
                 RobotConfig.ArmConstants.maxAccelerationInDegreesPerSecondSquared));
 
-    startState = new TrapezoidProfile.State(arm.getAngle(), arm.getVelocity());
+    initial = new TrapezoidProfile.State(arm.getAngle(), arm.getVelocity());
+    current = initial;
 
-    targetState =
+    goal =
         new TrapezoidProfile.State(
             MathUtil.clamp(
                 positionDegrees.getAsDouble(),
@@ -51,11 +53,10 @@ public class ArmToPositionTP extends Command {
 
   @Override
   public void execute() {
-    TrapezoidProfile.State setPoint = motionProfile.calculate(timer.get(), startState, targetState);
+    current = motionProfile.calculate(timer.get(), initial, goal);
 
-    //    System.out.println(("position/velocity=" + timer.get() + "/" + motionProfile.totalTime() +
-    // ":" + setPoint.position + "/" + setPoint.velocity));
-    arm.setAngle(setPoint.position, setPoint.velocity);
+    // System.out.println(current.position);
+    arm.setAngle(current.position, current.velocity);
   }
 
   public boolean isFinished() {
