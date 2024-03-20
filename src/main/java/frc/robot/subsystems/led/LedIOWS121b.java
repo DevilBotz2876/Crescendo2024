@@ -7,10 +7,11 @@ import frc.robot.config.RobotConfig.LedConstants;
 public class LedIOWS121b implements LedIO {
 
   AddressableLED led1 = new AddressableLED(LedConstants.Led1PWDPort);
-  AddressableLED led2 = new AddressableLED(LedConstants.Led2PWDPort);
+  //  AddressableLED led2 = new AddressableLED(LedConstants.Led2PWDPort);
 
-  AddressableLEDBuffer led1Buffer = new AddressableLEDBuffer(60);
-  AddressableLEDBuffer led2Buffer = new AddressableLEDBuffer(60);
+  AddressableLEDBuffer led1Buffer = new AddressableLEDBuffer(LedConstants.Led1Length);
+
+  //  AddressableLEDBuffer led2Buffer = new AddressableLEDBuffer(60);
 
   public LedIOWS121b() {
     led1.setLength(led1Buffer.getLength());
@@ -18,8 +19,8 @@ public class LedIOWS121b implements LedIO {
     led1.setData(led1Buffer);
     led1.start();
 
-    led2.setData(led2Buffer);
-    led2.start();
+    //  led2.setData(led2Buffer);
+    //  led2.start();
   }
 
   @Override
@@ -35,12 +36,12 @@ public class LedIOWS121b implements LedIO {
       // Sets the specified LED to the RGB values for red
       led1Buffer.setRGB(i, red, green, blue);
     }
-    for (var i = 0; i < led2Buffer.getLength(); i++) {
-      // Sets the specified LED to the RGB values for red
-      led2Buffer.setRGB(i, red, green, blue);
-    }
+    //    for (var i = 0; i < led2Buffer.getLength(); i++) {
+    // Sets the specified LED to the RGB values for red
+    //      led2Buffer.setRGB(i, red, green, blue);
+    //    }
 
     led1.setData(led1Buffer);
-    led2.setData(led2Buffer);
+    //    led2.setData(led2Buffer);
   }
 }

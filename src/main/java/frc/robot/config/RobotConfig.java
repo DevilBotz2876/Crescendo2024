@@ -146,7 +146,7 @@ public class RobotConfig {
 
   public static class LedConstants {
     public static int Led1PWDPort = 0;
-    public static int Led1Length = 60;
+    public static int Led1Length = 34;
 
     public static int Led2PWDPort = 1;
     public static int Led2Length = 60;
