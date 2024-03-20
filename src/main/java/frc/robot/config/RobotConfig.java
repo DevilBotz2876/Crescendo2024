@@ -40,10 +40,10 @@ public class RobotConfig {
     public static double maxVelocityMetersPerSec = 4.5;
     public static double maxAngularVelocityRadiansSec = 2 * Math.PI;
 
-    public static double anglePidKp = 0.05;
-    public static double anglePidKi = 0.0;
-    public static double anglePidKd = 0.0;
-    public static double pidAngleErrorInDegrees = 2.0;
+    public static double rotatePidKp = 0.05;
+    public static double rotatePidKi = 0.0;
+    public static double rotatePidKd = 0.0;
+    public static double rotatePidErrorInDegrees = 2.0;
     public static double pidTimeoutInSeconds = 0.5;
     public static double pidSettlingTimeInMilliseconds = 0.1;
 
