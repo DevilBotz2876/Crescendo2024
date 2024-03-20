@@ -31,10 +31,13 @@ public class RobotConfigInferno extends RobotConfig {
 
     // Inferno has a Swerve drive train
     // TODO: set DriveConstants.maxVelocityMetersPerSec
-    DriveConstants.anglePidKp = 0.02;
-    DriveConstants.anglePidKi = 0.0;
-    DriveConstants.anglePidKd = 0.0;
-    DriveConstants.pidAngleErrorInDegrees = 0.5;
+    DriveConstants.rotatePidKp = 0.015;
+    DriveConstants.rotatePidKi = 0.0;
+    DriveConstants.rotatePidKd = 0.001;
+    DriveConstants.rotatePidErrorInDegrees = 0.5;
+    DriveConstants.pidTimeoutInSeconds = 2;
+    DriveConstants.pidSettlingTimeInMilliseconds = 0.5;
+
     drive = new DriveSwerveYAGSL("yagsl/inferno");
 
     // Inferno has a TalonSRX based intake

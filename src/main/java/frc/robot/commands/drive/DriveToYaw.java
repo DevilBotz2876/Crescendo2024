@@ -15,14 +15,14 @@ public class DriveToYaw extends Command {
   double targetYaw;
   PIDController turnPID =
       new PIDController(
-          DriveConstants.anglePidKp, DriveConstants.anglePidKi, DriveConstants.anglePidKd);
+          DriveConstants.rotatePidKp, DriveConstants.rotatePidKi, DriveConstants.rotatePidKd);
   double timeMS;
 
   public DriveToYaw(Drive drive, DoubleSupplier yawDegrees) {
     this.drive = drive;
     this.yawDegrees = yawDegrees;
 
-    turnPID.setTolerance(DriveConstants.pidAngleErrorInDegrees);
+    turnPID.setTolerance(DriveConstants.rotatePidErrorInDegrees);
     turnPID.enableContinuousInput(-180, 180);
     addRequirements((Subsystem) drive);
   }

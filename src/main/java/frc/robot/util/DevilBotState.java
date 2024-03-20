@@ -201,7 +201,11 @@ public class DevilBotState {
     if (visionYawToTarget.isPresent()) {
       yawToTarget -= visionYawToTarget.get();
     }
-    return yawToTarget;
+    if (DevilBotState.isAmpMode() == true) {
+      return 90;
+    } else {
+      return yawToTarget;
+    }
   }
 
   public enum PieceDetectionMode {

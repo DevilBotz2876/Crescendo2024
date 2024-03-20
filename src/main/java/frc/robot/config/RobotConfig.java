@@ -43,10 +43,10 @@ public class RobotConfig {
     public static double maxVelocityMetersPerSec = 4.5;
     public static double maxAngularVelocityRadiansSec = 2 * Math.PI;
 
-    public static double anglePidKp = 0.05;
-    public static double anglePidKi = 0.0;
-    public static double anglePidKd = 0.0;
-    public static double pidAngleErrorInDegrees = 2.0;
+    public static double rotatePidKp = 0.05;
+    public static double rotatePidKi = 0.0;
+    public static double rotatePidKd = 0.0;
+    public static double rotatePidErrorInDegrees = 2.0;
     public static double pidTimeoutInSeconds = 0.5;
     public static double pidSettlingTimeInMilliseconds = 0.1;
 
@@ -79,10 +79,8 @@ public class RobotConfig {
 
     public static double maxAngleInDegrees = 90.0;
     public static double minAngleInDegrees = 0.0;
-    public static double maxVelocityInDegreesPerSecond =
-        (maxAngleInDegrees - minAngleInDegrees) / 3;
-    public static double maxAccelerationInDegreesPerSecondSquared =
-        maxVelocityInDegreesPerSecond / 2;
+    public static double maxVelocityInDegreesPerSecond = 90;
+    public static double maxAccelerationInDegreesPerSecondSquared = 360;
 
     public static double intakeAngleInDegrees = 1;
     public static double ejectAngleInDegrees = 15;
