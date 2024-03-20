@@ -116,7 +116,7 @@ public class LedSystem extends SubsystemBase implements Led {
     }
 
     // Turn LED off
-    commandGroup.addCommands(new InstantCommand(() -> setColor(0, 0, 0)));
+    commandGroup.addCommands(new InstantCommand(() -> setColor(255, 255, 255)));
 
     return commandGroup;
   }
