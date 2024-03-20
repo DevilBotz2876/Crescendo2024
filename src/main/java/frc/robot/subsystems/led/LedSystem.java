@@ -20,6 +20,7 @@ public class LedSystem extends SubsystemBase implements Led {
 
   public LedSystem(LedIO io) {
     this.io = io;
+    setColor(255, 255, 255);
   }
 
   @Override
@@ -62,7 +63,7 @@ public class LedSystem extends SubsystemBase implements Led {
     }
   }
 
-  public Command getDefualtCommand() {
+  public Command getDefualtColorCommand() {
     return new InstantCommand(() -> io.setColor(255, 255, 255));
   }
 
@@ -78,8 +79,8 @@ public class LedSystem extends SubsystemBase implements Led {
           new WaitCommand(0.2));
     }
 
-    // Turn LED off
-    commandGroup.addCommands(new InstantCommand(() -> setColor(0, 0, 0)));
+    // Turn LED White
+    commandGroup.addCommands(new InstantCommand(() -> setColor(255, 255, 255)));
 
     return commandGroup;
   }
@@ -96,8 +97,8 @@ public class LedSystem extends SubsystemBase implements Led {
           new WaitCommand(0.2));
     }
 
-    // Turn LED off
-    commandGroup.addCommands(new InstantCommand(() -> setColor(0, 0, 0)));
+    // Turn LED White
+    commandGroup.addCommands(new InstantCommand(() -> setColor(255, 255, 255)));
 
     return commandGroup;
   }
