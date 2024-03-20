@@ -27,6 +27,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   private final double positionDegreeMin = ArmConstants.minAngleInDegrees;
   @AutoLogOutput private double targetVoltage;
   @AutoLogOutput private double targetDegrees;
+  @AutoLogOutput private double targetRelativeDegrees;
   @AutoLogOutput private double targetVelocityDegreesPerSecond;
 
   // Create a Mechanism2d display of an Arm with a fixed ArmTower and moving Arm.
@@ -135,9 +136,18 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
     // We instantiate a new object here each time because constants can change when being tuned.
     feedforward = new ArmFeedforward(kS, kG, kV, kA);
-    double ff = feedforward.calculate(this.targetDegrees, this.targetVelocityDegreesPerSecond);
+    // To account for differences in absolute encoder and relative encoder readings cause by
+    // backlash and other arm physics,
+    // we calculate the difference in current vs target absolute encoder value and then calculate
+    // the corrsponding relative
+    // angle
+    double deltaDegrees = this.targetDegrees - getAngle();
+    this.targetRelativeDegrees = getRelativeAngle() + deltaDegrees;
 
-    Logger.recordOutput("Arm/setAngle/setpointDegrees", this.targetDegrees);
+    double ff =
+        feedforward.calculate(this.targetRelativeDegrees, this.targetVelocityDegreesPerSecond);
+
+    Logger.recordOutput("Arm/setAngle/setpointDegrees", this.targetRelativeDegrees);
     Logger.recordOutput("Arm/setAngle/ffVolts", ff);
 
     // Set the position reference with feedforward voltage
@@ -214,9 +224,9 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
       io.resetRelativeEncoder(getAngle());
     }
 
-    if (Math.abs(inputs.velocityInDegrees) < 0.1) {
-      io.resetRelativeEncoder(getAngle());
-    }
+    //    if (Math.abs(inputs.velocityInDegrees) < 0.1) {
+    //      io.resetRelativeEncoder(getAngle());
+    //    }
 
     if (isLimitHigh() && inputs.appliedVolts > 0) {
       // TODO: turn off voltage or stop pid
