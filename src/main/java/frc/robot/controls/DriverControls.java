@@ -83,6 +83,7 @@ public class DriverControls {
     }
 
     setupGUI();
+    setupLedControls();
   }
 
   private static void setupGUI() {
@@ -183,7 +184,8 @@ public class DriverControls {
     RobotConfig.intake.add2dSim(mech2d);
     RobotConfig.shooter.add2dSim(mech2d);
     RobotConfig.climber.add2dSim(mech2d);
-    RobotConfig.led.add2dSim(mech2d);;
+    RobotConfig.led.add2dSim(mech2d);
+    ;
 
     SmartDashboard.putData("Inferno 2D Simulation", mech2d);
   }
@@ -485,5 +487,14 @@ public class DriverControls {
     controller.pov(0).onTrue(speakerModeVisionBased);
     controller.pov(90).onTrue(speakerModeFromPodium);
     controller.pov(270).onTrue(speakerModeFromSubwoofer);
+  }
+
+  private static void setupLedControls() {
+    Trigger noteDetectedTrigger = new Trigger(() -> RobotConfig.intake.isPieceDetected());
+    noteDetectedTrigger.onTrue(RobotConfig.led.getNoteDetectionCommand());
+
+    Trigger AmpModeTrigger = new Trigger(() -> DevilBotState.isAmpMode());
+    AmpModeTrigger.onTrue(RobotConfig.led.getAmpModeCommand());
+    AmpModeTrigger.onFalse(RobotConfig.led.getSpeakerModeCommand());
   }
 }

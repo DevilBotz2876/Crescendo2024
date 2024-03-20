@@ -1,12 +1,10 @@
 package frc.robot.subsystems.led;
 
-
 public class LedIOStub implements LedIO {
 
-    int[] RGB = {0, 0, 0};
+  int[] RGB = {0, 0, 0};
 
-  public LedIOStub() {
-  }
+  public LedIOStub() {}
 
   @Override
   public void updateInputs(LedIOInputs inputs) {

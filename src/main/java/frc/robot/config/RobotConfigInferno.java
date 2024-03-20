@@ -148,9 +148,9 @@ public class RobotConfigInferno extends RobotConfig {
     autoChooser = AutoBuilder.buildAutoChooser("Sit Still");
 
     LedConstants.Led1PWDPort = 0;
-    LedConstants.Led1Length  = 60;
+    LedConstants.Led1Length = 60;
     LedConstants.Led2PWDPort = 1;
-    LedConstants.Led2Length  = 60;
+    LedConstants.Led2Length = 60;
     led = new LedSystem(new LedIOWS121b());
   }
 

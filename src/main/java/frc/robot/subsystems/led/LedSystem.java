@@ -1,16 +1,17 @@
 package frc.robot.subsystems.led;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import java.util.ArrayList;
+import java.util.List;
+import org.littletonrobotics.junction.Logger;
 
 public class LedSystem extends SubsystemBase implements Led {
   private final LedIO io;
@@ -43,16 +44,79 @@ public class LedSystem extends SubsystemBase implements Led {
 
   @Override
   public void add2dSim(Mechanism2d mech2d) {
-    MechanismRoot2d LedPivot2d = mech2d.getRoot("LED Pivot", 50, 15);
-    
+    MechanismRoot2d LedPivot2d = mech2d.getRoot("LED Pivot", 50, 5);
+
     led2d.add(
-        LedPivot2d.append(new MechanismLigament2d("LED", 5, 0, 10, new Color8Bit(Color.kOrange))));
+        LedPivot2d.append(
+            new MechanismLigament2d(
+                "LED", 1, 0, 10, new Color8Bit(inputs.red, inputs.green, inputs.blue))));
   }
+
   @Override
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Led", inputs);
 
+    for (MechanismLigament2d led : led2d) {
+      led.setColor(new Color8Bit(inputs.red, inputs.green, inputs.blue));
+    }
+  }
 
+  public Command getDefualtCommand() {
+    return new InstantCommand(() -> io.setColor(255, 255, 255));
+  }
+
+  public Command getNoteDetectionCommand() {
+    SequentialCommandGroup commandGroup = new SequentialCommandGroup();
+
+    // Blink orange
+    for (int i = 0; i < 2; i++) {
+      commandGroup.addCommands(
+          new InstantCommand(() -> setColor(250, 182, 25)),
+          new WaitCommand(0.2),
+          new InstantCommand(() -> setColor(0, 0, 0)),
+          new WaitCommand(0.2));
+    }
+
+    // Turn LED off
+    commandGroup.addCommands(new InstantCommand(() -> setColor(0, 0, 0)));
+
+    return commandGroup;
+  }
+
+  public Command getAmpModeCommand() {
+    SequentialCommandGroup commandGroup = new SequentialCommandGroup();
+
+    // Blink orange
+    for (int i = 0; i < 5; i++) {
+      commandGroup.addCommands(
+          new InstantCommand(() -> setColor(8, 199, 43)),
+          new WaitCommand(0.2),
+          new InstantCommand(() -> setColor(0, 0, 0)),
+          new WaitCommand(0.2));
+    }
+
+    // Turn LED off
+    commandGroup.addCommands(new InstantCommand(() -> setColor(0, 0, 0)));
+
+    return commandGroup;
+  }
+
+  public Command getSpeakerModeCommand() {
+    SequentialCommandGroup commandGroup = new SequentialCommandGroup();
+
+    // Blink orange
+    for (int i = 0; i < 5; i++) {
+      commandGroup.addCommands(
+          new InstantCommand(() -> setColor(16, 166, 235)),
+          new WaitCommand(0.2),
+          new InstantCommand(() -> setColor(0, 0, 0)),
+          new WaitCommand(0.2));
+    }
+
+    // Turn LED off
+    commandGroup.addCommands(new InstantCommand(() -> setColor(0, 0, 0)));
+
+    return commandGroup;
   }
 }

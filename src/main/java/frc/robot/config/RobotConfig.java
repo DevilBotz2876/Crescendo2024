@@ -152,7 +152,6 @@ public class RobotConfig {
 
     public static int Led2PWDPort = 1;
     public static int Led2Length = 60;
-
   }
 
   public Optional<Double> getArmAngleFromDistance(double distanceInMeters) {
@@ -195,8 +194,8 @@ public class RobotConfig {
       boolean stubAuto,
       boolean stubClimber,
       boolean stubVision) {
-        this(stubDrive, stubShooter, stubIntake, stubArm, stubAuto, stubClimber, stubVision, true);
-      }
+    this(stubDrive, stubShooter, stubIntake, stubArm, stubAuto, stubClimber, stubVision, true);
+  }
 
   public RobotConfig(
       boolean stubDrive,
