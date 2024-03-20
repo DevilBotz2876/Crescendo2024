@@ -86,8 +86,8 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.ffKv = 6.18;
     ArmConstants.ffKa = 0.04;
 
-    ArmConstants.maxVelocityInDegreesPerSecond = 30;
-    ArmConstants.maxAccelerationInDegreesPerSecondSquared = 5;
+    ArmConstants.maxVelocityInDegreesPerSecond = 90;
+    ArmConstants.maxAccelerationInDegreesPerSecondSquared = 720;
 
     ArmConstants.pidMaxOutput = 6.0;
     ArmConstants.pidMinOutput = -5.0;
