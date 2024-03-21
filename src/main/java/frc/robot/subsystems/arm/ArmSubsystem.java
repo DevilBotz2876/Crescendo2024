@@ -160,8 +160,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   }
 
   public boolean isAbsoluteEncoderReadingValid() {
-    if (getAngle() > ArmConstants.minAngleInDegrees - 5
-        && getAngle() < ArmConstants.maxAngleInDegrees + 5) {
+    if (getAngle() > ArmConstants.minAngleInDegrees - 10
+        && getAngle() < ArmConstants.maxAngleInDegrees + 10) {
       return true;
     }
     return false;
@@ -248,8 +248,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-    if (inputs.positionDegree >= positionDegreeMax
-        || inputs.relativePositionDegrees >= positionDegreeMax) {
+    if (inputs.positionDegree >= positionDegreeMax) {
       inputs.limitHigh = true;
     } else {
       inputs.limitHigh = false;
