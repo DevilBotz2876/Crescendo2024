@@ -5,9 +5,10 @@ import org.littletonrobotics.junction.AutoLog;
 public interface ArmIO {
   @AutoLog
   public static class ArmIOInputs {
-    public double positionRad = 0.0;
-    public double positionDegree = 0.0;
-    public double velocityInDegrees = 0.0;
+    public double positionRads = 0.0;
+    public double positionDegrees = 0.0;
+    public double velocityRadsPerSecond = 0.0;
+    public double velocityDegreesPerSecond = 0.0;
 
     public double absolutePositionRaw;
     public boolean absoluteEncoderConnected = false;
@@ -41,4 +42,8 @@ public interface ArmIO {
 
   /** Set brake mode on motors */
   public default void setBrakeMode(boolean brake) {}
+
+  public default boolean supportsHardwarePid() {
+    return false;
+  }
 }

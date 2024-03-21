@@ -49,15 +49,16 @@ public class ArmIOStub implements ArmIO {
   /** Updates the set of loggable inputs. */
   @Override
   public void updateInputs(ArmIOInputs inputs) {
-    inputs.positionRad = arm.getAngleRads();
-    inputs.positionDegree = Units.radiansToDegrees(inputs.positionRad);
-    inputs.velocityInDegrees = Units.radiansToDegrees(arm.getVelocityRadPerSec());
+    inputs.positionRads = arm.getAngleRads();
+    inputs.velocityRadsPerSecond = arm.getVelocityRadPerSec();
+    inputs.positionDegrees = Units.radiansToDegrees(inputs.positionRads);
+    inputs.velocityDegreesPerSecond = Units.radiansToDegrees(inputs.velocityRadsPerSecond);
     inputs.appliedVolts = currentVoltage;
 
     if (softwarePidEnabled) {
       currentVoltage =
           feedForwardVolts
-              + pid.calculate(inputs.positionDegree, targetDegrees)
+              + pid.calculate(inputs.positionDegrees, targetDegrees)
                   * RobotController.getBatteryVoltage();
     }
 
