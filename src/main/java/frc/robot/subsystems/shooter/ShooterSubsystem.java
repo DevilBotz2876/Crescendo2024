@@ -2,6 +2,7 @@ package frc.robot.subsystems.shooter;
 
 import static edu.wpi.first.units.Units.Volts;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -113,6 +114,7 @@ public class ShooterSubsystem extends ProfiledPIDSubsystem implements Shooter {
 
   @Override
   public void runVelocity(double velocityRPM) {
+    velocityRPM = MathUtil.clamp(velocityRPM, 0, ShooterConstants.maxVelocityInRPMs);
     if (this.targetVelocityRPM != velocityRPM) {
       targetVoltage = -1;
       this.targetVelocityRPM = velocityRPM;
