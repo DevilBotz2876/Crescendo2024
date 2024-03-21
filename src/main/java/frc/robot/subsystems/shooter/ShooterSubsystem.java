@@ -24,13 +24,12 @@ public class ShooterSubsystem extends ProfiledPIDSubsystem implements Shooter {
   ShooterIO io;
   private final SimpleMotorFeedforward feedforward;
   private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
+  boolean useSoftwarePidVelocityControl = true;
 
   private final SysIdRoutine sysId;
   @AutoLogOutput private double targetVoltage;
   @AutoLogOutput private double targetVelocityRPM;
   @AutoLogOutput private double targetVelocityRadPerSec;
-  boolean useProfiledPid = false;
-  boolean useSoftwarePidVelocityControl = false;
 
   // Mechanism2d display of a Shooter
   private List<MechanismLigament2d> shooter2d = new ArrayList<MechanismLigament2d>();
@@ -115,7 +114,7 @@ public class ShooterSubsystem extends ProfiledPIDSubsystem implements Shooter {
   @Override
   public void runVelocity(double velocityRPM) {
     if (this.targetVelocityRPM != velocityRPM) {
-      targetVoltage = 0;
+      targetVoltage = -1;
       this.targetVelocityRPM = velocityRPM;
       targetVelocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(velocityRPM);
       setGoal(targetVelocityRadPerSec);
