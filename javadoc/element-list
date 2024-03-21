@@ -12,6 +12,7 @@ frc.robot.subsystems.arm
 frc.robot.subsystems.climber
 frc.robot.subsystems.drive
 frc.robot.subsystems.intake
+frc.robot.subsystems.led
 frc.robot.subsystems.shooter
 frc.robot.subsystems.vision
 frc.robot.util
