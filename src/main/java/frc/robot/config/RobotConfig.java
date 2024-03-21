@@ -117,7 +117,8 @@ public class RobotConfig {
     public static double velocityInRPMs = 3000;
     public static double defaultSpeedInVolts = 6.0;
     public static double ampScoreVelocityInRPMs = 1000;
-    public static double maxVelocityInRPMs = 6000;
+    public static double maxVelocityInRPMs = 4000;
+    public static double maxAccelerationInRPMsSquared = maxVelocityInRPMs * 4;
   }
 
   public static class IntakeConstants {

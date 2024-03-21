@@ -2,9 +2,9 @@ package frc.robot.subsystems.shooter;
 
 import static edu.wpi.first.units.Units.Volts;
 
-import edu.wpi.first.math.controller.BangBangController;
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.config.RobotConfig.ShooterConstants;
 import java.util.ArrayList;
@@ -20,65 +20,49 @@ import java.util.List;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-public class ShooterSubsystem extends SubsystemBase implements Shooter {
+public class ShooterSubsystem extends ProfiledPIDSubsystem implements Shooter {
   ShooterIO io;
   private final SimpleMotorFeedforward feedforward;
-  private final PIDController pid;
-  private final BangBangController bangBang;
   private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
-
-  ShooterIO ioBottom = null;
-  private final SimpleMotorFeedforward feedforwardBottom;
-  private final PIDController pidBottom;
-  private ShooterIOInputsAutoLogged inputsBottom;
 
   private final SysIdRoutine sysId;
   @AutoLogOutput private double targetVoltage;
   @AutoLogOutput private double targetVelocityRPM;
   @AutoLogOutput private double targetVelocityRadPerSec;
-  boolean useBangBangControl = false;
-  boolean useSoftwareVelocityControl = false;
-  boolean softwareVelocityControlEnabled = false;
+  boolean useProfiledPid = false;
+  boolean useSoftwarePidVelocityControl = false;
 
   // Mechanism2d display of a Shooter
   private List<MechanismLigament2d> shooter2d = new ArrayList<MechanismLigament2d>();
   private int currentSimAngle = 0;
 
   public ShooterSubsystem(ShooterIO io) {
+    super(
+        new ProfiledPIDController(
+            ShooterConstants.pidKp,
+            ShooterConstants.pidKi,
+            ShooterConstants.pidKd,
+            new TrapezoidProfile.Constraints(
+                Units.rotationsPerMinuteToRadiansPerSecond(ShooterConstants.maxVelocityInRPMs),
+                Units.rotationsPerMinuteToRadiansPerSecond(
+                    ShooterConstants.maxAccelerationInRPMsSquared))));
+    setGoal(0);
+
     this.io = io;
-    // TODO: These are sample values.  Need to run sysid on shooter and get real values.
-    useSoftwareVelocityControl = !io.supportsHardwarePid();
-    if (useSoftwareVelocityControl) {
-      feedforward =
-          new SimpleMotorFeedforward(
-              ShooterConstants.ffKs, ShooterConstants.ffKv, ShooterConstants.ffKa);
-      feedforwardBottom =
-          new SimpleMotorFeedforward(
-              ShooterConstants.ffKsBottom,
-              ShooterConstants.ffKvBottom,
-              ShooterConstants.ffKaBottom);
-      if (useBangBangControl) {
-        pid = null;
-        pidBottom = null;
-        bangBang = new BangBangController();
-      } else {
-        pid =
-            new PIDController(
-                ShooterConstants.pidKp, ShooterConstants.pidKi, ShooterConstants.pidKd);
-        pidBottom =
-            new PIDController(
-                ShooterConstants.pidKpBottom,
-                ShooterConstants.pidKiBottom,
-                ShooterConstants.pidKdBottom);
-        bangBang = null;
-      }
-    } else {
-      feedforward = null;
-      feedforwardBottom = null;
-      pid = null;
-      pidBottom = null;
-      bangBang = null;
-    }
+    useSoftwarePidVelocityControl = !io.supportsHardwarePid();
+
+    //    if (false == useSoftwareVelocityControl)
+    //    {
+    //      io.setPID(
+    //        ShooterConstants.pidKp,
+    //        ShooterConstants.pidKi,
+    //        ShooterConstants.pidKd);
+    //    }
+
+    feedforward =
+        new SimpleMotorFeedforward(
+            ShooterConstants.ffKs, ShooterConstants.ffKv, ShooterConstants.ffKa);
+
     targetVoltage = 0;
     targetVelocityRPM = 0.0;
 
@@ -94,37 +78,48 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
 
   public ShooterSubsystem(ShooterIO ioTop, ShooterIO ioBottom) {
     this(ioTop);
-    this.ioBottom = ioBottom;
-    inputsBottom = new ShooterIOInputsAutoLogged();
+  }
+
+  @Override
+  public void useOutput(double output, TrapezoidProfile.State setpoint) {
+    double ff = feedforward.calculate(setpoint.position);
+
+    if (useSoftwarePidVelocityControl) {
+      // Use feedforward +  SW velocity PID
+      io.setVoltage(output + ff);
+    } else {
+      // Use feedforward +  HW velocity PID (ignore SW PID)
+      io.setVelocity(setpoint.position, ff);
+    }
+
+    //    System.out.println(setpoint.position);
+  }
+
+  @Override
+  public double getMeasurement() {
+    return inputs.velocityRadPerSec;
   }
 
   @Override
   // Sets the voltage to volts. the volts value is -12 to 12
   public void runVoltage(double volts) {
-    targetVoltage = volts;
-    targetVelocityRadPerSec = 0;
-    softwareVelocityControlEnabled = false;
-    io.setVoltage(targetVoltage);
-    if (ioBottom != null) {
-      ioBottom.setVoltage(targetVoltage);
+    if (targetVoltage != volts) {
+      targetVoltage = volts;
+      targetVelocityRadPerSec = 0;
+      this.targetVelocityRPM = ShooterConstants.maxVelocityInRPMs * (volts / 12.0);
+      disable(); // disable PID control
+      io.setVoltage(targetVoltage);
     }
-    this.targetVelocityRPM = ShooterConstants.maxVelocityInRPMs * (volts / 12.0);
   }
 
   @Override
   public void runVelocity(double velocityRPM) {
-    targetVoltage = 0;
-    this.targetVelocityRPM = velocityRPM;
-    targetVelocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(velocityRPM);
-
-    if (useSoftwareVelocityControl) {
-      softwareVelocityControlEnabled = true;
-    } else {
-      io.setVelocity(targetVelocityRadPerSec, feedforward.calculate(targetVelocityRadPerSec));
-      if (ioBottom != null) {
-        ioBottom.setVelocity(
-            targetVelocityRadPerSec, feedforwardBottom.calculate(targetVelocityRadPerSec));
-      }
+    if (this.targetVelocityRPM != velocityRPM) {
+      targetVoltage = 0;
+      this.targetVelocityRPM = velocityRPM;
+      targetVelocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(velocityRPM);
+      setGoal(targetVelocityRadPerSec);
+      enable();
     }
   }
 
@@ -140,35 +135,13 @@ public class ShooterSubsystem extends SubsystemBase implements Shooter {
 
   @Override
   public void periodic() {
+    super.periodic();
     // Updates the inputs
     io.updateInputs(inputs);
     Logger.processInputs("Shooter", inputs);
 
-    if (ioBottom != null) {
-      ioBottom.updateInputs(inputsBottom);
-      Logger.processInputs("Shooter Bottom", inputsBottom);
-    }
-
-    if (softwareVelocityControlEnabled) {
-      double ff = feedforward.calculate(targetVelocityRadPerSec);
-
-      if (useBangBangControl) {
-        ff *= 0.9; // Scale feedforward down since bang bang can only add voltage, not remove
-
-        io.setVoltage(
-            ff + bangBang.calculate(inputs.velocityRadPerSec, targetVelocityRadPerSec) * 12.0);
-      } else {
-        io.setVoltage(ff + pid.calculate(inputs.velocityRadPerSec, targetVelocityRadPerSec));
-        if (ioBottom != null) {
-          ioBottom.setVoltage(
-              feedforwardBottom.calculate(targetVelocityRadPerSec)
-                  + pidBottom.calculate(inputsBottom.velocityRadPerSec, targetVelocityRadPerSec));
-        }
-      }
-    }
-
     if (targetVelocityRPM != 0) {
-      currentSimAngle -= (targetVelocityRPM / ShooterConstants.maxVelocityInRPMs) * 45;
+      currentSimAngle -= (inputs.velocityRadPerSec / ShooterConstants.maxVelocityInRPMs) * 45;
 
       int angleOffset = 0;
       for (MechanismLigament2d shooter : shooter2d) {
