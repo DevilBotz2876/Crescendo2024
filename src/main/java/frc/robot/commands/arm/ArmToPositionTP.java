@@ -4,42 +4,85 @@
 
 package frc.robot.commands.arm;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj2.command.TrapezoidProfileCommand;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants;
 import frc.robot.config.RobotConfig;
 import frc.robot.subsystems.arm.Arm;
 import java.util.function.DoubleSupplier;
 
-public class ArmToPositionTP extends TrapezoidProfileCommand {
+public class ArmToPositionTP extends Command {
+  private final Arm arm;
+  private TrapezoidProfile motionProfile;
+  private TrapezoidProfile.State initial;
+  private TrapezoidProfile.State current;
+  private TrapezoidProfile.State goal;
+  private DoubleSupplier positionDegrees;
+  private final Timer timer = new Timer();
 
   /** Creates a new ArmToPositionTP. */
-  public ArmToPositionTP(DoubleSupplier positionDegrees, Arm arm) {
+  public ArmToPositionTP(Arm arm, DoubleSupplier positionDegrees) {
+    this.arm = arm;
+    this.positionDegrees = positionDegrees;
 
-    super(
-        // The motion profile to be executed
-        new TrapezoidProfile(
-            // The motion profile constraints
-            new TrapezoidProfile.Constraints(
-                RobotConfig.ArmConstants.maxVelocity, RobotConfig.ArmConstants.maxAcceleration)),
-        state -> {
-          // Apply current trajectory state to the arm.  We are setting the angle/setpoint
-          // calculated by the trapezoid profile
-          arm.setState(state);
-
-          // Should be logged in subsystem, delete this after verifying values are logged.
-          // Logger.recordOutput("Arm/TP/curPos", state.position);
-          // Logger.recordOutput("Arm/TP/curVel", state.velocity);
-        },
-        // Goal state, we want to get to requested position and hold arm there, so velocity is zero.
-        () -> new TrapezoidProfile.State(positionDegrees.getAsDouble(), 0),
-        // Current state
-        () -> new TrapezoidProfile.State(arm.getState().position, arm.getState().velocity),
-        arm);
+    addRequirements((Subsystem) arm);
   }
 
+  @Override
+  public void initialize() {
+    motionProfile =
+        new TrapezoidProfile(
+            new TrapezoidProfile.Constraints(
+                RobotConfig.ArmConstants.maxVelocityInDegreesPerSecond,
+                RobotConfig.ArmConstants.maxAccelerationInDegreesPerSecondSquared));
+
+    initial = new TrapezoidProfile.State(arm.getAngle(), arm.getVelocity());
+    current = initial;
+
+    goal =
+        new TrapezoidProfile.State(
+            MathUtil.clamp(
+                positionDegrees.getAsDouble(),
+                RobotConfig.ArmConstants.minAngleInDegrees,
+                RobotConfig.ArmConstants.maxAngleInDegrees),
+            0);
+    timer.restart();
+
+    if (Constants.debugCommands) {
+      System.out.println(
+          "START: "
+              + this.getClass().getSimpleName()
+              + " angle: "
+              + initial.position
+              + " --> "
+              + goal.position);
+    }
+  }
+
+  @Override
+  public void execute() {
+    current = motionProfile.calculate(timer.get(), initial, goal);
+
+    // System.out.println(current.position);
+    arm.setAngle(current.position, current.velocity);
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    if (interrupted) {
+      System.err.println("INTERRUPTED: " + this.getClass().getSimpleName());
+    }
+
+    if (Constants.debugCommands) {
+      System.out.println("  END: " + this.getClass().getSimpleName());
+    }
+  }
+
+  @Override
   public boolean isFinished() {
-    boolean done = super.isFinished();
-    //    Logger.recordOutput("Arm/TP/isFinished", done);
-    return done;
+    return timer.hasElapsed(motionProfile.totalTime());
   }
 }

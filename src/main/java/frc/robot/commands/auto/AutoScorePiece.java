@@ -18,7 +18,7 @@ public class AutoScorePiece extends Command {
   // Turn off intake
   // Turn off shooter
   public AutoScorePiece(Intake intake, Shooter shooter) {
-    this(intake, shooter, () -> IntakeConstants.feedSpeedInVolts);
+    this(intake, shooter, () -> IntakeConstants.defaultSpeedInVolts);
   }
 
   public AutoScorePiece(Intake intake, Shooter shooter, DoubleSupplier intakeFeedVoltage) {
@@ -45,7 +45,10 @@ public class AutoScorePiece extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    intake.runVoltage(0);
+    if (interrupted) {
+      System.err.println("INTERRUPTED: " + this.getClass().getSimpleName());
+    }
+
     if (Constants.debugCommands) {
       System.out.println("  END: " + this.getClass().getSimpleName());
     }

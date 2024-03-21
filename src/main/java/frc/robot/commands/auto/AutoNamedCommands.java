@@ -111,42 +111,45 @@ public class AutoNamedCommands {
     commandList.add(
         new ScorePieceCommand(
             "1 (Wing Podium Note)",
-            () -> getAngleToTarget(AutoConstants.scoreFrom1WingPodiumNote.armAngleInDegrees),
+            () -> getArmAngleToTarget(AutoConstants.scoreFrom1WingPodiumNote.armAngleInDegrees),
             () -> AutoConstants.scoreFrom1WingPodiumNote.shooterVelocityInRPMs,
-            () -> getYawToTarget(AutoConstants.scoreFrom1WingPodiumNote.robotYawInDegrees)));
+            () -> getRobotYawToTarget(AutoConstants.scoreFrom1WingPodiumNote.robotYawInDegrees)));
     commandList.add(
         new ScorePieceCommand(
             "2 (Wing Speaker Note)",
-            () -> getAngleToTarget(AutoConstants.scoreFrom2WingSpeakerNote.armAngleInDegrees),
+            () -> getArmAngleToTarget(AutoConstants.scoreFrom2WingSpeakerNote.armAngleInDegrees),
             () -> AutoConstants.scoreFrom2WingSpeakerNote.shooterVelocityInRPMs,
-            () -> getYawToTarget(AutoConstants.scoreFrom2WingSpeakerNote.robotYawInDegrees)));
+            () -> getRobotYawToTarget(AutoConstants.scoreFrom2WingSpeakerNote.robotYawInDegrees)));
     commandList.add(
         new ScorePieceCommand(
             "3 (Wing Amp Note)",
-            () -> getAngleToTarget(AutoConstants.scoreFrom3WingAmpNote.armAngleInDegrees),
+            () -> getArmAngleToTarget(AutoConstants.scoreFrom3WingAmpNote.armAngleInDegrees),
             () -> AutoConstants.scoreFrom3WingAmpNote.shooterVelocityInRPMs,
-            () -> getYawToTarget(AutoConstants.scoreFrom3WingAmpNote.robotYawInDegrees)));
+            () -> getRobotYawToTarget(AutoConstants.scoreFrom3WingAmpNote.robotYawInDegrees)));
     commandList.add(
         new ScorePieceCommand(
             "Between 2 and 3",
-            () -> getAngleToTarget(AutoConstants.scoreFromBetween2and3.armAngleInDegrees),
+            () -> getArmAngleToTarget(AutoConstants.scoreFromBetween2and3.armAngleInDegrees),
             () -> AutoConstants.scoreFromBetween2and3.shooterVelocityInRPMs,
-            () -> getYawToTarget(AutoConstants.scoreFromBetween2and3.robotYawInDegrees)));
+            () -> getRobotYawToTarget(AutoConstants.scoreFromBetween2and3.robotYawInDegrees)));
 
     for (ScorePieceCommand command : commandList) {
+      String commandName = "Prepare to Score from " + command.location;
       NamedCommands.registerCommand(
-          "Prepare to Score from " + command.location,
+          commandName,
           new SequentialCommandGroup(
+              new PrintCommand(commandName).onlyIf(() -> Constants.debugCommands),
               new AutoPrepareForScore(
                   RobotConfig.arm,
                   RobotConfig.shooter,
                   command.armAngleInDegrees,
                   command.shooterVelocityInRPMs)));
 
+      commandName = "Score from " + command.location;
       NamedCommands.registerCommand(
-          "Score from " + command.location,
+          commandName,
           new SequentialCommandGroup(
-              new PrintCommand(command.location),
+              new PrintCommand(commandName).onlyIf(() -> Constants.debugCommands),
               new AutoScore(
                   RobotConfig.drive,
                   RobotConfig.arm,
@@ -158,7 +161,7 @@ public class AutoNamedCommands {
     }
   }
 
-  private static double getYawToTarget(double defaultYawToTarget) {
+  private static double getRobotYawToTarget(double defaultYawToTarget) {
     Optional<Double> getYawToAprilTag =
         RobotConfig.vision.getYawToAprilTag(DevilBotState.getActiveTargetId());
 
@@ -178,7 +181,7 @@ public class AutoNamedCommands {
     return translateForAlliance(defaultYawToTarget);
   }
 
-  private static double getAngleToTarget(double defaultAngleToTarget) {
+  private static double getArmAngleToTarget(double defaultAngleToTarget) {
     Optional<Double> getDistanceToAprilTag =
         RobotConfig.vision.getDistanceToAprilTag(DevilBotState.getActiveTargetId());
 

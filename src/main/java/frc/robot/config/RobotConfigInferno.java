@@ -15,6 +15,8 @@ import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.DriveSwerveYAGSL;
 import frc.robot.subsystems.intake.IntakeIOSparkMax;
 import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.led.LedIOWS121b;
+import frc.robot.subsystems.led.LedSystem;
 import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.vision.VisionCamera;
@@ -29,16 +31,17 @@ public class RobotConfigInferno extends RobotConfig {
 
     // Inferno has a Swerve drive train
     // TODO: set DriveConstants.maxVelocityMetersPerSec
-    DriveConstants.anglePidKp = 0.02;
-    DriveConstants.anglePidKi = 0.0;
-    DriveConstants.anglePidKd = 0.0;
-    DriveConstants.pidAngleErrorInDegrees = 0.5;
+    DriveConstants.rotatePidKp = 0.015;
+    DriveConstants.rotatePidKi = 0.0;
+    DriveConstants.rotatePidKd = 0.001;
+    DriveConstants.rotatePidErrorInDegrees = 0.5;
+    DriveConstants.pidTimeoutInSeconds = 2;
+    DriveConstants.pidSettlingTimeInMilliseconds = 0.5;
+
     drive = new DriveSwerveYAGSL("yagsl/inferno");
 
     // Inferno has a TalonSRX based intake
     // IntakeConstants.defaultSpeedInVolts = 6.0;
-    IntakeConstants.indexSpeedInVolts = 4.5;
-    IntakeConstants.feedSpeedInVolts = 6.0;
 
     // Reading Intake v2.0
     // IntakeConstants.sensorDelayFalseToTrueInSeconds = 0.06;
@@ -55,18 +58,20 @@ public class RobotConfigInferno extends RobotConfig {
 
     // Inferno has a single SparkMax based shooter
 
-    // Values from Nilesh's Shooter SysId Run @ WPI on Inferno 2024-03-09
+    // Values from Nilesh's Shooter SysId Run @ BHS on Inferno 2024-03-18
     ShooterConstants.ffKs =
-        0.033556; // SysId calculated -0.036669, but likely erroneous.  Will need to re-run sysid
-    ShooterConstants.ffKv = 0.019623;
-    ShooterConstants.ffKa = 0.0069448;
+        0.0; // SysId calculated -0.016149, but likely erroneous.  Will need to re-run sysid
+    ShooterConstants.ffKv = 0.021208;
+    ShooterConstants.ffKa = 0.0072313;
 
-    ShooterConstants.pidKp = 0.0037689;
+    ShooterConstants.pidKp = 0.0047154;
     ShooterConstants.pidKi = 0.0;
     ShooterConstants.pidKd = 0.0;
-    ShooterConstants.pidVelocityErrorInRPMS = 300;
+    ShooterConstants.pidVelocityErrorInRPMS = 500;
 
-    ShooterConstants.ampScoreVelocityInRPMs = 2000;
+    ShooterConstants.maxVelocityInRPMs = 6000;
+    ShooterConstants.maxAccelerationInRPMsSquared = ShooterConstants.maxVelocityInRPMs * 4;
+    ShooterConstants.ampScoreVelocityInRPMs = 2500;
     ShooterConstants.velocityInRPMs = 4500;
     shooter = new ShooterSubsystem(new ShooterIOSparkMax(2));
 
@@ -83,8 +88,8 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.ffKv = 6.18;
     ArmConstants.ffKa = 0.04;
 
-    ArmConstants.maxVelocity = 1.0;
-    ArmConstants.maxAcceleration = .5;
+    ArmConstants.maxVelocityInDegreesPerSecond = 90;
+    ArmConstants.maxAccelerationInDegreesPerSecondSquared = 720;
 
     ArmConstants.pidMaxOutput = 6.0;
     ArmConstants.pidMinOutput = -5.0;
@@ -127,8 +132,8 @@ public class RobotConfigInferno extends RobotConfig {
             "shooter",
             "1188",
             new Transform3d(
-                new Translation3d(-0.3048, 0, 0.22),
-                new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(180)))));
+                new Translation3d(Units.inchesToMeters(10.5), 0, Units.inchesToMeters(13)),
+                new Rotation3d(0, Units.degreesToRadians(-28), Units.degreesToRadians(180)))));
 
     cameras.add(
         new VisionCamera(
@@ -146,13 +151,37 @@ public class RobotConfigInferno extends RobotConfig {
 
     AutoNamedCommands.configure();
     autoChooser = AutoBuilder.buildAutoChooser("Sit Still");
+
+    LedConstants.Led1PWDPort = 9;
+    LedConstants.Led1Length = 34;
+    led = new LedSystem(new LedIOWS121b());
   }
 
   @Override
   public Optional<Double> getArmAngleFromDistance(double distanceInMeters) {
     /* TODO: Insert mapping of distance to arm angle for scoring in speaker */
     System.out.println("TODO: Inferno getArmAngleFromDistance(" + distanceInMeters + ")");
-    if (distanceInMeters > 2.0) return Optional.empty();
-    return Optional.of(30 * distanceInMeters / 3.0);
+    // return Optional.empty();
+    distanceInMeters -= Units.inchesToMeters(38);
+    Optional<Double> angle = Optional.empty();
+    if (distanceInMeters < 0.6) {
+      angle = Optional.of(8.0 + 6.0 / 0.3 * distanceInMeters);
+    } else if (distanceInMeters < 1.2) {
+      angle = Optional.of(2.0 / 0.3 * distanceInMeters + 16.0);
+    } else if (distanceInMeters < 1.5) {
+      angle = Optional.of(25.0);
+    } else {
+      angle = Optional.of(1.0 / 0.3 * distanceInMeters + 21.0);
+    }
+
+    if (angle.isPresent() && angle.get() < ArmConstants.subwooferScoreAngleInDegrees) {
+      angle = Optional.of(ArmConstants.subwooferScoreAngleInDegrees);
+    }
+
+    return angle;
+    /*
+      if (distanceInMeters > 2.0) return Optional.empty();
+      return Optional.of(30 * distanceInMeters / 3.0);
+    */
   }
 }

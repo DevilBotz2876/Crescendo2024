@@ -24,11 +24,12 @@ public class AutoPrepareForScore extends SequentialCommandGroup {
     if (Constants.debugCommands) {
       addCommands(
           new PrintCommand(
-              "START: AutoPrepareToScore"
-                  + " angle: "
-                  + armAngleInDegrees.getAsDouble()
-                  + " velocity: "
-                  + shooterVelocityInRPMs.getAsDouble()));
+                  "START: AutoPrepareToScore"
+                      + " angle: "
+                      + armAngleInDegrees.getAsDouble()
+                      + " velocity: "
+                      + shooterVelocityInRPMs.getAsDouble())
+              .onlyIf(() -> Constants.debugCommands));
     }
     addCommands(
         new ParallelCommandGroup(

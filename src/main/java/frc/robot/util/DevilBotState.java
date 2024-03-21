@@ -201,7 +201,11 @@ public class DevilBotState {
     if (visionYawToTarget.isPresent()) {
       yawToTarget -= visionYawToTarget.get();
     }
-    return yawToTarget;
+    if (DevilBotState.isAmpMode() == true) {
+      return -90;
+    } else {
+      return yawToTarget;
+    }
   }
 
   public enum PieceDetectionMode {
@@ -220,19 +224,32 @@ public class DevilBotState {
   }
 
   public enum State {
+    UNKNOWN,
     DISABLED,
     AUTO,
     TELEOP,
     TEST
   }
 
-  private static State state;
+  private static State state = State.UNKNOWN;
+  private static boolean stateChanged;
 
   public static void setState(State state) {
+    if (state != DevilBotState.state) {
+      stateChanged = true;
+    }
     DevilBotState.state = state;
   }
 
   public static State getState() {
     return DevilBotState.state;
+  }
+
+  public static boolean stateChanged() {
+    if (stateChanged) {
+      stateChanged = false;
+      return true;
+    }
+    return false;
   }
 }

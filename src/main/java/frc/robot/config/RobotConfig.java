@@ -16,6 +16,8 @@ import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.drive.DriveBase;
 import frc.robot.subsystems.intake.IntakeIOStub;
 import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.led.LedIOStub;
+import frc.robot.subsystems.led.LedSystem;
 import frc.robot.subsystems.shooter.ShooterIOStub;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.vision.VisionCamera;
@@ -35,15 +37,16 @@ public class RobotConfig {
   public static VisionSubsystem vision;
   public static RobotConfig instance;
   public static List<VisionCamera> cameras;
+  public static LedSystem led;
 
   public static class DriveConstants {
     public static double maxVelocityMetersPerSec = 4.5;
     public static double maxAngularVelocityRadiansSec = 2 * Math.PI;
 
-    public static double anglePidKp = 0.05;
-    public static double anglePidKi = 0.0;
-    public static double anglePidKd = 0.0;
-    public static double pidAngleErrorInDegrees = 2.0;
+    public static double rotatePidKp = 0.05;
+    public static double rotatePidKi = 0.0;
+    public static double rotatePidKd = 0.0;
+    public static double rotatePidErrorInDegrees = 2.0;
     public static double pidTimeoutInSeconds = 0.5;
     public static double pidSettlingTimeInMilliseconds = 0.1;
 
@@ -66,13 +69,9 @@ public class RobotConfig {
     public static double pidMinOutput = -0.4;
 
     public static double ffKs = 0.0;
-    public static double ffKg = 0.1;
     public static double ffKv = 0.0;
     public static double ffKa = 0.0;
-
-    public static double maxVelocity = 3.0;
-    public static double maxVelocityInDegreesPerSecond = 45;
-    public static double maxAcceleration = 6.0;
+    public static double ffKg = 0.1;
 
     public static double pidAngleErrorInDegrees = 2.0;
     public static double pidSettlingTimeInMilliseconds = 0.1;
@@ -80,6 +79,9 @@ public class RobotConfig {
 
     public static double maxAngleInDegrees = 90.0;
     public static double minAngleInDegrees = 0.0;
+    public static double maxVelocityInDegreesPerSecond = 90;
+    public static double maxAccelerationInDegreesPerSecondSquared = 720;
+
     public static double intakeAngleInDegrees = 1;
     public static double ejectAngleInDegrees = 15;
     public static double ampScoreAngleInDegrees = 80;
@@ -115,16 +117,15 @@ public class RobotConfig {
     public static double velocityInRPMs = 3000;
     public static double defaultSpeedInVolts = 6.0;
     public static double ampScoreVelocityInRPMs = 1000;
-    public static double maxVelocityInRPMs = 6000;
+    public static double maxVelocityInRPMs = 4000;
+    public static double maxAccelerationInRPMsSquared = maxVelocityInRPMs * 4;
   }
 
   public static class IntakeConstants {
     public static double defaultSpeedInVolts = 6.0;
-    public static double indexSpeedInVolts = 6.0;
-    public static double feedSpeedInVolts = 6.0;
     public static double sensorDelayFalseToTrueInSeconds = 0.06;
     public static double sensorDelayTrueToFalseInSeconds = 0.1;
-    public static double intakeTimeoutInSeconds = 0.5; // max time to wait for piece to be detected
+    public static double intakeTimeoutInSeconds = 2.0; // max time to wait for piece to be detected
   }
 
   public static class ClimberConstants {
@@ -142,6 +143,14 @@ public class RobotConfig {
     // retract the climber after auto-zeroing
     public static double maxExtendTimeInSeconds = 5.0;
     public static double maxRetractTimeInSeconds = 8.0;
+  }
+
+  public static class LedConstants {
+    public static int Led1PWDPort = 0;
+    public static int Led1Length = 34;
+
+    public static int Led2PWDPort = 1;
+    public static int Led2Length = 60;
   }
 
   public Optional<Double> getArmAngleFromDistance(double distanceInMeters) {
@@ -184,6 +193,18 @@ public class RobotConfig {
       boolean stubAuto,
       boolean stubClimber,
       boolean stubVision) {
+    this(stubDrive, stubShooter, stubIntake, stubArm, stubAuto, stubClimber, stubVision, true);
+  }
+
+  public RobotConfig(
+      boolean stubDrive,
+      boolean stubShooter,
+      boolean stubIntake,
+      boolean stubArm,
+      boolean stubAuto,
+      boolean stubClimber,
+      boolean stubVision,
+      boolean stubLed) {
     instance = this;
 
     if (stubDrive) {
@@ -244,6 +265,9 @@ public class RobotConfig {
       if (Robot.isSimulation()) {
         vision.enableSimulation(() -> RobotConfig.drive.getPose(), false);
       }
+    }
+    if (stubLed) {
+      led = new LedSystem(new LedIOStub());
     }
   }
 }

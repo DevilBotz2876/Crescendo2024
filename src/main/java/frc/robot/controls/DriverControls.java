@@ -1,6 +1,9 @@
 package frc.robot.controls;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.event.BooleanEvent;
 import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -15,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.arm.ArmCommand;
@@ -68,6 +72,8 @@ public class DriverControls {
           });
 
   public static void setupControls() {
+    DriverStation.silenceJoystickConnectionWarning(true);
+
     mainController = new CommandXboxController(0);
     secondaryController = new CommandXboxController(1);
 
@@ -80,6 +86,7 @@ public class DriverControls {
     }
 
     setupGUI();
+    setupLedControls();
   }
 
   private static void setupGUI() {
@@ -180,6 +187,8 @@ public class DriverControls {
     RobotConfig.intake.add2dSim(mech2d);
     RobotConfig.shooter.add2dSim(mech2d);
     RobotConfig.climber.add2dSim(mech2d);
+    RobotConfig.led.add2dSim(mech2d);
+    ;
 
     SmartDashboard.putData("Inferno 2D Simulation", mech2d);
   }
@@ -276,7 +285,8 @@ public class DriverControls {
 
     mainController
         .leftBumper()
-        .onTrue(new EjectPiece(RobotConfig.intake, RobotConfig.arm)); // Eject Note
+        .onTrue(
+            new EjectPiece(RobotConfig.intake, RobotConfig.arm, RobotConfig.shooter)); // Eject Note
 
     mainController
         .rightBumper()
@@ -318,6 +328,39 @@ public class DriverControls {
                 // on
                 RobotConfig.intake.getTurnOnCommand())); // Shoot Note
 
+    // Trigger rumble when a note is detected
+    Trigger noteDetectedTrigger = new Trigger(() -> RobotConfig.intake.isPieceDetected());
+    noteDetectedTrigger.onTrue(
+        new SequentialCommandGroup(
+            // Starts the controller rumble
+            new InstantCommand(() -> mainController.getHID().setRumble(RumbleType.kBothRumble, 1)),
+            // Rumbles for 2 seconds
+            new WaitCommand(2),
+            // Ends the controller rumble
+            new InstantCommand(
+                () -> mainController.getHID().setRumble(RumbleType.kBothRumble, 0))));
+
+    // Trigger rumble when Shooter at RPM setpoint
+    Trigger shooterRPMTrigger =
+        new Trigger(
+            () ->
+                Units.radiansPerSecondToRotationsPerMinute(RobotConfig.shooter.getCurrentSpeed())
+                        >= DevilBotState.getShooterVelocity()
+                            - ShooterConstants.pidVelocityErrorInRPMS
+                    && Units.radiansPerSecondToRotationsPerMinute(
+                            RobotConfig.shooter.getCurrentSpeed())
+                        <= DevilBotState.getShooterVelocity()
+                            + ShooterConstants.pidVelocityErrorInRPMS);
+    shooterRPMTrigger.onTrue(
+        new SequentialCommandGroup(
+            // Starts the controller rumble
+            new InstantCommand(() -> mainController.getHID().setRumble(RumbleType.kBothRumble, 1)),
+            // Rumbles for 2 seconds
+            new WaitCommand(2),
+            // Ends the controller rumble
+            new InstantCommand(
+                () -> mainController.getHID().setRumble(RumbleType.kBothRumble, 0))));
+
     EventLoop eventLoop = CommandScheduler.getInstance().getDefaultButtonLoop();
     BooleanEvent havePiece =
         new BooleanEvent(
@@ -356,13 +399,22 @@ public class DriverControls {
                     RobotConfig.shooter) // Turn off shooter
                 ));
 
-    BooleanEvent enabledEvent =
-        new BooleanEvent(eventLoop, () -> DevilBotState.getState() == State.TELEOP);
+    BooleanEvent stateChangedEvent =
+        new BooleanEvent(eventLoop, () -> DevilBotState.stateChanged());
 
-    Trigger enabledEventTrigger = enabledEvent.rising().castTo(Trigger::new);
-    enabledEventTrigger.onTrue(
-        new ParallelCommandGroup(
-            RobotConfig.shooter.getTurnOffCommand(), RobotConfig.intake.getTurnOffCommand()));
+    Trigger stateChangedEventTrigger = stateChangedEvent.rising().castTo(Trigger::new);
+    stateChangedEventTrigger.onTrue(getResetSubsystemsCommand());
+  }
+
+  private static Command getResetSubsystemsCommand() {
+    return new ParallelCommandGroup(
+        RobotConfig.shooter.getTurnOffCommand(),
+        RobotConfig.intake.getTurnOffCommand(),
+        new InstantCommand(
+            () -> {
+              mainController.getHID().setRumble(RumbleType.kBothRumble, 0);
+              secondaryController.getHID().setRumble(RumbleType.kBothRumble, 0);
+            }));
   }
 
   private static void setupSecondaryControls(CommandXboxController controller) {
@@ -445,5 +497,14 @@ public class DriverControls {
     controller.pov(0).onTrue(speakerModeVisionBased);
     controller.pov(90).onTrue(speakerModeFromPodium);
     controller.pov(270).onTrue(speakerModeFromSubwoofer);
+  }
+
+  private static void setupLedControls() {
+    Trigger noteDetectedTrigger = new Trigger(() -> RobotConfig.intake.isPieceDetected());
+    noteDetectedTrigger.onTrue(RobotConfig.led.getNoteDetectionCommand());
+
+    Trigger AmpModeTrigger = new Trigger(() -> DevilBotState.isAmpMode());
+    AmpModeTrigger.onTrue(RobotConfig.led.getAmpModeCommand());
+    AmpModeTrigger.onFalse(RobotConfig.led.getSpeakerModeCommand());
   }
 }

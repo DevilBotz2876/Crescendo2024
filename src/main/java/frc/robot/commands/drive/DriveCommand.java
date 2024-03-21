@@ -36,7 +36,7 @@ public class DriveCommand extends Command {
     // Wild guess at P constant.
     turnPID =
         new PIDController(
-            DriveConstants.anglePidKp, DriveConstants.anglePidKi, DriveConstants.anglePidKd);
+            DriveConstants.rotatePidKp, DriveConstants.rotatePidKi, DriveConstants.rotatePidKd);
     turnPID.enableContinuousInput(0, 360);
 
     addRequirements(drive);
