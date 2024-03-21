@@ -161,7 +161,20 @@ public class RobotConfigInferno extends RobotConfig {
   public Optional<Double> getArmAngleFromDistance(double distanceInMeters) {
     /* TODO: Insert mapping of distance to arm angle for scoring in speaker */
     System.out.println("TODO: Inferno getArmAngleFromDistance(" + distanceInMeters + ")");
-    return Optional.empty();
+    // return Optional.empty();
+    distanceInMeters -= Units.inchesToMeters(38);
+    Optional<Double> angle;
+    if (distanceInMeters < 0.6) {
+      angle = Optional.of(8.0 + 6.0 / 0.3 * distanceInMeters);
+    } else if (distanceInMeters < 1.2) {
+      angle = Optional.of(2.0 / 0.3 * distanceInMeters + 16.0);
+    } else if (distanceInMeters < 1.5) {
+      angle = Optional.of(25.0);
+    } else {
+      angle = Optional.of(1.0 / 0.3 * distanceInMeters + 21.0);
+    }
+
+    return angle;
     /*
       if (distanceInMeters > 2.0) return Optional.empty();
       return Optional.of(30 * distanceInMeters / 3.0);
