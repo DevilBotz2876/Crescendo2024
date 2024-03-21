@@ -399,13 +399,22 @@ public class DriverControls {
                     RobotConfig.shooter) // Turn off shooter
                 ));
 
-    BooleanEvent enabledEvent =
-        new BooleanEvent(eventLoop, () -> DevilBotState.getState() == State.TELEOP);
+    BooleanEvent stateChangedEvent =
+        new BooleanEvent(eventLoop, () -> DevilBotState.stateChanged());
 
-    Trigger enabledEventTrigger = enabledEvent.rising().castTo(Trigger::new);
-    enabledEventTrigger.onTrue(
-        new ParallelCommandGroup(
-            RobotConfig.shooter.getTurnOffCommand(), RobotConfig.intake.getTurnOffCommand()));
+    Trigger stateChangedEventTrigger = stateChangedEvent.rising().castTo(Trigger::new);
+    stateChangedEventTrigger.onTrue(getResetSubsystemsCommand());
+  }
+
+  private static Command getResetSubsystemsCommand() {
+    return new ParallelCommandGroup(
+        RobotConfig.shooter.getTurnOffCommand(),
+        RobotConfig.intake.getTurnOffCommand(),
+        new InstantCommand(
+            () -> {
+              mainController.getHID().setRumble(RumbleType.kBothRumble, 0);
+              secondaryController.getHID().setRumble(RumbleType.kBothRumble, 0);
+            }));
   }
 
   private static void setupSecondaryControls(CommandXboxController controller) {
