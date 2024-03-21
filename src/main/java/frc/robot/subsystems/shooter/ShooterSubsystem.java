@@ -142,7 +142,10 @@ public class ShooterSubsystem extends ProfiledPIDSubsystem implements Shooter {
     Logger.processInputs("Shooter", inputs);
 
     if (targetVelocityRPM != 0) {
-      currentSimAngle -= (inputs.velocityRadPerSec / ShooterConstants.maxVelocityInRPMs) * 45;
+      currentSimAngle -=
+          (inputs.velocityRadPerSec
+                  / Units.rotationsPerMinuteToRadiansPerSecond(ShooterConstants.maxVelocityInRPMs))
+              * 45;
 
       int angleOffset = 0;
       for (MechanismLigament2d shooter : shooter2d) {
