@@ -77,8 +77,6 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements Arm {
       // Use feedforward +  HW velocity PID (ignore SW PID)
       io.setPosition(setpoint.position, ff);
     }
-
-    System.out.println(setpoint.position);
   }
 
   @Override
@@ -147,8 +145,8 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements Arm {
   }
 
   public boolean isAbsoluteEncoderReadingValid() {
-    if (getAngle() > ArmConstants.minAngleInDegrees - 5
-        && getAngle() < ArmConstants.maxAngleInDegrees + 5) {
+    if (getAngle() > ArmConstants.minAngleInDegrees - 10
+        && getAngle() < ArmConstants.maxAngleInDegrees + 10) {
       return true;
     }
     return false;
@@ -206,8 +204,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-    if (inputs.positionDegrees >= positionDegreeMax
-        || inputs.relativePositionDegrees >= positionDegreeMax) {
+    if (inputs.positionDegrees >= positionDegreeMax) {
       inputs.limitHigh = true;
     } else {
       inputs.limitHigh = false;

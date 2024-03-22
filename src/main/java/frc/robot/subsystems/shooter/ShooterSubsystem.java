@@ -46,7 +46,6 @@ public class ShooterSubsystem extends ProfiledPIDSubsystem implements Shooter {
                 Units.rotationsPerMinuteToRadiansPerSecond(ShooterConstants.maxVelocityInRPMs),
                 Units.rotationsPerMinuteToRadiansPerSecond(
                     ShooterConstants.maxAccelerationInRPMsSquared))));
-    setGoal(0);
 
     this.io = io;
     useSoftwarePidVelocityControl = !io.supportsHardwarePid();
@@ -74,6 +73,9 @@ public class ShooterSubsystem extends ProfiledPIDSubsystem implements Shooter {
                 null,
                 (state) -> Logger.recordOutput("Shooter/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism((voltage) -> runVoltage(voltage.in(Volts)), null, this));
+
+    setGoal(0);
+    disable();
   }
 
   public ShooterSubsystem(ShooterIO ioTop, ShooterIO ioBottom) {

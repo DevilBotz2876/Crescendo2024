@@ -62,16 +62,16 @@ public class RobotConfig {
     public static double absolutePositionOffset = 0; /* 0-1 */
     public static double absoluteEncoderInversion = 1; /* 1 for none, -1 to invert */
 
-    public static double pidKp = 0.1;
+    public static double pidKp = 0.12935;
     public static double pidKi = 0.0;
-    public static double pidKd = 0.0;
+    public static double pidKd = 0.0060174;
     public static double pidMaxOutput = 0.4;
     public static double pidMinOutput = -0.4;
 
-    public static double ffKs = 0.0;
-    public static double ffKv = 0.0;
-    public static double ffKa = 0.0;
-    public static double ffKg = 0.1;
+    public static double ffKs = 0.03402;
+    public static double ffKv = 0.072343;
+    public static double ffKa = 0.00036498;
+    public static double ffKg = 0.88138;
 
     public static double pidAngleErrorInDegrees = 2.0;
     public static double pidSettlingTimeInMilliseconds = 0.1;
@@ -79,8 +79,8 @@ public class RobotConfig {
 
     public static double maxAngleInDegrees = 90.0;
     public static double minAngleInDegrees = 0.0;
-    public static double maxVelocityInDegreesPerSecond = 90;
-    public static double maxAccelerationInDegreesPerSecondSquared = 720;
+    public static double maxVelocityInDegreesPerSecond = 45;
+    public static double maxAccelerationInDegreesPerSecondSquared = 360;
 
     public static double intakeAngleInDegrees = 1;
     public static double ejectAngleInDegrees = 15;
