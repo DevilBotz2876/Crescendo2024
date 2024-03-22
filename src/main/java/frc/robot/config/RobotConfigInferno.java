@@ -36,7 +36,7 @@ public class RobotConfigInferno extends RobotConfig {
     DriveConstants.rotatePidKd = 0.001;
     DriveConstants.rotatePidErrorInDegrees = 0.5;
     DriveConstants.pidTimeoutInSeconds = 2;
-    DriveConstants.pidSettlingTimeInMilliseconds = 0.5;
+    DriveConstants.pidSettlingTimeInSeconds = 0.5;
 
     drive = new DriveSwerveYAGSL("yagsl/inferno");
 
