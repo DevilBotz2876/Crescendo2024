@@ -50,7 +50,6 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements Arm {
             new TrapezoidProfile.Constraints(
                 ArmConstants.maxVelocityInDegreesPerSecond,
                 ArmConstants.maxAccelerationInDegreesPerSecondSquared)));
-    setGoal(0);
 
     this.io = io;
     useSoftwarePidVelocityControl = !io.supportsHardwarePid();
@@ -64,6 +63,9 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements Arm {
                 null,
                 (state) -> Logger.recordOutput("Arm/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism((voltage) -> runVoltage(voltage.in(Volts)), null, this));
+
+    setGoal(0);
+    disable();
   }
 
   @Override
