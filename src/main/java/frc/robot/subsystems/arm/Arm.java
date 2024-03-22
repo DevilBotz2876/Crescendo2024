@@ -24,11 +24,7 @@ public interface Arm extends Subsystem {
   }
 
   // sets of the angle of the arm
-  public default void setAngle(double degrees) {
-    setAngle(degrees, 0);
-  }
-
-  public default void setAngle(double degrees, double velocityDegreesPerSecond) {}
+  public default void setAngle(double degrees) {}
 
   public default boolean isAbsoluteEncoderConnected() {
     return true;
