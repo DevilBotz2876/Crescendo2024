@@ -28,7 +28,6 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   @AutoLogOutput private double targetVoltage;
   @AutoLogOutput private double targetDegrees;
   @AutoLogOutput private double targetRelativeDegrees;
-  @AutoLogOutput private double targetVelocityDegreesPerSecond;
 
   // Create a Mechanism2d display of an Arm with a fixed ArmTower and moving Arm.
   private final double armAngle2dOffset = 0;
@@ -87,12 +86,12 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
   @Override
   public double getAngle() {
-    return inputs.positionDegree;
+    return inputs.positionDegrees;
   }
 
   @Override
   public double getVelocity() {
-    return inputs.velocityInDegrees;
+    return inputs.velocityDegreesPerSecond;
   }
 
   @Override
@@ -107,7 +106,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
   // sets of the angle of the arm
   @Override
-  public void setAngle(double degrees, double velocityDegreesPerSecond) {
+  public void setAngle(double degrees) {
     Logger.recordOutput("Arm/setAngle/requestedAngleDegress", degrees);
     // Don't try to set position if absolute encoder is broken/missing.
     if (isAbsoluteEncoderConnected() == false) {
@@ -132,7 +131,6 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
       // The  angle is within the range and is set
       this.targetDegrees = degrees;
     }
-    this.targetVelocityDegreesPerSecond = velocityDegreesPerSecond;
 
     // We instantiate a new object here each time because constants can change when being tuned.
     feedforward = new ArmFeedforward(kS, kG, kV, kA);
@@ -144,8 +142,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     double deltaDegrees = this.targetDegrees - getAngle();
     this.targetRelativeDegrees = getRelativeAngle() + deltaDegrees;
 
-    double ff =
-        feedforward.calculate(this.targetRelativeDegrees, this.targetVelocityDegreesPerSecond);
+    double ff = feedforward.calculate(this.targetRelativeDegrees, 0);
 
     Logger.recordOutput("Arm/setAngle/setpointDegrees", this.targetRelativeDegrees);
     Logger.recordOutput("Arm/setAngle/ffVolts", ff);
@@ -239,7 +236,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     }
 
     if (null != arm2d) {
-      arm2d.setAngle(inputs.positionDegree + armAngle2dOffset);
+      arm2d.setAngle(inputs.positionDegrees + armAngle2dOffset);
     }
   }
 
@@ -248,7 +245,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-    if (inputs.positionDegree >= positionDegreeMax) {
+    if (inputs.positionDegrees >= positionDegreeMax) {
       inputs.limitHigh = true;
     } else {
       inputs.limitHigh = false;
@@ -261,7 +258,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-    if (inputs.positionDegree <= positionDegreeMin) {
+    if (inputs.positionDegrees <= positionDegreeMin) {
       inputs.limitLow = true;
 
     } else {
@@ -304,7 +301,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
             new MechanismLigament2d(
                 "Arm",
                 30,
-                inputs.positionDegree + armAngle2dOffset,
+                inputs.positionDegrees + armAngle2dOffset,
                 6,
                 new Color8Bit(Color.kYellow)));
   }
