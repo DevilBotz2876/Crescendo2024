@@ -106,6 +106,20 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements Arm {
     return targetDegrees;
   }
 
+  private void syncSetpointToTarget()
+  {
+      // To account for differences in absolute encoder and relative encoder readings cause by
+      // backlash and other arm physics,
+      // we calculate the difference in current vs target absolute encoder value and then calculate
+      // the corrsponding relative
+      // angle
+      double deltaDegrees = this.targetDegrees - getAngle();
+      this.targetRelativeDegrees = getRelativeAngle() + deltaDegrees;
+
+      setGoal(new TrapezoidProfile.State(this.targetRelativeDegrees, 0));
+      enable();
+  }
+
   // sets of the angle of the arm
   @Override
   public void setAngle(double degrees, double velocityDegreesPerSecond) {
@@ -127,17 +141,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements Arm {
       this.targetDegrees = degrees;
       this.targetVelocityDegreesPerSecond = velocityDegreesPerSecond;
 
-      // We instantiate a new object here each time because constants can change when being tuned.
-      // To account for differences in absolute encoder and relative encoder readings cause by
-      // backlash and other arm physics,
-      // we calculate the difference in current vs target absolute encoder value and then calculate
-      // the corrsponding relative
-      // angle
-      double deltaDegrees = this.targetDegrees - getAngle();
-      this.targetRelativeDegrees = getRelativeAngle() + deltaDegrees;
-
-      setGoal(new TrapezoidProfile.State(this.targetRelativeDegrees, 0));
-      enable();
+      syncSetpointToTarget();
     }
   }
 
