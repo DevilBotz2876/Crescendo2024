@@ -42,8 +42,4 @@ public interface ArmIO {
 
   /** Set brake mode on motors */
   public default void setBrakeMode(boolean brake) {}
-
-  public default boolean supportsHardwarePid() {
-    return false;
-  }
 }

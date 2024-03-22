@@ -215,9 +215,4 @@ public class ArmIOSparkMax implements ArmIO {
       }
     }
   }
-
-  @Override
-  public boolean supportsHardwarePid() {
-    return true;
-  }
 }

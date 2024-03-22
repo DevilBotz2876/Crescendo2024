@@ -4,7 +4,6 @@ import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -12,22 +11,20 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.util.DevilBotState;
 import frc.robot.util.DevilBotState.State;
+import frc.robot.util.TrapezoidProfileSubsystem2876;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-public class ArmSubsystem extends ProfiledPIDSubsystem implements Arm {
+public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
   private final ArmIO io;
   private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
   private ArmFeedforward feedforward =
       new ArmFeedforward(
           ArmConstants.ffKs, ArmConstants.ffKg, ArmConstants.ffKv, ArmConstants.ffKa);
-  ;
-  boolean useSoftwarePidVelocityControl = true;
 
   private final SysIdRoutine sysId;
   private final double positionDegreeMax = ArmConstants.maxAngleInDegrees;
@@ -35,7 +32,6 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements Arm {
   @AutoLogOutput private double targetVoltage;
   @AutoLogOutput private double targetDegrees;
   @AutoLogOutput private double targetRelativeDegrees;
-  @AutoLogOutput private double targetVelocityDegreesPerSecond;
 
   // Create a Mechanism2d display of an Arm with a fixed ArmTower and moving Arm.
   private final double armAngle2dOffset = 0;
@@ -43,16 +39,11 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements Arm {
 
   public ArmSubsystem(ArmIO io) {
     super(
-        new ProfiledPIDController(
-            ArmConstants.pidKp,
-            ArmConstants.pidKi,
-            ArmConstants.pidKd,
-            new TrapezoidProfile.Constraints(
-                ArmConstants.maxVelocityInDegreesPerSecond,
-                ArmConstants.maxAccelerationInDegreesPerSecondSquared)));
+        new TrapezoidProfile.Constraints(
+            ArmConstants.maxVelocityInDegreesPerSecond,
+            ArmConstants.maxAccelerationInDegreesPerSecondSquared));
 
     this.io = io;
-    useSoftwarePidVelocityControl = !io.supportsHardwarePid();
 
     // Configure SysId based on the AdvantageKit example
     sysId =
@@ -63,27 +54,21 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements Arm {
                 null,
                 (state) -> Logger.recordOutput("Arm/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism((voltage) -> runVoltage(voltage.in(Volts)), null, this));
-
-    setGoal(0);
-    disable();
   }
 
   @Override
-  public void useOutput(double output, TrapezoidProfile.State setpoint) {
-    double ff = feedforward.calculate(setpoint.position, 0);
+  public void useState(TrapezoidProfile.State setpoint) {
+    double ff = feedforward.calculate(setpoint.position, setpoint.velocity);
 
-    if (useSoftwarePidVelocityControl) {
-      // Use feedforward +  SW velocity PID
-      io.setVoltage(output + ff);
-    } else {
-      // Use feedforward +  HW velocity PID (ignore SW PID)
-      io.setPosition(setpoint.position, ff);
-    }
+    // Use feedforward +  HW velocity PID (ignore SW PID)
+    io.setPosition(setpoint.position, ff);
+
+    //    System.out.println(setpoint.position + ":" + output);
   }
 
   @Override
-  public double getMeasurement() {
-    return inputs.relativePositionDegrees;
+  public TrapezoidProfile.State getMeasurement() {
+    return new TrapezoidProfile.State(getRelativeAngle(), getVelocity());
   }
 
   @Override
@@ -106,7 +91,7 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements Arm {
     return targetDegrees;
   }
 
-  private void syncSetpointToTarget() {
+  private void syncRelativeSetpointToAbsoluteSetpoint() {
     // To account for differences in absolute encoder and relative encoder readings cause by
     // backlash and other arm physics,
     // we calculate the difference in current vs target absolute encoder value and then calculate
@@ -115,33 +100,32 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements Arm {
     double deltaDegrees = this.targetDegrees - getAngle();
     this.targetRelativeDegrees = getRelativeAngle() + deltaDegrees;
 
-    setGoal(new TrapezoidProfile.State(this.targetRelativeDegrees, 0));
+    setTargetAngle(this.targetRelativeDegrees);
     enable();
+  }
+
+  private void setTargetAngle(double degrees) {
+    setGoal(degrees);
+    //    setSetpoint(degrees);
   }
 
   // sets of the angle of the arm
   @Override
-  public void setAngle(double degrees, double velocityDegreesPerSecond) {
+  public void setAngle(double degrees) {
     degrees =
         MathUtil.clamp(degrees, ArmConstants.minAngleInDegrees, ArmConstants.maxAngleInDegrees);
-    velocityDegreesPerSecond =
-        MathUtil.clamp(velocityDegreesPerSecond, 0, ArmConstants.maxVelocityInDegreesPerSecond);
 
-    if ((this.targetDegrees != degrees)
-        || (this.targetVelocityDegreesPerSecond != velocityDegreesPerSecond)) {
-      // Don't try to set position if absolute encoder is broken/missing.
-      if (isAbsoluteEncoderConnected() == false) {
-        return;
-      }
-      if (isAbsoluteEncoderReadingValid() == false) {
-        return;
-      }
-
-      this.targetDegrees = degrees;
-      this.targetVelocityDegreesPerSecond = velocityDegreesPerSecond;
-
-      syncSetpointToTarget();
+    // Don't try to set position if absolute encoder is broken/missing.
+    if (isAbsoluteEncoderConnected() == false) {
+      return;
     }
+    if (isAbsoluteEncoderReadingValid() == false) {
+      return;
+    }
+
+    this.targetDegrees = degrees;
+
+    syncRelativeSetpointToAbsoluteSetpoint();
   }
 
   @Override
@@ -159,11 +143,9 @@ public class ArmSubsystem extends ProfiledPIDSubsystem implements Arm {
 
   // Sets the voltage to volts. the volts value is -12 to 12
   public void runVoltage(double volts) {
-    if ((volts == 0) || (targetVoltage != volts)) {
-      targetVoltage = voltageSafety(volts);
-      disable(); // disable PID control
-      io.setVoltage(targetVoltage);
-    }
+    targetVoltage = voltageSafety(volts);
+    disable(); // disable PID control
+    io.setVoltage(targetVoltage);
   }
 
   protected double voltageSafety(double voltage) {
