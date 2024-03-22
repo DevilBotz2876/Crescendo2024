@@ -148,7 +148,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     Logger.recordOutput("Arm/setAngle/ffVolts", ff);
 
     // Set the position reference with feedforward voltage
-    io.setPosition(this.targetDegrees, ff);
+    io.setPosition(this.targetRelativeDegrees, ff);
   }
 
   @Override
