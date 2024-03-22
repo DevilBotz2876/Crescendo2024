@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.arm.ArmToPosition;
-import frc.robot.commands.arm.ArmToPositionTP;
 import frc.robot.commands.auto.AutoPrepareForIntake;
 import frc.robot.commands.auto.AutoScorePiece;
 import frc.robot.commands.debug.PrepareForScore;
@@ -222,15 +221,6 @@ public class DebugControls {
         .add(
             "Arm To Position",
             new ArmToPosition(
-                RobotConfig.arm,
-                () -> armAngleEntry.getDouble(ArmConstants.subwooferScoreAngleInDegrees)))
-        .withPosition(colIndex, rowIndex++)
-        .withSize(2, 1);
-
-    debugTab
-        .add(
-            "Arm To Position (TP)",
-            new ArmToPositionTP(
                 RobotConfig.arm,
                 () -> armAngleEntry.getDouble(ArmConstants.subwooferScoreAngleInDegrees)))
         .withPosition(colIndex, rowIndex++)
