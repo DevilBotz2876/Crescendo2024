@@ -1,5 +1,6 @@
 package frc.robot.commands.arm;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -11,7 +12,7 @@ public class ArmToPosition extends Command {
   Arm arm;
   DoubleSupplier positionDegrees;
   double targetPositionDegrees;
-  double timeMS;
+  Timer timer = new Timer();
 
   public ArmToPosition(Arm arm, DoubleSupplier positionDegrees) {
     this.arm = arm;
@@ -23,28 +24,24 @@ public class ArmToPosition extends Command {
   @Override
   public void initialize() {
     targetPositionDegrees = positionDegrees.getAsDouble();
-    timeMS = 0.0;
+    timer.restart();
 
     if (Constants.debugCommands) {
       System.out.println(
           "START: " + this.getClass().getSimpleName() + " angle: " + targetPositionDegrees);
     }
-  }
 
-  @Override
-  public void execute() {
     arm.setAngle(targetPositionDegrees);
   }
 
   @Override
   public boolean isFinished() {
     if (Math.abs(arm.getAngle() - targetPositionDegrees) <= ArmConstants.pidAngleErrorInDegrees) {
-      timeMS += 20.0;
-      if (timeMS >= ArmConstants.pidSettlingTimeInMilliseconds) {
+      if (timer.get() >= ArmConstants.pidSettlingTimeInSeconds) {
         return true;
       }
     } else {
-      timeMS = 0.0;
+      timer.reset();
     }
     return false;
   }

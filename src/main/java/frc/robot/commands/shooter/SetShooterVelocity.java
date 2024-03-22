@@ -1,6 +1,7 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -12,7 +13,7 @@ public class SetShooterVelocity extends Command {
   Shooter shooter;
   DoubleSupplier velocityRPM;
   double targetVelocityRPM;
-  double timeMS;
+  Timer timer = new Timer();
 
   public SetShooterVelocity(Shooter shooter, DoubleSupplier velocityRPM) {
     this.shooter = shooter;
@@ -26,7 +27,7 @@ public class SetShooterVelocity extends Command {
       System.out.println(
           "START: " + this.getClass().getSimpleName() + " velocity: " + velocityRPM.getAsDouble());
     }
-    timeMS = 0.0;
+    timer.restart();
     targetVelocityRPM = velocityRPM.getAsDouble();
     shooter.runVelocity(targetVelocityRPM);
   }
@@ -37,12 +38,11 @@ public class SetShooterVelocity extends Command {
             Units.radiansPerSecondToRotationsPerMinute(shooter.getCurrentSpeed())
                 - targetVelocityRPM)
         <= ShooterConstants.pidVelocityErrorInRPMS) {
-      timeMS += 20.0;
-      if (timeMS >= ShooterConstants.pidSettlingTimeInMilliseconds) {
+      if (timer.get() >= ShooterConstants.pidSettlingTimeInSeconds) {
         return true;
       }
     } else {
-      timeMS = 0.0;
+      timer.reset();
     }
 
     return false;

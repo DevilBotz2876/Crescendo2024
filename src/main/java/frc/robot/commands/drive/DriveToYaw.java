@@ -2,6 +2,7 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
@@ -16,7 +17,7 @@ public class DriveToYaw extends Command {
   PIDController turnPID =
       new PIDController(
           DriveConstants.rotatePidKp, DriveConstants.rotatePidKi, DriveConstants.rotatePidKd);
-  double timeMS;
+  Timer timer = new Timer();
 
   public DriveToYaw(Drive drive, DoubleSupplier yawDegrees) {
     this.drive = drive;
@@ -32,7 +33,7 @@ public class DriveToYaw extends Command {
     targetYaw = this.yawDegrees.getAsDouble();
     turnPID.reset();
     turnPID.setSetpoint(targetYaw);
-    timeMS = 0.0;
+    timer.reset();
     if (Constants.debugCommands) {
       System.out.println(
           "START: "
@@ -54,12 +55,11 @@ public class DriveToYaw extends Command {
   @Override
   public boolean isFinished() {
     if (turnPID.atSetpoint()) {
-      timeMS += 20.0;
-      if (timeMS >= DriveConstants.pidSettlingTimeInMilliseconds) {
+      if (timer.get() >= DriveConstants.pidSettlingTimeInSeconds) {
         return true;
       }
     } else {
-      timeMS = 0.0;
+      timer.reset();
     }
     return false;
   }
