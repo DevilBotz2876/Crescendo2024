@@ -73,9 +73,6 @@ public class ShooterSubsystem extends ProfiledPIDSubsystem implements Shooter {
                 null,
                 (state) -> Logger.recordOutput("Shooter/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism((voltage) -> runVoltage(voltage.in(Volts)), null, this));
-
-    setGoal(0);
-    disable();
   }
 
   public ShooterSubsystem(ShooterIO ioTop, ShooterIO ioBottom) {
@@ -105,25 +102,21 @@ public class ShooterSubsystem extends ProfiledPIDSubsystem implements Shooter {
   @Override
   // Sets the voltage to volts. the volts value is -12 to 12
   public void runVoltage(double volts) {
-    if (targetVoltage != volts) {
-      targetVoltage = volts;
-      targetVelocityRadPerSec = 0;
-      this.targetVelocityRPM = ShooterConstants.maxVelocityInRPMs * (volts / 12.0);
-      disable(); // disable PID control
-      io.setVoltage(targetVoltage);
-    }
+    targetVoltage = volts;
+    targetVelocityRadPerSec = 0;
+    this.targetVelocityRPM = ShooterConstants.maxVelocityInRPMs * (volts / 12.0);
+    disable(); // disable PID control
+    io.setVoltage(targetVoltage);
   }
 
   @Override
   public void runVelocity(double velocityRPM) {
     velocityRPM = MathUtil.clamp(velocityRPM, 0, ShooterConstants.maxVelocityInRPMs);
-    if (this.targetVelocityRPM != velocityRPM) {
-      targetVoltage = -1;
-      this.targetVelocityRPM = velocityRPM;
-      targetVelocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(velocityRPM);
-      setGoal(targetVelocityRadPerSec);
-      enable();
-    }
+    targetVoltage = -1;
+    this.targetVelocityRPM = velocityRPM;
+    targetVelocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(velocityRPM);
+    setGoal(targetVelocityRadPerSec);
+    enable();
   }
 
   @Override
