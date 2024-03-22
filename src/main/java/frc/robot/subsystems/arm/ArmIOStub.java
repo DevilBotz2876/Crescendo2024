@@ -1,18 +1,12 @@
 package frc.robot.subsystems.arm;
 
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
-import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
 
 public class ArmIOStub implements ArmIO {
-  // The P gain for the PID controller that drives this arm.
-  private double targetDegrees = 0;
-  private double feedForwardVolts = 0;
   private double minAngleInDegrees = ArmConstants.minAngleInDegrees;
   private double maxAngleInDegrees = ArmConstants.maxAngleInDegrees;
 
@@ -22,14 +16,6 @@ public class ArmIOStub implements ArmIO {
   // The arm gearbox represents a gearbox containing two Vex 775pro motors.
   private final DCMotor motorPlant = DCMotor.getNEO(1);
   private double currentVoltage = 0.0;
-
-  // Standard classes for controlling our arm
-  private final PIDController pid =
-      new PIDController(
-          RobotConfig.ArmConstants.pidKp,
-          RobotConfig.ArmConstants.pidKi,
-          RobotConfig.ArmConstants.pidKd);
-  private boolean softwarePidEnabled = false;
 
   // Simulation classes help us simulate what's going on, including gravity.
   // This arm sim represents an arm that can travel from -75 degrees (rotated down front)
@@ -56,13 +42,6 @@ public class ArmIOStub implements ArmIO {
     inputs.relativePositionDegrees = inputs.positionDegrees;
     inputs.appliedVolts = currentVoltage;
 
-    if (softwarePidEnabled) {
-      currentVoltage =
-          feedForwardVolts
-              + pid.calculate(inputs.positionDegrees, targetDegrees)
-                  * RobotController.getBatteryVoltage();
-    }
-
     arm.setInput(currentVoltage);
     arm.update(0.020);
   }
@@ -70,24 +49,6 @@ public class ArmIOStub implements ArmIO {
   /** Run the arm motor at the specified voltage. */
   @Override
   public void setVoltage(double volts) {
-    softwarePidEnabled = false;
     currentVoltage = volts;
-  }
-
-  @Override
-  public void setPosition(double degrees, double ffVolts) {
-    targetDegrees = degrees;
-    feedForwardVolts = ffVolts;
-    softwarePidEnabled = true;
-    pid.reset();
-  }
-
-  @Override
-  public void setFeedback(double kP, double kI, double kD, double minOutput, double maxOutput) {
-    pid.setP(kP);
-    pid.setI(kI);
-    pid.setD(kD);
-    // wpilib pid has no method to set output range. When you call calculate method to use output
-    // you can limit the range there.
   }
 }
