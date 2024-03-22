@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.util.DevilBotState;
 import frc.robot.util.DevilBotState.State;
+import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.TrapezoidProfileSubsystem2876;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
@@ -25,7 +26,6 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
   private ArmFeedforward feedforward =
       new ArmFeedforward(
           ArmConstants.ffKs, ArmConstants.ffKg, ArmConstants.ffKv, ArmConstants.ffKa);
-
   private final SysIdRoutine sysId;
   private final double positionDegreeMax = ArmConstants.maxAngleInDegrees;
   private final double positionDegreeMin = ArmConstants.minAngleInDegrees;
@@ -37,13 +37,49 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
   private final double armAngle2dOffset = 0;
   private MechanismLigament2d arm2d = null;
 
+  private static final LoggedTunableNumber armKp = new LoggedTunableNumber("Arm/pid/kP");
+  private static final LoggedTunableNumber armKd = new LoggedTunableNumber("Arm/pid/kD");
+
+  private static final LoggedTunableNumber armKg = new LoggedTunableNumber("Arm/pid/kG");
+  private static final LoggedTunableNumber armKv = new LoggedTunableNumber("Arm/pid/kV");
+  private static final LoggedTunableNumber armKa = new LoggedTunableNumber("Arm/pid/kA");
+  private static final LoggedTunableNumber armKs = new LoggedTunableNumber("Arm/pid/kS");
+
+  private static final LoggedTunableNumber armOutputMax =
+      new LoggedTunableNumber("Arm/pid/outputMax");
+  private static final LoggedTunableNumber armOutputMin =
+      new LoggedTunableNumber("Arm/pid/outputMin");
+
+  private static final LoggedTunableNumber armMaxVelocity =
+      new LoggedTunableNumber("Arm/constraints/maxVelocity");
+  private static final LoggedTunableNumber armMaxAccel =
+      new LoggedTunableNumber("Arm/constraints/minAccel");
+
+  private double kG, kV, kA, kS;
+
   public ArmSubsystem(ArmIO io) {
     super(
         new TrapezoidProfile.Constraints(
             ArmConstants.maxVelocityInDegreesPerSecond,
             ArmConstants.maxAccelerationInDegreesPerSecondSquared));
-
     this.io = io;
+
+    armKp.initDefault(ArmConstants.pidKp);
+    armKd.initDefault(ArmConstants.pidKd);
+    armKg.initDefault(ArmConstants.ffKg);
+    armKv.initDefault(ArmConstants.ffKv);
+    armKa.initDefault(ArmConstants.ffKa);
+    armKs.initDefault(ArmConstants.ffKs);
+    armOutputMax.initDefault(ArmConstants.pidMaxOutput);
+    armOutputMin.initDefault(ArmConstants.pidMinOutput);
+
+    armMaxVelocity.initDefault(ArmConstants.maxVelocityInDegreesPerSecond);
+    armMaxAccel.initDefault(ArmConstants.maxAccelerationInDegreesPerSecondSquared);
+
+    kG = armKg.get();
+    kV = armKv.get();
+    kA = armKa.get();
+    kS = armKs.get();
 
     // Configure SysId based on the AdvantageKit example
     sysId =
@@ -62,6 +98,9 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
 
     // Use feedforward +  HW velocity PID (ignore SW PID)
     io.setPosition(setpoint.position, ff);
+
+    Logger.recordOutput("Arm/setAngle/setpointDegrees", setpoint.position);
+    Logger.recordOutput("Arm/setAngle/ffVolts", ff);
 
     //    System.out.println(setpoint.position + ":" + output);
   }
@@ -91,7 +130,39 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
     return targetDegrees;
   }
 
-  private void syncRelativeSetpointToAbsoluteSetpoint() {
+  // sets of the angle of the arm
+  @Override
+  public void setAngle(double degrees) {
+    degrees =
+        MathUtil.clamp(degrees, ArmConstants.minAngleInDegrees, ArmConstants.maxAngleInDegrees);
+
+    Logger.recordOutput("Arm/setAngle/requestedAngleDegress", degrees);
+    // Don't try to set position if absolute encoder is broken/missing.
+    if (isAbsoluteEncoderConnected() == false) {
+      return;
+    }
+    if (isAbsoluteEncoderReadingValid() == false) {
+      return;
+    }
+    // Check if the arm angle is within limits.  Don't try to move the arm to new angle if it is
+    // already at limit.
+    // if (isHighLimit() || isLowLimit()) {
+    //   return;
+    // }
+
+    // Check if the angle is below the minimum limit or above the maximum limit
+    // If it is the it is set to min/max
+    if (degrees < ArmConstants.minAngleInDegrees) {
+      this.targetDegrees = ArmConstants.minAngleInDegrees; // Set to the minimum angle
+    } else if (degrees > ArmConstants.maxAngleInDegrees) {
+      this.targetDegrees = ArmConstants.maxAngleInDegrees; // Set to the maximum angle
+    } else {
+      // The  angle is within the range and is set
+      this.targetDegrees = degrees;
+    }
+
+    // We instantiate a new object here each time because constants can change when being tuned.
+    feedforward = new ArmFeedforward(kS, kG, kV, kA);
     // To account for differences in absolute encoder and relative encoder readings cause by
     // backlash and other arm physics,
     // we calculate the difference in current vs target absolute encoder value and then calculate
@@ -100,32 +171,10 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
     double deltaDegrees = this.targetDegrees - getAngle();
     this.targetRelativeDegrees = getRelativeAngle() + deltaDegrees;
 
-    setTargetAngle(this.targetRelativeDegrees);
+    Logger.recordOutput("Arm/setAngle/setpointDegrees", this.targetRelativeDegrees);
+
+    setGoal(this.targetRelativeDegrees);
     enable();
-  }
-
-  private void setTargetAngle(double degrees) {
-    setGoal(degrees);
-    //    setSetpoint(degrees);
-  }
-
-  // sets of the angle of the arm
-  @Override
-  public void setAngle(double degrees) {
-    degrees =
-        MathUtil.clamp(degrees, ArmConstants.minAngleInDegrees, ArmConstants.maxAngleInDegrees);
-
-    // Don't try to set position if absolute encoder is broken/missing.
-    if (isAbsoluteEncoderConnected() == false) {
-      return;
-    }
-    if (isAbsoluteEncoderReadingValid() == false) {
-      return;
-    }
-
-    this.targetDegrees = degrees;
-
-    syncRelativeSetpointToAbsoluteSetpoint();
   }
 
   @Override
@@ -144,7 +193,7 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
   // Sets the voltage to volts. the volts value is -12 to 12
   public void runVoltage(double volts) {
     targetVoltage = voltageSafety(volts);
-    disable(); // disable PID control
+    disable();
     io.setVoltage(targetVoltage);
   }
 
@@ -166,18 +215,51 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
   @Override
   public void periodic() {
     super.periodic();
+    if (armKp.hasChanged(hashCode())
+        || armKd.hasChanged(hashCode())
+        || armOutputMin.hasChanged(hashCode())
+        || armOutputMax.hasChanged(hashCode())) {
+      io.setFeedback(armKp.get(), 0.0, armKd.get(), armOutputMin.get(), armOutputMax.get());
+    }
+    if (armKg.hasChanged(hashCode())) {
+      kG = armKg.get();
+    }
+    if (armKv.hasChanged(hashCode())) {
+      kV = armKv.get();
+    }
+    if (armKa.hasChanged(hashCode())) {
+      kA = armKa.get();
+    }
+    if (armKs.hasChanged(hashCode())) {
+      kS = armKs.get();
+    }
     // Updates the inputs
     io.updateInputs(inputs);
     Logger.processInputs("Arm", inputs);
 
+    // The relative encoder is initialized in the hw specific code/file.
+    //
+    // if (relEncoderInit) {
+    //   io.resetRelativeEncoder(
+    //       0); // TODO: We need to figure out the mapping for the absolute encoder to relative
+    //   // encoder
+    //   relEncoderInit = false;
+    // }
     if (DevilBotState.getState() == State.DISABLED && io.isAbsoluteEncoderConnected()) {
       io.resetRelativeEncoder(getAngle());
     }
 
+    //    if (Math.abs(inputs.velocityInDegrees) < 0.1) {
+    //      io.resetRelativeEncoder(getAngle());
+    //    }
+
     if (isLimitHigh() && inputs.appliedVolts > 0) {
+      // TODO: turn off voltage or stop pid
       io.setVoltage(0);
     }
     if (isLimitLow() && inputs.appliedVolts < 0) {
+      // TODO: turn off voltage or stop pid
+      // io.resetRelativeEncoder(0.0);
       io.setVoltage(0);
     }
 
