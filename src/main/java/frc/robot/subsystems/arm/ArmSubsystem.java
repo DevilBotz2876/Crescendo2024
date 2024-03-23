@@ -91,6 +91,7 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
                 null,
                 (state) -> Logger.recordOutput("Arm/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism((voltage) -> runVoltage(voltage.in(Volts)), null, this));
+    disable();
   }
 
   @Override
