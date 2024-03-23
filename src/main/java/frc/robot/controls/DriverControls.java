@@ -400,7 +400,9 @@ public class DriverControls {
                 ));
 
     BooleanEvent stateChangedEvent =
-        new BooleanEvent(eventLoop, () -> DevilBotState.stateChanged());
+        new BooleanEvent(
+            eventLoop,
+            () -> (DevilBotState.stateChanged()) && DevilBotState.getState() != State.AUTO);
 
     Trigger stateChangedEventTrigger = stateChangedEvent.rising().castTo(Trigger::new);
     stateChangedEventTrigger.onTrue(getResetSubsystemsCommand());
