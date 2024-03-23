@@ -25,7 +25,7 @@ public class AutoPrepareForIntake extends SequentialCommandGroup {
           new ParallelCommandGroup(new ArmToPosition(arm, intakeAngle)),
           new AutoIndexPiece(intake, intakeVoltage));
     }
-    addCommands(arm.getStowCommand());
+    //    addCommands(arm.getStowCommand());
     if (Constants.debugCommands) {
       addCommands(new PrintCommand("  END: " + this.getClass().getSimpleName()));
     }
