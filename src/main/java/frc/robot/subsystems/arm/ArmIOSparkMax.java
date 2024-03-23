@@ -63,6 +63,10 @@ public class ArmIOSparkMax implements ArmIO {
     // encoder is at 0, set rel to 0.  Everything else is invalid and requires arm to rehome itself.
     //
     // relEncoder.setPosition(0);
+
+    // 60:1 gear box, 72 teeth on the arm cog and 14 teeth on the motor cog
+    relEncoder.setPositionConversionFactor(360 / (60 * (72 / 14)));
+    // relEncoder.setVelocityConversionFactor((360 / (60 * (72 / 14))) / 60);
     relEncoder.setPosition(Units.radiansToDegrees(getOffsetCorrectedAbsolutePositionInRadians()));
 
     lkP = RobotConfig.ArmConstants.pidKp;
@@ -166,7 +170,11 @@ public class ArmIOSparkMax implements ArmIO {
       SmartDashboard.putNumber("Arm/setPosition/ffVolts", ffVolts);
     }
     armPid.setReference(
-        degrees, CANSparkMax.ControlType.kPosition, 0, ffVolts, ArbFFUnits.kVoltage);
+        Units.degreesToRotations(degrees),
+        CANSparkMax.ControlType.kPosition,
+        0,
+        ffVolts,
+        ArbFFUnits.kVoltage);
   }
 
   /** Run the arm motor at the specified voltage. */
