@@ -2,26 +2,30 @@ package frc.robot.subsystems.arm;
 
 import static edu.wpi.first.units.Units.Volts;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.util.DevilBotState;
 import frc.robot.util.DevilBotState.State;
 import frc.robot.util.LoggedTunableNumber;
+import frc.robot.util.TrapezoidProfileSubsystem2876;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
-public class ArmSubsystem extends SubsystemBase implements Arm {
+public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
   private final ArmIO io;
   private final ArmIOInputsAutoLogged inputs = new ArmIOInputsAutoLogged();
-  private ArmFeedforward feedforward;
+  private ArmFeedforward feedforward =
+      new ArmFeedforward(
+          ArmConstants.ffKs, ArmConstants.ffKg, ArmConstants.ffKv, ArmConstants.ffKa);
   private final SysIdRoutine sysId;
   private final double positionDegreeMax = ArmConstants.maxAngleInDegrees;
   private final double positionDegreeMin = ArmConstants.minAngleInDegrees;
@@ -55,6 +59,10 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   private double kG, kV, kA, kS;
 
   public ArmSubsystem(ArmIO io) {
+super(
+        new TrapezoidProfile.Constraints(
+            ArmConstants.maxVelocityInDegreesPerSecond,
+            ArmConstants.maxAccelerationInDegreesPerSecondSquared));
     this.io = io;
 
     armKp.initDefault(ArmConstants.pidKp);
@@ -88,6 +96,26 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   }
 
   @Override
+  public void useState(TrapezoidProfile.State setpoint) {
+    double ff = feedforward.calculate(setpoint.position, 0);
+
+    // Use feedforward +  HW velocity PID (ignore SW PID)
+    io.setPosition(setpoint.position, ff);
+
+    Logger.recordOutput("Arm/setAngle/setpointDegrees", setpoint.position);
+    Logger.recordOutput("Arm/setAngle/ffVolts", ff);
+
+    // System.out.println("pos: " + setpoint.position);
+    // System.out.println("vel: " + setpoint.velocity);
+  }
+  
+
+  @Override
+  public TrapezoidProfile.State getMeasurement() {
+    return new TrapezoidProfile.State(getRelativeAngle(), getVelocity());
+  }
+
+  @Override
   public double getAngle() {
     return inputs.positionDegree;
   }
@@ -109,7 +137,10 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
   // sets of the angle of the arm
   @Override
-  public void setAngle(double degrees, double velocityDegreesPerSecond) {
+  public void setAngle(double degrees) {
+    degrees =
+        MathUtil.clamp(degrees, ArmConstants.minAngleInDegrees, ArmConstants.maxAngleInDegrees);
+
     Logger.recordOutput("Arm/setAngle/requestedAngleDegress", degrees);
     // Don't try to set position if absolute encoder is broken/missing.
     if (isAbsoluteEncoderConnected() == false) {
@@ -134,7 +165,6 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
       // The  angle is within the range and is set
       this.targetDegrees = degrees;
     }
-    this.targetVelocityDegreesPerSecond = velocityDegreesPerSecond;
 
     // We instantiate a new object here each time because constants can change when being tuned.
     feedforward = new ArmFeedforward(kS, kG, kV, kA);
@@ -146,13 +176,10 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     double deltaDegrees = this.targetDegrees - getAngle();
     this.targetRelativeDegrees = getRelativeAngle() + deltaDegrees;
 
-    double ff = feedforward.calculate(this.targetDegrees, this.targetVelocityDegreesPerSecond);
-
     Logger.recordOutput("Arm/setAngle/setpointDegrees", this.targetRelativeDegrees);
-    Logger.recordOutput("Arm/setAngle/ffVolts", ff);
-
-    // Set the position reference with feedforward voltage
-    io.setPosition(this.targetDegrees, ff);
+    
+    setGoal(this.targetDegrees);
+    enable();
   }
 
   @Override
@@ -171,6 +198,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   // Sets the voltage to volts. the volts value is -12 to 12
   public void runVoltage(double volts) {
     targetVoltage = voltageSafety(volts);
+    disable();
     io.setVoltage(targetVoltage);
   }
 
@@ -191,6 +219,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
   @Override
   public void periodic() {
+super.periodic();
     if (armKp.hasChanged(hashCode())
         || armKd.hasChanged(hashCode())
         || armOutputMin.hasChanged(hashCode())
