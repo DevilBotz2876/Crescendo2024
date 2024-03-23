@@ -172,7 +172,11 @@ public class ArmIOSparkMax implements ArmIO {
       SmartDashboard.putNumber("Arm/setPosition/ffVolts", ffVolts);
     }
     armPid.setReference(
-        degrees, CANSparkMax.ControlType.kPosition, 0, ffVolts, ArbFFUnits.kVoltage);
+        Units.degreesToRotations(degrees),
+        CANSparkMax.ControlType.kPosition,
+        0,
+        ffVolts,
+        ArbFFUnits.kVoltage);
   }
 
   /** Run the arm motor at the specified voltage. */
