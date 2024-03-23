@@ -93,6 +93,7 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
             new SysIdRoutine.Mechanism((voltage) -> runVoltage(voltage.in(Volts)), null, this));
 
     io.setBrakeMode(true);
+    disable();
   }
 
   @Override
