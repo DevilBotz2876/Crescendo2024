@@ -29,12 +29,12 @@ public class ArmToPosition extends Command {
       System.out.println(
           "START: " + this.getClass().getSimpleName() + " angle: " + targetPositionDegrees);
     }
+
+    arm.setAngle(targetPositionDegrees);
   }
 
   @Override
-  public void execute() {
-    arm.setAngle(targetPositionDegrees);
-  }
+  public void execute() {}
 
   @Override
   public boolean isFinished() {
