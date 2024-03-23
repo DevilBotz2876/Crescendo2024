@@ -65,8 +65,10 @@ public class ArmIOSparkMax implements ArmIO {
     // relEncoder.setPosition(0);
 
     // 60:1 gear box, 72 teeth on the arm cog and 14 teeth on the motor cog
-    relEncoder.setPositionConversionFactor(360 / (60 * (72 / 14)));
-    // relEncoder.setVelocityConversionFactor((360 / (60 * (72 / 14))) / 60);
+    double gearRatio = (60 * (72 / 14));
+    double rotationsToDegreesConversionFactor = 360.0 / gearRatio;
+    relEncoder.setPositionConversionFactor(rotationsToDegreesConversionFactor);
+    relEncoder.setVelocityConversionFactor(rotationsToDegreesConversionFactor / 60);
     relEncoder.setPosition(Units.radiansToDegrees(getOffsetCorrectedAbsolutePositionInRadians()));
 
     lkP = RobotConfig.ArmConstants.pidKp;
@@ -170,11 +172,7 @@ public class ArmIOSparkMax implements ArmIO {
       SmartDashboard.putNumber("Arm/setPosition/ffVolts", ffVolts);
     }
     armPid.setReference(
-        Units.degreesToRotations(degrees),
-        CANSparkMax.ControlType.kPosition,
-        0,
-        ffVolts,
-        ArbFFUnits.kVoltage);
+        degrees, CANSparkMax.ControlType.kPosition, 0, ffVolts, ArbFFUnits.kVoltage);
   }
 
   /** Run the arm motor at the specified voltage. */
