@@ -405,10 +405,19 @@ public class DriverControls {
             () -> (DevilBotState.stateChanged()) && DevilBotState.getState() != State.AUTO);
 
     Trigger stateChangedEventTrigger = stateChangedEvent.rising().castTo(Trigger::new);
-    stateChangedEventTrigger.onTrue(getResetSubsystemsCommand());
+    stateChangedEventTrigger.onTrue(getRobotStateTransitionCommand());
   }
 
-  private static Command getResetSubsystemsCommand() {
+  public static Command getResetDisableAllSubsystemsCommand() {
+    return new ParallelCommandGroup(
+        getRobotStateTransitionCommand(),
+        new InstantCommand(
+            () -> {
+              RobotConfig.arm.runVoltage(0);
+            }));
+  }
+
+  private static Command getRobotStateTransitionCommand() {
     return new ParallelCommandGroup(
         RobotConfig.shooter.getTurnOffCommand(),
         RobotConfig.intake.getTurnOffCommand(),
