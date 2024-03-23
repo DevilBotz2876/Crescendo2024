@@ -196,16 +196,15 @@ public class DevilBotState {
 
   public static double getVisionRobotYawToTarget() {
     double yawToTarget = RobotConfig.drive.getAngle();
-    Optional<Double> visionYawToTarget =
-        RobotConfig.vision.getYawToAprilTag(DevilBotState.getActiveTargetId());
-    if (visionYawToTarget.isPresent()) {
-      yawToTarget -= visionYawToTarget.get();
+
+    if (DevilBotState.isAmpMode() != true) {
+      Optional<Double> visionYawToTarget =
+          RobotConfig.vision.getYawToAprilTag(DevilBotState.getActiveTargetId());
+      if (visionYawToTarget.isPresent()) {
+        yawToTarget -= visionYawToTarget.get();
+      }
     }
-    if (DevilBotState.isAmpMode() == true) {
-      return -90;
-    } else {
-      return yawToTarget;
-    }
+    return yawToTarget;
   }
 
   public enum PieceDetectionMode {
