@@ -59,7 +59,7 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
   private double kG, kV, kA, kS;
 
   public ArmSubsystem(ArmIO io) {
-super(
+    super(
         new TrapezoidProfile.Constraints(
             ArmConstants.maxVelocityInDegreesPerSecond,
             ArmConstants.maxAccelerationInDegreesPerSecondSquared));
@@ -106,7 +106,6 @@ super(
     // System.out.println("pos: " + setpoint.position);
     // System.out.println("vel: " + setpoint.velocity);
   }
-  
 
   @Override
   public TrapezoidProfile.State getMeasurement() {
@@ -175,7 +174,7 @@ super(
     this.targetRelativeDegrees = getRelativeAngle() + deltaDegrees;
 
     Logger.recordOutput("Arm/setAngle/setpointDegrees", this.targetRelativeDegrees);
-    
+
     setGoal(this.targetDegrees);
     enable();
   }
@@ -217,7 +216,7 @@ super(
 
   @Override
   public void periodic() {
-super.periodic();
+    super.periodic();
     if (armKp.hasChanged(hashCode())
         || armKd.hasChanged(hashCode())
         || armOutputMin.hasChanged(hashCode())
