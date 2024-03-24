@@ -1,0 +1,122 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.75,
+        "y": 4.45
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 0.7617341550472575,
+        "y": 2.6174529542041545
+      },
+      "isLocked": false,
+      "linkedName": "\"P\" Subwoofer (Podium)"
+    },
+    {
+      "anchor": {
+        "x": 7.816843352984952,
+        "y": 0.785663676590511
+      },
+      "prevControl": {
+        "x": 6.816843352984952,
+        "y": 0.785663676590511
+      },
+      "nextControl": {
+        "x": 8.816843352984952,
+        "y": 0.785663676590511
+      },
+      "isLocked": false,
+      "linkedName": "\"1\" Wing Podium Note"
+    },
+    {
+      "anchor": {
+        "x": 8.206778694259144,
+        "y": 2.544906844199654
+      },
+      "prevControl": {
+        "x": 8.511811023622048,
+        "y": 1.6652852603950823
+      },
+      "nextControl": {
+        "x": 7.9017463648962405,
+        "y": 3.4245284280042254
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.23398348551083,
+        "y": 4.45831049556836
+      },
+      "prevControl": {
+        "x": 8.067864925203535,
+        "y": 3.9414194617862925
+      },
+      "nextControl": {
+        "x": 8.400102045818125,
+        "y": 4.975201529350427
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.433485288023208,
+        "y": 6.1903488719258135
+      },
+      "prevControl": {
+        "x": 8.416793666920666,
+        "y": 5.58277520063812
+      },
+      "nextControl": {
+        "x": 8.45017690912575,
+        "y": 6.797922543213507
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.961935572993954,
+        "y": 7.251335730741637
+      },
+      "prevControl": {
+        "x": 8.501935572993954,
+        "y": 7.251335730741637
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.55,
+      "rotationDegrees": 180.0,
+      "rotateFast": true
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": -60.92861841213601,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}
