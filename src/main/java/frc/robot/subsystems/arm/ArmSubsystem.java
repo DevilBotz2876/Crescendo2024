@@ -83,6 +83,8 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
                 null,
                 (state) -> Logger.recordOutput("Arm/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism((voltage) -> runVoltage(voltage.in(Volts)), null, this));
+
+    io.setBrakeMode(true);
   }
 
   @Override
