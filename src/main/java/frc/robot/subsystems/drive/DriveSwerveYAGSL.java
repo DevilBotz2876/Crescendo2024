@@ -14,6 +14,8 @@ import frc.robot.config.RobotConfig.DriveConstants;
 import frc.robot.util.DevilBotState;
 import java.io.File;
 import org.littletonrobotics.junction.AutoLogOutput;
+import org.littletonrobotics.junction.Logger;
+
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
 import swervelib.parser.PIDFConfig;
@@ -24,6 +26,12 @@ public class DriveSwerveYAGSL extends DriveBase {
   private final File swerveJsonDirectory;
   private SwerveDrive swerveDrive;
   @AutoLogOutput private boolean fieldOrientedDrive = false;
+
+  // @AutoLogOutput 
+  DriveIO io = new DriveIO();
+  private final DriveIOInputsAutoLogged inputs = new DriveIOInputsAutoLogged();
+  
+
 
   public DriveSwerveYAGSL(String configPath) {
     swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), configPath);
@@ -143,5 +151,11 @@ public class DriveSwerveYAGSL extends DriveBase {
   @Override
   public void lockPose() {
     swerveDrive.lockPose();
+  }
+
+  @Override
+  public void periodic() {
+    io.updateInputs(inputs, swerveDrive);
+    Logger.processInputs("Drive", inputs);
   }
 }
