@@ -70,7 +70,7 @@ public class LedSystem extends SubsystemBase implements Led {
   public Command getNoteDetectionCommand() {
     SequentialCommandGroup commandGroup = new SequentialCommandGroup();
 
-    //Blink orange
+    // Blink orange
     for (int i = 0; i < 2; i++) {
       commandGroup.addCommands(
           new InstantCommand(() -> setColor(255, 105, 180)),
@@ -80,7 +80,7 @@ public class LedSystem extends SubsystemBase implements Led {
     }
 
     new InstantCommand(() -> setColor(255, 105, 180));
-      
+
     // Turn LED White
     commandGroup.addCommands(new InstantCommand(() -> setColor(255, 255, 255)));
 

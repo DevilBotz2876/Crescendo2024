@@ -15,7 +15,6 @@ import frc.robot.util.DevilBotState;
 import java.io.File;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
-
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
 import swervelib.parser.PIDFConfig;
@@ -27,11 +26,9 @@ public class DriveSwerveYAGSL extends DriveBase {
   private SwerveDrive swerveDrive;
   @AutoLogOutput private boolean fieldOrientedDrive = false;
 
-  // @AutoLogOutput 
+  // @AutoLogOutput
   DriveIO io = new DriveIO();
   private final DriveIOInputsAutoLogged inputs = new DriveIOInputsAutoLogged();
-  
-
 
   public DriveSwerveYAGSL(String configPath) {
     swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), configPath);
