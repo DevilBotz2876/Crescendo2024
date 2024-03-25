@@ -165,6 +165,7 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
       // The  angle is within the range and is set
       this.targetDegrees = degrees;
     }
+    this.targetVelocityDegreesPerSecond = velocityDegreesPerSecond;
 
     // We instantiate a new object here each time because constants can change when being tuned.
     feedforward = new ArmFeedforward(kS, kG, kV, kA);
@@ -253,6 +254,7 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
     if (DevilBotState.getState() == State.DISABLED && io.isAbsoluteEncoderConnected()) {
       io.resetRelativeEncoder(getAngle());
     }
+    
     if (isLimitHigh() && inputs.appliedVolts > 0) {
       // TODO: turn off voltage or stop pid
       io.setVoltage(0);
