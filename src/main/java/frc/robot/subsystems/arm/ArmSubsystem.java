@@ -110,6 +110,10 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
     // System.out.println("vel: " + setpoint.velocity);
   }
 
+  public double getRelativeAngle() {
+    return inputs.relativePositionDegrees;
+  }
+
   @Override
   public TrapezoidProfile.State getMeasurement() {
     return new TrapezoidProfile.State(getRelativeAngle(), getVelocity());
@@ -123,11 +127,6 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
   @Override
   public double getVelocity() {
     return inputs.velocityDegrees;
-  }
-
-  @Override
-  public double getRelativeAngle() {
-    return inputs.relativePositionDegrees;
   }
 
   @Override
@@ -182,7 +181,6 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
     enable();
   }
 
-  @Override
   public boolean isAbsoluteEncoderConnected() {
     return io.isAbsoluteEncoderConnected();
   }
@@ -314,6 +312,10 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
   @Override
   public boolean isAtMinLimit() {
     return isLimitLow();
+  }
+
+  private void stow() {
+    setAngle(ArmConstants.stowIntakeAngleInDegrees);
   }
 
   @Override

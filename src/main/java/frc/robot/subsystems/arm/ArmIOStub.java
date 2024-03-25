@@ -53,6 +53,10 @@ public class ArmIOStub implements ArmIO {
     inputs.currentAmps = arm.getCurrentDrawAmps();
     inputs.positionDegrees = Units.radiansToDegrees(arm.getAngleRads());
     inputs.velocityDegrees = Units.radiansToDegrees(arm.getVelocityRadPerSec());
+    inputs.relativePositionDegrees =
+        inputs
+            .positionDegrees; // In sim, the relative/absolute encoder are identical, so just it to
+    // the same value;
 
     if (softwarePidEnabled) {
       currentVoltage =
