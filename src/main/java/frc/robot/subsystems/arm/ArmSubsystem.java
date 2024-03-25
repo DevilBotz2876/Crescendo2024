@@ -165,7 +165,6 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
       // The  angle is within the range and is set
       this.targetDegrees = degrees;
     }
-    this.targetVelocityDegreesPerSecond = velocityDegreesPerSecond;
 
     // We instantiate a new object here each time because constants can change when being tuned.
     feedforward = new ArmFeedforward(kS, kG, kV, kA);
