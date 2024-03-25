@@ -117,12 +117,12 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
 
   @Override
   public double getAngle() {
-    return inputs.positionDegree;
+    return inputs.positionDegrees;
   }
 
   @Override
   public double getVelocity() {
-    return inputs.velocityInDegrees;
+    return inputs.velocityDegrees;
   }
 
   @Override
@@ -265,7 +265,7 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
     }
 
     if (null != arm2d) {
-      arm2d.setAngle(inputs.positionDegree + armAngle2dOffset);
+      arm2d.setAngle(inputs.positionDegrees + armAngle2dOffset);
     }
   }
 
@@ -274,7 +274,7 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-    if (inputs.positionDegree >= positionDegreeMax) {
+    if (inputs.positionDegrees >= positionDegreeMax) {
       inputs.limitHigh = true;
     } else {
       inputs.limitHigh = false;
@@ -287,7 +287,7 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-    if (inputs.positionDegree <= positionDegreeMin) {
+    if (inputs.positionDegrees <= positionDegreeMin) {
       inputs.limitLow = true;
 
     } else {
@@ -330,7 +330,7 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
             new MechanismLigament2d(
                 "Arm",
                 30,
-                inputs.positionDegree + armAngle2dOffset,
+                inputs.positionDegrees + armAngle2dOffset,
                 6,
                 new Color8Bit(Color.kYellow)));
   }

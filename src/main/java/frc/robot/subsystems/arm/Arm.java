@@ -7,9 +7,12 @@ import frc.robot.config.RobotConfig.ArmConstants;
 
 public interface Arm extends Subsystem {
   // gets the angle of the arm
-  public default double getAngle() {
-    return 0;
-  }
+  public double getAngle();
+
+  public double getTargetAngle();
+
+  // sets of the angle of the arm
+  public void setAngle(double degrees);
 
   public default double getVelocity() {
     return 0;
@@ -18,17 +21,6 @@ public interface Arm extends Subsystem {
   public default double getRelativeAngle() {
     return getAngle();
   }
-
-  public default double getTargetAngle() {
-    return 0;
-  }
-
-  // sets of the angle of the arm
-  public default void setAngle(double degrees) {
-    setAngle(degrees, 0);
-  }
-
-  public default void setAngle(double degrees, double velocityDegreesPerSecond) {}
 
   public default boolean isAbsoluteEncoderConnected() {
     return true;
@@ -49,5 +41,4 @@ public interface Arm extends Subsystem {
   public Command getStowCommand();
 
   public default void add2dSim(Mechanism2d mech2d) {}
-  ;
 }
