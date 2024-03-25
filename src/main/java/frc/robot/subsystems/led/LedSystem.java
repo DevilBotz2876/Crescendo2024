@@ -80,6 +80,7 @@ public class LedSystem extends SubsystemBase implements Led {
     }
 
     new InstantCommand(() -> setColor(255, 105, 180));
+
     // Turn LED White
     commandGroup.addCommands(new InstantCommand(() -> setColor(255, 255, 255)));
 
