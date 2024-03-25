@@ -50,7 +50,7 @@ public class ArmIOStub implements ArmIO {
   @Override
   public void updateInputs(ArmIOInputs inputs) {
     inputs.appliedVolts = currentVoltage;
-    inputs.currentAmps = arm.getCurrentDrawAmps();
+    inputs.currentAmps = Math.abs(arm.getCurrentDrawAmps());
     inputs.positionDegrees = Units.radiansToDegrees(arm.getAngleRads());
     inputs.velocityDegrees = Units.radiansToDegrees(arm.getVelocityRadPerSec());
     inputs.relativePositionDegrees =
