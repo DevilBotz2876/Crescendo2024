@@ -40,7 +40,6 @@ public class AutoPrepareForIntakeV2 extends SequentialCommandGroup {
             // timeout)
             new ParallelCommandGroup(
                 new InstantCommand(() -> RobotConfig.intake.runVoltage(0)) // , // turn off intake
-                // RobotConfig.arm.getStowCommand() // stow arm
                 )));
 
     if (Constants.debugCommands) {
