@@ -47,10 +47,14 @@ public class AutoScore extends SequentialCommandGroup {
     addCommands(
         new ParallelCommandGroup(
             new DriveToYaw(drive, robotYawInDegrees)
-                .withTimeout(DriveConstants.pidTimeoutInSeconds),
-            new ArmToPosition(arm, armAngleInDegrees).withTimeout(ArmConstants.pidTimeoutInSeconds),
+                .withTimeout(DriveConstants.pidTimeoutInSeconds)
+                .onlyIf(() -> robotYawInDegrees != null),
+            new ArmToPosition(arm, armAngleInDegrees)
+                .withTimeout(ArmConstants.pidTimeoutInSeconds)
+                .onlyIf(() -> armAngleInDegrees != null),
             new SetShooterVelocity(shooter, shooterVelocityInRPMs)
-                .withTimeout(ShooterConstants.pidTimeoutInSeconds)));
+                .withTimeout(ShooterConstants.pidTimeoutInSeconds)
+                .onlyIf(() -> shooterVelocityInRPMs != null)));
     addCommands(new AutoScorePiece(intake, shooter));
 
     if (Constants.debugCommands) {

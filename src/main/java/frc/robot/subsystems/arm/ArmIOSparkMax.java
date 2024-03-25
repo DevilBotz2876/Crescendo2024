@@ -63,6 +63,12 @@ public class ArmIOSparkMax implements ArmIO {
     // encoder is at 0, set rel to 0.  Everything else is invalid and requires arm to rehome itself.
     //
     // relEncoder.setPosition(0);
+
+    // 60:1 gear box, 72 teeth on the arm cog and 14 teeth on the motor cog
+    double gearRatio = (60 * (72 / 14));
+    double rotationsToDegreesConversionFactor = 360.0 / gearRatio;
+    relEncoder.setPositionConversionFactor(rotationsToDegreesConversionFactor);
+    relEncoder.setVelocityConversionFactor(rotationsToDegreesConversionFactor / 60);
     relEncoder.setPosition(Units.radiansToDegrees(getOffsetCorrectedAbsolutePositionInRadians()));
 
     lkP = RobotConfig.ArmConstants.pidKp;
@@ -96,8 +102,8 @@ public class ArmIOSparkMax implements ArmIO {
   /** Updates the set of loggable inputs. */
   @Override
   public void updateInputs(ArmIOInputs inputs) {
-    inputs.positionRads = getOffsetCorrectedAbsolutePositionInRadians();
-    inputs.positionDegrees = Units.radiansToDegrees(inputs.positionRads);
+    inputs.positionRad = getOffsetCorrectedAbsolutePositionInRadians();
+    inputs.positionDegree = Units.radiansToDegrees(inputs.positionRad);
     inputs.absolutePositionRaw = absoluteEncoder.getAbsolutePosition();
     inputs.absoluteEncoderConnected = isAbsoluteEncoderConnected();
 
@@ -106,8 +112,7 @@ public class ArmIOSparkMax implements ArmIO {
     inputs.current = motor.getOutputCurrent();
 
     inputs.relativePositionDegrees = relEncoder.getPosition();
-    inputs.velocityDegreesPerSecond = relEncoder.getVelocity();
-    inputs.velocityRadsPerSecond = Units.degreesToRadians(inputs.velocityDegreesPerSecond);
+    inputs.velocityInDegrees = relEncoder.getVelocity();
 
     // Code below allows PID to be tuned using SmartDashboard.  And outputs extra data to
     // SmartDashboard.

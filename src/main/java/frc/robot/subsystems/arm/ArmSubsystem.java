@@ -28,6 +28,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
   @AutoLogOutput private double targetVoltage;
   @AutoLogOutput private double targetDegrees;
   @AutoLogOutput private double targetRelativeDegrees;
+  @AutoLogOutput private double targetVelocityDegreesPerSecond;
 
   // Create a Mechanism2d display of an Arm with a fixed ArmTower and moving Arm.
   private final double armAngle2dOffset = 0;
@@ -82,16 +83,18 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
                 null,
                 (state) -> Logger.recordOutput("Arm/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism((voltage) -> runVoltage(voltage.in(Volts)), null, this));
+
+    io.setBrakeMode(true);
   }
 
   @Override
   public double getAngle() {
-    return inputs.positionDegrees;
+    return inputs.positionDegree;
   }
 
   @Override
   public double getVelocity() {
-    return inputs.velocityDegreesPerSecond;
+    return inputs.velocityInDegrees;
   }
 
   @Override
@@ -106,7 +109,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
 
   // sets of the angle of the arm
   @Override
-  public void setAngle(double degrees) {
+  public void setAngle(double degrees, double velocityDegreesPerSecond) {
     Logger.recordOutput("Arm/setAngle/requestedAngleDegress", degrees);
     // Don't try to set position if absolute encoder is broken/missing.
     if (isAbsoluteEncoderConnected() == false) {
@@ -131,6 +134,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
       // The  angle is within the range and is set
       this.targetDegrees = degrees;
     }
+    this.targetVelocityDegreesPerSecond = velocityDegreesPerSecond;
 
     // We instantiate a new object here each time because constants can change when being tuned.
     feedforward = new ArmFeedforward(kS, kG, kV, kA);
@@ -142,13 +146,13 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     double deltaDegrees = this.targetDegrees - getAngle();
     this.targetRelativeDegrees = getRelativeAngle() + deltaDegrees;
 
-    double ff = feedforward.calculate(this.targetRelativeDegrees, 0);
+    double ff = feedforward.calculate(this.targetDegrees, this.targetVelocityDegreesPerSecond);
 
     Logger.recordOutput("Arm/setAngle/setpointDegrees", this.targetRelativeDegrees);
     Logger.recordOutput("Arm/setAngle/ffVolts", ff);
 
     // Set the position reference with feedforward voltage
-    io.setPosition(this.targetRelativeDegrees, ff);
+    io.setPosition(this.targetDegrees, ff);
   }
 
   @Override
@@ -221,9 +225,9 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
       io.resetRelativeEncoder(getAngle());
     }
 
-    //    if (Math.abs(inputs.velocityInDegrees) < 0.1) {
-    //      io.resetRelativeEncoder(getAngle());
-    //    }
+    if (Math.abs(inputs.velocityInDegrees) < 0.1) {
+      io.resetRelativeEncoder(getAngle());
+    }
 
     if (isLimitHigh() && inputs.appliedVolts > 0) {
       // TODO: turn off voltage or stop pid
@@ -236,7 +240,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     }
 
     if (null != arm2d) {
-      arm2d.setAngle(inputs.positionDegrees + armAngle2dOffset);
+      arm2d.setAngle(inputs.positionDegree + armAngle2dOffset);
     }
   }
 
@@ -245,7 +249,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-    if (inputs.positionDegrees >= positionDegreeMax) {
+    if (inputs.positionDegree >= positionDegreeMax) {
       inputs.limitHigh = true;
     } else {
       inputs.limitHigh = false;
@@ -258,7 +262,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
     if (isAbsoluteEncoderConnected() == false) {
       return true;
     }
-    if (inputs.positionDegrees <= positionDegreeMin) {
+    if (inputs.positionDegree <= positionDegreeMin) {
       inputs.limitLow = true;
 
     } else {
@@ -301,7 +305,7 @@ public class ArmSubsystem extends SubsystemBase implements Arm {
             new MechanismLigament2d(
                 "Arm",
                 30,
-                inputs.positionDegrees + armAngle2dOffset,
+                inputs.positionDegree + armAngle2dOffset,
                 6,
                 new Color8Bit(Color.kYellow)));
   }

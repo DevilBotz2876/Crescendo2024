@@ -30,12 +30,11 @@ public class RobotConfigInferno extends RobotConfig {
     super(false, false, false, false, false, false, false);
 
     // Inferno has a Swerve drive train
-    // TODO: set DriveConstants.maxVelocityMetersPerSec
-    DriveConstants.rotatePidKp = 0.015;
+    DriveConstants.rotatePidKp = 0.02;
     DriveConstants.rotatePidKi = 0.0;
-    DriveConstants.rotatePidKd = 0.001;
+    DriveConstants.rotatePidKd = 0.0;
     DriveConstants.rotatePidErrorInDegrees = 0.5;
-    DriveConstants.pidTimeoutInSeconds = 2;
+    DriveConstants.pidTimeoutInSeconds = 0.5;
     DriveConstants.pidSettlingTimeInSeconds = 0.5;
 
     drive = new DriveSwerveYAGSL("yagsl/inferno");
@@ -99,7 +98,7 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.minAngleInDegrees = -1.0;
 
     ArmConstants.intakeAngleInDegrees = 1.5;
-    ArmConstants.ampScoreAngleInDegrees = 80;
+    ArmConstants.ampScoreAngleInDegrees = 89.0;
     ArmConstants.subwooferScoreAngleInDegrees = 9.80;
     ArmConstants.subwooferScoreFromPodiumAngleInDegrees = 33; // min/max = 33.24/34.37
     ArmConstants.noteScoreAngleInDegrees =

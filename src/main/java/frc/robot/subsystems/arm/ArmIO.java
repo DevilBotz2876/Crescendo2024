@@ -5,10 +5,9 @@ import org.littletonrobotics.junction.AutoLog;
 public interface ArmIO {
   @AutoLog
   public static class ArmIOInputs {
-    public double positionRads = 0.0;
-    public double positionDegrees = 0.0;
-    public double velocityRadsPerSecond = 0.0;
-    public double velocityDegreesPerSecond = 0.0;
+    public double positionRad = 0.0;
+    public double positionDegree = 0.0;
+    public double velocityInDegrees = 0.0;
 
     public double absolutePositionRaw;
     public boolean absoluteEncoderConnected = false;

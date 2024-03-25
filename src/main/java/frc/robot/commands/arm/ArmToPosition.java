@@ -35,6 +35,9 @@ public class ArmToPosition extends Command {
   }
 
   @Override
+  public void execute() {}
+
+  @Override
   public boolean isFinished() {
     if (Math.abs(arm.getAngle() - targetPositionDegrees) <= ArmConstants.pidAngleErrorInDegrees) {
       if (timer.get() >= ArmConstants.pidSettlingTimeInSeconds) {

@@ -93,19 +93,19 @@ public class AutoNamedCommands {
             "A (Subwoofer Amp-Side)",
             () -> AutoConstants.scoreFromASubwooferAmpSide.armAngleInDegrees,
             () -> AutoConstants.scoreFromASubwooferAmpSide.shooterVelocityInRPMs,
-            () -> RobotConfig.drive.getAngle()));
+            null));
     commandList.add(
         new ScorePieceCommand(
             "C (Subwoofer Center)",
             () -> AutoConstants.scoreFromCSubwooferCenter.armAngleInDegrees,
             () -> AutoConstants.scoreFromCSubwooferCenter.shooterVelocityInRPMs,
-            () -> RobotConfig.drive.getAngle()));
+            null));
     commandList.add(
         new ScorePieceCommand(
             "P (Subwoofer Podium-Side)",
             () -> AutoConstants.scoreFromPSubwooferPodiumSide.armAngleInDegrees,
             () -> AutoConstants.scoreFromPSubwooferPodiumSide.shooterVelocityInRPMs,
-            () -> RobotConfig.drive.getAngle()));
+            null));
 
     /* Vision Assisted yaw/angle*/
     commandList.add(

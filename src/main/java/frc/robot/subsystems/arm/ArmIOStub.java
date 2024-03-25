@@ -13,12 +13,12 @@ public class ArmIOStub implements ArmIO {
   // The P gain for the PID controller that drives this arm.
   private double targetDegrees = 0;
   private double feedForwardVolts = 0;
+  private double armGearingReduction = 317;
+  private double armLengthInMeters = .5;
   private double minAngleInDegrees = ArmConstants.minAngleInDegrees;
   private double maxAngleInDegrees = ArmConstants.maxAngleInDegrees;
+  private double armMassInKg = 11.3398;
 
-  private double armGearingReduction = 210;
-  private double armLengthInMeters = 0.6096;
-  private double armMassInKg = 13.60777;
   // The arm gearbox represents a gearbox containing two Vex 775pro motors.
   private final DCMotor motorPlant = DCMotor.getNEO(1);
   private double currentVoltage = 0.0;
@@ -49,17 +49,15 @@ public class ArmIOStub implements ArmIO {
   /** Updates the set of loggable inputs. */
   @Override
   public void updateInputs(ArmIOInputs inputs) {
-    inputs.positionRads = arm.getAngleRads();
-    inputs.positionDegrees = Units.radiansToDegrees(inputs.positionRads);
-    inputs.velocityRadsPerSecond = arm.getVelocityRadPerSec();
-    inputs.velocityDegreesPerSecond = Units.radiansToDegrees(inputs.velocityRadsPerSecond);
-    inputs.relativePositionDegrees = inputs.positionDegrees;
+    inputs.positionRad = arm.getAngleRads();
+    inputs.positionDegree = Units.radiansToDegrees(inputs.positionRad);
+    inputs.velocityInDegrees = Units.radiansToDegrees(arm.getVelocityRadPerSec());
     inputs.appliedVolts = currentVoltage;
 
     if (softwarePidEnabled) {
       currentVoltage =
           feedForwardVolts
-              + pid.calculate(inputs.positionDegrees, targetDegrees)
+              + pid.calculate(inputs.positionDegree, targetDegrees)
                   * RobotController.getBatteryVoltage();
     }
 
