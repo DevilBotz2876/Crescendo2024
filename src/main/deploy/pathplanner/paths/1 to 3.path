@@ -3,48 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.853116407987202,
-        "y": 2.45
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 6.853116407987202,
-        "y": 2.45
-      },
-      "isLocked": false,
-      "linkedName": "\"7\" Center Source Mid Note"
-    },
-    {
-      "anchor": {
-        "x": 4.5,
-        "y": 1.5
-      },
-      "prevControl": {
-        "x": 5.53,
-        "y": 1.5
-      },
-      "nextControl": {
-        "x": 3.70809225940068,
-        "y": 1.5
-      },
-      "isLocked": false,
-      "linkedName": "Between \"1\" and \"7\""
-    },
-    {
-      "anchor": {
         "x": 2.4840603370774184,
         "y": 4.062870619379916
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.7947301034551182,
+        "y": 4.835756032835222
+      },
+      "isLocked": false,
+      "linkedName": "\"1\" Wing Podium Note"
+    },
+    {
+      "anchor": {
+        "x": 2.891391838763322,
+        "y": 6.527748424453591
+      },
       "prevControl": {
-        "x": 2.4840603370774184,
-        "y": 3.0628706193799156
+        "x": 3.048057800950209,
+        "y": 4.877533622751724
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "\"1\" Wing Podium Note"
+      "linkedName": "\"3\" Wing Amp Note (90 degrees)"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.75,
+      "rotationDegrees": 90.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -55,7 +45,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": 90.0,
     "rotateFast": false
   },
   "reversed": false,
