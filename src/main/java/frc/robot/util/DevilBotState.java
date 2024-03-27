@@ -225,8 +225,8 @@ public class DevilBotState {
 
     double xToTarget = distanceToTarget * Math.sin(Math.toRadians(RobotConfig.drive.getAngle())+Math.toRadians(yawToTarget));
     
-    Logger.recordOutput("DevilBotState/distanceToTarget", yawToTarget);
-    Logger.recordOutput("DevilBotState/xToTarget", yawToTarget);
+    Logger.recordOutput("DevilBotState/distanceToTarget", distanceToTarget);
+    Logger.recordOutput("DevilBotState/xToTarget", xToTarget);
     return xToTarget;
 }
 
