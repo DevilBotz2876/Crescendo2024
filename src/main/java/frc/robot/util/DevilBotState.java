@@ -7,6 +7,8 @@ import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
 import java.util.Optional;
 
+import org.littletonrobotics.junction.AutoLogOutput;
+
 public class DevilBotState {
   public static boolean climberNeedsToBeZeroedAtStart =
       false; // Set to true is the climber is holding up the arm

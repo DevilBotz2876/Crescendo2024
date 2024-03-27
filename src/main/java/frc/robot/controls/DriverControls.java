@@ -207,7 +207,7 @@ public class DriverControls {
                 RobotConfig.shooter.getTurnOffCommand(),
                 RobotConfig.arm.getStowCommand(),
                 RobotConfig.climber.getExtendCommand()));
-    controller.x().onTrue(RobotConfig.climber.getRetractCommand());
+    controller.x().onTrue(new DriveTranslateInX(RobotConfig.drive, () -> DevilBotState.getVisionRobotXToAmpTarget()));
 
     /* Target Selection Controls */
     /*     A Button = Amp Mode
@@ -304,7 +304,6 @@ public class DriverControls {
                     () -> {
                       if (DevilBotState.isAmpMode()) {
                         RobotConfig.arm.setAngle(ArmConstants.ampScoreAngleInDegrees);
-                        new SequentialCommandGroup(new DriveTranslateInX(RobotConfig.drive, () -> DevilBotState.getVisionRobotXToAmpTarget()), new DriveToYaw(RobotConfig.drive, () -> -90.0).withTimeout(DriveConstants.pidTimeoutInSeconds)).schedule();
                       } else {
                         Optional<Double> armAngle = DevilBotState.getArmAngleToTarget();
                         if (armAngle.isPresent()) {

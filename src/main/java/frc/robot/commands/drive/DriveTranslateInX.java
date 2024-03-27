@@ -3,12 +3,17 @@ package frc.robot.commands.drive;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.config.RobotConfig.DriveConstants;
 import frc.robot.subsystems.drive.Drive;
 import java.util.function.DoubleSupplier;
+
+import javax.swing.text.StyleContext.SmallAttributeSet;
+
+import org.littletonrobotics.junction.AutoLogOutput;
 
 public class DriveTranslateInX extends Command {
   Drive drive;
@@ -31,6 +36,8 @@ public class DriveTranslateInX extends Command {
   public void initialize() {
     xTargetMeters = drive.getPose().getX() + xMeters.getAsDouble();
 
+    SmartDashboard.putNumber("DriveTranslateInX/xMeters", xMeters.getAsDouble());
+    SmartDashboard.putNumber("DriveTranslateInX/xTargetMeters", xTargetMeters);
     xTranslatePID.reset();
     xTranslatePID.setSetpoint(xTargetMeters);
 
@@ -50,15 +57,17 @@ public class DriveTranslateInX extends Command {
   public void execute() {
     double translate = xTranslatePID.calculate(drive.getPose().getX());
     ChassisSpeeds speeds = new ChassisSpeeds(translate, 0, 0);
-    drive.runVelocity(speeds);
+    SmartDashboard.putNumber("DriveTranslateInX/speeds", speeds.vxMetersPerSecond);
+    // drive.runVelocity(speeds);
   }
 
   @Override
   public boolean isFinished() {
-    if (xTranslatePID.atSetpoint()) {
-        return true;
-      }
-    return false;
+    // if (xTranslatePID.atSetpoint()) {
+    //     return true;
+    //   }
+    // return false;
+    return true;
   }
 
   @Override
