@@ -53,6 +53,11 @@ public class RobotConfig {
     public static double slewRateLimiterX = 3;
     public static double slewRateLimiterY = 3;
     public static double slewRateLimiterAngle = 3;
+    public static double translatePidErrorInMeters = 0.25;
+    public static double translatePidKp = 0.1;
+    public static double translatePidKi = 0.0;
+    public static double translatePidKd = 0.0;
+    public static double translatepPidSettlingTimeInSeconds = 0.1;
   }
 
   public static class ArmConstants {

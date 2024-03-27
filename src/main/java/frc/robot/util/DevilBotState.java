@@ -207,6 +207,22 @@ public class DevilBotState {
     return yawToTarget;
   }
 
+  public static double getVisionRobotXToAmpTarget() {
+    double yawToTarget = DevilBotState.getVisionRobotYawToTarget();
+    double distanceToTarget = 0;
+    if(DevilBotState.isRedAlliance()) {
+      distanceToTarget = RobotConfig.vision.getDistanceToAprilTag(5).orElse(0.0);
+    } else {
+      distanceToTarget = RobotConfig.vision.getDistanceToAprilTag(6).orElse(0.0);
+    }
+    
+
+    double xToTarget = distanceToTarget * Math.sin(Math.toRadians(RobotConfig.drive.getAngle())+Math.toRadians(yawToTarget));
+
+    return xToTarget;
+}
+
+
   public enum PieceDetectionMode {
     ENABLED,
     DISABLED

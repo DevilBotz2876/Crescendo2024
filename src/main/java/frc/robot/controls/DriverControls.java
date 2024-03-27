@@ -25,6 +25,7 @@ import frc.robot.commands.arm.ArmCommand;
 import frc.robot.commands.assist.EjectPiece;
 import frc.robot.commands.drive.DriveCommand;
 import frc.robot.commands.drive.DriveToYaw;
+import frc.robot.commands.drive.DriveTranslateInX;
 import frc.robot.commands.shooter.SetShooterVelocity;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
@@ -303,6 +304,7 @@ public class DriverControls {
                     () -> {
                       if (DevilBotState.isAmpMode()) {
                         RobotConfig.arm.setAngle(ArmConstants.ampScoreAngleInDegrees);
+                        new SequentialCommandGroup(new DriveTranslateInX(RobotConfig.drive, () -> DevilBotState.getVisionRobotXToAmpTarget()), new DriveToYaw(RobotConfig.drive, () -> -90.0).withTimeout(DriveConstants.pidTimeoutInSeconds)).schedule();
                       } else {
                         Optional<Double> armAngle = DevilBotState.getArmAngleToTarget();
                         if (armAngle.isPresent()) {
