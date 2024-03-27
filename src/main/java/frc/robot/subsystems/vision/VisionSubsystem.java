@@ -2,6 +2,7 @@ package frc.robot.subsystems.vision;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,6 +18,7 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.PhotonUtils;
 import org.photonvision.simulation.PhotonCameraSim;
+import org.photonvision.simulation.SimCameraProperties;
 import org.photonvision.simulation.VisionSystemSim;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
@@ -122,7 +124,13 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
     simVision.addAprilTags(this.fieldLayout);
 
     for (VisionCameraImpl camera : cameras) {
-      camera.simCamera = new PhotonCameraSim(camera.camera);
+      var cameraProp = new SimCameraProperties();
+      cameraProp.setCalibration(800, 600, Rotation2d.fromDegrees(70));
+      cameraProp.setCalibError(0.35, 0.10);
+      cameraProp.setFPS(120);
+      cameraProp.setAvgLatencyMs(50);
+      cameraProp.setLatencyStdDevMs(15);
+      camera.simCamera = new PhotonCameraSim(camera.camera, cameraProp);
       simVision.addCamera(camera.simCamera, camera.robotToCamera);
       camera.simCamera.enableDrawWireframe(enableWireFrame);
     }
