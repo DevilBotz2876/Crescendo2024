@@ -1,11 +1,14 @@
 package frc.robot.util;
 
+import java.util.Optional;
+
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.config.RobotConfig;
 import frc.robot.config.RobotConfig.ArmConstants;
 import frc.robot.config.RobotConfig.ShooterConstants;
-import java.util.Optional;
 
 import org.littletonrobotics.junction.AutoLogOutput;
 
@@ -206,6 +209,7 @@ public class DevilBotState {
         yawToTarget -= visionYawToTarget.get();
       }
     }
+    Logger.recordOutput("DevilBotState/yawToTarget", yawToTarget);
     return yawToTarget;
   }
 
@@ -220,7 +224,9 @@ public class DevilBotState {
     
 
     double xToTarget = distanceToTarget * Math.sin(Math.toRadians(RobotConfig.drive.getAngle())+Math.toRadians(yawToTarget));
-
+    
+    Logger.recordOutput("DevilBotState/distanceToTarget", yawToTarget);
+    Logger.recordOutput("DevilBotState/xToTarget", yawToTarget);
     return xToTarget;
 }
 
