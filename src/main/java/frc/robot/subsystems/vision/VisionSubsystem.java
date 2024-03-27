@@ -2,6 +2,7 @@ package frc.robot.subsystems.vision;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
@@ -101,6 +102,7 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
   @AutoLogOutput private double debugTargetDistance = 0;
   @AutoLogOutput private double debugTargetYaw = 0;
   @AutoLogOutput private Pose2d debugEstimatedPose;
+  @AutoLogOutput private Pose2d debugEstimatedPose2d;
 
   /* Simulation Support*/
   private boolean simEnabled = false;
@@ -149,6 +151,17 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
       camera.update();
       if (camera == primaryCamera) {
         debugTargetsVisible = camera.result.getTargets().size();
+
+        if (debugTargetsVisible > 0) {
+          PhotonTrackedTarget target = camera.result.getBestTarget();
+          Optional<Pose3d> fieldToTarget = fieldLayout.getTagPose(target.getFiducialId());
+          if (fieldToTarget.isPresent()) {
+            debugEstimatedPose2d =
+                PhotonUtils.estimateFieldToRobotAprilTag(
+                        target.getBestCameraToTarget(), fieldToTarget.get(), camera.robotToCamera)
+                    .toPose2d();
+          }
+        }
       }
 
       Optional<EstimatedRobotPose> currentEstimatedRobotPose = camera.getEstimatedRobotPose();
