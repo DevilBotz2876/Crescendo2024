@@ -11,10 +11,6 @@ import frc.robot.config.RobotConfig.DriveConstants;
 import frc.robot.subsystems.drive.Drive;
 import java.util.function.DoubleSupplier;
 
-import javax.swing.text.StyleContext.SmallAttributeSet;
-
-import org.littletonrobotics.junction.AutoLogOutput;
-
 public class DriveTranslateInX extends Command {
   Drive drive;
   DoubleSupplier xMeters;
@@ -63,11 +59,10 @@ public class DriveTranslateInX extends Command {
 
   @Override
   public boolean isFinished() {
-    // if (xTranslatePID.atSetpoint()) {
-    //     return true;
-    //   }
-    // return false;
-    return true;
+    if (xTranslatePID.atSetpoint()) {
+        return true;
+      }
+    return false;
   }
 
   @Override
