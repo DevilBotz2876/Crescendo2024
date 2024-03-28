@@ -2,7 +2,6 @@ package frc.robot.subsystems.vision;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import java.text.DecimalFormat;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -82,14 +81,6 @@ public interface Vision {
    * @return yaw to the specified april tag (in degrees).
    */
   public Optional<Double> getYawToAprilTag(int id);
-
-  /**
-   * Returns a list of vision-based estimated robot poses
-   *
-   * @return list of estimated poses. list length may be zero if updated pose estimation data is not
-   *     available.
-   */
-  public List<VisionPose> getEstimatedRobotPoses();
 
   public default void enableSimulation(Supplier<Pose2d> poseSupplier, boolean enableWireFrame) {}
 }

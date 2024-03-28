@@ -1,7 +1,10 @@
 package frc.robot.subsystems.drive;
 
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public interface Drive {
@@ -66,4 +69,7 @@ public interface Drive {
 
   public default void lockPose() {}
   ;
+
+  public default void addVisionMeasurement(
+      Pose2d robotPose, double timestamp, Matrix<N3, N1> visionMeasurementStdDevs) {}
 }
