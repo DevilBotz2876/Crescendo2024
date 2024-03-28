@@ -102,17 +102,14 @@ public class ArmIOSparkMax implements ArmIO {
   /** Updates the set of loggable inputs. */
   @Override
   public void updateInputs(ArmIOInputs inputs) {
-    inputs.positionRad = getOffsetCorrectedAbsolutePositionInRadians();
-    inputs.positionDegree = Units.radiansToDegrees(inputs.positionRad);
-    inputs.absolutePositionRaw = absoluteEncoder.getAbsolutePosition();
-    inputs.absoluteEncoderConnected = isAbsoluteEncoderConnected();
-
     inputs.appliedVolts = motor.getAppliedOutput() * motor.getBusVoltage();
+    inputs.currentAmps = motor.getOutputCurrent();
+    inputs.positionDegrees = Units.radiansToDegrees(getOffsetCorrectedAbsolutePositionInRadians());
+    inputs.velocityDegrees = relEncoder.getVelocity();
 
-    inputs.current = motor.getOutputCurrent();
-
+    inputs.absoluteEncoderConnected = isAbsoluteEncoderConnected();
+    inputs.absolutePositionRaw = absoluteEncoder.getAbsolutePosition();
     inputs.relativePositionDegrees = relEncoder.getPosition();
-    inputs.velocityInDegrees = relEncoder.getVelocity();
 
     // Code below allows PID to be tuned using SmartDashboard.  And outputs extra data to
     // SmartDashboard.

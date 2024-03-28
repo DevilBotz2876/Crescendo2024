@@ -84,8 +84,8 @@ public class RobotConfig {
 
     public static double maxAngleInDegrees = 90.0;
     public static double minAngleInDegrees = 0.0;
-    public static double maxVelocityInDegreesPerSecond = 90;
-    public static double maxAccelerationInDegreesPerSecondSquared = 720;
+    public static double maxVelocityInDegreesPerSecond = 45;
+    public static double maxAccelerationInDegreesPerSecondSquared = 120;
 
     public static double intakeAngleInDegrees = 1;
     public static double ejectAngleInDegrees = 15;
