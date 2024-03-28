@@ -88,7 +88,7 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.ffKa = 0.04;
 
     ArmConstants.maxVelocityInDegreesPerSecond = 90;
-    ArmConstants.maxAccelerationInDegreesPerSecondSquared = 720;
+    ArmConstants.maxAccelerationInDegreesPerSecondSquared = 240;
 
     ArmConstants.pidMaxOutput = 6.0;
     ArmConstants.pidMinOutput = -5.0;
@@ -131,7 +131,7 @@ public class RobotConfigInferno extends RobotConfig {
             "shooter",
             "1188",
             new Transform3d(
-                new Translation3d(Units.inchesToMeters(10.5), 0, Units.inchesToMeters(13)),
+                new Translation3d(-Units.inchesToMeters(10.5), 0, Units.inchesToMeters(13)),
                 new Rotation3d(0, Units.degreesToRadians(-28), Units.degreesToRadians(180)))));
 
     cameras.add(

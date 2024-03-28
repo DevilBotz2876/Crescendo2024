@@ -49,15 +49,19 @@ public class ArmIOStub implements ArmIO {
   /** Updates the set of loggable inputs. */
   @Override
   public void updateInputs(ArmIOInputs inputs) {
-    inputs.positionRad = arm.getAngleRads();
-    inputs.positionDegree = Units.radiansToDegrees(inputs.positionRad);
-    inputs.velocityInDegrees = Units.radiansToDegrees(arm.getVelocityRadPerSec());
     inputs.appliedVolts = currentVoltage;
+    inputs.currentAmps = Math.abs(arm.getCurrentDrawAmps());
+    inputs.positionDegrees = Units.radiansToDegrees(arm.getAngleRads());
+    inputs.velocityDegrees = Units.radiansToDegrees(arm.getVelocityRadPerSec());
+    inputs.relativePositionDegrees =
+        inputs
+            .positionDegrees; // In sim, the relative/absolute encoder are identical, so just it to
+    // the same value;
 
     if (softwarePidEnabled) {
       currentVoltage =
           feedForwardVolts
-              + pid.calculate(inputs.positionDegree, targetDegrees)
+              + pid.calculate(inputs.positionDegrees, targetDegrees)
                   * RobotController.getBatteryVoltage();
     }
 
