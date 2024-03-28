@@ -54,6 +54,8 @@ public class DriveTranslateInX extends Command {
     double translate = xTranslatePID.calculate(drive.getPose().getX());
     ChassisSpeeds speeds = new ChassisSpeeds(translate, 0, 0);
     SmartDashboard.putNumber("DriveTranslateInX/speeds", speeds.vxMetersPerSecond);
+    SmartDashboard.putBoolean("DriveTranslateInX/atSetpoint", xTranslatePID.atSetpoint());
+    SmartDashboard.putNumber("DriveTranslateInX/xTargetMeters", xTargetMeters);
     // drive.runVelocity(speeds);
   }
 
