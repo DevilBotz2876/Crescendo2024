@@ -9,7 +9,11 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.config.RobotConfig.DriveConstants;
 import frc.robot.subsystems.drive.Drive;
+import frc.robot.util.DevilBotState;
+
 import java.util.function.DoubleSupplier;
+
+import org.littletonrobotics.junction.Logger;
 
 public class DriveTranslateInX extends Command {
   Drive drive;
@@ -25,15 +29,16 @@ public class DriveTranslateInX extends Command {
     this.xMeters = xMeters;
 
     xTranslatePID.setTolerance(DriveConstants.translatePidErrorInMeters);
-    addRequirements((Subsystem) drive);
+    //addRequirements((Subsystem) drive);
   }
 
   @Override
   public void initialize() {
     xTargetMeters = drive.getPose().getX() + xMeters.getAsDouble();
 
-    SmartDashboard.putNumber("DriveTranslateInX/xMeters", xMeters.getAsDouble());
-    SmartDashboard.putNumber("DriveTranslateInX/xTargetMeters", xTargetMeters);
+    Logger.recordOutput("DriveTranslateInX/xMeters", xMeters.getAsDouble());
+    Logger.recordOutput("DriveTranslateInX/xTargetMeters", xTargetMeters);
+    Logger.recordOutput("DriveTranslateInX/running", true);
     xTranslatePID.reset();
     xTranslatePID.setSetpoint(xTargetMeters);
 
@@ -51,11 +56,17 @@ public class DriveTranslateInX extends Command {
 
   @Override
   public void execute() {
-    double translate = xTranslatePID.calculate(drive.getPose().getX());
-    ChassisSpeeds speeds = new ChassisSpeeds(translate, 0, 0);
-    SmartDashboard.putNumber("DriveTranslateInX/speeds", speeds.vxMetersPerSecond);
-    SmartDashboard.putBoolean("DriveTranslateInX/atSetpoint", xTranslatePID.atSetpoint());
-    SmartDashboard.putNumber("DriveTranslateInX/xTargetMeters", xTargetMeters);
+    double xOutput = xTranslatePID.calculate(drive.getPose().getX());
+    ChassisSpeeds speeds = new ChassisSpeeds(xOutput, 0, 0);
+    
+    Logger.recordOutput("DriveTranslateInX/xPose", drive.getPose().getX());    
+    Logger.recordOutput("DriveTranslateInX/xOutput", xOutput);    
+    Logger.recordOutput("DriveTranslateInX/xSpeeds", speeds.vxMetersPerSecond);    
+    Logger.recordOutput("DriveTranslateInX/xTargetMeters", xTargetMeters);
+    Logger.recordOutput("DriveTranslateInX/atSetpoint", xTranslatePID.atSetpoint());
+
+    DevilBotState.getVisionRobotXToAmpTarget();
+
     // drive.runVelocity(speeds);
   }
 
@@ -77,5 +88,6 @@ public class DriveTranslateInX extends Command {
     if (Constants.debugCommands) {
       System.out.println("  END: " + this.getClass().getSimpleName());
     }
+    Logger.recordOutput("DriveTranslateInX/running", false);
   }
 }
