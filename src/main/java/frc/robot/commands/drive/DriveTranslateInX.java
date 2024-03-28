@@ -29,7 +29,7 @@ public class DriveTranslateInX extends Command {
     this.xMeters = xMeters;
 
     xTranslatePID.setTolerance(DriveConstants.translatePidErrorInMeters);
-    //addRequirements((Subsystem) drive);
+    addRequirements((Subsystem) drive);
   }
 
   @Override
@@ -65,9 +65,9 @@ public class DriveTranslateInX extends Command {
     Logger.recordOutput("DriveTranslateInX/xTargetMeters", xTargetMeters);
     Logger.recordOutput("DriveTranslateInX/atSetpoint", xTranslatePID.atSetpoint());
 
-    DevilBotState.getVisionRobotXToAmpTarget();
+    Logger.recordOutput("DriveTranslateInX/getVisionRobotXToAmpTarget",DevilBotState.getVisionRobotXToAmpTarget());
 
-    // drive.runVelocity(speeds);
+    drive.runVelocity(speeds);
   }
 
   @Override
