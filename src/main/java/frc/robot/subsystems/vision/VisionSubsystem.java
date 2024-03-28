@@ -175,7 +175,7 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
           RobotConfig.drive.addVisionMeasurement(
               currentEstimatedRobotPose.get().estimatedPose.toPose2d(),
               currentEstimatedRobotPose.get().timestampSeconds,
-              VecBuilder.fill(distance / 2, distance / 2, distance/2));
+              VecBuilder.fill(distance / 2, distance / 2, distance / 2));
         }
 
         if (camera == primaryCamera) {
