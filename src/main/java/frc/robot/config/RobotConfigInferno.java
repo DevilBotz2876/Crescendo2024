@@ -87,8 +87,8 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.ffKv = 6.18;
     ArmConstants.ffKa = 0.04;
 
-    ArmConstants.maxVelocityInDegreesPerSecond = 90;
-    ArmConstants.maxAccelerationInDegreesPerSecondSquared = 240;
+    ArmConstants.maxVelocityInDegreesPerSecond = 120;
+    ArmConstants.maxAccelerationInDegreesPerSecondSquared = 120;
 
     ArmConstants.pidMaxOutput = 6.0;
     ArmConstants.pidMinOutput = -5.0;
@@ -107,7 +107,7 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.matchStartArmAngle = 90;
     ArmConstants.pidTimeoutInSeconds = 2.0;
 
-    ArmConstants.maxBacklashDegrees = 7.0;
+    ArmConstants.maxBacklashDegrees = 3.0;
     arm = new ArmSubsystem(new ArmIOSparkMax(4, true));
 
     ClimberConstants.minPositionInRadians = 0.01;
