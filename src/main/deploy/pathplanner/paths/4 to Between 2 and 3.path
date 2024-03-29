@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.4840603370774184,
-        "y": 4.062870619379916
+        "x": 7.873369436306303,
+        "y": 7.436411005137533
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4840603370774184,
-        "y": 3.0628706193799156
-      },
-      "isLocked": true,
-      "linkedName": "\"1\" Wing Podium Note"
-    },
-    {
-      "anchor": {
-        "x": 4.5,
-        "y": 1.5
-      },
-      "prevControl": {
-        "x": 3.37,
-        "y": 1.5
-      },
-      "nextControl": {
-        "x": 5.630211744096089,
-        "y": 1.5
+        "x": 7.121149805763432,
+        "y": 7.342597271196915
       },
       "isLocked": false,
-      "linkedName": "Between \"1\" and \"7\""
+      "linkedName": "\"4\" Center Amp Note"
     },
     {
       "anchor": {
-        "x": 7.853116407987202,
-        "y": 2.45
+        "x": 3.8101642988576607,
+        "y": 6.320087041123074
       },
       "prevControl": {
-        "x": 6.853116407987202,
-        "y": 2.45
+        "x": 4.574671479117573,
+        "y": 6.3967192655619
       },
       "nextControl": null,
-      "isLocked": true,
-      "linkedName": "\"7\" Center Source Mid Note"
+      "isLocked": false,
+      "linkedName": "Between 2 and 3 Notes"
     }
   ],
   "rotationTargets": [],

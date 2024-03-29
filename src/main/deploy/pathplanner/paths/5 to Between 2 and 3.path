@@ -3,45 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.4840603370774184,
-        "y": 4.062870619379916
+        "x": 7.873688005440527,
+        "y": 5.777446393602466
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4840603370774184,
-        "y": 3.0628706193799156
-      },
-      "isLocked": true,
-      "linkedName": "\"1\" Wing Podium Note"
-    },
-    {
-      "anchor": {
-        "x": 4.5,
-        "y": 1.5
-      },
-      "prevControl": {
-        "x": 3.37,
-        "y": 1.5
-      },
-      "nextControl": {
-        "x": 5.630211744096089,
-        "y": 1.5
+        "x": 6.755818906039849,
+        "y": 6.0055285504973055
       },
       "isLocked": false,
-      "linkedName": "Between \"1\" and \"7\""
+      "linkedName": "\"5\" Center Amp Mid Note"
     },
     {
       "anchor": {
-        "x": 7.853116407987202,
-        "y": 2.45
+        "x": 5.533824400982135,
+        "y": 6.320087041123074
       },
       "prevControl": {
-        "x": 6.853116407987202,
-        "y": 2.45
+        "x": 6.533750048775623,
+        "y": 6.3322812563400666
+      },
+      "nextControl": {
+        "x": 4.677383807693824,
+        "y": 6.309642643643949
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.8101642988576607,
+        "y": 6.320087041123074
+      },
+      "prevControl": {
+        "x": 4.499829050548687,
+        "y": 6.412860052183209
       },
       "nextControl": null,
-      "isLocked": true,
-      "linkedName": "\"7\" Center Source Mid Note"
+      "isLocked": false,
+      "linkedName": "Between 2 and 3 Notes"
     }
   ],
   "rotationTargets": [],
