@@ -101,9 +101,9 @@ public class DevilBotState {
 
   public static double getShooterVelocity() {
     if (isAmpMode()) {
-      return ShooterConstants.ampScoreVelocityInRPMs;
+      return ShooterConstants.ampScoreVelocityInRPM;
     } else {
-      return ShooterConstants.velocityInRPMs;
+      return ShooterConstants.velocityInRPM;
     }
   }
 

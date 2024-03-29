@@ -39,9 +39,9 @@ public class RobotConfigSherman extends RobotConfig {
     ShooterConstants.pidKpBottom = 0.0001581;
     ShooterConstants.pidKiBottom = 0.0;
     ShooterConstants.pidKdBottom = 0.0;
-    ShooterConstants.pidVelocityErrorInRPMS = 20;
+    ShooterConstants.pidVelocityErrorInRPM = 20;
 
-    ShooterConstants.velocityInRPMs = 3000;
+    ShooterConstants.velocityInRPM = 3000;
     shooter = new ShooterSubsystem(new ShooterIOSparkMax(2), new ShooterIOSparkMax(1));
 
     // ArmConstants.absolutePositionOffset = 0.426777535;

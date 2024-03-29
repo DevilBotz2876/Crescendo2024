@@ -14,6 +14,8 @@ public interface Shooter {
   /** Run closed loop at the specified velocity */
   public default void runVelocity(double velocityRPM) {}
 
+  public boolean isAtSetpoint();
+
   public double getCurrentSpeed();
 
   public double getVoltage();

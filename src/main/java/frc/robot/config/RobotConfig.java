@@ -104,7 +104,7 @@ public class RobotConfig {
     public static double ffKaBottom = 0.019246;
 
     /* PID */
-    public static double pidVelocityErrorInRPMS = 300;
+    public static double pidVelocityErrorInRPM = 300;
     public static double pidSettlingTimeInSeconds = 0.1;
     public static double pidTimeoutInSeconds = 2.0;
     public static double pidKp = 0.043566;
@@ -114,11 +114,11 @@ public class RobotConfig {
     public static double pidKiBottom = 0.0;
     public static double pidKdBottom = 0.0;
 
-    public static double velocityInRPMs = 3000;
+    public static double velocityInRPM = 3000;
     public static double defaultSpeedInVolts = 6.0;
-    public static double ampScoreVelocityInRPMs = 1000;
-    public static double maxVelocityInRPMs = 4000;
-    public static double maxAccelerationInRPMsSquared = maxVelocityInRPMs * 4;
+    public static double ampScoreVelocityInRPM = 1000;
+    public static double maxVelocityInRPM = 4000;
+    public static double maxAccelerationInRPMSquared = maxVelocityInRPM * 4;
   }
 
   public static class IntakeConstants {
