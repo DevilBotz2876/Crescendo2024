@@ -31,6 +31,7 @@ public class ShooterSubsystem extends ProfiledPIDSubsystem implements Shooter {
   @AutoLogOutput private double targetVoltage;
   @AutoLogOutput private double targetVelocityRPM;
   @AutoLogOutput private double targetVelocityRadPerSec;
+  @AutoLogOutput private double currentVelocitySetpointRPM;
 
   // Mechanism2d display of a Shooter
   private List<MechanismLigament2d> shooter2d = new ArrayList<MechanismLigament2d>();
@@ -43,9 +44,9 @@ public class ShooterSubsystem extends ProfiledPIDSubsystem implements Shooter {
             ShooterConstants.pidKi,
             ShooterConstants.pidKd,
             new TrapezoidProfile.Constraints(
-                Units.rotationsPerMinuteToRadiansPerSecond(ShooterConstants.maxVelocityInRPMs),
+                Units.rotationsPerMinuteToRadiansPerSecond(ShooterConstants.maxVelocityInRPM),
                 Units.rotationsPerMinuteToRadiansPerSecond(
-                    ShooterConstants.maxAccelerationInRPMsSquared))));
+                    ShooterConstants.maxAccelerationInRPMSquared))));
 
     this.io = io;
     useSoftwarePidVelocityControl = !io.supportsHardwarePid();
@@ -91,6 +92,7 @@ public class ShooterSubsystem extends ProfiledPIDSubsystem implements Shooter {
       io.setVelocity(setpoint.position, ff);
     }
 
+    currentVelocitySetpointRPM = Units.radiansPerSecondToRotationsPerMinute(setpoint.position);
     //    System.out.println(setpoint.position);
   }
 
@@ -104,14 +106,14 @@ public class ShooterSubsystem extends ProfiledPIDSubsystem implements Shooter {
   public void runVoltage(double volts) {
     targetVoltage = volts;
     targetVelocityRadPerSec = 0;
-    this.targetVelocityRPM = ShooterConstants.maxVelocityInRPMs * (volts / 12.0);
+    this.targetVelocityRPM = ShooterConstants.maxVelocityInRPM * (volts / 12.0);
     disable(); // disable PID control
     io.setVoltage(targetVoltage);
   }
 
   @Override
   public void runVelocity(double velocityRPM) {
-    velocityRPM = MathUtil.clamp(velocityRPM, 0, ShooterConstants.maxVelocityInRPMs);
+    velocityRPM = MathUtil.clamp(velocityRPM, 0, ShooterConstants.maxVelocityInRPM);
     targetVoltage = -1;
     this.targetVelocityRPM = velocityRPM;
     targetVelocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(velocityRPM);
@@ -136,17 +138,15 @@ public class ShooterSubsystem extends ProfiledPIDSubsystem implements Shooter {
     io.updateInputs(inputs);
     Logger.processInputs("Shooter", inputs);
 
-    if (targetVelocityRPM != 0) {
-      currentSimAngle -=
-          (inputs.velocityRadPerSec
-                  / Units.rotationsPerMinuteToRadiansPerSecond(ShooterConstants.maxVelocityInRPMs))
-              * 45;
+    currentSimAngle -=
+        (inputs.velocityRadPerSec
+                / Units.rotationsPerMinuteToRadiansPerSecond(ShooterConstants.maxVelocityInRPM))
+            * 45;
 
-      int angleOffset = 0;
-      for (MechanismLigament2d shooter : shooter2d) {
-        shooter.setAngle(angleOffset + currentSimAngle);
-        angleOffset += 90;
-      }
+    int angleOffset = 0;
+    for (MechanismLigament2d shooter : shooter2d) {
+      shooter.setAngle(angleOffset + currentSimAngle);
+      angleOffset += 90;
     }
   }
 
@@ -180,5 +180,10 @@ public class ShooterSubsystem extends ProfiledPIDSubsystem implements Shooter {
         intakePivot2d.append(
             new MechanismLigament2d("Wheel Spoke D", 5, 270, 12, new Color8Bit(Color.kBlue))));
   }
-  ;
+
+  @Override
+  public boolean isAtSetpoint() {
+    return (Math.abs(currentVelocitySetpointRPM - targetVelocityRPM)
+        < ShooterConstants.pidVelocityErrorInRPM);
+  }
 }
