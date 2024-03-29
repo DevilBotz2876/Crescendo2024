@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 1.35,
+        "x": 1.75,
         "y": 5.55
       },
       "prevControl": {
-        "x": 1.85,
+        "x": 2.25,
         "y": 5.55
       },
       "nextControl": null,
       "isLocked": true,
-      "linkedName": "\"C\" Subwoofer (Center Side)"
+      "linkedName": "\"C\" Subwoofer (Center Side) - No Sub Touch"
     }
   ],
   "rotationTargets": [],

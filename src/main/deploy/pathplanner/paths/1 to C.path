@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.4840603370774184,
-        "y": 4.062870619379916
+        "x": 2.5,
+        "y": 4.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.130506946484145,
-        "y": 4.416424009973191
+        "x": 2.1464466094067265,
+        "y": 4.353553390593276
       },
       "isLocked": true,
       "linkedName": "\"1\" Wing Podium Note"
     },
     {
       "anchor": {
-        "x": 1.35,
+        "x": 1.75,
         "y": 5.55
       },
       "prevControl": {
-        "x": 1.7035533905932736,
+        "x": 2.1035533905932735,
         "y": 5.196446609406726
       },
       "nextControl": null,
       "isLocked": true,
-      "linkedName": "\"C\" Subwoofer (Center Side)"
+      "linkedName": "\"C\" Subwoofer (Center Side) - No Sub Touch"
     }
   ],
   "rotationTargets": [
