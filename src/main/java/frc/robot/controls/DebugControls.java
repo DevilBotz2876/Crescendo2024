@@ -134,7 +134,7 @@ public class DebugControls {
 
     GenericEntry shooterVelocityEntry =
         debugTab
-            .add("Shooter: Velocity", ShooterConstants.velocityInRPMs)
+            .add("Shooter: Velocity", ShooterConstants.velocityInRPM)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 6000))
             .withPosition(colIndex, rowIndex++)
@@ -148,7 +148,7 @@ public class DebugControls {
                 RobotConfig.shooter,
                 RobotConfig.intake,
                 RobotConfig.arm,
-                () -> shooterVelocityEntry.getDouble(ShooterConstants.velocityInRPMs),
+                () -> shooterVelocityEntry.getDouble(ShooterConstants.velocityInRPM),
                 () -> intakeVoltageEntry.getDouble(IntakeConstants.defaultSpeedInVolts),
                 () -> armAngleEntry.getDouble(ArmConstants.subwooferScoreAngleInDegrees)))
         .withPosition(colIndex, rowIndex++)
@@ -171,7 +171,7 @@ public class DebugControls {
             "Shooter to Velocity",
             new SetShooterVelocity(
                 RobotConfig.shooter,
-                () -> shooterVelocityEntry.getDouble(ShooterConstants.velocityInRPMs)))
+                () -> shooterVelocityEntry.getDouble(ShooterConstants.velocityInRPM)))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
 

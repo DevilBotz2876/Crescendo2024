@@ -224,7 +224,7 @@ public class PitControls {
             "Velocity (RPMs)",
             () -> Units.radiansPerSecondToRotationsPerMinute(RobotConfig.shooter.getCurrentSpeed()))
         .withWidget(BuiltInWidgets.kNumberBar)
-        .withProperties(Map.of("min", 0, "max", ShooterConstants.maxVelocityInRPMs))
+        .withProperties(Map.of("min", 0, "max", ShooterConstants.maxVelocityInRPM))
         .withPosition(layoutColIndex, layoutRowIndex++);
 
     ShuffleboardLayout shooterCommandLayout =

@@ -346,11 +346,11 @@ public class DriverControls {
             () ->
                 Units.radiansPerSecondToRotationsPerMinute(RobotConfig.shooter.getCurrentSpeed())
                         >= DevilBotState.getShooterVelocity()
-                            - ShooterConstants.pidVelocityErrorInRPMS
+                            - ShooterConstants.pidVelocityErrorInRPM
                     && Units.radiansPerSecondToRotationsPerMinute(
                             RobotConfig.shooter.getCurrentSpeed())
                         <= DevilBotState.getShooterVelocity()
-                            + ShooterConstants.pidVelocityErrorInRPMS);
+                            + ShooterConstants.pidVelocityErrorInRPM);
     shooterRPMTrigger.onTrue(
         new SequentialCommandGroup(
             // Starts the controller rumble
