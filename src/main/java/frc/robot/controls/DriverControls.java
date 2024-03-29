@@ -495,7 +495,7 @@ public class DriverControls {
         new BooleanEvent(eventLoop, () -> Math.abs(controller.getLeftY()) > 0.05);
 
     Trigger leftYPressedTrigger = leftYPressed.castTo(Trigger::new);
-    leftYPressedTrigger.onTrue(
+    leftYPressedTrigger.whileTrue(
         new ArmCommand(
             RobotConfig.arm,
             () -> MathUtil.applyDeadband(-controller.getLeftY(), 0.05))); //  Arm Up/Down
