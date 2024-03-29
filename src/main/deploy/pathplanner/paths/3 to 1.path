@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.7,
-        "y": 6.8
+        "x": 2.6,
+        "y": 6.9
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.348283169848783,
-        "y": 6.151750115205065
+        "x": 2.248283169848783,
+        "y": 6.251750115205065
       },
       "isLocked": false,
       "linkedName": "\"3\" Wing Amp Note (45 degrees)"
