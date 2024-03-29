@@ -19,6 +19,8 @@ public interface Arm extends Subsystem {
   // sets of the angle of the arm
   public void setAngle(double degrees);
 
+  public boolean isAtSetpoint();
+
   public Command getStowCommand();
 
   public default void add2dSim(Mechanism2d mech2d) {}
