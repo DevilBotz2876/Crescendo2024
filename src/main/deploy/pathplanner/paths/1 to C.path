@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.5,
-        "y": 3.99
+        "x": 2.65,
+        "y": 4.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1464466094067265,
-        "y": 4.343553390593276
+        "x": 2.2964466094067264,
+        "y": 4.353553390593276
       },
       "isLocked": true,
       "linkedName": "\"1\" Wing Podium Note"
