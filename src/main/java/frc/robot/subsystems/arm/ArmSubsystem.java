@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.Volts;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.filter.MedianFilter;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -32,7 +33,11 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
   @AutoLogOutput private double targetVoltage;
   @AutoLogOutput private double targetDegrees;
   @AutoLogOutput private double targetRelativeDegrees;
-  @AutoLogOutput private double targetVelocityDegreesPerSecond;
+  @AutoLogOutput private double goalSetpointDegrees;
+  @AutoLogOutput private double currentSetpointDegrees;
+  private final MedianFilter positionFilter = new MedianFilter(5);
+  @AutoLogOutput private double positionDegreesFiltered;
+  private double backlashCompensationFactor = 0;
 
   // Create a Mechanism2d display of an Arm with a fixed ArmTower and moving Arm.
   private final double armAngle2dOffset = 0;
@@ -102,6 +107,7 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
 
     // Use feedforward +  HW velocity PID (ignore SW PID)
     io.setPosition(setpoint.position, ff);
+    currentSetpointDegrees = setpoint.position;
 
     Logger.recordOutput("Arm/setAngle/setpointDegrees", setpoint.position);
     Logger.recordOutput("Arm/setAngle/ffVolts", ff);
@@ -137,6 +143,8 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
   // sets of the angle of the arm
   @Override
   public void setAngle(double degrees) {
+    double previousTargetDegrees = this.targetDegrees;
+
     degrees =
         MathUtil.clamp(degrees, ArmConstants.minAngleInDegrees, ArmConstants.maxAngleInDegrees);
 
@@ -148,22 +156,9 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
     if (isAbsoluteEncoderReadingValid() == false) {
       return;
     }
-    // Check if the arm angle is within limits.  Don't try to move the arm to new angle if it is
-    // already at limit.
-    // if (isHighLimit() || isLowLimit()) {
-    //   return;
-    // }
 
-    // Check if the angle is below the minimum limit or above the maximum limit
-    // If it is the it is set to min/max
-    if (degrees < ArmConstants.minAngleInDegrees) {
-      this.targetDegrees = ArmConstants.minAngleInDegrees; // Set to the minimum angle
-    } else if (degrees > ArmConstants.maxAngleInDegrees) {
-      this.targetDegrees = ArmConstants.maxAngleInDegrees; // Set to the maximum angle
-    } else {
-      // The  angle is within the range and is set
-      this.targetDegrees = degrees;
-    }
+    // Clamp the target degrees
+    this.targetDegrees = degrees;
 
     // We instantiate a new object here each time because constants can change when being tuned.
     feedforward = new ArmFeedforward(kS, kG, kV, kA);
@@ -172,12 +167,21 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
     // we calculate the difference in current vs target absolute encoder value and then calculate
     // the corrsponding relative
     // angle
-    double deltaDegrees = this.targetDegrees - getAngle();
-    this.targetRelativeDegrees = getRelativeAngle() + deltaDegrees;
+    //    double deltaDegrees = this.targetDegrees - getAngle();
+    //    this.targetRelativeDegrees = getRelativeAngle() + deltaDegrees;
+    this.targetRelativeDegrees =
+        this.targetDegrees + (backlashCompensationFactor * ArmConstants.maxBacklashDegrees);
+    if (this.targetDegrees > previousTargetDegrees) {
+      backlashCompensationFactor = 1;
+    } else {
+      backlashCompensationFactor = -1;
+    }
 
     Logger.recordOutput("Arm/setAngle/setpointDegrees", this.targetRelativeDegrees);
+    //    this.setpointDegrees = this.targetDegrees;
+    this.goalSetpointDegrees = this.targetRelativeDegrees;
 
-    setGoal(this.targetDegrees);
+    setGoal(this.goalSetpointDegrees);
     enable();
   }
 
@@ -239,26 +243,16 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
     // Updates the inputs
     io.updateInputs(inputs);
     Logger.processInputs("Arm", inputs);
+    positionDegreesFiltered = positionFilter.calculate(inputs.positionDegrees);
 
-    // The relative encoder is initialized in the hw specific code/file.
-    //
-    // if (relEncoderInit) {
-    //   io.resetRelativeEncoder(
-    //       0); // TODO: We need to figure out the mapping for the absolute encoder to relative
-    //   // encoder
-    //   relEncoderInit = false;
-    // }
     if (DevilBotState.getState() == State.DISABLED && io.isAbsoluteEncoderConnected()) {
       io.resetRelativeEncoder(getAngle());
     }
 
     if (isLimitHigh() && inputs.appliedVolts > 0) {
-      // TODO: turn off voltage or stop pid
       io.setVoltage(0);
     }
     if (isLimitLow() && inputs.appliedVolts < 0) {
-      // TODO: turn off voltage or stop pid
-      // io.resetRelativeEncoder(0.0);
       io.setVoltage(0);
     }
 
@@ -335,5 +329,11 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
                 inputs.positionDegrees + armAngle2dOffset,
                 6,
                 new Color8Bit(Color.kYellow)));
+  }
+
+  @Override
+  public boolean isAtSetpoint() {
+    return (Math.abs(currentSetpointDegrees - goalSetpointDegrees)
+        < ArmConstants.pidAngleErrorInDegrees);
   }
 }

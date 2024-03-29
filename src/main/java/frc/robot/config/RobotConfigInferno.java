@@ -107,6 +107,7 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.matchStartArmAngle = 90;
     ArmConstants.pidTimeoutInSeconds = 2.0;
 
+    ArmConstants.maxBacklashDegrees = 7.0;
     arm = new ArmSubsystem(new ArmIOSparkMax(4, true));
 
     ClimberConstants.minPositionInRadians = 0.01;
