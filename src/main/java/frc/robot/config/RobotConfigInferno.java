@@ -66,12 +66,12 @@ public class RobotConfigInferno extends RobotConfig {
     ShooterConstants.pidKp = 0.0047154;
     ShooterConstants.pidKi = 0.0;
     ShooterConstants.pidKd = 0.0;
-    ShooterConstants.pidVelocityErrorInRPMS = 500;
+    ShooterConstants.pidVelocityErrorInRPM = 500;
 
-    ShooterConstants.maxVelocityInRPMs = 6000;
-    ShooterConstants.maxAccelerationInRPMsSquared = ShooterConstants.maxVelocityInRPMs * 4;
-    ShooterConstants.ampScoreVelocityInRPMs = 2500;
-    ShooterConstants.velocityInRPMs = 4500;
+    ShooterConstants.maxVelocityInRPM = 6000;
+    ShooterConstants.maxAccelerationInRPMSquared = ShooterConstants.maxVelocityInRPM * 4;
+    ShooterConstants.ampScoreVelocityInRPM = 2500;
+    ShooterConstants.velocityInRPM = 4500;
     shooter = new ShooterSubsystem(new ShooterIOSparkMax(2));
 
     ArmConstants.absolutePositionOffset =
@@ -87,8 +87,8 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.ffKv = 6.18;
     ArmConstants.ffKa = 0.04;
 
-    ArmConstants.maxVelocityInDegreesPerSecond = 90;
-    ArmConstants.maxAccelerationInDegreesPerSecondSquared = 720;
+    ArmConstants.maxVelocityInDegreesPerSecond = 120;
+    ArmConstants.maxAccelerationInDegreesPerSecondSquared = 120;
 
     ArmConstants.pidMaxOutput = 6.0;
     ArmConstants.pidMinOutput = -5.0;
@@ -107,6 +107,7 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.matchStartArmAngle = 90;
     ArmConstants.pidTimeoutInSeconds = 2.0;
 
+    ArmConstants.maxBacklashDegrees = 3.0;
     arm = new ArmSubsystem(new ArmIOSparkMax(4, true));
 
     ClimberConstants.minPositionInRadians = 0.01;
@@ -131,7 +132,7 @@ public class RobotConfigInferno extends RobotConfig {
             "shooter",
             "1188",
             new Transform3d(
-                new Translation3d(Units.inchesToMeters(10.5), 0, Units.inchesToMeters(13)),
+                new Translation3d(-Units.inchesToMeters(10.5), 0, Units.inchesToMeters(13)),
                 new Rotation3d(0, Units.degreesToRadians(-28), Units.degreesToRadians(180)))));
 
     cameras.add(

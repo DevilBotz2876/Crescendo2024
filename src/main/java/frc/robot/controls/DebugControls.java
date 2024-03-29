@@ -1,5 +1,12 @@
 package frc.robot.controls;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
@@ -127,7 +134,7 @@ public class DebugControls {
 
     GenericEntry shooterVelocityEntry =
         debugTab
-            .add("Shooter: Velocity", ShooterConstants.velocityInRPMs)
+            .add("Shooter: Velocity", ShooterConstants.velocityInRPM)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 6000))
             .withPosition(colIndex, rowIndex++)
@@ -141,7 +148,7 @@ public class DebugControls {
                 RobotConfig.shooter,
                 RobotConfig.intake,
                 RobotConfig.arm,
-                () -> shooterVelocityEntry.getDouble(ShooterConstants.velocityInRPMs),
+                () -> shooterVelocityEntry.getDouble(ShooterConstants.velocityInRPM),
                 () -> intakeVoltageEntry.getDouble(IntakeConstants.defaultSpeedInVolts),
                 () -> armAngleEntry.getDouble(ArmConstants.subwooferScoreAngleInDegrees)))
         .withPosition(colIndex, rowIndex++)
@@ -164,10 +171,40 @@ public class DebugControls {
             "Shooter to Velocity",
             new SetShooterVelocity(
                 RobotConfig.shooter,
-                () -> shooterVelocityEntry.getDouble(ShooterConstants.velocityInRPMs)))
+                () -> shooterVelocityEntry.getDouble(ShooterConstants.velocityInRPM)))
         .withPosition(colIndex, rowIndex++)
         .withSize(2, 1);
 
+    // Create a list of bezier points from poses. Each pose represents one waypoint.
+    // The rotation component of the pose should be the direction of travel. Do not use holonomic
+    // rotation.
+    List<Translation2d> bezierPoints =
+        PathPlannerPath.bezierFromPoses(
+            RobotConfig.drive.getPose(),
+            new Pose2d(1.8, 7.5, Rotation2d.fromDegrees(90)),
+            new Pose2d(1.8, 7.7, Rotation2d.fromDegrees(90)));
+
+    // Create the path using the bezier points created above
+    PathPlannerPath path =
+        new PathPlannerPath(
+            bezierPoints,
+            new PathConstraints(
+                1.0,
+                3.0,
+                2 * Math.PI,
+                4 * Math.PI), // The constraints for this path. If using a differential drivetrain,
+            // the angular constraints have no effect.
+            new GoalEndState(
+                0.0,
+                Rotation2d.fromDegrees(
+                    -90)) // Goal end state. You can set a holonomic rotation here. If using a
+            // differential drivetrain, the rotation will have no effect.
+            );
+
+    Command driveToBlueAmp = AutoBuilder.followPath(path);
+    driveToBlueAmp.setName("Drive To Amp");
+    debugTab.add(driveToBlueAmp).withPosition(colIndex, rowIndex++).withSize(2, 1);
+    ;
     /*
         colIndex += 2;
         rowIndex = 1;

@@ -32,26 +32,26 @@ public class AutoNamedCommands {
     /* TODO: Fill in the values for scoring here */
     public static AutoScoreConstants scoreFromASubwooferAmpSide =
         new AutoScoreConstants(
-            0.0, ArmConstants.subwooferScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
+            0.0, ArmConstants.subwooferScoreAngleInDegrees, ShooterConstants.velocityInRPM);
     public static AutoScoreConstants scoreFromCSubwooferCenter =
         new AutoScoreConstants(
-            0.0, ArmConstants.subwooferScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
+            0.0, ArmConstants.subwooferScoreAngleInDegrees, ShooterConstants.velocityInRPM);
     public static AutoScoreConstants scoreFromPSubwooferPodiumSide =
         new AutoScoreConstants(
-            0.0, ArmConstants.subwooferScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
+            0.0, ArmConstants.subwooferScoreAngleInDegrees, ShooterConstants.velocityInRPM);
 
     public static AutoScoreConstants scoreFrom1WingPodiumNote =
         new AutoScoreConstants(
-            -28, ArmConstants.noteScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
+            -28, ArmConstants.noteScoreAngleInDegrees, ShooterConstants.velocityInRPM);
     public static AutoScoreConstants scoreFrom2WingSpeakerNote =
         new AutoScoreConstants(
-            0.0, ArmConstants.noteScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
+            0.0, ArmConstants.noteScoreAngleInDegrees, ShooterConstants.velocityInRPM);
     public static AutoScoreConstants scoreFrom3WingAmpNote =
         new AutoScoreConstants(
-            28, ArmConstants.noteScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
+            28, ArmConstants.noteScoreAngleInDegrees, ShooterConstants.velocityInRPM);
     public static AutoScoreConstants scoreFromBetween2and3 =
         new AutoScoreConstants(
-            21, ArmConstants.noteScoreAngleInDegrees, ShooterConstants.velocityInRPMs);
+            21, ArmConstants.noteScoreAngleInDegrees, ShooterConstants.velocityInRPM);
   }
 
   public static void configure() {
