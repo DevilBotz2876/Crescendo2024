@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 2.65,
-        "y": 4.0
+        "y": 3.9
       },
       "prevControl": null,
       "nextControl": {
         "x": 1.9606697663776997,
-        "y": 4.772885413455306
+        "y": 4.672885413455306
       },
       "isLocked": false,
       "linkedName": "\"1\" Wing Podium Note"

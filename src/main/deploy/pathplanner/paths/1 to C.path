@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 2.65,
-        "y": 4.0
+        "y": 3.9
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.2964466094067264,
-        "y": 4.353553390593276
+        "y": 4.253553390593277
       },
       "isLocked": true,
       "linkedName": "\"1\" Wing Podium Note"
@@ -39,7 +39,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 2.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -54,5 +54,5 @@
     "rotation": -0.32938132022465144,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
