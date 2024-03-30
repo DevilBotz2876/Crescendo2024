@@ -1,0 +1,68 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.75,
+        "y": 5.55
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.4571067811865475,
+        "y": 6.257106781186548
+      },
+      "isLocked": false,
+      "linkedName": "\"C\" Subwoofer (Center Side) - No Sub Touch"
+    },
+    {
+      "anchor": {
+        "x": 5.0,
+        "y": 6.5
+      },
+      "prevControl": {
+        "x": 4.0,
+        "y": 6.5
+      },
+      "nextControl": {
+        "x": 5.999999999999999,
+        "y": 6.5
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.0,
+        "y": 5.75
+      },
+      "prevControl": {
+        "x": 7.55,
+        "y": 5.75
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "\"5\" Center Amp Mid Note"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}
