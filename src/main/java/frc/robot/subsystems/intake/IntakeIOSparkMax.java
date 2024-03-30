@@ -15,6 +15,7 @@ public class IntakeIOSparkMax implements IntakeIO {
   // Gets the NEO encoder
   private final RelativeEncoder encoder;
   DigitalInput limitSwitchIntake = new DigitalInput(1);
+  DigitalInput limitSwitchIntakeSecondary = new DigitalInput(2);
 
   public IntakeIOSparkMax(int id, boolean inverted) {
     leader = new CANSparkMax(id, MotorType.kBrushless);
@@ -31,7 +32,10 @@ public class IntakeIOSparkMax implements IntakeIO {
   @Override
   public void updateInputs(IntakeIOInputs inputs) {
     inputs.appliedVolts = leader.getAppliedOutput() * leader.getBusVoltage();
-    inputs.limitSwitchIntake = !limitSwitchIntake.get();
+    inputs.limitSwitchIntake =
+        !limitSwitchIntake.get()
+            || !limitSwitchIntakeSecondary
+                .get(); // Assume note in intake if either sensor is triggered
     inputs.current = leader.getOutputCurrent();
     inputs.velocityRadPerSec =
         Units.rotationsPerMinuteToRadiansPerSecond(encoder.getVelocity() / GEAR_RATIO);
