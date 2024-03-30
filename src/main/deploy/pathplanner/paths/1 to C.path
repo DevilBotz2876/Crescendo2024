@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.6,
+        "x": 2.65,
         "y": 3.9
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.246446609406726,
-        "y": 4.253553390593275
+        "x": 2.2964466094067264,
+        "y": 4.253553390593277
       },
       "isLocked": true,
       "linkedName": "\"1\" Wing Podium Note"
     },
     {
       "anchor": {
-        "x": 1.35,
+        "x": 1.75,
         "y": 5.55
       },
       "prevControl": {
-        "x": 1.7035533905932736,
+        "x": 2.103553390593273,
         "y": 5.196446609406726
       },
       "nextControl": null,
       "isLocked": true,
-      "linkedName": "\"C\" Subwoofer (Center Side)"
+      "linkedName": "\"C\" Subwoofer (Center Side) - No Sub Touch"
     }
   ],
   "rotationTargets": [
@@ -39,7 +39,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 2.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -54,5 +54,5 @@
     "rotation": -0.32938132022465144,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
