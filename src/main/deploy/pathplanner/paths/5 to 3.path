@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.873688005440527,
-        "y": 5.777446393602466
+        "x": 8.0,
+        "y": 5.75
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.907762179151458,
-        "y": 6.036265438704987
+        "x": 7.034074173710931,
+        "y": 6.008819045102522
       },
       "isLocked": true,
       "linkedName": "\"5\" Center Amp Mid Note"
