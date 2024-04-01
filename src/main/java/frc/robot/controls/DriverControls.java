@@ -1,5 +1,7 @@
 package frc.robot.controls;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -19,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -42,9 +45,6 @@ import frc.robot.util.DevilBotState.State;
 import frc.robot.util.DevilBotState.TargetMode;
 import java.util.Map;
 import java.util.Optional;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathConstraints;
 
 public class DriverControls {
   public static CommandXboxController mainController;
@@ -298,16 +298,20 @@ public class DriverControls {
         .onTrue(
             new ParallelCommandGroup(
                 RobotConfig.intake.getTurnOffCommand(),
-                new InstantCommand(() -> {
-                    if (DevilBotState.isAmpMode()) {
-                        AutoBuilder.pathfindToPoseFlipped(
-            new Pose2d(1.8, 7.75, Rotation2d.fromDegrees(-90)),
-            new PathConstraints(4.0, 3.0, 2 * Math.PI, 3 * Math.PI)) ;
-                      } else {
-                        new DriveToYaw(RobotConfig.drive, () -> DevilBotState.getVisionRobotYawToTarget())
-                    .withTimeout(DriveConstants.pidTimeoutInSeconds);
-                        }
-                }),
+                new SelectCommand<>(
+                    Map.ofEntries(
+                        Map.entry(
+                            true,
+                            AutoBuilder.pathfindToPoseFlipped(
+                                new Pose2d(1.8, 7.75, Rotation2d.fromDegrees(-90)),
+                                new PathConstraints(4.0, 3.0, 2 * Math.PI, 3 * Math.PI))),
+                        Map.entry(
+                            false,
+                            new DriveToYaw(
+                                    RobotConfig.drive,
+                                    () -> DevilBotState.getVisionRobotYawToTarget())
+                                .withTimeout(DriveConstants.pidTimeoutInSeconds))),
+                    () -> DevilBotState.isAmpMode()),
                 new SetShooterVelocity(
                         RobotConfig.shooter, () -> DevilBotState.getShooterVelocity())
                     .withTimeout(ShooterConstants.pidTimeoutInSeconds), // turn on shooter
@@ -315,7 +319,7 @@ public class DriverControls {
                 new InstantCommand(
                     () -> {
                       if (DevilBotState.isAmpMode()) {
-                        //RobotConfig.arm.setAngle(ArmConstants.ampScoreAngleInDegrees);
+                        // RobotConfig.arm.setAngle(ArmConstants.ampScoreAngleInDegrees);
                       } else {
                         Optional<Double> armAngle = DevilBotState.getArmAngleToTarget();
                         if (armAngle.isPresent()) {
