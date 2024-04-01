@@ -174,8 +174,8 @@ public class DebugControls {
 
     Command driveToAmp =
         AutoBuilder.pathfindToPoseFlipped(
-            new Pose2d(1.8, 7.75, Rotation2d.fromDegrees(90)),
-            new PathConstraints(4.0, 3.0, 2 * Math.PI, 4 * Math.PI));
+            new Pose2d(1.8, 7.75, Rotation2d.fromDegrees(-90)),
+            new PathConstraints(4.0, 3.0, 2 * Math.PI, 3 * Math.PI));
     driveToAmp.setName("Drive To Amp");
     debugTab.add(driveToAmp).withPosition(colIndex, rowIndex++).withSize(2, 1);
     ;

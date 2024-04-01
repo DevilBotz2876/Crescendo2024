@@ -1,6 +1,8 @@
 package frc.robot.controls;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -40,6 +42,9 @@ import frc.robot.util.DevilBotState.State;
 import frc.robot.util.DevilBotState.TargetMode;
 import java.util.Map;
 import java.util.Optional;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
 
 public class DriverControls {
   public static CommandXboxController mainController;
@@ -293,8 +298,16 @@ public class DriverControls {
         .onTrue(
             new ParallelCommandGroup(
                 RobotConfig.intake.getTurnOffCommand(),
-                new DriveToYaw(RobotConfig.drive, () -> DevilBotState.getVisionRobotYawToTarget())
-                    .withTimeout(DriveConstants.pidTimeoutInSeconds),
+                new InstantCommand(() -> {
+                    if (DevilBotState.isAmpMode()) {
+                        AutoBuilder.pathfindToPoseFlipped(
+            new Pose2d(1.8, 7.75, Rotation2d.fromDegrees(-90)),
+            new PathConstraints(4.0, 3.0, 2 * Math.PI, 3 * Math.PI)) ;
+                      } else {
+                        new DriveToYaw(RobotConfig.drive, () -> DevilBotState.getVisionRobotYawToTarget())
+                    .withTimeout(DriveConstants.pidTimeoutInSeconds);
+                        }
+                }),
                 new SetShooterVelocity(
                         RobotConfig.shooter, () -> DevilBotState.getShooterVelocity())
                     .withTimeout(ShooterConstants.pidTimeoutInSeconds), // turn on shooter
@@ -302,7 +315,7 @@ public class DriverControls {
                 new InstantCommand(
                     () -> {
                       if (DevilBotState.isAmpMode()) {
-                        RobotConfig.arm.setAngle(ArmConstants.ampScoreAngleInDegrees);
+                        //RobotConfig.arm.setAngle(ArmConstants.ampScoreAngleInDegrees);
                       } else {
                         Optional<Double> armAngle = DevilBotState.getArmAngleToTarget();
                         if (armAngle.isPresent()) {
