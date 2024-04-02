@@ -293,38 +293,44 @@ public class DriverControls {
         .onTrue(
             new EjectPiece(RobotConfig.intake, RobotConfig.arm, RobotConfig.shooter)); // Eject Note
 
+    mainController.rightBumper().onTrue(RobotConfig.intake.getTurnOffCommand());
+
     mainController
         .rightBumper()
         .onTrue(
-            new ParallelCommandGroup(
-                RobotConfig.intake.getTurnOffCommand(),
-                new SelectCommand<>(
-                    Map.ofEntries(
-                        Map.entry(
-                            true,
-                            AutoBuilder.pathfindToPoseFlipped(
-                                new Pose2d(1.8, 7.75, Rotation2d.fromDegrees(-90)),
-                                new PathConstraints(4.0, 3.0, 2 * Math.PI, 3 * Math.PI))),
-                        Map.entry(
-                            false,
-                            new DriveToYaw(
-                                    RobotConfig.drive,
-                                    () -> DevilBotState.getVisionRobotYawToTarget())
-                                .withTimeout(DriveConstants.pidTimeoutInSeconds))),
-                    () -> DevilBotState.isAmpMode()),
-                new SetShooterVelocity(
-                        RobotConfig.shooter, () -> DevilBotState.getShooterVelocity())
-                    .withTimeout(ShooterConstants.pidTimeoutInSeconds), // turn on shooter
-                /* TODO: Use ArmToPositionTP instead of setting arm angle directly */
-                new InstantCommand(
-                        () -> {
-                          Optional<Double> armAngle = DevilBotState.getArmAngleToTarget();
-                          if (armAngle.isPresent()) {
-                            RobotConfig.arm.setAngle((armAngle.get()));
-                          }
-                        },
-                        RobotConfig.arm)
-                    .onlyIf(() -> !DevilBotState.isAmpMode()))); // Aim
+            new SelectCommand<>(
+                Map.ofEntries(
+                    Map.entry(
+                        true,
+                        AutoBuilder.pathfindToPoseFlipped(
+                            new Pose2d(1.8, 7.75, Rotation2d.fromDegrees(-90)),
+                            new PathConstraints(4.0, 3.0, 2 * Math.PI, 3 * Math.PI))),
+                    Map.entry(
+                        false,
+                        new DriveToYaw(
+                                RobotConfig.drive, () -> DevilBotState.getVisionRobotYawToTarget())
+                            .withTimeout(DriveConstants.pidTimeoutInSeconds))),
+                () -> DevilBotState.isAmpMode()));
+
+    mainController
+        .rightBumper()
+        .onTrue(
+            new SetShooterVelocity(RobotConfig.shooter, () -> DevilBotState.getShooterVelocity())
+                .withTimeout(ShooterConstants.pidTimeoutInSeconds) // turn on shooter
+            );
+
+    mainController
+        .rightBumper()
+        .onTrue(
+            new InstantCommand(
+                    () -> {
+                      Optional<Double> armAngle = DevilBotState.getArmAngleToTarget();
+                      if (armAngle.isPresent()) {
+                        RobotConfig.arm.setAngle((armAngle.get()));
+                      }
+                    },
+                    RobotConfig.arm)
+                .onlyIf(() -> !DevilBotState.isAmpMode()));
 
     mainController
         .rightTrigger()
