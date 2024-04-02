@@ -1,6 +1,10 @@
 package frc.robot.controls;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -17,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -198,14 +203,11 @@ public class DriverControls {
     /*     Y Button = Prepare to Climb
      *     X Button = Climber
      */
-    controller
-        .y()
-        .onTrue(
-            new ParallelCommandGroup(
-                RobotConfig.intake.getTurnOffCommand(),
-                RobotConfig.shooter.getTurnOffCommand(),
-                RobotConfig.arm.getStowCommand(),
-                RobotConfig.climber.getExtendCommand()));
+    controller.y().onTrue(RobotConfig.intake.getTurnOffCommand());
+    controller.y().onTrue(RobotConfig.shooter.getTurnOffCommand());
+    controller.y().onTrue(RobotConfig.arm.getStowCommand());
+    controller.y().onTrue(RobotConfig.climber.getExtendCommand());
+
     controller.x().onTrue(RobotConfig.climber.getRetractCommand());
 
     /* Target Selection Controls */
@@ -288,30 +290,44 @@ public class DriverControls {
         .onTrue(
             new EjectPiece(RobotConfig.intake, RobotConfig.arm, RobotConfig.shooter)); // Eject Note
 
+    mainController.rightBumper().onTrue(RobotConfig.intake.getTurnOffCommand());
+
     mainController
         .rightBumper()
         .onTrue(
-            new ParallelCommandGroup(
-                RobotConfig.intake.getTurnOffCommand(),
-                new DriveToYaw(RobotConfig.drive, () -> DevilBotState.getVisionRobotYawToTarget())
-                    .withTimeout(DriveConstants.pidTimeoutInSeconds),
-                new SetShooterVelocity(
-                        RobotConfig.shooter, () -> DevilBotState.getShooterVelocity())
-                    .withTimeout(ShooterConstants.pidTimeoutInSeconds), // turn on shooter
-                /* TODO: Use ArmToPositionTP instead of setting arm angle directly */
-                new InstantCommand(
+            new SelectCommand<>(
+                Map.ofEntries(
+                    Map.entry(
+                        true,
+                        AutoBuilder.pathfindToPoseFlipped(
+                            new Pose2d(1.8, 7.75, Rotation2d.fromDegrees(-90)),
+                            new PathConstraints(4.0, 3.0, 2 * Math.PI, 3 * Math.PI))),
+                    Map.entry(
+                        false,
+                        new DriveToYaw(
+                                RobotConfig.drive, () -> DevilBotState.getVisionRobotYawToTarget())
+                            .withTimeout(DriveConstants.pidTimeoutInSeconds))),
+                () -> DevilBotState.isAmpMode()));
+
+    mainController
+        .rightBumper()
+        .onTrue(
+            new SetShooterVelocity(RobotConfig.shooter, () -> DevilBotState.getShooterVelocity())
+                .withTimeout(ShooterConstants.pidTimeoutInSeconds) // turn on shooter
+            );
+
+    mainController
+        .rightBumper()
+        .onTrue(
+            new InstantCommand(
                     () -> {
-                      if (DevilBotState.isAmpMode()) {
-                        RobotConfig.arm.setAngle(ArmConstants.ampScoreAngleInDegrees);
-                      } else {
-                        Optional<Double> armAngle = DevilBotState.getArmAngleToTarget();
-                        if (armAngle.isPresent()) {
-                          RobotConfig.arm.setAngle((armAngle.get()));
-                        }
+                      Optional<Double> armAngle = DevilBotState.getArmAngleToTarget();
+                      if (armAngle.isPresent()) {
+                        RobotConfig.arm.setAngle((armAngle.get()));
                       }
                     },
-                    RobotConfig.arm) // adjust arm angle based on vision's distance from target
-                )); // Aim
+                    RobotConfig.arm)
+                .onlyIf(() -> !DevilBotState.isAmpMode()));
 
     mainController
         .rightTrigger()
