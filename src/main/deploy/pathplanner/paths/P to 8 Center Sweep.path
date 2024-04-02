@@ -25,10 +25,10 @@
       },
       "nextControl": {
         "x": 10.0,
-        "y": 3.0
+        "y": 3.0000000000000004
       },
       "isLocked": false,
-      "linkedName": "\"1\" Wing Podium Note"
+      "linkedName": null
     },
     {
       "anchor": {

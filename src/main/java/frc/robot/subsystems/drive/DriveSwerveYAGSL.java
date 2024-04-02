@@ -2,7 +2,6 @@ package frc.robot.subsystems.drive;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -20,7 +19,6 @@ import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
-import swervelib.parser.PIDFConfig;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 
@@ -55,9 +53,6 @@ public class DriveSwerveYAGSL extends DriveBase {
       throw new RuntimeException(e);
     }
 
-    PIDFConfig drivePIDF = swerveDrive.getModules()[0].getDrivePIDF();
-    PIDFConfig anglePIDF = swerveDrive.getModules()[0].getAnglePIDF();
-
     AutoBuilder.configureHolonomic(
         swerveDrive::getPose, // Robot pose supplier
         swerveDrive
@@ -66,10 +61,7 @@ public class DriveSwerveYAGSL extends DriveBase {
         swerveDrive::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         swerveDrive::setChassisSpeeds, // Method that will drive the robot given ROBOT RELATIVE
         // ChassisSpeeds
-        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in
-            // your Constants class
-            new PIDConstants(drivePIDF.p, drivePIDF.i, drivePIDF.d), // Translation PID constants
-            new PIDConstants(anglePIDF.p, anglePIDF.i, anglePIDF.d), // Rotation PID constants
+        new HolonomicPathFollowerConfig(
             swerveDrive.getMaximumVelocity(), // Max module speed, in m/s
             swerveDrive.swerveDriveConfiguration
                 .getDriveBaseRadiusMeters(), // Drive base radius in meters. Distance from robot
