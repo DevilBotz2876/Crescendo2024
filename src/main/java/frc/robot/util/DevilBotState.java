@@ -137,7 +137,7 @@ public class DevilBotState {
     SPEAKER_VISION_BASED,
   }
 
-  private static SpeakerShootingMode shootingMode = SpeakerShootingMode.SPEAKER_FROM_SUBWOOFER;
+  private static SpeakerShootingMode shootingMode = SpeakerShootingMode.SPEAKER_VISION_BASED;
 
   public static void setShootingMode(SpeakerShootingMode position) {
     DevilBotState.shootingMode = position;
