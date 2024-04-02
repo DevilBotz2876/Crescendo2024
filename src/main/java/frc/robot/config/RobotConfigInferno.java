@@ -150,7 +150,7 @@ public class RobotConfigInferno extends RobotConfig {
             "1196",
             new Transform3d(
                 new Translation3d(
-                    -Units.inchesToMeters(5), -Units.inchesToMeters(12.5), Units.inchesToMeters(5)),
+                    -Units.inchesToMeters(5.25), -Units.inchesToMeters(11.25), Units.inchesToMeters(7)),
                 new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(-90)))));
 
     cameras.add(
@@ -159,7 +159,7 @@ public class RobotConfigInferno extends RobotConfig {
             "1190",
             new Transform3d(
                 new Translation3d(
-                    -Units.inchesToMeters(5), Units.inchesToMeters(12.5), Units.inchesToMeters(5)),
+                    -Units.inchesToMeters(5.25), Units.inchesToMeters(11.25), Units.inchesToMeters(7)),
                 new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(90)))));
     */
 
