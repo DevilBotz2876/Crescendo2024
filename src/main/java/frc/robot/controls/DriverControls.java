@@ -203,14 +203,11 @@ public class DriverControls {
     /*     Y Button = Prepare to Climb
      *     X Button = Climber
      */
-    controller
-        .y()
-        .onTrue(
-            new ParallelCommandGroup(
-                RobotConfig.intake.getTurnOffCommand(),
-                RobotConfig.shooter.getTurnOffCommand(),
-                RobotConfig.arm.getStowCommand(),
-                RobotConfig.climber.getExtendCommand()));
+    controller.y().onTrue(RobotConfig.intake.getTurnOffCommand());
+    controller.y().onTrue(RobotConfig.shooter.getTurnOffCommand());
+    controller.y().onTrue(RobotConfig.arm.getStowCommand());
+    controller.y().onTrue(RobotConfig.climber.getExtendCommand());
+
     controller.x().onTrue(RobotConfig.climber.getRetractCommand());
 
     /* Target Selection Controls */
