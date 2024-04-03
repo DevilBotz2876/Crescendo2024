@@ -171,7 +171,7 @@ public class RobotConfig {
   }
 
   public Optional<Double> getArmAngleFromDistance(double distanceInMeters) {
-    // Calcululated using https://stats.blue/Stats_Suite/polynomial_regression_calculator.html
+    // Calculated using https://stats.blue/Stats_Suite/polynomial_regression_calculator.html
     // Based on empirical measurements done on 2024-04-03
     // (https://docs.google.com/spreadsheets/d/17Rh0MyVeME0KEAvkSqZKafnL0LPy9PoqWqOJ7ho49S8)
 
