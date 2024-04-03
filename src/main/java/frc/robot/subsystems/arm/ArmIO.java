@@ -12,6 +12,7 @@ public interface ArmIO {
 
     public double absolutePositionRaw;
     public double relativePositionDegrees = 0.0;
+    public double positionError = 0.0;
 
     public boolean absoluteEncoderConnected = false;
     public boolean limitHigh = false;

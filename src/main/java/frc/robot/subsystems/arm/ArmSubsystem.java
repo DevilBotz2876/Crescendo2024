@@ -162,11 +162,11 @@ public class ArmSubsystem extends TrapezoidProfileSubsystem2876 implements Arm {
 
     // If we are moving up, we need to account for backlash since the arm tends to bias down (due to
     // gravity)
-    if ((this.targetRelativeDegrees > inputs.relativePositionDegrees)) {
-      backlashCompensationDirection = 1;
-    } else {
-      backlashCompensationDirection = 0;
-    }
+    // if ((this.targetRelativeDegrees > inputs.relativePositionDegrees)) {
+    //   backlashCompensationDirection = 1;
+    // } else {
+    //   backlashCompensationDirection = 0;
+    // }
     this.targetRelativeDegrees += (backlashCompensationDirection * ArmConstants.maxBacklashDegrees);
 
     Logger.recordOutput("Arm/setAngle/setpointDegrees", this.targetRelativeDegrees);
