@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.config.RobotConfig;
+import frc.robot.config.RobotConfig.VisionConstants;
 import frc.robot.util.DevilBotState;
 import java.util.ArrayList;
 import java.util.List;
@@ -220,10 +221,11 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
     if ((target != null) && (primaryCamera != null)) {
       return Optional.of(
           PhotonUtils.calculateDistanceToTargetMeters(
-              primaryCamera.getRobotToCamera().getZ(),
-              fieldLayout.getTagPose(target.getFiducialId()).get().getZ(),
-              -primaryCamera.getRobotToCamera().getRotation().getY(),
-              Units.degreesToRadians(target.getPitch())));
+                  primaryCamera.getRobotToCamera().getZ(),
+                  fieldLayout.getTagPose(target.getFiducialId()).get().getZ(),
+                  -primaryCamera.getRobotToCamera().getRotation().getY(),
+                  Units.degreesToRadians(target.getPitch()))
+              + VisionConstants.visionDistanceOffsetInMeters);
     }
     return Optional.empty();
   }

@@ -1,6 +1,7 @@
 package frc.robot.config;
 
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -94,6 +95,15 @@ public class RobotConfig {
     public static double defaultSpeedInVolts = 1.0;
 
     public static double maxBacklashDegrees = 0.0;
+
+    // Arm Angle Calculations
+    // Polynomial: y = a*x^2 + b*x + c
+    //   y = angle and x = distance
+    public static double minDistanceInMeters = 0; // min distance we can aim at
+    public static double maxDistanceInMeters = 3.0; // max distance we can aim at
+    public static double Ax2 = 0;
+    public static double Bx = (maxAngleInDegrees / 2) / maxDistanceInMeters;
+    public static double C = 0;
   }
 
   public static class ShooterConstants {
@@ -155,9 +165,29 @@ public class RobotConfig {
     public static int Led2Length = 60;
   }
 
+  public static class VisionConstants {
+    public static double visionDistanceOffsetInMeters =
+        0; // Average difference between vision-calculated distance vs actual
+  }
+
   public Optional<Double> getArmAngleFromDistance(double distanceInMeters) {
-    if (distanceInMeters > 3.0) return Optional.empty();
-    return Optional.of(45 * distanceInMeters / 3.0);
+    // Calcululated using https://stats.blue/Stats_Suite/polynomial_regression_calculator.html
+    // Based on empirical measurements done on 2024-04-03
+    // (https://docs.google.com/spreadsheets/d/17Rh0MyVeME0KEAvkSqZKafnL0LPy9PoqWqOJ7ho49S8)
+
+    distanceInMeters =
+        MathUtil.clamp(
+            distanceInMeters, ArmConstants.minDistanceInMeters, ArmConstants.maxDistanceInMeters);
+
+    Optional<Double> angle =
+        Optional.of(
+            ArmConstants.Ax2 * Math.pow(distanceInMeters, 2)
+                + ArmConstants.Bx * distanceInMeters
+                + ArmConstants.C);
+
+    // System.out.println("getArmAngleFromDistance(" + distanceInMeters + ") = " + angle.get());
+
+    return angle;
   }
 
   public RobotConfig() {

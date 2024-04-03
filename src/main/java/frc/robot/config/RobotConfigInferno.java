@@ -22,7 +22,6 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.vision.VisionCamera;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import java.util.ArrayList;
-import java.util.Optional;
 
 /* Override Inferno specific constants here */
 public class RobotConfigInferno extends RobotConfig {
@@ -108,6 +107,12 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.pidTimeoutInSeconds = 2.0;
 
     ArmConstants.maxBacklashDegrees = 3.0;
+
+    ArmConstants.minDistanceInMeters = Units.inchesToMeters(38);
+    ArmConstants.maxDistanceInMeters = 4.0;
+    ArmConstants.Ax2 = -3.2;
+    ArmConstants.Bx = 23.7;
+    ArmConstants.C = -10.3;
     arm = new ArmSubsystem(new ArmIOSparkMax(4, true));
 
     ClimberConstants.minPositionInRadians = 0.01;
@@ -162,7 +167,7 @@ public class RobotConfigInferno extends RobotConfig {
                     -Units.inchesToMeters(5.25), Units.inchesToMeters(11.25), Units.inchesToMeters(7)),
                 new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(90)))));
     */
-
+    VisionConstants.visionDistanceOffsetInMeters = -0.2;
     vision = new VisionSubsystem(cameras, AprilTagFields.k2024Crescendo.loadAprilTagLayoutField());
 
     if (Robot.isSimulation()) {
@@ -175,33 +180,5 @@ public class RobotConfigInferno extends RobotConfig {
     LedConstants.Led1PWDPort = 9;
     LedConstants.Led1Length = 34;
     led = new LedSystem(new LedIOWS121b());
-  }
-
-  @Override
-  public Optional<Double> getArmAngleFromDistance(double distanceInMeters) {
-    /* TODO: Insert mapping of distance to arm angle for scoring in speaker */
-    System.out.println("TODO: Inferno getArmAngleFromDistance(" + distanceInMeters + ")");
-    // return Optional.empty();
-    distanceInMeters -= Units.inchesToMeters(38);
-    Optional<Double> angle = Optional.empty();
-    if (distanceInMeters < 0.6) {
-      angle = Optional.of(8.0 + 6.0 / 0.3 * distanceInMeters);
-    } else if (distanceInMeters < 1.2) {
-      angle = Optional.of(2.0 / 0.3 * distanceInMeters + 16.0);
-    } else if (distanceInMeters < 1.5) {
-      angle = Optional.of(25.0);
-    } else {
-      angle = Optional.of(1.0 / 0.3 * distanceInMeters + 21.0);
-    }
-
-    if (angle.isPresent() && angle.get() < ArmConstants.subwooferScoreAngleInDegrees) {
-      angle = Optional.of(ArmConstants.subwooferScoreAngleInDegrees);
-    }
-
-    return angle;
-    /*
-      if (distanceInMeters > 2.0) return Optional.empty();
-      return Optional.of(30 * distanceInMeters / 3.0);
-    */
   }
 }
