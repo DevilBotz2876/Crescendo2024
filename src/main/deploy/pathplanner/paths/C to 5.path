@@ -3,49 +3,65 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.75,
-        "y": 6.75
+        "x": 1.75,
+        "y": 5.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2267288353915133,
-        "y": 6.619526014370095
+        "x": 2.4571067811865475,
+        "y": 6.257106781186548
       },
       "isLocked": false,
-      "linkedName": "\"3\" Wing Amp Note (45 degrees)"
+      "linkedName": "\"C\" Subwoofer (Center Side) - No Sub Touch"
     },
     {
       "anchor": {
-        "x": 1.74250811605949,
-        "y": 6.308416077391951
+        "x": 5.0,
+        "y": 6.5
       },
       "prevControl": {
-        "x": 2.2333947975784003,
-        "y": 6.5486372194118445
+        "x": 4.0,
+        "y": 6.5
+      },
+      "nextControl": {
+        "x": 5.999999999999999,
+        "y": 6.5
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.0,
+        "y": 5.75
+      },
+      "prevControl": {
+        "x": 7.55,
+        "y": 5.75
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Start Between Wing Amp and Speaker Notes"
+      "linkedName": "\"5\" Center Amp Mid Note"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.0,
+    "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 41.53177074108293,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": false

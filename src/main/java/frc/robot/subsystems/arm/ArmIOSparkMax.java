@@ -65,10 +65,10 @@ public class ArmIOSparkMax implements ArmIO {
     // relEncoder.setPosition(0);
 
     // 60:1 gear box, 72 teeth on the arm cog and 14 teeth on the motor cog
-    double gearRatio = (60 * (72 / 14));
+    double gearRatio = (60.0 * (72.0 / 14.0));
     double rotationsToDegreesConversionFactor = 360.0 / gearRatio;
     relEncoder.setPositionConversionFactor(rotationsToDegreesConversionFactor);
-    relEncoder.setVelocityConversionFactor(rotationsToDegreesConversionFactor / 60);
+    relEncoder.setVelocityConversionFactor(rotationsToDegreesConversionFactor / 60.0);
     relEncoder.setPosition(Units.radiansToDegrees(getOffsetCorrectedAbsolutePositionInRadians()));
 
     lkP = RobotConfig.ArmConstants.pidKp;
@@ -102,17 +102,15 @@ public class ArmIOSparkMax implements ArmIO {
   /** Updates the set of loggable inputs. */
   @Override
   public void updateInputs(ArmIOInputs inputs) {
-    inputs.positionRad = getOffsetCorrectedAbsolutePositionInRadians();
-    inputs.positionDegree = Units.radiansToDegrees(inputs.positionRad);
-    inputs.absolutePositionRaw = absoluteEncoder.getAbsolutePosition();
-    inputs.absoluteEncoderConnected = isAbsoluteEncoderConnected();
-
     inputs.appliedVolts = motor.getAppliedOutput() * motor.getBusVoltage();
+    inputs.currentAmps = motor.getOutputCurrent();
+    inputs.positionDegrees = Units.radiansToDegrees(getOffsetCorrectedAbsolutePositionInRadians());
+    inputs.velocityDegrees = relEncoder.getVelocity();
 
-    inputs.current = motor.getOutputCurrent();
-
+    inputs.absoluteEncoderConnected = isAbsoluteEncoderConnected();
+    inputs.absolutePositionRaw = absoluteEncoder.getAbsolutePosition();
     inputs.relativePositionDegrees = relEncoder.getPosition();
-    inputs.velocityInDegrees = relEncoder.getVelocity();
+    inputs.positionError = inputs.positionDegrees - inputs.relativePositionDegrees;
 
     // Code below allows PID to be tuned using SmartDashboard.  And outputs extra data to
     // SmartDashboard.

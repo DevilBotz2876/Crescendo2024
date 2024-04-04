@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.7,
-        "y": 6.8
+        "x": 2.75,
+        "y": 6.75
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3464466094067262,
-        "y": 6.446446609406726
+        "x": 2.396446609406726,
+        "y": 6.396446609406726
       },
       "isLocked": true,
       "linkedName": "\"3\" Wing Amp Note (45 degrees)"
     },
     {
       "anchor": {
-        "x": 1.35,
+        "x": 1.75,
         "y": 5.55
       },
       "prevControl": {
-        "x": 1.7035533905932738,
+        "x": 2.103553390593274,
         "y": 5.903553390593274
       },
       "nextControl": null,
       "isLocked": true,
-      "linkedName": "\"C\" Subwoofer (Center Side)"
+      "linkedName": "\"C\" Subwoofer (Center Side) - No Sub Touch"
     }
   ],
   "rotationTargets": [

@@ -73,13 +73,13 @@ public class LedSystem extends SubsystemBase implements Led {
     // Blink orange
     for (int i = 0; i < 2; i++) {
       commandGroup.addCommands(
-          new InstantCommand(() -> setColor(255, 105, 180)),
+          new InstantCommand(() -> setColor(231, 84, 128)),
           new WaitCommand(0.2),
-          new InstantCommand(() -> setColor(255, 105, 180)),
+          new InstantCommand(() -> setColor(231, 84, 128)),
           new WaitCommand(0.2));
     }
 
-    new InstantCommand(() -> setColor(255, 105, 180));
+    new InstantCommand(() -> setColor(231, 84, 128));
 
     // Turn LED White
     commandGroup.addCommands(new InstantCommand(() -> setColor(255, 255, 255)));

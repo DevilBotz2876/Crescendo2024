@@ -15,6 +15,9 @@ public class TestShooterAngle extends Command {
   DoubleSupplier shooterVelocity;
   DoubleSupplier intakeVoltage;
   DoubleSupplier armAngle;
+  double currentShooterVelocity = -1;
+  double currentIntakeVoltage = -1;
+  double currentArmAngle = -1;
 
   public TestShooterAngle(
       Shooter shooter,
@@ -36,10 +39,28 @@ public class TestShooterAngle extends Command {
   }
 
   @Override
+  public void initialize() {
+    currentShooterVelocity = 0;
+    currentIntakeVoltage = 0;
+    currentArmAngle = 0;
+  }
+
+  @Override
   public void execute() {
-    shooter.runVelocity(shooterVelocity.getAsDouble());
-    intake.runVoltage(intakeVoltage.getAsDouble());
-    arm.setAngle(armAngle.getAsDouble());
+    if (currentShooterVelocity != shooterVelocity.getAsDouble()) {
+      currentShooterVelocity = shooterVelocity.getAsDouble();
+      shooter.runVelocity(shooterVelocity.getAsDouble());
+    }
+
+    if (currentIntakeVoltage != intakeVoltage.getAsDouble()) {
+      currentIntakeVoltage = intakeVoltage.getAsDouble();
+      intake.runVoltage(currentIntakeVoltage);
+    }
+
+    if (currentArmAngle != armAngle.getAsDouble()) {
+      currentArmAngle = armAngle.getAsDouble();
+      arm.setAngle(currentArmAngle);
+    }
   }
 
   public void end(boolean interrupted) {

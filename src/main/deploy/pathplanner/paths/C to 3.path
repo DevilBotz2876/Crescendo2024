@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.35,
+        "x": 1.75,
         "y": 5.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7035533905932738,
-        "y": 5.903553390593274
+        "x": 2.12476659402887,
+        "y": 5.9247665940288705
       },
-      "isLocked": true,
-      "linkedName": "\"C\" Subwoofer (Center Side)"
+      "isLocked": false,
+      "linkedName": "\"C\" Subwoofer (Center Side) - No Sub Touch"
     },
     {
       "anchor": {
-        "x": 2.7,
-        "y": 6.8
+        "x": 2.75,
+        "y": 6.75
       },
       "prevControl": {
-        "x": 2.3464466094067262,
-        "y": 6.446446609406726
+        "x": 2.396446609406726,
+        "y": 6.396446609406726
       },
       "nextControl": null,
       "isLocked": true,
@@ -32,7 +32,7 @@
     {
       "waypointRelativePos": 0.5,
       "rotationDegrees": 45.0,
-      "rotateFast": false
+      "rotateFast": true
     }
   ],
   "constraintZones": [],
@@ -45,7 +45,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 44.999999999999964,
+    "rotation": 45.0,
     "rotateFast": false
   },
   "reversed": false,
