@@ -99,7 +99,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="#appliedVolts" class="member-name-link">appliedVolts</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>double</code></div>
-<div class="col-second odd-row-color"><code><a href="#current" class="member-name-link">current</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#currentAmps" class="member-name-link">currentAmps</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>boolean</code></div>
 <div class="col-second even-row-color"><code><a href="#limitHigh" class="member-name-link">limitHigh</a></code></div>
@@ -108,16 +108,16 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><code><a href="#limitLow" class="member-name-link">limitLow</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>double</code></div>
-<div class="col-second even-row-color"><code><a href="#positionDegree" class="member-name-link">positionDegree</a></code></div>
+<div class="col-second even-row-color"><code><a href="#positionDegrees" class="member-name-link">positionDegrees</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>double</code></div>
-<div class="col-second odd-row-color"><code><a href="#positionRad" class="member-name-link">positionRad</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#positionError" class="member-name-link">positionError</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>double</code></div>
 <div class="col-second even-row-color"><code><a href="#relativePositionDegrees" class="member-name-link">relativePositionDegrees</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>double</code></div>
-<div class="col-second odd-row-color"><code><a href="#velocityInDegrees" class="member-name-link">velocityInDegrees</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#velocityDegrees" class="member-name-link">velocityDegrees</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
@@ -154,21 +154,27 @@ loadScripts(document, 'script');</script>
 <h2>Field Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="positionRad">
-<h3>positionRad</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">positionRad</span></div>
+<section class="detail" id="appliedVolts">
+<h3>appliedVolts</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">appliedVolts</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="positionDegree">
-<h3>positionDegree</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">positionDegree</span></div>
+<section class="detail" id="currentAmps">
+<h3>currentAmps</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">currentAmps</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="velocityInDegrees">
-<h3>velocityInDegrees</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">velocityInDegrees</span></div>
+<section class="detail" id="positionDegrees">
+<h3>positionDegrees</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">positionDegrees</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="velocityDegrees">
+<h3>velocityDegrees</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">velocityDegrees</span></div>
 </section>
 </li>
 <li>
@@ -178,27 +184,21 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="absoluteEncoderConnected">
-<h3>absoluteEncoderConnected</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">absoluteEncoderConnected</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="current">
-<h3>current</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">current</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="appliedVolts">
-<h3>appliedVolts</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">appliedVolts</span></div>
-</section>
-</li>
-<li>
 <section class="detail" id="relativePositionDegrees">
 <h3>relativePositionDegrees</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">relativePositionDegrees</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="positionError">
+<h3>positionError</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">positionError</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="absoluteEncoderConnected">
+<h3>absoluteEncoderConnected</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">absoluteEncoderConnected</span></div>
 </section>
 </li>
 <li>
