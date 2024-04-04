@@ -94,9 +94,9 @@ public class RobotConfigInferno extends RobotConfig {
 
     ArmConstants.pidAngleErrorInDegrees = 1.5;
     ArmConstants.maxAngleInDegrees = 89.0;
-    ArmConstants.minAngleInDegrees = -1.0;
+    ArmConstants.minAngleInDegrees = -1.5;
 
-    ArmConstants.intakeAngleInDegrees = 1.5;
+    ArmConstants.intakeAngleInDegrees = -1.5;
     ArmConstants.ampScoreAngleInDegrees = 89.0;
     ArmConstants.subwooferScoreAngleInDegrees = 9.80;
     ArmConstants.subwooferScoreFromPodiumAngleInDegrees = 33; // min/max = 33.24/34.37

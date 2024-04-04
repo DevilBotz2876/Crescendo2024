@@ -301,7 +301,7 @@ public class DriverControls {
                         true,
                         AutoBuilder.pathfindToPoseFlipped(
                             new Pose2d(1.8, 7.75, Rotation2d.fromDegrees(-90)),
-                            new PathConstraints(4.0, 3.0, 2 * Math.PI, 3 * Math.PI))),
+                            new PathConstraints(3.0, 2.0, 2 * Math.PI, 3 * Math.PI))),
                     Map.entry(
                         false,
                         new DriveToYaw(
