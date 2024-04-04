@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.0,
+        "x": 8.25,
         "y": 7.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.394224946210707,
-        "y": 7.385111627729617
+        "x": 7.63,
+        "y": 7.5
       },
       "isLocked": false,
       "linkedName": "\"4\" Center Amp Note"
@@ -20,8 +20,8 @@
         "y": 6.25
       },
       "prevControl": {
-        "x": 4.762441015976179,
-        "y": 6.260444397479127
+        "x": 4.76,
+        "y": 6.25
       },
       "nextControl": null,
       "isLocked": false,

@@ -12,9 +12,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Between A-C to Between 2-3"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Between A-C to Between 2-3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prepare to Score from Between 2 and 3"
+                }
+              }
+            ]
           }
         },
         {
