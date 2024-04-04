@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.561636151902691,
-        "y": 5.761447951678579
+        "x": 7.6016120916577234,
+        "y": 5.985993898894711
       },
       "isLocked": false,
       "linkedName": "\"5\" Center Amp Mid Note"
@@ -36,8 +36,8 @@
         "y": 6.25
       },
       "prevControl": {
-        "x": 4.532664271430633,
-        "y": 6.2499999999988365
+        "x": 4.520262407227262,
+        "y": 6.351128767549569
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,13 +49,13 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 11.0,
     "rotateFast": false
   },
   "reversed": false,
