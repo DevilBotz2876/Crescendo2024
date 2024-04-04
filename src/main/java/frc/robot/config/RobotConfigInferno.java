@@ -102,7 +102,7 @@ public class RobotConfigInferno extends RobotConfig {
     ArmConstants.subwooferScoreFromPodiumAngleInDegrees = 33; // min/max = 33.24/34.37
     ArmConstants.noteScoreAngleInDegrees =
         24.24; // Empirically at reading practice field after running 2-note center
-    ArmConstants.stowIntakeAngleInDegrees = 14.64;
+    ArmConstants.stowIntakeAngleInDegrees = 5.0;
     ArmConstants.matchStartArmAngle = 90;
     ArmConstants.pidTimeoutInSeconds = 2.0;
 
