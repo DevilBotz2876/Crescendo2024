@@ -1,0 +1,163 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.35,
+      "y": 5.55
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Score from C (Subwoofer Center)"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "C to 2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Piece v2.0"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "2 to C"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prepare to Score from C (Subwoofer Center)"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score from C (Subwoofer Center)"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "C to 1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Piece v2.0"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "1 to C"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prepare to Score from C (Subwoofer Center)"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score from C (Subwoofer Center)"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "C to 3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Piece v2.0"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "3 to C"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prepare to Score from C (Subwoofer Center)"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score from C (Subwoofer Center)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Turn off Shooter and Intake"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
