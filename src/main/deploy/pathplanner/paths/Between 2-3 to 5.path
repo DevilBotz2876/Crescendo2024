@@ -8,24 +8,40 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.052887526894647,
-        "y": 6.2708887949582515
+        "x": 4.75,
+        "y": 6.25
       },
       "isLocked": false,
       "linkedName": "Start Between Wing Amp and Speaker Notes"
     },
     {
       "anchor": {
-        "x": 2.75,
-        "y": 6.75
+        "x": 5.75,
+        "y": 6.5
       },
       "prevControl": {
-        "x": 2.372950400099274,
-        "y": 6.473304449662335
+        "x": 4.75,
+        "y": 6.5
+      },
+      "nextControl": {
+        "x": 6.976584197962229,
+        "y": 6.5
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.0,
+        "y": 5.75
+      },
+      "prevControl": {
+        "x": 7.3,
+        "y": 5.75
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "\"3\" Wing Amp Note (45 degrees)"
+      "linkedName": "\"5\" Center Amp Mid Note"
     }
   ],
   "rotationTargets": [],
@@ -39,13 +55,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 41.53177074108293,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": false

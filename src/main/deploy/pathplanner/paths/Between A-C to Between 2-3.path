@@ -3,49 +3,49 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.75,
-        "y": 6.25
+        "x": 1.35,
+        "y": 6.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.052887526894647,
-        "y": 6.2708887949582515
+        "x": 2.3159258262890683,
+        "y": 6.241180954897479
       },
       "isLocked": false,
-      "linkedName": "Start Between Wing Amp and Speaker Notes"
+      "linkedName": "Between A-C"
     },
     {
       "anchor": {
-        "x": 2.75,
-        "y": 6.75
+        "x": 3.75,
+        "y": 6.25
       },
       "prevControl": {
-        "x": 2.372950400099274,
-        "y": 6.473304449662335
+        "x": 2.75,
+        "y": 6.25
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "\"3\" Wing Amp Note (45 degrees)"
+      "linkedName": "Start Between Wing Amp and Speaker Notes"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 5.0,
+    "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 41.53177074108293,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": false
