@@ -148,15 +148,16 @@ public class RobotConfigInferno extends RobotConfig {
                 new Translation3d(0.3048, 0, 0.22),
                 new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(0)))));
 
-    /*
     cameras.add(
         new VisionCamera(
             "right",
             "1196",
             new Transform3d(
                 new Translation3d(
-                    -Units.inchesToMeters(5.25), -Units.inchesToMeters(11.25), Units.inchesToMeters(7)),
-                new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(-90)))));
+                    -Units.inchesToMeters(5.25),
+                    -Units.inchesToMeters(11.25),
+                    Units.inchesToMeters(7)),
+                new Rotation3d(0, Units.degreesToRadians(-32), Units.degreesToRadians(-90)))));
 
     cameras.add(
         new VisionCamera(
@@ -164,9 +165,11 @@ public class RobotConfigInferno extends RobotConfig {
             "1190",
             new Transform3d(
                 new Translation3d(
-                    -Units.inchesToMeters(5.25), Units.inchesToMeters(11.25), Units.inchesToMeters(7)),
-                new Rotation3d(0, Units.degreesToRadians(-30), Units.degreesToRadians(90)))));
-    */
+                    -Units.inchesToMeters(5.25),
+                    Units.inchesToMeters(11.25),
+                    Units.inchesToMeters(7)),
+                new Rotation3d(0, Units.degreesToRadians(-32), Units.degreesToRadians(90)))));
+
     VisionConstants.visionDistanceOffsetInMeters = -0.2;
     vision = new VisionSubsystem(cameras, AprilTagFields.k2024Crescendo.loadAprilTagLayoutField());
 
