@@ -3,6 +3,7 @@ package frc.robot.subsystems.vision;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
@@ -15,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 import org.littletonrobotics.junction.AutoLogOutput;
-import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -34,14 +34,11 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
     private final Transform3d robotToCamera;
     private final PhotonPoseEstimator poseEstimator;
     private final int index;
-    private final String name;
-
     private PhotonCameraSim simCamera;
     private PhotonPipelineResult result;
     private Optional<EstimatedRobotPose> estimatedRobotPose;
 
     private VisionCameraImpl(VisionCamera camera, AprilTagFieldLayout fieldLayout) {
-      this.name = camera.name;
       this.camera = new PhotonCamera(camera.name);
       this.robotToCamera = camera.robotToCamera;
       this.poseEstimator =
@@ -57,11 +54,6 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
     private void update() {
       result = camera.getLatestResult();
       estimatedRobotPose = poseEstimator.update();
-      if (estimatedRobotPose.isPresent()) {
-        Logger.recordOutput(
-            "VisionSubsystem/Camera/" + name + "/Pose2d",
-            estimatedRobotPose.get().estimatedPose.toPose2d());
-      }
     }
 
     private double getLatestTimestamp() {
@@ -102,11 +94,16 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
   private final AprilTagFieldLayout fieldLayout;
 
   /* Debug Info */
-  @AutoLogOutput private int numTargetsVisible;
-  @AutoLogOutput private int selectedTargetId = DevilBotState.getActiveTargetId();
-  @AutoLogOutput private String selectedTargetName = DevilBotState.getTargetName(selectedTargetId);
-  @AutoLogOutput private double selectedTargetDistance = 0;
-  @AutoLogOutput private double selectedTargetYaw = 0;
+  @AutoLogOutput private int debugTargetsVisible;
+  @AutoLogOutput private int debugCurrentTargetId = DevilBotState.getActiveTargetId();
+
+  @AutoLogOutput
+  private String debugCurrentTargetName = DevilBotState.getTargetName(debugCurrentTargetId);
+
+  @AutoLogOutput private double debugTargetDistance = 0;
+  @AutoLogOutput private double debugTargetYaw = 0;
+  @AutoLogOutput private Pose2d debugEstimatedPose;
+  @AutoLogOutput private Pose2d debugEstimatedPose2d;
 
   /* Simulation Support*/
   private boolean simEnabled = false;
@@ -153,19 +150,18 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
     for (VisionCameraImpl camera : cameras) {
       camera.update();
       if (camera == primaryCamera) {
-        numTargetsVisible = camera.result.getTargets().size();
+        debugTargetsVisible = camera.result.getTargets().size();
 
-        // if (numTargetsVisible > 0) {
-        //   PhotonTrackedTarget target = camera.result.getBestTarget();
-        //   Optional<Pose3d> fieldToTarget = fieldLayout.getTagPose(target.getFiducialId());
-        //   if (fieldToTarget.isPresent()) {
-        //     debugEstimatedPose2d =
-        //         PhotonUtils.estimateFieldToRobotAprilTag(
-        //                 target.getBestCameraToTarget(), fieldToTarget.get(),
-        // camera.robotToCamera)
-        //             .toPose2d();
-        //   }
-        // }
+        if (debugTargetsVisible > 0) {
+          PhotonTrackedTarget target = camera.result.getBestTarget();
+          Optional<Pose3d> fieldToTarget = fieldLayout.getTagPose(target.getFiducialId());
+          if (fieldToTarget.isPresent()) {
+            debugEstimatedPose2d =
+                PhotonUtils.estimateFieldToRobotAprilTag(
+                        target.getBestCameraToTarget(), fieldToTarget.get(), camera.robotToCamera)
+                    .toPose2d();
+          }
+        }
       }
 
       Optional<EstimatedRobotPose> currentEstimatedRobotPose = camera.getEstimatedRobotPose();
@@ -182,24 +178,28 @@ public class VisionSubsystem extends SubsystemBase implements Vision {
               currentEstimatedRobotPose.get().timestampSeconds,
               VecBuilder.fill(distance / 2, distance / 2, distance / 2));
         }
+
+        if (camera == primaryCamera) {
+          debugEstimatedPose = currentEstimatedRobotPose.get().estimatedPose.toPose2d();
+        }
       }
     }
 
     Optional<Double> distance;
     Optional<Double> yaw;
-    if (selectedTargetId != DevilBotState.getActiveTargetId()) {
-      selectedTargetId = DevilBotState.getActiveTargetId();
-      selectedTargetDistance = 0;
-      selectedTargetYaw = 0;
-      selectedTargetName = DevilBotState.getTargetName(selectedTargetId);
+    if (debugCurrentTargetId != DevilBotState.getActiveTargetId()) {
+      debugCurrentTargetId = DevilBotState.getActiveTargetId();
+      debugTargetDistance = 0;
+      debugTargetYaw = 0;
+      debugCurrentTargetName = DevilBotState.getTargetName(debugCurrentTargetId);
     }
-    distance = getDistanceToAprilTag(selectedTargetId);
-    yaw = getYawToAprilTag(selectedTargetId);
+    distance = getDistanceToAprilTag(debugCurrentTargetId);
+    yaw = getYawToAprilTag(debugCurrentTargetId);
     if (distance.isPresent()) {
-      selectedTargetDistance = distance.get();
+      debugTargetDistance = distance.get();
     }
     if (yaw.isPresent()) {
-      selectedTargetYaw = yaw.get();
+      debugTargetYaw = yaw.get();
     }
   }
 
