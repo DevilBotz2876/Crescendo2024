@@ -3,7 +3,6 @@ package frc.robot.subsystems.drive;
 import edu.wpi.first.math.geometry.Pose2d;
 import frc.robot.config.RobotConfig.DriveConstants;
 import frc.robot.util.DevilBotState;
-
 import org.littletonrobotics.junction.AutoLog;
 import swervelib.SwerveDrive;
 
@@ -23,11 +22,18 @@ public class DriveIO {
     inputs.poseX = inputs.pose.getTranslation().getX();
     inputs.poseY = inputs.pose.getTranslation().getY();
     inputs.poseRotInDegrees = inputs.pose.getRotation().getDegrees();
-    if(!DevilBotState.isRedAlliance()){
-      inputs.distanceFromSpeaker = Math.sqrt(Math.pow(inputs.poseX - DriveConstants.blueSpeakerX,2)+Math.pow(inputs.poseY - DriveConstants.speakerY,2));
-    } else{
-      inputs.distanceFromSpeaker = Math.sqrt(Math.pow(inputs.poseX - DriveConstants.redSpeakerX,2)+Math.pow(inputs.poseY - DriveConstants.speakerY,2));
-    }                                                           ;
+    if (!DevilBotState.isRedAlliance()) {
+      inputs.distanceFromSpeaker =
+          Math.sqrt(
+              Math.pow(inputs.poseX - DriveConstants.blueSpeakerX, 2)
+                  + Math.pow(inputs.poseY - DriveConstants.speakerY, 2));
+    } else {
+      inputs.distanceFromSpeaker =
+          Math.sqrt(
+              Math.pow(inputs.poseX - DriveConstants.redSpeakerX, 2)
+                  + Math.pow(inputs.poseY - DriveConstants.speakerY, 2));
+    }
+    ;
   }
 
   // Other methods for controlling the drive subsystem...

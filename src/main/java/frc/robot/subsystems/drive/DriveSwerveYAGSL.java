@@ -16,7 +16,6 @@ import frc.robot.config.RobotConfig.DriveConstants;
 import frc.robot.util.DevilBotState;
 import java.io.File;
 import java.util.Optional;
-
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 import swervelib.SwerveDrive;
