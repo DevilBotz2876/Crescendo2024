@@ -51,7 +51,9 @@ public class AutoNamedCommands {
             28, ArmConstants.noteScoreAngleInDegrees, ShooterConstants.velocityInRPM);
     public static AutoScoreConstants scoreFromBetween2and3 =
         new AutoScoreConstants(
-            21, ArmConstants.noteScoreAngleInDegrees, ShooterConstants.velocityInRPM);
+            11,
+            ArmConstants.subwooferScoreFromPodiumAngleInDegrees,
+            ShooterConstants.velocityInRPM);
   }
 
   public static void configure() {

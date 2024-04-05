@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.74250811605949,
-        "y": 6.308416077391951
+        "x": 4.25,
+        "y": 6.25
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0453956429541362,
-        "y": 6.329304872350202
+        "x": 4.552887526894647,
+        "y": 6.2708887949582515
       },
       "isLocked": false,
       "linkedName": "Start Between Wing Amp and Speaker Notes"

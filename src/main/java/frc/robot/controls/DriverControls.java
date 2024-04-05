@@ -218,6 +218,13 @@ public class DriverControls {
     controller.b().onTrue(speakerModeCommand);
   }
 
+  public static boolean driveOverride(CommandXboxController mainController) {
+    return (Math.abs(mainController.getLeftY()) > 0.05)
+        || (Math.abs(mainController.getLeftX()) > 0.05)
+        || (Math.abs(mainController.getRightY()) > 0.05)
+        || (Math.abs(mainController.getRightX()) > 0.05);
+  }
+
   public static void setupMainControls(CommandXboxController mainController) {
     /**** Drive Controls ****/
     /* Competition:
@@ -296,18 +303,20 @@ public class DriverControls {
         .rightBumper()
         .onTrue(
             new SelectCommand<>(
-                Map.ofEntries(
-                    Map.entry(
-                        true,
-                        AutoBuilder.pathfindToPoseFlipped(
-                            new Pose2d(1.8, 7.75, Rotation2d.fromDegrees(-90)),
-                            new PathConstraints(3.0, 2.0, 2 * Math.PI, 3 * Math.PI))),
-                    Map.entry(
-                        false,
-                        new DriveToYaw(
-                                RobotConfig.drive, () -> DevilBotState.getVisionRobotYawToTarget())
-                            .withTimeout(DriveConstants.pidTimeoutInSeconds))),
-                () -> DevilBotState.isAmpMode()));
+                    Map.ofEntries(
+                        Map.entry(
+                            true,
+                            AutoBuilder.pathfindToPoseFlipped(
+                                new Pose2d(1.8, 7.75, Rotation2d.fromDegrees(-90)),
+                                new PathConstraints(3.0, 2.0, 2 * Math.PI, 3 * Math.PI))),
+                        Map.entry(
+                            false,
+                            new DriveToYaw(
+                                    RobotConfig.drive,
+                                    () -> DevilBotState.getVisionRobotYawToTarget())
+                                .withTimeout(DriveConstants.pidTimeoutInSeconds))),
+                    () -> DevilBotState.isAmpMode())
+                .until(() -> driveOverride(mainController)));
 
     mainController
         .rightBumper()

@@ -1,0 +1,138 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.35,
+      "y": 6.5
+    },
+    "rotation": 0.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Between A-C to Between 2-3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prepare to Score from Between 2 and 3"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score from Between 2 and 3"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Between 2-3 to 4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Piece v2.0"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "4 to Between 2-3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prepare to Score from Between 2 and 3"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score from Between 2 and 3"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Between 2-3 to 5"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Piece v2.0"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "5 to Between 2-3"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prepare to Score from Between 2 and 3"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score from Between 2 and 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Turn off Shooter and Intake"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
