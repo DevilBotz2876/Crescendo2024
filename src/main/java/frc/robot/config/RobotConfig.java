@@ -54,6 +54,10 @@ public class RobotConfig {
     public static double slewRateLimiterX = 3;
     public static double slewRateLimiterY = 3;
     public static double slewRateLimiterAngle = 3;
+
+    public static double blueSpeakerX = 0.14;
+    public static double speakerY = 5.53;
+    public static double redSpeakerX = 16.54-0.14;
   }
 
   public static class ArmConstants {

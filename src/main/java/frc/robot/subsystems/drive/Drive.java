@@ -1,5 +1,7 @@
 package frc.robot.subsystems.drive;
 
+import java.util.Optional;
+
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -72,4 +74,8 @@ public interface Drive {
 
   public default void addVisionMeasurement(
       Pose2d robotPose, double timestamp, Matrix<N3, N1> visionMeasurementStdDevs) {}
+
+  public default Optional<Double> getDistanceFromSpeaker() {
+    return Optional.empty();
+  }
 }

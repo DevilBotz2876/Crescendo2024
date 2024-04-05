@@ -40,7 +40,7 @@ public class RobotConfigPhoenix extends RobotConfig {
                 new Translation3d(-Units.inchesToMeters(10.75), 0, Units.inchesToMeters(8)),
                 new Rotation3d(0, Units.degreesToRadians(-33), Units.degreesToRadians(180)))));
 
-    VisionConstants.visionDistanceOffsetInMeters = -0.2;
+    VisionConstants.visionDistanceOffsetInMeters = 0;
     vision = new VisionSubsystem(cameras, AprilTagFields.k2024Crescendo.loadAprilTagLayoutField());
 
     if (Robot.isSimulation()) {

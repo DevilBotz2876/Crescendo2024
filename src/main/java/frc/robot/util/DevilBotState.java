@@ -184,6 +184,14 @@ public class DevilBotState {
                 RobotConfig.instance.getArmAngleFromDistance(distanceToTarget.get());
 
             return armAngle;
+          } else {
+            distanceToTarget =RobotConfig.drive.getDistanceFromSpeaker();
+            if (distanceToTarget.isPresent()) {
+              Optional<Double> armAngle =
+                  RobotConfig.instance.getArmAngleFromDistance(distanceToTarget.get());
+
+              return armAngle;
+            }
           }
           return Optional.empty();
 
