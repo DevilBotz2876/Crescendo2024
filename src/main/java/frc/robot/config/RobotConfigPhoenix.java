@@ -40,27 +40,27 @@ public class RobotConfigPhoenix extends RobotConfig {
                 new Translation3d(-Units.inchesToMeters(10.75), 0, Units.inchesToMeters(8)),
                 new Rotation3d(0, Units.degreesToRadians(-33), Units.degreesToRadians(180)))));
 
-    // cameras.add(
-    //     new VisionCamera(
-    //         "right",
-    //         "1196",
-    //         new Transform3d(
-    //             new Translation3d(
-    //                 -Units.inchesToMeters(5.25),
-    //                 -Units.inchesToMeters(11.25),
-    //                 Units.inchesToMeters(7)),
-    //             new Rotation3d(0, Units.degreesToRadians(-32), Units.degreesToRadians(-90)))));
+    cameras.add(
+        new VisionCamera(
+            "right",
+            "1196",
+            new Transform3d(
+                new Translation3d(
+                    -Units.inchesToMeters(5.25),
+                    -Units.inchesToMeters(11.25),
+                    Units.inchesToMeters(7)),
+                new Rotation3d(0, Units.degreesToRadians(-32), Units.degreesToRadians(-90)))));
 
-    // cameras.add(
-    //     new VisionCamera(
-    //         "left",
-    //         "1190",
-    //         new Transform3d(
-    //             new Translation3d(
-    //                 -Units.inchesToMeters(5.25),
-    //                 Units.inchesToMeters(11.25),
-    //                 Units.inchesToMeters(7)),
-    //             new Rotation3d(0, Units.degreesToRadians(-32), Units.degreesToRadians(90)))));
+    cameras.add(
+        new VisionCamera(
+            "left",
+            "1190",
+            new Transform3d(
+                new Translation3d(
+                    -Units.inchesToMeters(5.25),
+                    Units.inchesToMeters(11.25),
+                    Units.inchesToMeters(7)),
+                new Rotation3d(0, Units.degreesToRadians(-32), Units.degreesToRadians(90)))));
 
     VisionConstants.visionDistanceOffsetInMeters = -0.2;
     vision = new VisionSubsystem(cameras, AprilTagFields.k2024Crescendo.loadAprilTagLayoutField());
