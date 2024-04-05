@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.config.RobotConfig.DriveConstants;
 import frc.robot.util.DevilBotState;
 import java.io.File;
+import java.util.Optional;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 import swervelib.SwerveDrive;
@@ -156,5 +157,9 @@ public class DriveSwerveYAGSL extends DriveBase {
       Pose2d robotPose, double timestamp, Matrix<N3, N1> visionMeasurementStdDevs) {
 
     swerveDrive.addVisionMeasurement(robotPose, timestamp, visionMeasurementStdDevs);
+  }
+
+  public Optional<Double> getDistanceFromSpeaker() {
+    return Optional.of(inputs.distanceFromSpeaker);
   }
 }
