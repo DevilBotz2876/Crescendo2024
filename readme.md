@@ -36,6 +36,7 @@ The code uses Java WPILib.
          1. Thumb Controls should now move the robot
    1. 2D Mechanism Simulation
       1. NetworkTables --> "SmartDashboard" --> "Inferno 2D Simulation"
+         ![Inferno2DSimulation](https://github.com/DevilBotz2876/Crescendo2024/assets/115738405/563381bc-6ee0-4b3d-a01f-8f6d709c51e1)
          * Shooter (Blue/Grey)
          * Intake (Red/Grey)
          * Note (Orange)
@@ -46,7 +47,6 @@ The code uses Java WPILib.
        1.  NetworkTables --> "SmartDashboard" --> "VisionSystemSim-main" --> Sim Field
    1. Alliance Selection
    1. Autonomous
-      1.
    1. AdvantageScope
 
 1. Contributing to the Repo
