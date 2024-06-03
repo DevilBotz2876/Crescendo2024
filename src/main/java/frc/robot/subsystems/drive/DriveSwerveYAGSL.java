@@ -77,6 +77,7 @@ public class DriveSwerveYAGSL extends DriveBase {
 
   @Override
   public void runVelocity(ChassisSpeeds velocity) {
+    
     if (fieldOrientedDrive) {
       swerveDrive.driveFieldOriented(velocity);
     } else {
@@ -86,12 +87,12 @@ public class DriveSwerveYAGSL extends DriveBase {
 
   @Override
   public double getMaxLinearSpeed() {
-    return swerveDrive.getMaximumVelocity();
+    return swerveDrive.getMaximumVelocity() * 0.3;
   }
 
   @Override
   public double getMaxAngularSpeed() {
-    return swerveDrive.getMaximumAngularVelocity();
+    return swerveDrive.getMaximumAngularVelocity() * 0.3;
   }
 
   public void setFieldOrientedDrive(boolean enable) {
